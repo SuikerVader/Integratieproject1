@@ -7,5 +7,6 @@ namespace Integratieproject1.Models
 {
     public class Ideation
     {
+
     }
 }
