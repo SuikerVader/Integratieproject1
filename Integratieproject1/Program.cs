@@ -15,7 +15,7 @@ namespace Integratieproject1
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
-            Console.WriteLine("Hallo iedereen! Test Glenn");
+            Console.WriteLine("Hallo iedereen! Test Jeroen");
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
