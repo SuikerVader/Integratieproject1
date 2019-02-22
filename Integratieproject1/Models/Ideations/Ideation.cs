@@ -7,6 +7,7 @@ namespace Integratieproject1.Models
 {
     public class Ideation
     {
-
+        public String centralQuestion { get; set; }
+        public Boolean inputIdeation { get; set; }
     }
 }

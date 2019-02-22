@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Integratieproject1.Models
+namespace Integratieproject1.Models.Users
 {
-    public class Survey
+    public class User
     {
-        public String title { get; set; }
+        public String email { get; set; }
     }
 }

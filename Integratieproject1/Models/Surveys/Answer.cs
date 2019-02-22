@@ -7,5 +7,7 @@ namespace Integratieproject1.Models.Surveys
 {
     public class Answer
     {
+        public String answerText { get; set; }
+        public int totalTimesChosen { get; set; }
     }
 }

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace Integratieproject1.Models.Ideations
 {
-    public class Vote
+    public enum VoteType
     {
-        public int voteNr { get; set; }
-        public Boolean confirmed { get; set; }
-        public VoteType voteType { get; set; }
+        VOTE,
+        SHARE_FB,
+        SHARE_TW,
+        IOT
     }
 }
