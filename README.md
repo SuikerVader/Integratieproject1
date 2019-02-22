@@ -1,33 +1,33 @@
-Git Bash Tutorial
+# Git Bash Tutorial
 
-Git op pc clonen (moet maar 1 keer gebeuren)
+## Git op pc clonen (moet maar 1 keer gebeuren)
 
-- Creëer een map op je pc "Integratieproject1"
+- Creëer een map op je pc **Integratieproject1**
 
 - Open de nieuw gemaakte map
 
-- Rechtermuisklik in de map en kies "Git Bash Here"
+- Rechtermuisklik in de map en kies **Git Bash Here**
 
-- typ "git clone https://github.com/SuikerVader/Integratieproject1.git"
+- typ **git clone https://github.com/SuikerVader/Integratieproject1.git**
 
 - Het project staat nu op je pc!
 
-Status van je lokale project bekijken
+## Status van je lokale project bekijken
 
-- "git status"
+- **git status**
 
-Up to date project van Github naar pc zetten
+## Up to date project van Github naar pc zetten
 
-- "git pull origin master"
+- **git pull origin master**
 
-Aanpassing naar Github pushen
+## Aanpassing naar Github pushen
 
-- Eerst pullen van Github om up to date project te hebben -> "git pull origin master"
+- Eerst pullen van Github om up to date project te hebben -> **git pull origin master**
 
-- Bekijken van bestanden die je hebt aangepast -> "git status"
+- Bekijken van bestanden die je hebt aangepast -> **git status**
 
-- "git add ." -> Dit is om alle gewijzigde bestanden klaar te zetten om te pushen
+- **git add .** -> Dit is om alle gewijzigde bestanden klaar te zetten om te pushen
 
-- "git commit -m "<message to specify what yoy have changed>"" -> Dit is om te bevestigen
+- **git commit -m "<message to specify what yoy have changed>"** -> Dit is om te bevestigen
 
-- "git push origin master"
+- **git push origin master**
