@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Integratieproject1.Models.Users
 {
-    public class Person
+    public class Person : LoggedInUser
     {
-        public String firstName { get; set; }
-        public String lastName { get; set; }
-        public Sex sex { get; set; }
-        public DateTime birthDate { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public Sex Sex { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

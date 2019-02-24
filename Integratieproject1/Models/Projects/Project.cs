@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,14 +8,20 @@ namespace Integratieproject1.Models.Projects
 {
     public class Project
     {
-        public String projectName { get; set; }
-        public String logo { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
-        public String objective { get; set; }
-        public String description { get; set; }
-        public Location location { get; set; }
-        public String status { get; set; }
+        [Key]
+        public int ProjectId { get; set; }
+    [Required]
+        public String ProjectName { get; set; }
+        public String Logo { get; set; }
+    [Required]
+        public DateTime StartDate { get; set; }
+    [Required]
+        public DateTime EndDate { get; set; }
+        public String Objective { get; set; }
+        public String Description { get; set; }
+    [Required]
+        public Location Location { get; set; }
+        public String Status { get; set; }
 
     }
 }
