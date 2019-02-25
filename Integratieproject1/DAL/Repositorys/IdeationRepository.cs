@@ -12,15 +12,21 @@ namespace Integratieproject1.DAL.Repositorys
     public IdeationRepository()
     {
       ctx = new CityOfIdeasDbContext();
-      CityOfIdeasDbInitializer.Initialize(ctx, true);
+      CityOfIdeasDbInitializer.Initialize(ctx, false);
     }
     public IEnumerable<Ideation> GetIdeations()
     {
-      throw new NotImplementedException();
+      return ctx.Ideations.AsEnumerable();
+    }
+    public Ideation GetIdeation(int ideationId)
+    {
+      return ctx.Ideations.Find(ideationId);
     }
     public Ideation CreateIdeation(Ideation ideation)
     {
-      throw new NotImplementedException();
+      ctx.Ideations.Add(ideation);
+      ctx.SaveChanges();
+      return ideation;
     }
   }
  
