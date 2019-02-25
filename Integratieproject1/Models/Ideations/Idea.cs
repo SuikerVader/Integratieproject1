@@ -21,9 +21,9 @@ namespace Integratieproject1.Models.Ideations
         public String Title { get; set; }
     [Required]
     [ForeignKey("LoggedInUser")]
-    public int LoggedInUserFK { get; set; }
+    public int LoggedInUserFk { get; set; }
     [Required]
     [ForeignKey("Ideation")]
-    public int IdeationFK { get; set; }
+    public int IdeationFk { get; set; }
   }
 }

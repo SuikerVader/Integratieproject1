@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositorys;
 using Integratieproject1.Models;
+using Integratieproject1.Models.Ideations;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
