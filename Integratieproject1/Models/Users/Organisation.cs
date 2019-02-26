@@ -7,7 +7,7 @@ namespace Integratieproject1.Models.Users
 {
     public class Organisation : LoggedInUser
     {
-        public String OrganisationName { get; set; }
-        public String TaxNumber { get; set; }
+        public string OrganisationName { get; set; }
+        public string TaxNumber { get; set; }
     }
 }

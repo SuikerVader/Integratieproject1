@@ -9,7 +9,7 @@ namespace Integratieproject1.Models.Datatypes
     public class Position
     {   
     [Key]
-        public int PostionID { get; set; }
+        public int PostionId { get; set; }
         public double Longitude { get; set; }
         public double Altitude { get; set; }
     }

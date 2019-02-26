@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Models.IoT;
+using Integratieproject1.Models.Users;
 
 namespace Integratieproject1.Models.Ideations
 {
@@ -19,11 +21,17 @@ namespace Integratieproject1.Models.Ideations
         public String Text { get; set; }
         [Required]
         public String Title { get; set; }
-    [Required]
+    [Required] public LoggedInUser LoggedInUser { get; set; }
+    [Required] public Ideation Ideation { get; set; }
+    public IList<IoTSetup> IoTSetups { get; set; }
+    public IList<Vote> Votes { get; set; }
+        
+        
+        /*[Required]
     [ForeignKey("LoggedInUser")]
     public int LoggedInUserFk { get; set; }
     [Required]
     [ForeignKey("Ideation")]
-    public int IdeationFk { get; set; }
+    public int IdeationFk { get; set; }*/
   }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Models.Datatypes;
 
 namespace Integratieproject1.Models.Projects
 {
@@ -11,17 +12,21 @@ namespace Integratieproject1.Models.Projects
         [Key]
         public int ProjectId { get; set; }
     [Required]
-        public String ProjectName { get; set; }
-        public String Logo { get; set; }
+        public string ProjectName { get; set; }
+        public string Logo { get; set; }
     [Required]
         public DateTime StartDate { get; set; }
     [Required]
         public DateTime EndDate { get; set; }
-        public String Objective { get; set; }
-        public String Description { get; set; }
+        public string Objective { get; set; }
+        public string Description { get; set; }
     [Required]
         public Location Location { get; set; }
-        public String Status { get; set; }
-
+        public string Status { get; set; }
+     
+        [Required] 
+        public Platform Platform { get; set; }
+        
+        public IList<Phase> Phases { get; set; }
     }
 }

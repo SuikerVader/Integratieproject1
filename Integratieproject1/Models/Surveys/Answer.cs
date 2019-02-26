@@ -11,10 +11,11 @@ namespace Integratieproject1.Models.Surveys
     {
     [Key]
         public int AnswerId { get; set; }
-        public String AnswerText { get; set; }
+        public string AnswerText { get; set; }
         public int TotalTimesChosen { get; set; }
-    [Required]
-    [ForeignKey("QuestionFK")]
-    public int QuestionFK { get; set; }
+    [Required] public Question Question { get; set; }
+    
+    /*[ForeignKey("QuestionFK")]
+    public int QuestionFK { get; set; }*/
   }
 }

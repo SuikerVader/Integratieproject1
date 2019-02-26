@@ -7,10 +7,10 @@ using Integratieproject1.Models.Ideations;
 
 namespace Integratieproject1.DAL.Repositorys
 {
-  public class IdeationRepository
+  public class IdeationsRepository
   {
     private CityOfIdeasDbContext ctx = null;
-    public IdeationRepository()
+    public IdeationsRepository()
     {
       ctx = new CityOfIdeasDbContext();
       CityOfIdeasDbInitializer.Initialize(ctx, false);
