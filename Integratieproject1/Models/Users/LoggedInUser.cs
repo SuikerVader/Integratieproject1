@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Models.Ideations;
 
 namespace Integratieproject1.Models.Users
 {
-    public class LoggedInUser
+    public class LoggedInUser : User
     {
-        public String password { get; set; }
-        public Boolean verified { get; set; }
-        public String zipCode { get; set; }
-        public RoleType roleType { get; set; }
-    }
+        public string Password { get; set; }
+        public bool Verified { get; set; }
+        public string ZipCode { get; set; }
+        public RoleType RoleType { get; set; }
+        
+        public IList<Reaction> Reactions { get; set; }
+        public IList<Idea> Ideas { get; set; }
+    
+  }
 }

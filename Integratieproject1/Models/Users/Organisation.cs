@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Integratieproject1.Models.Users
 {
-    public class Organisation
+    public class Organisation : LoggedInUser
     {
-        public String organisationName { get; set; }
-        public String taxNumber { get; set; }
+        public string OrganisationName { get; set; }
+        public string TaxNumber { get; set; }
     }
 }

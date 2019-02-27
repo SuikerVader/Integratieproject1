@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Integratieproject1.Models.Projects
+namespace Integratieproject1.Models.Datatypes
 {
     public class Address
     {
-        public String street { get; set; }
-        public String houseNr { get; set; }
-        public String city { get; set; }
-        public String zipCode { get; set; }
+    [Key]
+        public int AddressId { get; set; }
+        public string Street { get; set; }
+        public string HouseNr { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
     }
 }

@@ -1,16 +1,13 @@
-﻿using Integratieproject1.Models.Datatypes;
-using Integratieproject1.Models.Projects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Integratieproject1.Models
+namespace Integratieproject1.Models.Datatypes
 {
     public class Location
     {
-        public String locationName { get; set; }
-        public Address address { get; set; }
-        public Position position { get; set; }
+     [Key]
+        public int LocationId { get; set; }
+        public string LocationName { get; set; }
+        public Address Address { get; set; }
+        public Position Position { get; set; }
     }
 }

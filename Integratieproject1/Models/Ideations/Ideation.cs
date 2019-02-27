@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Integratieproject1.Models.Projects;
 
-namespace Integratieproject1.Models
+namespace Integratieproject1.Models.Ideations
 {
     public class Ideation
     {
-        public String centralQuestion { get; set; }
-        public Boolean inputIdeation { get; set; }
-    }
+
+    [Key]
+    public int IdeationId { get; set; }
+    [Required]
+    public string CentralQuestion { get; set; }
+    [Required]
+    public bool InputIdeation { get; set; }
+    [Required] public Phase Phase { get; set; }
+    public IList<Reaction> Reactions { get; set; }
+    public IList<Idea> Ideas { get; set; }
+    
+    /*[ForeignKey("Phase")]
+    public int PhaseFk { get; set; }*/
+  }
 }
