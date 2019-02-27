@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using Integratieproject1.BL.Models;
 using Microsoft.AspNetCore.Mvc;
-using Integratieproject1.Models;
 
 namespace Integratieproject1.Controllers
 {

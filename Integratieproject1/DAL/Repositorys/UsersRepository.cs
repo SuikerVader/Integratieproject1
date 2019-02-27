@@ -3,10 +3,11 @@ namespace Integratieproject1.DAL.Repositorys
     public class UsersRepository
     {
         private CityOfIdeasDbContext ctx = null;
-        public UsersRepository()
+        public UsersRepository(CityOfIdeasDbContext dbContext)
         {
-            ctx = new CityOfIdeasDbContext();
-            CityOfIdeasDbInitializer.Initialize(ctx, false);
+            ctx = dbContext;
+            //CityOfIdeasDbInitializer.Initialize(ctx, false);
         }
+        
     }
 }

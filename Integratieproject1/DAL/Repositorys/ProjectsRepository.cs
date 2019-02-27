@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using Integratieproject1.Models.Ideations;
-using Integratieproject1.Models.Projects;
+using Integratieproject1.BL.Models.Projects;
 
 namespace Integratieproject1.DAL.Repositorys
 {
     public class ProjectsRepository
     {
         private CityOfIdeasDbContext ctx = null;
-        public ProjectsRepository()
+        public ProjectsRepository( CityOfIdeasDbContext dbContext)
         {
-            ctx = new CityOfIdeasDbContext();
-            CityOfIdeasDbInitializer.Initialize(ctx, false);
+            ctx = dbContext ;
+            //CityOfIdeasDbInitializer.Initialize(ctx, false);
         }
         
         // Platform methods

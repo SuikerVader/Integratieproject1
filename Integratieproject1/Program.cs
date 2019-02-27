@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.BL.Models.Datatypes;
+using Integratieproject1.BL.Models.Ideations;
+using Integratieproject1.BL.Models.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositorys;
-using Integratieproject1.Models;
-using Integratieproject1.Models.Datatypes;
-using Integratieproject1.Models.Ideations;
-using Integratieproject1.Models.Projects;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
@@ -65,12 +64,13 @@ namespace Integratieproject1
           Phase = phase
       };
       
-      IdeationsRepository ideationsRepository = new IdeationsRepository();
-      ProjectsRepository projectsRepository  = new ProjectsRepository();
+      
+      ProjectsRepository projectsRepository  = new ProjectsRepository(ctx);
       projectsRepository.CreatePlatform(platform);
       projectsRepository.CreateProject(project);
       projectsRepository.CreatePhase(phase);
-      //ideationsRepository.CreateIdeation(ideation);
+      IdeationsRepository ideationsRepository = new IdeationsRepository(ctx);
+      ideationsRepository.CreateIdeation(ideation);
       
       
       CreateWebHostBuilder(args).Build().Run();
