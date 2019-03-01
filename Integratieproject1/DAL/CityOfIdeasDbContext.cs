@@ -1,14 +1,13 @@
-﻿using Integratieproject1.Models;
-using Integratieproject1.Models.Ideations;
-using Integratieproject1.Models.IoT;
-using Integratieproject1.Models.Projects;
-using Integratieproject1.Models.Surveys;
-using Integratieproject1.Models.Users;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.BL.Models.Ideations;
+using Integratieproject1.BL.Models.IoT;
+using Integratieproject1.BL.Models.Projects;
+using Integratieproject1.BL.Models.Surveys;
+using Integratieproject1.BL.Models.Users;
 
 namespace Integratieproject1.DAL
 {
