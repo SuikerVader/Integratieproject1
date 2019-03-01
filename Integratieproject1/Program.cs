@@ -48,11 +48,22 @@ namespace Integratieproject1
           Status = "Phase1",
           Location = location
       };
+      Project project2 = new Project
+      {
+          ProjectName = "test2",
+          StartDate = DateTime.Today,
+          EndDate = DateTime.Today.AddYears(1),
+          Platform = platform,
+          Objective = "test2",
+          Description = "test2",
+          Status = "Phase2",
+          Location = location
+      };
       Phase phase = new Phase
       {
           PhaseNr = 1,
-          PhaseName = "test1",
-          Description = "test1",
+          PhaseName = "phasetest1",
+          Description = "phasedescriptiontest1",
           StartDate = DateTime.Today,
           EndDate = DateTime.Today.AddMonths(1),
           Project = project
@@ -60,7 +71,7 @@ namespace Integratieproject1
 
       Ideation ideation = new Ideation
       {
-          CentralQuestion = "test1", 
+          CentralQuestion = "ideationtest1", 
           InputIdeation = true, 
           Phase = phase
       };
@@ -104,6 +115,7 @@ namespace Integratieproject1
       ProjectsRepository projectsRepository  = new ProjectsRepository(uow.ctx);
       projectsRepository.CreatePlatform(platform);
       projectsRepository.CreateProject(project);
+      projectsRepository.CreateProject(project2);
       projectsRepository.CreatePhase(phase);
       IdeationsRepository ideationsRepository = new IdeationsRepository(uow.ctx);
       ideationsRepository.CreateIdeation(ideation);
