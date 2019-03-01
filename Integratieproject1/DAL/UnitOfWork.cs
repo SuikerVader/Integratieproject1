@@ -1,3 +1,5 @@
+using System;
+
 namespace Integratieproject1.DAL
 {
     public class UnitOfWork
@@ -6,6 +8,7 @@ namespace Integratieproject1.DAL
         public UnitOfWork()
         {
             ctx = new CityOfIdeasDbContext();
+            Console.WriteLine("uow fixed!");
             CityOfIdeasDbInitializer.Initialize(ctx,true);
         }
 
