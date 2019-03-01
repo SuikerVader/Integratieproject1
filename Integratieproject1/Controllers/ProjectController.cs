@@ -1,9 +1,6 @@
-using System.Diagnostics;
 using Integratieproject1.BL.Managers;
-using Integratieproject1.BL.Models;
 using Integratieproject1.BL.Models.Ideations;
 using Integratieproject1.BL.Models.Projects;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.Controllers
