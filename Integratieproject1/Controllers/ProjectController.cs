@@ -3,7 +3,7 @@ using Integratieproject1.BL.Models.Ideations;
 using Integratieproject1.BL.Models.Projects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Integratieproject1.UI.Controllers
+namespace Integratieproject1.Controllers
 {
     public class ProjectController : Controller
     {
