@@ -4,7 +4,7 @@ using Integratieproject1.BL.Models;
 using Integratieproject1.BL.Models.Projects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Integratieproject1.Controllers
+namespace Integratieproject1.UI.Controllers
 {
     public class HomeController : Controller
     {
