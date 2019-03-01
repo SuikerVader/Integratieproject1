@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.BL.Models.Projects;
@@ -41,7 +42,12 @@ namespace Integratieproject1.DAL.Repositorys
         public Project CreateProject(Project project)
         {
             ctx.Projects.Add(project);
+            Platform platform = GetPlatform(project.Platform.PlatformId) ;
+            /*platform.Projects.Add(project);
+            ctx.Platforms.Update(platform);*/
+            Console.WriteLine(platform.Projects.First().ToString());
             ctx.SaveChanges();
+            Console.WriteLine(ctx.Platforms.Find(project.Platform.PlatformId).Projects.Count);
             return project;
         }
         
@@ -57,6 +63,8 @@ namespace Integratieproject1.DAL.Repositorys
         public Phase CreatePhase(Phase phase)
         {
             ctx.Phases.Add(phase);
+            Project project = phase.Project;
+            project.Phases.Add(phase);
             ctx.SaveChanges();
             return phase;
         }

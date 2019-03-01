@@ -13,6 +13,7 @@ namespace Integratieproject1.DAL.Repositorys
             //CityOfIdeasDbInitializer.Initialize(ctx, false);
         }
         
+        
         // Survey methods
         public IEnumerable<Survey> GetSurveys()
         {

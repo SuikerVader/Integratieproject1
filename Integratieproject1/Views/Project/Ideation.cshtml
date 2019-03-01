@@ -1,0 +1,20 @@
+@model Integratieproject1.BL.Models.Ideations.Ideation
+
+@{
+    ViewBag.Title = "ideationPage";
+    Layout = "_Layout";
+}
+
+<h2>@Model.CentralQuestion</h2>
+<p>idea's: </p>
+@foreach (var idea in Model.Ideas)
+{
+    <div>
+        <h3>@idea.Title</h3>
+        <button>create reaction</button>
+        @foreach (var reaction in idea.Reactions)
+        {
+            <p>@reaction.ReactionText</p>
+        }
+    </div>
+}

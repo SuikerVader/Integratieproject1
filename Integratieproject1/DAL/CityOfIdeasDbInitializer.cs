@@ -18,11 +18,11 @@ namespace Integratieproject1.DAL
           context.Database.EnsureDeleted();
         // Create database and initial data if needed
         if (context.Database.EnsureCreated())
-          Console.WriteLine("initializer test1");
+          //Console.WriteLine("initializer test1");
         // Seed(context);
         hasRunDuringAppExecution = true;
       }
-      Console.WriteLine("initializer test");
+      
     }
   }
 }

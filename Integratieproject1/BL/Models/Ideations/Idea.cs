@@ -22,6 +22,7 @@ namespace Integratieproject1.BL.Models.Ideations
     [Required] public Ideation Ideation { get; set; }
     public IList<IoTSetup> IoTSetups { get; set; }
     public IList<Vote> Votes { get; set; }
+    public IList<Reaction> Reactions { get; set; }
         
         
         /*[Required]

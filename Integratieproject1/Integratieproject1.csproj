@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
-    <Folder Include="BL\Managers" />
     <Folder Include="DAL\Interfaces\" />
+    <Folder Include="Pages\Project" />
     <Folder Include="UI" />
   </ItemGroup>
 
