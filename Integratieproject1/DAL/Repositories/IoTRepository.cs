@@ -1,16 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Integratieproject1.BL.Models.IoT;
 
-namespace Integratieproject1.DAL.Repositorys
+namespace Integratieproject1.DAL.Repositories
 {
     public class IoTRepository
     {
-        private CityOfIdeasDbContext ctx = null;
-        public IoTRepository( CityOfIdeasDbContext dbContext)
+        private readonly CityOfIdeasDbContext ctx = null;
+        public IoTRepository( UnitOfWork unitOfWork)
         {
-            ctx = dbContext;
-            //CityOfIdeasDbInitializer.Initialize(ctx, false);
+            if (unitOfWork == null)
+                throw new ArgumentNullException("unitOfWork");
+
+            ctx = unitOfWork.ctx;
         }
         public IEnumerable<IoTSetup> GetIoTSetups()
         {

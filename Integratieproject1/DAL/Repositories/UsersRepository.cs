@@ -1,12 +1,16 @@
-namespace Integratieproject1.DAL.Repositorys
+using System;
+
+namespace Integratieproject1.DAL.Repositories
 {
     public class UsersRepository
     {
         private CityOfIdeasDbContext ctx = null;
-        public UsersRepository(CityOfIdeasDbContext dbContext)
+        public UsersRepository(UnitOfWork unitOfWork)
         {
-            ctx = dbContext;
-            //CityOfIdeasDbInitializer.Initialize(ctx, false);
+            if (unitOfWork == null)
+                throw new ArgumentNullException("unitOfWork");
+
+            ctx = unitOfWork.ctx;
         }
         
     }
