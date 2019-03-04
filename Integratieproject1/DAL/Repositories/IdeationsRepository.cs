@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Integratieproject1.BL.Models.Ideations;
 using Integratieproject1.BL.Models.Projects;
 
-namespace Integratieproject1.DAL.Repositorys
+namespace Integratieproject1.DAL.Repositories
 {
   public class IdeationsRepository
   {
-    private CityOfIdeasDbContext ctx = null;
-    public IdeationsRepository(CityOfIdeasDbContext dbContext)
+    private readonly CityOfIdeasDbContext ctx;
+
+   
+    public IdeationsRepository(UnitOfWork unitOfWork)
     {
-      ctx = dbContext;
-      //CityOfIdeasDbInitializer.Initialize(ctx, false);
+      if (unitOfWork == null)
+        throw new ArgumentNullException("unitOfWork");
+      
+      ctx = unitOfWork.ctx;
     }
     
     // Ideation methods

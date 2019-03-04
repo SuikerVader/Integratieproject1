@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.BL.Models.Projects;
 
-namespace Integratieproject1.DAL.Repositorys
+namespace Integratieproject1.DAL.Repositories
 {
     public class ProjectsRepository
     {
-        private CityOfIdeasDbContext ctx = null;
-        public ProjectsRepository( CityOfIdeasDbContext dbContext)
+        private readonly CityOfIdeasDbContext ctx;
+
+       
+        public ProjectsRepository( UnitOfWork unitOfWork)
         {
-            ctx = dbContext ;
-            //CityOfIdeasDbInitializer.Initialize(ctx, false);
+            if (unitOfWork == null)
+                throw new ArgumentNullException("unitOfWork");
+
+            ctx = unitOfWork.ctx ;
         }
         
         // Platform methods
