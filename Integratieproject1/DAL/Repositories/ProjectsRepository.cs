@@ -7,7 +7,7 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class ProjectsRepository
     {
-        private readonly CityOfIdeasDbContext ctx = null;
+        private readonly CityOfIdeasDbContext ctx;
 
        
         public ProjectsRepository( UnitOfWork unitOfWork)

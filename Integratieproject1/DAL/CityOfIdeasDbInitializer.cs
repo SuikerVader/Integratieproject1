@@ -45,7 +45,7 @@ namespace Integratieproject1.DAL
       Platform platform = new Platform
       {
         PlatformName = "test1",
-        Adress = address
+        Address = address
       };
 
       Project project = new Project
@@ -138,7 +138,7 @@ namespace Integratieproject1.DAL
       ctx.Phases.Add(phase);
       project.Phases.Add(phase);
       ctx.Projects.AddRange(project,project2);
-      platform.Projects= new List<Project>(){project, project2};
+      platform.Projects= new List<Project>{project, project2};
       ctx.Platforms.Add(platform);
             
       

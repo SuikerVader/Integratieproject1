@@ -12,11 +12,11 @@ namespace Integratieproject1.BL.Models.Projects
     [Required]
         public string PlatformName { get; set; }
         public string Logo { get; set; }
-        public Address Adress { get; set; }
+        public Address Address { get; set; }
         public string Phonenumber { get; set; }
         public string Description { get; set; }
     
-        public IList<Project> Projects { get; set; }
-        public IList<User> Users { get; set; }
+        public ICollection<Project> Projects { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

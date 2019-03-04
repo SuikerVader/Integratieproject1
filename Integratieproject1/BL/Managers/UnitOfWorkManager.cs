@@ -6,7 +6,7 @@ namespace Integratieproject1.BL.Managers
     {
         public UnitOfWorkManager()
         {
-            this.UnitOfWork = new UnitOfWork();
+            UnitOfWork = new UnitOfWork();
         }
         
         internal UnitOfWork UnitOfWork { get; } //Readonly-property!

@@ -25,6 +25,6 @@ namespace Integratieproject1.BL.Models.Projects
         [Required] 
         public Platform Platform { get; set; }
         
-        public IList<Phase> Phases { get; set; }
+        public ICollection<Phase> Phases { get; set; }
     }
 }

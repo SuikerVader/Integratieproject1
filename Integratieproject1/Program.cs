@@ -25,15 +25,7 @@ namespace Integratieproject1
     {
         public static void Main(string[] args)
         {
-       //CityOfIdeasDbContext dbContext = new CityOfIdeasDbContext();
-       /*ProjectsManager projectsManager = new ProjectsManager();
-       Platform platform;
-       platform = projectsManager.GetPlatform(1);
-       Console.WriteLine(platform.PlatformName);
-       Console.WriteLine(platform.Projects.Count);*/
       CreateWebHostBuilder(args).Build().Run();
-      Console.WriteLine("Hallo iedereen! Test Branching");
-            
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

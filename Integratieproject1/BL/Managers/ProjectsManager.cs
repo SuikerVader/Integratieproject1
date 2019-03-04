@@ -51,7 +51,6 @@ namespace Integratieproject1.BL.Managers
                     projectsRepository.CreateProject(project);
                     unitOfWorkManager.Save();
                 }
-
         #endregion
 
         #region Phase

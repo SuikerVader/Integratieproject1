@@ -22,8 +22,8 @@ namespace Integratieproject1.BL.Models.Projects
     [Required]
     public Project Project { get; set; }
 
-    public IList<Ideation> Ideations { get; set; }
-    public IList<Survey> Surveys { get; set; }
+    public ICollection<Ideation> Ideations { get; set; }
+    public ICollection<Survey> Surveys { get; set; }
     
     /*[Required]
     [ForeignKey("Project")]

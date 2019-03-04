@@ -86,7 +86,6 @@ namespace Integratieproject1.DAL
       Helper.PrintDbContextTrackedEntitiesStates(this, "STATES AFTER SaveChanges() (TO DB)");            
             
       return infectedRecords;
-      return 1;
     }
 
     private readonly bool delaySave = false;
