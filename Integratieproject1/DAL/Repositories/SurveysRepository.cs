@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Integratieproject1.BL.Models.Surveys;
+using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Surveys;
 
 namespace Integratieproject1.DAL.Repositories
 {
-    public class SurveysRepository
+    public class SurveysRepository : ISurveysRepository
     {
         private readonly CityOfIdeasDbContext ctx = null;
 

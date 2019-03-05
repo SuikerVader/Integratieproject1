@@ -1,11 +1,12 @@
 using System;
-using Integratieproject1.BL.Models.Ideations;
+using Integratieproject1.BL.Interfaces;
+using Integratieproject1.Domain.Ideations;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
 
 namespace Integratieproject1.BL.Managers
 {
-    public class IdeationsManager
+    public class IdeationsManager : IIdeationsManager
     {
         private IdeationsRepository ideationsRepository;
         private UnitOfWorkManager unitOfWorkManager;

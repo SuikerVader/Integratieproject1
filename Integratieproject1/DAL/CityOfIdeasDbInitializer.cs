@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Integratieproject1.BL.Models.Datatypes;
-using Integratieproject1.BL.Models.Ideations;
-using Integratieproject1.BL.Models.Projects;
-using Integratieproject1.BL.Models.Surveys;
-using Integratieproject1.BL.Models.Users;
+using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL

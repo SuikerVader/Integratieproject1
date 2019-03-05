@@ -1,0 +1,14 @@
+﻿@model Integratieproject1.Domain.Projects.Platform
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    @foreach (var project in Model.Projects)
+    {
+        <a asp-area="" asp-controller="Project"
+           asp-action="Project" asp-route-projectId="@project.ProjectId" >@project.ProjectName
+        </a>
+    }
+    
+</div>

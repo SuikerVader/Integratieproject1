@@ -1,12 +1,13 @@
 using System;
-using Integratieproject1.BL.Models.Surveys;
+using Integratieproject1.BL.Interfaces;
+using Integratieproject1.Domain.Surveys;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 
 namespace Integratieproject1.BL.Managers
 {
-    public class SurveysManager
+    public class SurveysManager : ISurveysManager
     {
         private SurveysRepository surveysRepository;
         private UnitOfWorkManager unitOfWorkManager;

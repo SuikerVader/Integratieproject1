@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
-    <Folder Include="DAL\Interfaces\" />
     <Folder Include="UI" />
   </ItemGroup>
 
@@ -68,6 +67,16 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="Views\Project\Ideation.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Project\Project.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Project\Survey.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\About.cshtml" />
+    <UpToDateCheckInput Remove="Views\Home\Contact.cshtml" />
+    <UpToDateCheckInput Remove="Views\Home\Index.cshtml" />
+    <UpToDateCheckInput Remove="Views\Home\Privacy.cshtml" />
   </ItemGroup>
 
 </Project>

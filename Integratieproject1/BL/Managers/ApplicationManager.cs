@@ -1,6 +1,6 @@
-using Integratieproject1.BL.Models.Ideations;
-using Integratieproject1.BL.Models.Projects;
-using Integratieproject1.BL.Models.Surveys;
+using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
 
 namespace Integratieproject1.BL.Managers
 {
