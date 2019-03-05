@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Integratieproject1.BL.Models.IoT;
+using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.IoT;
 
 namespace Integratieproject1.DAL.Repositories
 {
-    public class IoTRepository
+    public class IoTRepository : IIoTRepository
     {
         private readonly CityOfIdeasDbContext ctx = null;
         public IoTRepository( UnitOfWork unitOfWork)

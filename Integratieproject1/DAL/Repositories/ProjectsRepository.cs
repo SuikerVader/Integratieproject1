@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Integratieproject1.BL.Models.Projects;
+using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Projects;
 
 namespace Integratieproject1.DAL.Repositories
 {
-    public class ProjectsRepository
+    public class ProjectsRepository : IProjectsRepository
     {
         private readonly CityOfIdeasDbContext ctx;
 
