@@ -25,7 +25,10 @@ namespace Integratieproject1
     {
         public static void Main(string[] args)
         {
-      CreateWebHostBuilder(args).Build().Run();
+        /*CityOfIdeasDbContext ctx = new CityOfIdeasDbContext();
+        ProjectsManager projectsManager = new ProjectsManager();
+        Console.WriteLine(projectsManager.GetPlatform(1).Projects.Count);*/
+        CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

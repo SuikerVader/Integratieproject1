@@ -125,20 +125,20 @@ namespace Integratieproject1.DAL
         AnswerText = "test1"
       };
 
-      ctx.Answers.Add(answer);
+      //ctx.Answers.Add(answer);
       question.Answers = new List<Answer>(){answer};
-      ctx.Questions.Add(question);
-      survey.Questions.Add(question);
-      ctx.Surveys.Add(survey);
-      phase.Surveys.Add(survey);
-      ctx.Ideas.Add(idea);
-      ideation.Ideas.Add(idea);
-      ctx.Ideations.Add(ideation);
-      phase.Ideations.Add(ideation);
-      ctx.Phases.Add(phase);
-      project.Phases.Add(phase);
-      ctx.Projects.AddRange(project,project2);
-      platform.Projects= new List<Project>{project, project2};
+      //ctx.Questions.Add(question);
+      survey.Questions = new List<Question>(){question};
+      //ctx.Surveys.Add(survey);
+      phase.Surveys = new List<Survey>(){survey};
+      //ctx.Ideas.Add(idea);
+      ideation.Ideas = new List<Idea>(){idea};
+      //ctx.Ideations.Add(ideation);
+      phase.Ideations = new List<Ideation>(){ideation};
+      //ctx.Phases.Add(phase);
+      project.Phases = new List<Phase>() {phase};
+      //ctx.Projects.AddRange(project,project2);
+      platform.Projects = new List<Project>(){project, project2};
       ctx.Platforms.Add(platform);
             
       

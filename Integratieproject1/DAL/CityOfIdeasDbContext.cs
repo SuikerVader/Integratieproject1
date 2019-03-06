@@ -19,6 +19,7 @@ namespace Integratieproject1.DAL
     {
       public CityOfIdeasDbContext()
       {
+        this.ChangeTracker.AutoDetectChangesEnabled = false;
         CityOfIdeasDbInitializer.Initialize(this,true);
         Console.WriteLine("dbcontext constructor");
       }
@@ -52,6 +53,14 @@ namespace Integratieproject1.DAL
           new DebugLoggerProvider(
             (category, level) => category == DbLoggerCategory.Database.Command.Name && level == LogLevel.Information),
         }));
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      /*base.OnModelCreating(modelBuilder);
+      modelBuilder.Entity<Project>().Property<int>("PlatformFK");
+      modelBuilder.Entity<Project>().HasOne<Platform>(p => p.Platform).WithMany(po => po.Projects).HasForeignKey("PlatformId");
+    */
     }
 
     public override int SaveChanges()
