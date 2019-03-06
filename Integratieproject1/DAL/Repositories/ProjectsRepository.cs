@@ -43,7 +43,10 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Project GetProject(int projectId)
         {
-            return ctx.Projects.Include(p => p.Phases).Single(pr => pr.ProjectId == projectId);
+            return ctx.Projects
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
+                .Include(p => p.Phases).ThenInclude(s => s.Surveys)
+                .Single(pr => pr.ProjectId == projectId);
         }
         public Project CreateProject(Project project)
         {

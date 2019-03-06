@@ -16,7 +16,9 @@
          {
              <div>
                  <h3>@ideation.CentralQuestion</h3>
-                 <button>view ideation</button>
+                 <a asp-area="" asp-controller="Project"
+                    asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId" >view ideation
+                 </a>
              </div>
          }
         </div>
@@ -26,7 +28,9 @@
         {
             <div>
                 <h3> @survey.Title</h3>
-                <button>answer survey</button>
+                <a asp-area="" asp-controller="Project"
+                        asp-action="Survey" asp-route-surveyId="@survey.SurveyId" >answer survey
+                </a>
             </div>
         }
         </div>
