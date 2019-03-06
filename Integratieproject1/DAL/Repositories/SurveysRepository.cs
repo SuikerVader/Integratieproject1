@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Surveys;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -27,7 +28,7 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Survey GetSurvey(int surveyId)
         {
-            return ctx.Surveys.Find(surveyId);
+            return ctx.Surveys.Include(q => q.Questions).ThenInclude(a => a.Answers).Single(s => s.SurveyId == surveyId);;
         }
         public Survey CreateSurvey(Survey survey)
         {

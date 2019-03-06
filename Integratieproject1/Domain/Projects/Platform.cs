@@ -15,7 +15,6 @@ namespace Integratieproject1.Domain.Projects
         public Address Address { get; set; }
         public string Phonenumber { get; set; }
         public string Description { get; set; }
-    
         public ICollection<Project> Projects { get; set; }
         public ICollection<User> Users { get; set; }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -27,7 +28,7 @@ namespace Integratieproject1.DAL.Repositories
     }
     public Ideation GetIdeation(int ideationId)
     {
-      return ctx.Ideations.Find(ideationId);
+      return ctx.Ideations.Include(i => i.Ideas).Single(id => id.IdeationId == ideationId);
     }
     public Ideation CreateIdeation(Ideation ideation)
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -26,7 +27,7 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Platform GetPlatform(int platformId)
         {
-            return ctx.Platforms.Find(platformId);
+            return ctx.Platforms.Include(pl => pl.Projects).Single(pl => pl.PlatformId == platformId);
         }
         public Platform CreatePlatform(Platform platform)
         {
@@ -42,7 +43,7 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Project GetProject(int projectId)
         {
-            return ctx.Projects.Find(projectId);
+            return ctx.Projects.Include(p => p.Phases).Single(pr => pr.ProjectId == projectId);
         }
         public Project CreateProject(Project project)
         {
@@ -63,7 +64,7 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Phase GetPhase(int phaseId)
         {
-            return ctx.Phases.Find(phaseId);
+            return ctx.Phases.Include(i => i.Ideations).Include(s => s.Surveys).Single(p => p.PhaseId == phaseId);
         }
         public Phase CreatePhase(Phase phase)
         {
