@@ -14,5 +14,6 @@ namespace Integratieproject1.DAL.Interfaces
         IEnumerable<Answer> GetAnswers();
         Answer GetAnswer(int answerId);
         Answer CreateAnswer(Answer answer);
+        Answer UpdateAnswer(Answer answer);
     }
 }

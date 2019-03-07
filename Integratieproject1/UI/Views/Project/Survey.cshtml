@@ -1,3 +1,5 @@
+@using System.Linq
+@using Integratieproject1.Domain.Surveys
 @model Integratieproject1.Domain.Surveys.Survey
 
 @{
@@ -6,13 +8,45 @@
 }
 
 <h2>@Model.Title</h2>
-@foreach (var question in Model.Questions)
-{
-    <div>
-        <h3>@question.QuestionText</h3>
-        @foreach (var answer in question.Answers)
-        {
-            <p>@answer.AnswerText</p>
-        }
-    </div>
-}
+<a asp-area="" asp-controller="Project"
+   asp-action="Results" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
+</a><form asp-controller="Project" asp-action="SaveFormData" asp-route-surveyId="@Model.SurveyId" method="post">
+    @foreach (var question in Model.Questions)
+    {
+        <div>
+            <h3>@question.QuestionText</h3>
+            @if (question.Answers.First().AnswerType == AnswerType.OPEN)
+            {
+                <input type="text" name="@question.QuestionNr">
+            }
+            else if (question.Answers.First().AnswerType == AnswerType.RADIO)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    <input type="radio" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
+                }
+            }
+            else if (question.Answers.First().AnswerType == AnswerType.CHECK)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    <input type="checkbox" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
+                }
+            }
+            else if (question.Answers.First().AnswerType == AnswerType.DROP)
+            {
+                <select name="@question.QuestionNr">
+                    @foreach (var answer in question.Answers)
+                    {
+                        <option value="@answer.AnswerText">@answer.AnswerText</option>
+                    }
+                </select>
+            }
+            else if (question.Answers.First().AnswerType == AnswerType.EMAIL)
+            {
+                <input type="email" name="@question.QuestionNr">
+            }    
+        </div>
+    }
+    <input type="submit" value="Submit">
+</form>
