@@ -1,7 +1,6 @@
 using System;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Users;
-using Integratieproject1.UI.ViewModels;
 
 namespace Integratieproject1.DAL.Repositories
 {
