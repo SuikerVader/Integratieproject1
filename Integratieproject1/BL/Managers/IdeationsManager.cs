@@ -40,5 +40,23 @@ namespace Integratieproject1.BL.Managers
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();
         }
+
+        public Idea GetIdea(int ideaId)
+        {
+            return ideationsRepository.GetIdea(ideaId);
+        }
+
+        public void PostReaction(int ideaId, string reactionText, int loggedInUserId)
+        {
+            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            Reaction reaction = new Reaction
+            {
+                Idea = ideationsRepository.GetIdea(ideaId),
+                LoggedInUser = usersManager.GetLoggedInUser(loggedInUserId),
+                ReactionText = reactionText
+            };
+            ideationsRepository.CreateReaction(reaction);
+            unitOfWorkManager.Save();
+        }
     }
 }

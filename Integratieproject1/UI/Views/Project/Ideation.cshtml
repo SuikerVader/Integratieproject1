@@ -11,11 +11,8 @@
 {
     <div>
         <h3>@idea.Title</h3>
-        <button>create reaction</button>
-        <p>Reactions:</p>
-        @foreach (var reaction in idea.Reactions)
-        {
-            <p>@reaction.ReactionText</p>
-        }
+        <a asp-area="" asp-controller="Project"
+           asp-action="Idea" asp-route-ideaId="@idea.IdeaId">view idea
+        </a>
     </div>
 }

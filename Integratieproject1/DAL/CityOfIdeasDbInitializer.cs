@@ -124,7 +124,23 @@ namespace Integratieproject1.DAL
         Question = question,
         AnswerText = "test1"
       };
+      Reaction reaction = new Reaction
+      {
+        Idea = idea,
+        TotalLikes = 1,
+        ReactionText = "reactionTest1",
+        LoggedInUser = loggedInUser
+      };
+      Vote vote = new Vote
+      {
+        VoteType = VoteType.VOTE,
+        User = loggedInUser,
+        Confirmed = true,
+        Idea = idea
+      };
 
+      idea.Reactions = new List<Reaction>(){reaction};
+      idea.Votes = new List<Vote>(){vote};
       //ctx.Answers.Add(answer);
       question.Answers = new List<Answer>(){answer};
       //ctx.Questions.Add(question);

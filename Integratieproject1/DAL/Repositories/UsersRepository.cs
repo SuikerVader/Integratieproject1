@@ -1,5 +1,7 @@
 using System;
 using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Users;
+using Integratieproject1.UI.ViewModels;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -10,8 +12,13 @@ namespace Integratieproject1.DAL.Repositories
         {
             if (unitOfWork == null)
                 throw new ArgumentNullException("unitOfWork");
-
+                
             ctx = unitOfWork.ctx;
+        }
+
+        public User GetUser(int userId)
+        {
+          return  ctx.Users.Find(userId);
         }
         
     }

@@ -37,5 +37,17 @@ namespace Integratieproject1.UI.Controllers
             Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/Survey.cshtml", survey);
         }
+
+        public IActionResult Idea(int ideaId)
+        {
+            Domain.Ideations.Idea idea = ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
+        [HttpPost]    
+        public IActionResult PostReaction(int ideaId, string reactionText, int loggedInUserId)
+        {
+            ideationsManager.PostReaction(ideaId, reactionText, loggedInUserId);
+            return RedirectToAction("Idea", ideaId);
+        }
     }
 }
