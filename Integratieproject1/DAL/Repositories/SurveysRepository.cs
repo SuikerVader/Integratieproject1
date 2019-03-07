@@ -68,5 +68,16 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return answer;
         }
+
+        public Answer UpdateAnswer(Answer answer)
+        {
+            Console.WriteLine("repo update called!");
+            Answer answer1 = new Answer();
+            answer1 = ctx.Answers.Find(answer.AnswerId);
+            answer1.TotalTimesChosen += 1;
+            ctx.Entry(answer1).State = EntityState.Modified;
+            ctx.SaveChanges();
+            return answer;
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Integratieproject1.DAL
       public CityOfIdeasDbContext()
       {
         this.ChangeTracker.AutoDetectChangesEnabled = false;
-        CityOfIdeasDbInitializer.Initialize(this,false);
+        CityOfIdeasDbInitializer.Initialize(this,true);
         Console.WriteLine("dbcontext constructor");
       }
 
