@@ -1,6 +1,6 @@
 namespace Integratieproject1.Domain.Surveys
 {
-    public enum AnswerType
+    public enum QuestionType
     {
         OPEN,
         RADIO,

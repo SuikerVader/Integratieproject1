@@ -116,6 +116,7 @@ namespace Integratieproject1.DAL
       {
         QuestionNr = 1,
         Survey = survey,
+        QuestionType = QuestionType.OPEN,
         QuestionText = "Wat is het belangrijkste voor dit plein?"
       };
       
@@ -123,6 +124,7 @@ namespace Integratieproject1.DAL
       {
         QuestionNr = 2,
         Survey = survey,
+        QuestionType = QuestionType.RADIO,
         QuestionText = "Voor wie is het plein het belangrijkste?"
       };
       
@@ -130,6 +132,7 @@ namespace Integratieproject1.DAL
       {
         QuestionNr = 3,
         Survey = survey,
+        QuestionType = QuestionType.CHECK,
         QuestionText = "Wat zou je graag willen doen op dit plein?"
       };
       
@@ -137,6 +140,7 @@ namespace Integratieproject1.DAL
       {
         QuestionNr = 4,
         Survey = survey,
+        QuestionType = QuestionType.DROP,
         QuestionText = "Hoe belangrijk is dit plein voor jou?"
       };
       
@@ -144,6 +148,7 @@ namespace Integratieproject1.DAL
       {
         QuestionNr = 5,
         Survey = survey,
+        QuestionType = QuestionType.EMAIL,
         QuestionText = "Geef je email om je stem te bevestigen!"
       };
       
@@ -151,7 +156,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = openQuestion,
-        AnswerType = AnswerType.OPEN,
         AnswerText = ""
       };
       
@@ -159,7 +163,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
-        AnswerType = AnswerType.RADIO,
         AnswerText = "Jongeren"
       };
       
@@ -167,7 +170,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
-        AnswerType = AnswerType.RADIO,
         AnswerText = "Volwassenen"
       };
       
@@ -175,7 +177,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
-        AnswerType = AnswerType.RADIO,
         AnswerText = "Ouderen"
       };
       
@@ -183,7 +184,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
-        AnswerType = AnswerType.RADIO,
         AnswerText = "Iedereen"
       };
       
@@ -191,7 +191,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
-        AnswerType = AnswerType.CHECK,
         AnswerText = "Sporten"
       };
       
@@ -199,7 +198,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
-        AnswerType = AnswerType.CHECK,
         AnswerText = "Spelen"
       };
       
@@ -207,7 +205,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
-        AnswerType = AnswerType.CHECK,
         AnswerText = "Ontspannen"
       };
       
@@ -215,7 +212,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
-        AnswerType = AnswerType.CHECK,
         AnswerText = "Geen mening"
       };
       
@@ -223,7 +219,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
-        AnswerType = AnswerType.DROP,
         AnswerText = "Niet belangrijk"
       };
       
@@ -231,7 +226,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
-        AnswerType = AnswerType.DROP,
         AnswerText = "Beetje belangrijk"
       };
       
@@ -239,7 +233,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
-        AnswerType = AnswerType.DROP,
         AnswerText = "Vrij belangrijk"
       };
       
@@ -247,7 +240,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
-        AnswerType = AnswerType.DROP,
         AnswerText = "Heel belangrijk"
       };
       
@@ -255,7 +247,6 @@ namespace Integratieproject1.DAL
       {
         TotalTimesChosen = 0,
         Question = emailQuestion,
-        AnswerType = AnswerType.EMAIL,
         AnswerText = ""
       };
 

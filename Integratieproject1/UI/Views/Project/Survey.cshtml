@@ -15,25 +15,25 @@
     {
         <div>
             <h3>@question.QuestionText</h3>
-            @if (question.Answers.First().AnswerType == AnswerType.OPEN)
+            @if (question.QuestionType == QuestionType.OPEN)
             {
                 <input type="text" name="@question.QuestionNr">
             }
-            else if (question.Answers.First().AnswerType == AnswerType.RADIO)
+            else if (question.QuestionType == QuestionType.RADIO)
             {
                 foreach (var answer in question.Answers)
                 {
                     <input type="radio" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
                 }
             }
-            else if (question.Answers.First().AnswerType == AnswerType.CHECK)
+            else if (question.QuestionType == QuestionType.CHECK)
             {
                 foreach (var answer in question.Answers)
                 {
                     <input type="checkbox" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
                 }
             }
-            else if (question.Answers.First().AnswerType == AnswerType.DROP)
+            else if (question.QuestionType == QuestionType.DROP)
             {
                 <select name="@question.QuestionNr">
                     @foreach (var answer in question.Answers)
@@ -42,7 +42,7 @@
                     }
                 </select>
             }
-            else if (question.Answers.First().AnswerType == AnswerType.EMAIL)
+            else if (question.QuestionType == QuestionType.EMAIL)
             {
                 <input type="email" name="@question.QuestionNr">
             }    
