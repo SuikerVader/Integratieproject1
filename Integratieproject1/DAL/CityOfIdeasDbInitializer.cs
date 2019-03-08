@@ -15,7 +15,7 @@ namespace Integratieproject1.DAL
   {
     private static bool hasRunDuringAppExecution = false;
     public static void Initialize(CityOfIdeasDbContext context
-    , bool dropCreateDatabase = false)
+    , bool dropCreateDatabase = true)
     {
       if (!hasRunDuringAppExecution)
       {
@@ -109,20 +109,154 @@ namespace Integratieproject1.DAL
       
       Survey survey = new Survey
       {
-        Title = "test1",
+        Title = "SurveyTest",
         Phase = phase
       };
-      Question question = new Question
+      Question openQuestion = new Question
       {
         QuestionNr = 1,
         Survey = survey,
-        QuestionText = "test1"
+        QuestionText = "Wat is het belangrijkste voor dit plein?"
       };
-      Answer answer = new Answer
+      
+      Question radioQuestion = new Question
+      {
+        QuestionNr = 2,
+        Survey = survey,
+        QuestionText = "Voor wie is het plein het belangrijkste?"
+      };
+      
+      Question checkQuestion = new Question
+      {
+        QuestionNr = 3,
+        Survey = survey,
+        QuestionText = "Wat zou je graag willen doen op dit plein?"
+      };
+      
+      Question dropQuestion = new Question
+      {
+        QuestionNr = 4,
+        Survey = survey,
+        QuestionText = "Hoe belangrijk is dit plein voor jou?"
+      };
+      
+      Question emailQuestion = new Question
+      {
+        QuestionNr = 5,
+        Survey = survey,
+        QuestionText = "Geef je email om je stem te bevestigen!"
+      };
+      
+      Answer open = new Answer
       {
         TotalTimesChosen = 0,
-        Question = question,
-        AnswerText = "test1"
+        Question = openQuestion,
+        AnswerType = AnswerType.OPEN,
+        AnswerText = ""
+      };
+      
+      Answer radio1 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = radioQuestion,
+        AnswerType = AnswerType.RADIO,
+        AnswerText = "Jongeren"
+      };
+      
+      Answer radio2 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = radioQuestion,
+        AnswerType = AnswerType.RADIO,
+        AnswerText = "Volwassenen"
+      };
+      
+      Answer radio3 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = radioQuestion,
+        AnswerType = AnswerType.RADIO,
+        AnswerText = "Ouderen"
+      };
+      
+      Answer radio4 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = radioQuestion,
+        AnswerType = AnswerType.RADIO,
+        AnswerText = "Iedereen"
+      };
+      
+      Answer check1 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = checkQuestion,
+        AnswerType = AnswerType.CHECK,
+        AnswerText = "Sporten"
+      };
+      
+      Answer check2 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = checkQuestion,
+        AnswerType = AnswerType.CHECK,
+        AnswerText = "Spelen"
+      };
+      
+      Answer check3 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = checkQuestion,
+        AnswerType = AnswerType.CHECK,
+        AnswerText = "Ontspannen"
+      };
+      
+      Answer check4 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = checkQuestion,
+        AnswerType = AnswerType.CHECK,
+        AnswerText = "Geen mening"
+      };
+      
+      Answer drop1 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = dropQuestion,
+        AnswerType = AnswerType.DROP,
+        AnswerText = "Niet belangrijk"
+      };
+      
+      Answer drop2 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = dropQuestion,
+        AnswerType = AnswerType.DROP,
+        AnswerText = "Beetje belangrijk"
+      };
+      
+      Answer drop3 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = dropQuestion,
+        AnswerType = AnswerType.DROP,
+        AnswerText = "Vrij belangrijk"
+      };
+      
+      Answer drop4 = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = dropQuestion,
+        AnswerType = AnswerType.DROP,
+        AnswerText = "Heel belangrijk"
+      };
+      
+      Answer email = new Answer
+      {
+        TotalTimesChosen = 0,
+        Question = emailQuestion,
+        AnswerType = AnswerType.EMAIL,
+        AnswerText = ""
       };
       Reaction reaction = new Reaction
       {
@@ -142,9 +276,13 @@ namespace Integratieproject1.DAL
       idea.Reactions = new List<Reaction>(){reaction};
       idea.Votes = new List<Vote>(){vote};
       //ctx.Answers.Add(answer);
-      question.Answers = new List<Answer>(){answer};
+      openQuestion.Answers = new List<Answer>(){open};
+      radioQuestion.Answers = new List<Answer>(){radio1, radio2, radio3, radio4};
+      checkQuestion.Answers = new List<Answer>(){check1, check2, check3, check4};
+      dropQuestion.Answers = new List<Answer>(){drop1, drop2, drop3, drop4};
+      emailQuestion.Answers = new List<Answer>(){email};
       //ctx.Questions.Add(question);
-      survey.Questions = new List<Question>(){question};
+      survey.Questions = new List<Question>(){openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
       //ctx.Surveys.Add(survey);
       phase.Surveys = new List<Survey>(){survey};
       //ctx.Ideas.Add(idea);
