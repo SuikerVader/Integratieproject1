@@ -107,5 +107,18 @@ namespace Integratieproject1.UI.Controllers
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
+
+        public IActionResult LikeReaction(int ideaId,int reactionId, IFormCollection formCollection)
+        {
+            ArrayList parameters = new ArrayList();
+            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            {
+                parameters.Add(pair.Value);
+            }
+            ideationsManager.LikeReaction(reactionId, parameters[0].ToString());
+            Idea idea = ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+
+        }
     }
 }

@@ -89,5 +89,20 @@ namespace Integratieproject1.BL.Managers
             }
             
         }
+
+        public void LikeReaction(int reactionId, string user)
+        {
+            if (ideationsRepository.CheckLike(reactionId,user) == true)
+            {
+                ideationsRepository.LikeReaction(reactionId, user);
+                unitOfWorkManager.Save();
+            }
+            else
+            {
+                throw new Exception("user has already liked this reaction");
+            }
+           
+
+        }
     }
 }

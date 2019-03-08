@@ -124,6 +124,19 @@ namespace Integratieproject1.DAL.Repositories
             return true;
           }
         }
+
+        public bool CheckLike(int reactionId, string user)
+        {
+          return true;
+        }
+
+        public void LikeReaction(int reactionId, string user)
+        {
+          Reaction reaction = ctx.Reactions.Find(reactionId);
+          reaction.TotalLikes++;
+          ctx.Reactions.Update(reaction);
+          ctx.SaveChanges();
+        }
   }
 
     

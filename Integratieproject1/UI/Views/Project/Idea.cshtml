@@ -38,6 +38,14 @@
     <p></p>
     <p>@reaction.ReactionText</p>
     <p>total likes: @reaction.TotalLikes</p>
+    <form asp-controller="Project" asp-action="LikeReaction" asp-route-ideaId="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
+    
+        <select name="user">
+            <option value="1">1</option>
+        </select>
+        <input type="submit" value="like reactie">
+    </form>
+          
     
 }
 
