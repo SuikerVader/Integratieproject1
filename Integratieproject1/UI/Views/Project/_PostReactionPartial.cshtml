@@ -1,40 +1,19 @@
 @using Integratieproject1.Domain.Users
-@model Integratieproject1.Domain.Ideations.Idea
+@model Integratieproject1.Domain.Ideations.Reaction
 
 @{
     ViewBag.Title = "ideaPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Title</h2>
-<p>votes: @Model.Votes.Count</p>
-<p>number of reactions: @Model.Reactions.Count</p>
-@await Html.PartialAsync("_PostReactionPartial", @Model.IdeaId)
-<p>reactions: </p>
-@foreach (var reaction in Model.Reactions)
-{
-    if(reaction.LoggedInUser.GetType() == typeof(Person))
-    {
-        Person person = (Person) reaction.LoggedInUser;
-        <p>@person.LastName @person.FirstName.First()</p>
-    }
-    if (reaction.LoggedInUser.GetType() == typeof(Organisation))
-    {
-        Organisation organisation = (Organisation) reaction.LoggedInUser;
-        <p>@organisation.OrganisationName</p>
-    }
-    <p></p>
-    <p>@reaction.ReactionText</p>
-    <p>total likes: @reaction.TotalLikes</p>
+<form asp-controller="Project" asp-action="PostReaction" asp-route-ideaId="@ViewBag.IdeaId" method="post">
     
-}
+    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
+    <select name="loggedinuser">
+        <option value="1">1</option>
+    </select>
+    <input type="text" name="reactiontext">
+   <input type="submit" value="Post">
+</form>
 
-@*<script>
-    function showHideCreateReaction() {
-       if (document.getElementById("reaction").style.display === "none") {
-           document.getElementById("reaction").style.display = "inline-block";
-       } else {
-           document.getElementById("reaction").style.display = "none";
-       }
-    }
-</script>*@
+

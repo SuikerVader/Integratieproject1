@@ -15,7 +15,7 @@ namespace Integratieproject1.DAL
   {
     private static bool hasRunDuringAppExecution = false;
     public static void Initialize(CityOfIdeasDbContext context
-    , bool dropCreateDatabase = true)
+    , bool dropCreateDatabase = false)
     {
       if (!hasRunDuringAppExecution)
       {

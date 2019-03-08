@@ -50,14 +50,20 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
         [HttpPost]    
-        public IActionResult PostReaction(int ideaId, string reactionText, int loggedInUserId)
+        public IActionResult PostReaction(IFormCollection formCollection, int ideaId)
         {
-            ideationsManager.PostReaction(ideaId, reactionText, loggedInUserId);
-            return RedirectToAction("Idea", ideaId);
+            ArrayList parameters = new ArrayList();
+            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            {
+                parameters.Add(pair.Value);
+            }
+            ideationsManager.PostReaction(parameters, ideaId);
+            Idea idea = ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
         [HttpPost]
-        public IActionResult SaveFormData(IFormCollection formCollection, int surveyId)
+        public IActionResult SaveSurveyFormData(IFormCollection formCollection, int surveyId)
         {
             ArrayList answers = new ArrayList();
             foreach (KeyValuePair<string,StringValues> pair in formCollection)
@@ -66,13 +72,13 @@ namespace Integratieproject1.UI.Controllers
             }
             surveysManager.UpdateAnswers(answers, surveyId);
             Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
-            return View("/UI/Views/Project/Results.cshtml", survey);
+            return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
 
-        public IActionResult Results(int surveyId)
+        public IActionResult SurveyResults(int surveyId)
         {
             Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
-            return View("/UI/Views/Project/Results.cshtml", survey);
+            return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
     }
 }

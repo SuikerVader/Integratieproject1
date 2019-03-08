@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.DAL;
@@ -46,15 +47,13 @@ namespace Integratieproject1.BL.Managers
             return ideationsRepository.GetIdea(ideaId);
         }
 
-        public void PostReaction(int ideaId, string reactionText, int loggedInUserId)
+        public void PostReaction(ArrayList parameters, int ideaId)
         {
             UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            Reaction reaction = new Reaction
-            {
-                Idea = ideationsRepository.GetIdea(ideaId),
-                LoggedInUser = usersManager.GetLoggedInUser(loggedInUserId),
-                ReactionText = reactionText
-            };
+            Reaction reaction = new Reaction();
+            reaction.Idea = GetIdea(ideaId);
+            reaction.LoggedInUser= usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
+            reaction.ReactionText = parameters[1].ToString();
             ideationsRepository.CreateReaction(reaction);
             unitOfWorkManager.Save();
         }

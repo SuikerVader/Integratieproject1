@@ -9,8 +9,8 @@
 
 <h2>@Model.Title</h2>
 <a asp-area="" asp-controller="Project"
-   asp-action="Results" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
-</a><form asp-controller="Project" asp-action="SaveFormData" asp-route-surveyId="@Model.SurveyId" method="post">
+   asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
+</a><form asp-controller="Project" asp-action="SaveSurveyFormData" asp-route-surveyId="@Model.SurveyId" method="post">
     @foreach (var question in Model.Questions)
     {
         <div>

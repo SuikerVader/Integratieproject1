@@ -21,5 +21,13 @@ namespace Integratieproject1.Domain.Ideations
     public int IdeationFK { get; set; }
     [ForeignKey("Idea")]
     public int IdeaFK { get; set; }*/
-  }
+    public Reaction()
+    {
+        
+    }
+    public Reaction(Idea idea)
+    {
+        Idea = idea;
+    }
+    }
 }
