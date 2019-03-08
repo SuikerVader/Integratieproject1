@@ -11,6 +11,16 @@
 <h2>@Model.Title</h2>
 <p>votes: @Model.Votes.Count</p>
 <p>number of reactions: @Model.Reactions.Count</p>
+<a asp-area="" asp-controller="Project"
+   asp-action="CreateVote" asp-route-votType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId"><button>vote</button>
+</a>
+<form asp-controller="Project" asp-action="CreateUserVote" asp-route-votType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
+    
+      <select name="user">
+        <option value="1">1</option>
+    </select>
+    <input type="submit" value="user vote">
+</form>
 @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
 <p>reactions: </p>
 @foreach (var reaction in Model.Reactions)

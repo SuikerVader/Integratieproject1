@@ -4,6 +4,7 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -103,12 +104,27 @@ namespace Integratieproject1.DAL.Repositories
         }
         public Vote CreateVote(Vote vote)
         {
+          /*Idea idea = GetIdea(vote.Idea.IdeaId);
+          idea.Votes.Add(vote);
+          ctx.Ideas.Update(idea);*/
           ctx.Votes.Add(vote);
           ctx.SaveChanges();
           return vote;
         }
         #endregion
-      }
+
+        public bool CheckUserVote(User user, VoteType voteType, Idea idea)
+        {
+          if (ctx.Votes.Where(v => v.Idea == idea).Where(v => v.User == user).Where(v => v.VoteType == voteType).AsEnumerable().Any())
+          {
+            return false;
+          }
+          else
+          {
+            return true;
+          }
+        }
+  }
 
     
     

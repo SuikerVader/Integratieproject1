@@ -4,6 +4,7 @@ using Integratieproject1.BL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -56,6 +57,37 @@ namespace Integratieproject1.BL.Managers
             reaction.ReactionText = parameters[1].ToString();
             ideationsRepository.CreateReaction(reaction);
             unitOfWorkManager.Save();
+        }
+
+        public void CreateVote(int ideaId, VoteType voteType, string userId = null)
+        {
+            Vote vote = new Vote();
+            Idea idea = GetIdea(ideaId);
+            if (userId != null)
+            {                 
+                UsersManager usersManager = new UsersManager(unitOfWorkManager);
+                User user = usersManager.GetUser(Int32.Parse(userId));
+                if (ideationsRepository.CheckUserVote(user, voteType, idea)==true)
+                {
+                    vote.User = user;
+                    vote.VoteType = voteType;
+                    vote.Idea = idea;
+                    ideationsRepository.CreateVote(vote);
+                    unitOfWorkManager.Save();
+                }
+                else
+                {
+                    throw new Exception("user already voted in that type");
+                }
+            }
+            else
+            {
+                vote.VoteType = voteType;
+                vote.Idea = idea;
+                ideationsRepository.CreateVote(vote);
+                unitOfWorkManager.Save();
+            }
+            
         }
     }
 }

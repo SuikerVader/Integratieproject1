@@ -80,5 +80,32 @@ namespace Integratieproject1.UI.Controllers
             Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
+
+        public IActionResult CreateVote(int ideaId, VoteType voteType)
+        {
+            ideationsManager.CreateVote(ideaId,voteType);
+            Idea idea = ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
+        public IActionResult CreateUserVote(int ideaId, VoteType voteType ,IFormCollection formCollection) 
+        {
+            ArrayList parameters = new ArrayList();
+           
+                foreach (KeyValuePair<string,StringValues> pair in formCollection)
+                {
+                    parameters.Add(pair.Value);
+                }
+
+                if (parameters.Count > 0)
+                {
+                    ideationsManager.CreateVote(ideaId, voteType, parameters[0].ToString());         
+                }
+                else
+                {
+                    throw new Exception("fout createVote");
+                }
+            Idea idea = ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
     }
 }
