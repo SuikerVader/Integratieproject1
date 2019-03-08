@@ -7,8 +7,6 @@ namespace Integratieproject1.Domain.Surveys
     [Key]
         public int AnswerId { get; set; }
         public string AnswerText { get; set; }
-        [Required]
-        public AnswerType AnswerType { get; set; }
         public int TotalTimesChosen { get; set; }
     [Required] public Question Question { get; set; }
     
