@@ -59,22 +59,20 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (Question surveyQuestion in survey.Questions)
                 {
-                    if (surveyQuestion.QuestionNr == i + 1 && surveyQuestion.Answers.First().AnswerType == AnswerType.OPEN)
+                    if (surveyQuestion.QuestionNr == i + 1 && surveyQuestion.QuestionType == QuestionType.OPEN)
                     {
                         CreateAnswer(new Answer
                         {
                             AnswerText = answers[i].ToString(),
-                            AnswerType = AnswerType.OPEN,
                             TotalTimesChosen = 1,
                             Question = surveyQuestion
                         });
                     }
-                    else if (surveyQuestion.QuestionNr == i + 1 && surveyQuestion.Answers.First().AnswerType == AnswerType.EMAIL)
+                    else if (surveyQuestion.QuestionNr == i + 1 && surveyQuestion.QuestionType == QuestionType.EMAIL)
                     {
                         CreateAnswer(new Answer
                         {
                             AnswerText = answers[i].ToString(),
-                            AnswerType = AnswerType.EMAIL,
                             TotalTimesChosen = 1,
                             Question = surveyQuestion
                         });

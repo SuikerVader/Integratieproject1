@@ -10,6 +10,8 @@ namespace Integratieproject1.Domain.Surveys
       public int QuestionId { get; set; }
         public int QuestionNr { get; set; }
         public string QuestionText { get; set; }
+        [Required]
+        public QuestionType QuestionType { get; set; }
     [Required] public Survey Survey { get; set; }
     public ICollection<Answer> Answers { get; set; }
     public ICollection<IoTSetup> IoTSetups { get; set; }
