@@ -1,0 +1,19 @@
+@using Integratieproject1.Domain.Users
+@model Integratieproject1.Domain.Ideations.Reaction
+
+@{
+    ViewBag.Title = "ideaPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-controller="Project" asp-action="PostReaction" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+    
+    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
+    <select name="loggedinuser">
+        <option value="1">1</option>
+    </select>
+    <input type="text" name="reactiontext">
+   <input type="submit" value="Post">
+</form>
+
+

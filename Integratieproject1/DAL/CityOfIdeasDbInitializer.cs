@@ -15,7 +15,7 @@ namespace Integratieproject1.DAL
   {
     private static bool hasRunDuringAppExecution = false;
     public static void Initialize(CityOfIdeasDbContext context
-    , bool dropCreateDatabase = true)
+    , bool dropCreateDatabase = false)
     {
       if (!hasRunDuringAppExecution)
       {
@@ -249,7 +249,23 @@ namespace Integratieproject1.DAL
         Question = emailQuestion,
         AnswerText = ""
       };
+      Reaction reaction = new Reaction
+      {
+        Idea = idea,
+        TotalLikes = 1,
+        ReactionText = "reactionTest1",
+        LoggedInUser = loggedInUser
+      };
+      Vote vote = new Vote
+      {
+        VoteType = VoteType.VOTE,
+        User = loggedInUser,
+        Confirmed = true,
+        Idea = idea
+      };
 
+      idea.Reactions = new List<Reaction>(){reaction};
+      idea.Votes = new List<Vote>(){vote};
       //ctx.Answers.Add(answer);
       openQuestion.Answers = new List<Answer>(){open};
       radioQuestion.Answers = new List<Answer>(){radio1, radio2, radio3, radio4};

@@ -12,6 +12,7 @@ namespace Integratieproject1.Domain.Ideations
         public VoteType VoteType { get; set; }
 
         public User User { get; set; }
+        [Required]
         public Idea Idea { get; set; }
     
     /*[ForeignKey("User")]

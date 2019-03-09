@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
-    <Folder Include="UI" />
   </ItemGroup>
 
   <ItemGroup>
