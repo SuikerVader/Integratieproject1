@@ -109,9 +109,6 @@ namespace Integratieproject1.BL.Managers
 
         }
 
-        public void CreateIoTVote(Vote vote)
-        {
-            ideationsRepository.CreateVote(vote);
-        }
+        
     }
 }
