@@ -55,6 +55,7 @@ namespace Integratieproject1.DAL.Repositories
         {
           return ctx.Ideas
             .Include(r => r.Reactions).ThenInclude(l => l.LoggedInUser)
+            .Include(r => r.Reactions).ThenInclude(l => l.Likes)
             .Include(v => v.Votes)
             .Single(i => i.IdeaId == ideaId);
         }
@@ -111,8 +112,6 @@ namespace Integratieproject1.DAL.Repositories
           ctx.SaveChanges();
           return vote;
         }
-        #endregion
-
         public bool CheckUserVote(User user, VoteType voteType, Idea idea)
         {
           if (ctx.Votes.Where(v => v.Idea == idea).Where(v => v.User == user).Where(v => v.VoteType == voteType).AsEnumerable().Any())
@@ -124,19 +123,34 @@ namespace Integratieproject1.DAL.Repositories
             return true;
           }
         }
+        #endregion
 
-        public bool CheckLike(int reactionId, string user)
-        {
-          return true;
-        }
+        #region Like
 
-        public void LikeReaction(int reactionId, string user)
-        {
-          Reaction reaction = ctx.Reactions.Find(reactionId);
-          reaction.TotalLikes++;
-          ctx.Reactions.Update(reaction);
-          ctx.SaveChanges();
-        }
+       public bool CheckLike(Reaction reaction, LoggedInUser loggedInUser)
+               {
+                 if (ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.LoggedInUser == loggedInUser).AsEnumerable().Any())
+                 {
+                   return false;
+                 }
+                 else
+                 {
+                   return true;
+                 }
+               }
+       
+               public Like CreateLike(Like like)
+               {
+                 ctx.Likes.Add(like);
+                 ctx.SaveChanges();
+                 return like;
+               }
+
+        
+        #endregion
+        
+
+        
   }
 
     

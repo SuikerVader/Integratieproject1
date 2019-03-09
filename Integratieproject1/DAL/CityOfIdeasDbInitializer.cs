@@ -87,27 +87,63 @@ namespace Integratieproject1.DAL
       };
       
 
-      Person loggedInUser = new Person()
+      Person person = new Person
       {
-        Email = "test1@test.com",
+        Email = "testPerson1@test.com",
         Platform = platform,
         Password = "test1",
         RoleType = RoleType.LOGGEDINUSER,
         ZipCode = "0000",
         Verified = false,
-        LastName = "test1",
-        FirstName = "test1",
+        LastName = "testPerson1",
+        FirstName = "testPerson1",
         BirthDate = new DateTime(1000,1,1)
+      };
+      Organisation organisation = new Organisation
+      {
+        Email = "testOrganisation1@test.com",
+        Platform = platform,
+        Password = "test1",
+        RoleType = RoleType.LOGGEDINUSER,
+        ZipCode = "0000",
+        Verified = true,
+        OrganisationName = "testOrganisation1",
       };
       
       Idea idea = new Idea
       {
-        Title = "test1",
+        Title = "testIdea1",
         Ideation = ideation,
-        LoggedInUser = loggedInUser
+        LoggedInUser = person
       };
-      
-      Survey survey = new Survey
+      Idea idea2 = new Idea
+      {
+        Title = "testIdea2",
+        Ideation = ideation,
+        LoggedInUser = organisation,
+      };
+      Reaction reaction = new Reaction
+      {
+        Idea = idea,
+        ReactionText = "reactionTest1",
+        LoggedInUser = person
+      };
+      Vote vote = new Vote
+      {
+        VoteType = VoteType.VOTE,
+        User = person,
+        Confirmed = true,
+        Idea = idea
+      };
+      Like like = new Like
+      {
+        Reaction = reaction,
+        LoggedInUser = person
+      };
+
+      #region Survey
+
+ Survey survey = new Survey
       {
         Title = "SurveyTest",
         Phase = phase
@@ -249,21 +285,12 @@ namespace Integratieproject1.DAL
         Question = emailQuestion,
         AnswerText = ""
       };
-      Reaction reaction = new Reaction
-      {
-        Idea = idea,
-        TotalLikes = 1,
-        ReactionText = "reactionTest1",
-        LoggedInUser = loggedInUser
-      };
-      Vote vote = new Vote
-      {
-        VoteType = VoteType.VOTE,
-        User = loggedInUser,
-        Confirmed = true,
-        Idea = idea
-      };
+      
 
+      #endregion
+     
+      
+      reaction.Likes = new List<Like>(){like};
       idea.Reactions = new List<Reaction>(){reaction};
       idea.Votes = new List<Vote>(){vote};
       //ctx.Answers.Add(answer);
@@ -277,7 +304,7 @@ namespace Integratieproject1.DAL
       //ctx.Surveys.Add(survey);
       phase.Surveys = new List<Survey>(){survey};
       //ctx.Ideas.Add(idea);
-      ideation.Ideas = new List<Idea>(){idea};
+      ideation.Ideas = new List<Idea>(){idea,idea2};
       //ctx.Ideations.Add(ideation);
       phase.Ideations = new List<Ideation>(){ideation};
       //ctx.Phases.Add(phase);
