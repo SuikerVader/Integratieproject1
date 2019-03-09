@@ -12,8 +12,8 @@
 <p>votes: @Model.Votes.Count</p>
 <p>number of reactions: @Model.Reactions.Count</p>
 <a asp-area="" asp-controller="Project"
-   asp-action="CreateVote" asp-route-votType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId"><button>vote</button>
-</a><br/>
+   asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId"><button>vote</button>
+</a>
 <form asp-controller="Project" asp-action="CreateUserVote" asp-route-votType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
     
     <select name="user">
