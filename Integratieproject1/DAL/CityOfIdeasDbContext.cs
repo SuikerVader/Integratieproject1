@@ -32,6 +32,7 @@ namespace Integratieproject1.DAL
       public DbSet<Idea> Ideas { get; set; }
       public DbSet<Reaction> Reactions { get; set; }
       public DbSet<Vote> Votes { get; set; }
+      public DbSet<Like> Likes { get; set; }
 
       public DbSet<Survey> Surveys { get; set; }
       public DbSet<Answer> Answers { get; set; }
@@ -43,6 +44,7 @@ namespace Integratieproject1.DAL
       public DbSet<Person> Persons { get; set; }
       public DbSet<Organisation> Organisations { get; set; }
       public DbSet<LoggedInUser> LoggedInUsers { get; set; }
+      
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
       optionsBuilder.EnableSensitiveDataLogging();

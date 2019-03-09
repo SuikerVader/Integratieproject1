@@ -92,9 +92,13 @@ namespace Integratieproject1.BL.Managers
 
         public void LikeReaction(int reactionId, string user)
         {
-            if (ideationsRepository.CheckLike(reactionId,user) == true)
+            Reaction reaction = ideationsRepository.GetReaction(reactionId);
+            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            LoggedInUser loggedInUser = usersManager.GetLoggedInUser(Int32.Parse(user));
+            Like like = new Like{ Reaction = reaction, LoggedInUser = loggedInUser};
+            if (ideationsRepository.CheckLike(reaction,loggedInUser) == true)
             {
-                ideationsRepository.LikeReaction(reactionId, user);
+                ideationsRepository.CreateLike(like);
                 unitOfWorkManager.Save();
             }
             else
