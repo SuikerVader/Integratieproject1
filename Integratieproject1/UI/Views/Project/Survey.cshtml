@@ -10,20 +10,21 @@
 <h2>@Model.Title</h2>
 <a asp-area="" asp-controller="Project"
    asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
-</a><form asp-controller="Project" asp-action="SaveSurveyFormData" asp-route-surveyId="@Model.SurveyId" method="post">
+</a><form asp-controller="Project" asp-action="SaveSurveyFormData" asp-route-surveyId="@Model.SurveyId" method="post" >
     @foreach (var question in Model.Questions)
     {
         <div>
             <h3>@question.QuestionText</h3>
             @if (question.QuestionType == QuestionType.OPEN)
             {
-                <input type="text" name="@question.QuestionNr">
+                <input required type="text" name="@question.QuestionNr">
             }
             else if (question.QuestionType == QuestionType.RADIO)
             {
+                 
                 foreach (var answer in question.Answers)
                 {
-                    <input type="radio" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
+                    <input required type="radio" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
                 }
             }
             else if (question.QuestionType == QuestionType.CHECK)
@@ -35,7 +36,7 @@
             }
             else if (question.QuestionType == QuestionType.DROP)
             {
-                <select name="@question.QuestionNr">
+                <select required name="@question.QuestionNr">
                     @foreach (var answer in question.Answers)
                     {
                         <option value="@answer.AnswerText">@answer.AnswerText</option>
@@ -44,9 +45,9 @@
             }
             else if (question.QuestionType == QuestionType.EMAIL)
             {
-                <input type="email" name="@question.QuestionNr">
+                <input required type="email" name="@question.QuestionNr">
             }    
         </div>
     }
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" >
 </form>
