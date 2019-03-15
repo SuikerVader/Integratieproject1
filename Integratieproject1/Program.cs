@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
+using Integratieproject1.BL.Managers;
+using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Integratieproject1.DAL;
-using Integratieproject1.DAL.Repositorys;
-using Integratieproject1.Models;
-using Integratieproject1.Models.Datatypes;
-using Integratieproject1.Models.Ideations;
-using Integratieproject1.Models.Projects;
+using Integratieproject1.DAL.Repositories;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
@@ -22,6 +25,7 @@ namespace Integratieproject1
     {
         public static void Main(string[] args)
         {
+<<<<<<< HEAD
             CityOfIdeasDbContext ctx = new CityOfIdeasDbContext();
             CityOfIdeasDbInitializer.Initialize(ctx, true);
 
@@ -73,6 +77,12 @@ namespace Integratieproject1
 
             CreateWebHostBuilder(args).Build().Run();
             Console.WriteLine("Hallo iedereen! Test Branching");
+=======
+        /*CityOfIdeasDbContext ctx = new CityOfIdeasDbContext();
+        ProjectsManager projectsManager = new ProjectsManager();
+        Console.WriteLine(projectsManager.GetPlatform(1).Projects.Count);*/
+        CreateWebHostBuilder(args).Build().Run();
+>>>>>>> a81d43807e7aa11edcdc5bbcc7f6c0d679788026
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

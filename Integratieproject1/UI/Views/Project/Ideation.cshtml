@@ -1,0 +1,18 @@
+@model Integratieproject1.Domain.Ideations.Ideation
+
+@{
+    ViewBag.Title = "ideationPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.CentralQuestion</h2>
+<p>idea's: </p>
+@foreach (var idea in Model.Ideas)
+{
+    <div>
+        <h3>@idea.Title</h3>
+        <a asp-area="" asp-controller="Project"
+           asp-action="Idea" asp-route-ideaId="@idea.IdeaId"><button>view idea</button>
+        </a>
+    </div>
+}
