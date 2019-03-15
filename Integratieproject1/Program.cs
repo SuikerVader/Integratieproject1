@@ -18,64 +18,61 @@ using Microsoft.Extensions.Logging;
 namespace Integratieproject1
 {
     public class Program
-  
+
     {
-   
         public static void Main(string[] args)
         {
-      
-      CityOfIdeasDbContext ctx = new CityOfIdeasDbContext();
-      CityOfIdeasDbInitializer.Initialize(ctx, true);
+            CityOfIdeasDbContext ctx = new CityOfIdeasDbContext();
+            CityOfIdeasDbInitializer.Initialize(ctx, true);
 
-      Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
-      Location location = new Location {Address = address, LocationName = "test1"};
-      Position position = new Position {Altitude = 0.0, Longitude = 0.0};
-      
-      Platform platform = new Platform
-      {
-          PlatformName = "test1",
-          Adress = address
-      };
+            Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
+            Location location = new Location {Address = address, LocationName = "test1"};
+            Position position = new Position {Altitude = 0.0, Longitude = 0.0};
 
-      Project project = new Project
-      {
-          ProjectName = "test1",
-          StartDate = DateTime.Today,
-          EndDate = DateTime.Today.AddYears(1),
-          Platform = platform,
-          Objective = "test1",
-          Description = "test1",
-          Status = "Phase1",
-          Location = location
-      };
-      Phase phase = new Phase
-      {
-          PhaseNr = 1,
-          PhaseName = "test1",
-          Description = "test1",
-          StartDate = DateTime.Today,
-          EndDate = DateTime.Today.AddMonths(1),
-          Project = project
-      };
+            Platform platform = new Platform
+            {
+                PlatformName = "test1",
+                Adress = address
+            };
 
-      Ideation ideation = new Ideation
-      {
-          CentralQuestion = "test1", 
-          InputIdeation = false, 
-          Phase = phase
-      };
-      
-      IdeationsRepository ideationsRepository = new IdeationsRepository();
-      ProjectsRepository projectsRepository  = new ProjectsRepository();
-      projectsRepository.CreatePlatform(platform);
-      projectsRepository.CreateProject(project);
-      projectsRepository.CreatePhase(phase);
-      //ideationsRepository.CreateIdeation(ideation);
-      
-      
-      CreateWebHostBuilder(args).Build().Run();
-      Console.WriteLine("Hallo iedereen! Test Branching");
-            
+            Project project = new Project
+            {
+                ProjectName = "test1",
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddYears(1),
+                Platform = platform,
+                Objective = "test1",
+                Description = "test1",
+                Status = "Phase1",
+                Location = location
+            };
+            Phase phase = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "test1",
+                Description = "test1",
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddMonths(1),
+                Project = project
+            };
+
+            Ideation ideation = new Ideation
+            {
+                CentralQuestion = "test1",
+                InputIdeation = false,
+                Phase = phase
+            };
+
+            IdeationsRepository ideationsRepository = new IdeationsRepository();
+            ProjectsRepository projectsRepository = new ProjectsRepository();
+            projectsRepository.CreatePlatform(platform);
+            projectsRepository.CreateProject(project);
+            projectsRepository.CreatePhase(phase);
+            //ideationsRepository.CreateIdeation(ideation);
+
+
+            CreateWebHostBuilder(args).Build().Run();
+            Console.WriteLine("Hallo iedereen! Test Branching");
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
