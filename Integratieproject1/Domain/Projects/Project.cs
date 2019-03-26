@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.Domain.Projects
 {
@@ -26,5 +27,8 @@ namespace Integratieproject1.Domain.Projects
         public Platform Platform { get; set; }
         
         public ICollection<Phase> Phases { get; set; }
+        public ICollection<AdminProject> AdminProjects { get; set; }
     }
+
+    
 }

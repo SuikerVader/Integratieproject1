@@ -8,7 +8,7 @@
 
 <h2>Project</h2>
 <div>
-    <form asp-controller="Admin" asp-action="EditProject" asp-route-projectId="@Model.ProjectId" asp-route-locationId="@Model.Location.LocationId" method="post">
+    <form asp-controller="Admin" asp-action="EditProject" asp-route-projectId="@Model.ProjectId" method="post">
         <label asp-for="ProjectName"></label>
         <input required asp-for="ProjectName" value="@Model.ProjectName" class="form-control"/>
         <label asp-for="StartDate"></label>
@@ -21,15 +21,15 @@
         <input asp-for="Objective"/>
         <label asp-for="Description"></label>
         <input asp-for="Description"/>
-            <label asp-for="Location.Address.City">City</label>
-            <input required asp-for="Location.Address.City"/>
-            <label asp-for="Location.Address.Street">Street</label>
-            <input required asp-for="Location.Address.Street"/>
-            <label asp-for="Location.Address.HouseNr">House nr</label>
-            <input required asp-for="Location.Address.HouseNr"/>
-            <label asp-for="Location.Address.ZipCode">zipcode</label>
-            <input required asp-for="Location.Address.ZipCode"/>
-            <label asp-for="Location.LocationName">location name</label>
+        <label asp-for="Location.Address.City">City</label>
+        <input required asp-for="Location.Address.City"/>
+        <label asp-for="Location.Address.Street">Street</label>
+        <input required asp-for="Location.Address.Street"/>
+        <label asp-for="Location.Address.HouseNr">House nr</label>
+        <input required asp-for="Location.Address.HouseNr"/>
+        <label asp-for="Location.Address.ZipCode">zipcode</label>
+        <input required asp-for="Location.Address.ZipCode"/>
+        <label asp-for="Location.LocationName">location name</label>
         <input required asp-for="Location.LocationName"/>
         <input type="submit" value="Edit Project">
     </form>

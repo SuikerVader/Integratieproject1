@@ -44,6 +44,7 @@ namespace Integratieproject1.DAL
       public DbSet<Person> Persons { get; set; }
       public DbSet<Organisation> Organisations { get; set; }
       public DbSet<LoggedInUser> LoggedInUsers { get; set; }
+      public DbSet<AdminProject> AdminProjects { get; set; }
       
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

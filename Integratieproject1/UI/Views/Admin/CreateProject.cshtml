@@ -8,6 +8,30 @@
 
 <h2>New Project</h2>
 <div>
-    
+    <form asp-controller="Admin" asp-action="CreateProject" asp-route-platformId="@ViewData["PlatformId"]" method="post">
+        <label asp-for="ProjectName"></label>
+        <input required asp-for="ProjectName" value="@Model.ProjectName" class="form-control"/>
+        <label asp-for="StartDate"></label>
+        <input required asp-for="StartDate" value="@Model.StartDate" type="date" class="form-control"/>
+        <label asp-for="EndDate"></label>
+        <input required asp-for="EndDate" value="@Model.EndDate" type="date" class="form-control"/>
+        <label asp-for="Logo"></label>
+        <input asp-for="Logo"/>
+        <label asp-for="Objective"></label>
+        <input asp-for="Objective"/>
+        <label asp-for="Description"></label>
+        <input asp-for="Description"/>
+        <label asp-for="Location.Address.City" value="City"></label>
+        <input required asp-for="Location.Address.City"/>
+        <label asp-for="Location.Address.Street" value="Street"></label>
+        <input required asp-for="Location.Address.Street"/>
+        <label asp-for="Location.Address.HouseNr" value="House nr"></label>
+        <input required asp-for="Location.Address.HouseNr"/>
+        <label asp-for="Location.Address.ZipCode" value="Zipcode"></label>
+        <input required asp-for="Location.Address.ZipCode"/>
+        <label asp-for="Location.LocationName" value="Location name"></label>
+        <input required asp-for="Location.LocationName"/>
+        <input type="submit" value="Create Project">
+    </form>
     
 </div>

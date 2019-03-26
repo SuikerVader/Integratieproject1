@@ -33,7 +33,7 @@ namespace Integratieproject1.UI.Controllers
         }
         public IActionResult Projects(int userId)
         {
-            IList<Project> projects = projectsManager.GetProjects(userId);            
+            IList<Project> projects = projectsManager.GetAdminProjects(userId);            
             return View("/UI/Views/Admin/Projects.cshtml" , projects);
         }
 
@@ -49,9 +49,9 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProject(int projectId, int locationId,Project project)
+        public IActionResult EditProject(int projectId,Project project)
         {
-            projectsManager.EditProject(project, projectId, locationId);
+            projectsManager.EditProject(project, projectId);
             return RedirectToAction("Index","Home");
         }
 
@@ -60,6 +60,14 @@ namespace Integratieproject1.UI.Controllers
             LoggedInUser user = usersManager.GetLoggedInUser(userId);
             ViewData["PlatformId"] = user.Platform.PlatformId;
             return View("/UI/Views/Admin/CreateProject.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult CreateProject(Project project, int platformId)
+        {
+            project.Platform = projectsManager.GetPlatform(platformId);
+            projectsManager.CreateProject(project);
+            return RedirectToAction("Index","Home");
         }
     }
 }

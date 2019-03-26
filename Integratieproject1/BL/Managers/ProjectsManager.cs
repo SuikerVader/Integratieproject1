@@ -50,18 +50,25 @@ namespace Integratieproject1.BL.Managers
                 {
                     return projectsRepository.GetProject(projectId);
                 }
-        public IList<Project> GetProjects(int userId)
+        public IList<Project> GetAdminProjects(int userId)
                 {
                     UsersManager usersManager = new UsersManager(unitOfWorkManager);
-                    User user = usersManager.GetUser(userId);
-                    return projectsRepository.GetProjects(user.Platform.PlatformId).ToList();
+                    LoggedInUser user = usersManager.GetLoggedInUser(userId);
+                    List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(user).ToList();
+                    List<Project> projects = new List<Project>();
+                    foreach (AdminProject adminProject in adminProjects)
+                    {
+                        projects.Add(adminProject.Project);
+                    }
+
+                    return projects;
                 }
          public void CreateProject(Project project)
                 {
                     projectsRepository.CreateProject(project);
                     unitOfWorkManager.Save();
                 }
-         public void EditProject(Project project, int projectId, int locationId)
+         public void EditProject(Project project, int projectId)
          {
              project.ProjectId = projectId;
              projectsRepository.EditProject(project);

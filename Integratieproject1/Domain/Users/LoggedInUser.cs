@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.Projects;
 
 namespace Integratieproject1.Domain.Users
 {
@@ -12,6 +13,7 @@ namespace Integratieproject1.Domain.Users
         
         public ICollection<Reaction> Reactions { get; set; }
         public ICollection<Idea> Ideas { get; set; }
+        public ICollection<AdminProject> AdminProjects { get; set; }
     
   }
 }

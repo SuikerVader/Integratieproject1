@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -46,6 +48,17 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(l => l.Location)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
+        }
+
+        public IEnumerable<AdminProject> GetAdminProjects(LoggedInUser user)
+        {
+           
+            return ctx.AdminProjects
+                .Where(a => a.Admin == user)
+                .Include(p => p.Project).ThenInclude(l => l.Location)
+                .Include(p => p.Project).ThenInclude(p => p.Platform)
+                .AsEnumerable();
+
         }
         public Project GetProject(int projectId)
         {
