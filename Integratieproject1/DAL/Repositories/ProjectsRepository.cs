@@ -37,15 +37,23 @@ namespace Integratieproject1.DAL.Repositories
         }
         
         //ProjectMethods
-        public IEnumerable<Project> GetProjects()
+        public IEnumerable<Project> GetProjects(int platformId)
         {
-            return ctx.Projects.AsEnumerable();
+            return ctx.Projects
+                .Where(p => p.Platform.PlatformId == platformId)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
+                .Include(p => p.Phases).ThenInclude(s => s.Surveys)
+                .Include(l => l.Location)
+                .Include(pl => pl.Platform)
+                .AsEnumerable();
         }
         public Project GetProject(int projectId)
         {
             return ctx.Projects
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
+                .Include(l => l.Location)
+                .Include(pl => pl.Platform)
                 .Single(pr => pr.ProjectId == projectId);
         }
         public Project CreateProject(Project project)
@@ -59,11 +67,20 @@ namespace Integratieproject1.DAL.Repositories
             Console.WriteLine(ctx.Platforms.Find(project.Platform.PlatformId).Projects.Count);
             return project;
         }
+        public void EditProject(Project project)
+        {
+            ctx.Projects.Update(project);
+            ctx.SaveChanges();
+        }
         
         //PhaseMethods
-        public IEnumerable<Phase> GetPhases()
+        public IEnumerable<Phase> GetPhases(int projectId)
         {
-            return ctx.Phases.AsEnumerable();
+            return ctx.Phases
+                .Where(p => p.Project.ProjectId == projectId)
+                .Include(i => i.Ideations)
+                .Include(s => s.Surveys)
+                .AsEnumerable();
         }
         public Phase GetPhase(int phaseId)
         {
@@ -77,5 +94,7 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return phase;
         }
+
+        
     }
 }
