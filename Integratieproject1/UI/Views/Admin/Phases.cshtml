@@ -1,0 +1,15 @@
+@using Integratieproject1.Domain.Projects
+@model IList<Integratieproject1.Domain.Projects.Phase>
+
+@{
+    ViewBag.Title = "AdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<h2>phases</h2>
+<div>
+    @foreach (var phase in Model)
+    {
+        <p>@phase.PhaseName</p>
+    }
+</div>

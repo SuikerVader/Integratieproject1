@@ -85,8 +85,8 @@ namespace Integratieproject1.DAL
         InputIdeation = true, 
         Phase = phase
       };
-      
 
+      
       Person person = new Person
       {
         Email = "testPerson1@test.com",
@@ -108,6 +108,18 @@ namespace Integratieproject1.DAL
         ZipCode = "0000",
         Verified = true,
         OrganisationName = "testOrganisation1",
+      };
+      Person admin = new Person
+      {
+        Email = "testAdmin1@test.com",
+        Platform = platform,
+        Password = "test1",
+        RoleType = RoleType.ADMIN,
+        ZipCode = "0000",
+        Verified = false,
+        LastName = "testAdmin1",
+        FirstName = "testAdmin1",
+        BirthDate = new DateTime(1000,1,1)
       };
       
       Idea idea = new Idea
@@ -289,7 +301,7 @@ namespace Integratieproject1.DAL
 
       #endregion
      
-      
+      platform.Users = new List<User>(){person, organisation,admin};
       reaction.Likes = new List<Like>(){like};
       idea.Reactions = new List<Reaction>(){reaction};
       idea.Votes = new List<Vote>(){vote};
