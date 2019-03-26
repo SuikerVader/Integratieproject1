@@ -14,9 +14,10 @@ namespace Integratieproject1.Domain.Projects
         public string ProjectName { get; set; }
         public string Logo { get; set; }
     [Required]
+    
         public DateTime StartDate { get; set; }
     [Required]
-        public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; }
         public string Objective { get; set; }
         public string Description { get; set; }
     [Required]

@@ -45,7 +45,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(p => p.Platform.PlatformId == platformId)
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
-                .Include(l => l.Location)
+                .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
         }
@@ -55,7 +55,7 @@ namespace Integratieproject1.DAL.Repositories
            
             return ctx.AdminProjects
                 .Where(a => a.Admin == user)
-                .Include(p => p.Project).ThenInclude(l => l.Location)
+                .Include(p => p.Project).ThenInclude(l => l.Location).ThenInclude(a => a.Address)
                 .Include(p => p.Project).ThenInclude(p => p.Platform)
                 .AsEnumerable();
 
@@ -65,7 +65,7 @@ namespace Integratieproject1.DAL.Repositories
             return ctx.Projects
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
-                .Include(l => l.Location)
+                .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
                 .Single(pr => pr.ProjectId == projectId);
         }
@@ -108,6 +108,14 @@ namespace Integratieproject1.DAL.Repositories
             return phase;
         }
 
-        
+
+        public AdminProject CreateAdminProject(AdminProject adminProject)
+        {
+            ctx.AdminProjects.Add(adminProject);
+            Project project = adminProject.Project;
+            project.AdminProjects.Add(adminProject);
+            ctx.SaveChanges();
+            return adminProject;
+        }
     }
 }

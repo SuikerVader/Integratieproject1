@@ -63,13 +63,26 @@ namespace Integratieproject1.BL.Managers
 
                     return projects;
                 }
-         public void CreateProject(Project project)
-                {
-                    projectsRepository.CreateProject(project);
+         public void CreateProject(Project project, int userId )
+         {
+                    UsersManager usersManager = new UsersManager(unitOfWorkManager);
+                    LoggedInUser user = usersManager.GetLoggedInUser(userId);
+                    project.Platform = GetPlatform(user.Platform.PlatformId);
+                    DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+                    project.Location = dataTypeManager.CheckLocation(project.Location);
+                    //Project createdProject = projectsRepository.CreateProject(project);
+                    AdminProject adminProject = new AdminProject
+                    {
+                        Project = project,
+                        Admin = user
+                    };
+                    projectsRepository.CreateAdminProject(adminProject);
                     unitOfWorkManager.Save();
                 }
          public void EditProject(Project project, int projectId)
          {
+             DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+             project.Location = dataTypeManager.CheckLocation(project.Location);
              project.ProjectId = projectId;
              projectsRepository.EditProject(project);
              unitOfWorkManager.Save();

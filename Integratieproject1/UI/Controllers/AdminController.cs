@@ -57,16 +57,15 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult CreateProject(int userId)
         {
-            LoggedInUser user = usersManager.GetLoggedInUser(userId);
-            ViewData["PlatformId"] = user.Platform.PlatformId;
+            ViewData["UserId"] = userId;
             return View("/UI/Views/Admin/CreateProject.cshtml");
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project, int platformId)
+        public IActionResult CreateProject(Project project, int userId)
         {
-            project.Platform = projectsManager.GetPlatform(platformId);
-            projectsManager.CreateProject(project);
+            
+            projectsManager.CreateProject(project, userId);
             return RedirectToAction("Index","Home");
         }
     }
