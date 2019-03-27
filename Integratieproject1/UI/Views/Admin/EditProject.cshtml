@@ -33,5 +33,9 @@
         <input required asp-for="Location.LocationName" value="@Model.Location.LocationName" class="form-control"/>
         <input type="submit" value="Edit Project">
     </form>
+    <a asp-area="" asp-controller="Admin"
+       asp-action="DeleteProject" asp-route-projectId="@Model.ProjectId"><button>Delete Project</button>
+    </a>
+    
     
 </div>

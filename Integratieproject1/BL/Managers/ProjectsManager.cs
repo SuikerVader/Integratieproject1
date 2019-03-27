@@ -87,8 +87,36 @@ namespace Integratieproject1.BL.Managers
              projectsRepository.EditProject(project);
              unitOfWorkManager.Save();
          }
-         
-        #endregion
+         public void DeleteProject(int projectId)
+         {
+             Project project = projectsRepository.GetProject(projectId);
+             if (project.Phases != null)
+             {
+                 foreach (Phase phase in project.Phases.ToList())
+                              {
+                                  this.DeletePhase(phase.PhaseId);
+                              }
+             }
+
+             if (project.AdminProjects != null)
+             {
+                 foreach (AdminProject adminProject in project.AdminProjects.ToList())
+                              {
+                                  this.DeleteAdminProject(adminProject.AdminProjectId);
+                              }
+             }            
+             projectsRepository.RemoveProject(project);
+             unitOfWorkManager.Save();
+         }
+
+         private void DeleteAdminProject(int adminProjectId)
+         {
+             AdminProject adminProject = projectsRepository.GetAdminProject(adminProjectId);
+             projectsRepository.RemoveAdminProject(adminProject);
+             unitOfWorkManager.Save();
+         }
+
+         #endregion
 
         #region Phase
 
@@ -105,11 +133,35 @@ namespace Integratieproject1.BL.Managers
             projectsRepository.CreatePhase(phase);
             unitOfWorkManager.Save();
         }
+        private void DeletePhase(int phaseId)
+        {
+            IdeationsManager ideationsManager =new IdeationsManager(unitOfWorkManager);
+            SurveysManager surveysManager = new SurveysManager(unitOfWorkManager);
+            Phase phase = projectsRepository.GetPhase(phaseId);
+            if (phase.Ideations != null)
+            {
+               foreach (var ideation in phase.Ideations.ToList())
+                           {
+                               ideationsManager.DeleteIdeation(ideation.IdeationId);
+                           }
+            }
+
+            if (phase.Surveys != null)
+            {
+                foreach (var survey in phase.Surveys.ToList())
+                            {
+                                surveysManager.DeleteSurvey(survey.SurveyId);
+                            }
+            }
+        
+            projectsRepository.RemovePhase(phase);
+            unitOfWorkManager.Save();
+        }
         
 
         #endregion
 
 
-        
+       
     }
 }

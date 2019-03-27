@@ -6,7 +6,7 @@ namespace Integratieproject1.Domain.Ideations
     public class Vote
     {
         [Key]
-        public int VoteNr { get; set; }
+        public int VoteId { get; set; }
         public bool Confirmed { get; set; }
     [Required]
         public VoteType VoteType { get; set; }

@@ -66,7 +66,7 @@ namespace Integratieproject1.UI.Controllers
             ViewData["UserId"] = userId;
             return View("/UI/Views/Admin/CreateProject.cshtml");
         }
-
+        
         [HttpPost]
         public IActionResult CreateProject(Project project, int userId)
         {
@@ -76,6 +76,12 @@ namespace Integratieproject1.UI.Controllers
                return RedirectToAction("Index","Home");
             }
             return RedirectToAction("CreateProject");
+        }
+
+        public IActionResult DeleteProject(int projectId)
+        {
+            projectsManager.DeleteProject(projectId);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
