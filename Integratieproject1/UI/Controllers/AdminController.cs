@@ -41,6 +41,7 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult Phases(int projectId)
         {
             IList<Phase> phases = projectsManager.GetPhases(projectId);
+            ViewData["ProjectId"] = projectId;
             return View("/UI/Views/Admin/Phases.cshtml" , phases);
         }
         public IActionResult EditProject(int projectId)
@@ -58,7 +59,7 @@ namespace Integratieproject1.UI.Controllers
                 return RedirectToAction("Index","Home");
             }
 
-            return RedirectToAction("EditProject", projectId);
+            return RedirectToAction("Index","Home");
         }
 
         public IActionResult CreateProject(int userId)
@@ -75,13 +76,73 @@ namespace Integratieproject1.UI.Controllers
                projectsManager.CreateProject(project, userId); 
                return RedirectToAction("Index","Home");
             }
-            return RedirectToAction("CreateProject");
+            return RedirectToAction("Index","Home");
         }
 
         public IActionResult DeleteProject(int projectId)
         {
             projectsManager.DeleteProject(projectId);
             return RedirectToAction("Index", "Home");
+        }
+
+        
+
+        public IActionResult EditPhase(int phaseId)
+        {
+            Phase phase = projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/EditPhase.cshtml", phase);
+        }
+        [HttpPost]
+        public IActionResult EditPhase(int phaseId, Phase phase)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                Phase editedPhase = projectsManager.EditPhase(phase, phaseId);
+                
+                return RedirectToAction("Index","Home");
+            }
+
+            return RedirectToAction("Index","Home");
+        }
+        
+        public IActionResult AddPhase(int projectId)
+        {
+            Phase phase = new Phase();
+            Project project = projectsManager.GetProject(projectId);
+            phase.Project = project;
+            if (project.Phases !=null && project.Phases.Count > 0)
+            {
+                phase.PhaseNr = project.Phases.Last().PhaseNr + 1;
+                phase.StartDate = project.Phases.Last().EndDate;
+            }
+            else
+            {
+                phase.PhaseNr = 1;
+                phase.StartDate = project.StartDate;
+            }            
+            
+            phase.EndDate = phase.StartDate;
+            return View("/UI/Views/Admin/CreatePhase.cshtml", phase);
+        }
+        [HttpPost]
+        public IActionResult AddPhase(Phase phase, int phaseNr, int projectId)
+        {
+            phase.PhaseNr = phaseNr;
+            phase.Project = projectsManager.GetProject(projectId);
+            if (ModelState.IsValid)
+            {
+                Phase createdPhase = projectsManager.CreatePhase(phase);
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index","Home");
+        }
+
+        public IActionResult DeletePhase(int phaseId)
+        {
+            projectsManager.DeletePhase(phaseId);
+            return RedirectToAction("Index","Home");
         }
     }
 }

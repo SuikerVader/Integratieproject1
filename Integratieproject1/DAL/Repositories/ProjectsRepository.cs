@@ -153,8 +153,15 @@ namespace Integratieproject1.DAL.Repositories
             ctx.Phases.Remove(phase);
             ctx.SaveChanges();
         }
+        public Phase EditPhase(Phase phase)
+        {
+            ctx.Phases.Update(phase);
+            ctx.SaveChanges();
+            return ctx.Phases.Find(phase.PhaseId);
+        }
 
         #endregion
+
 
         
     }

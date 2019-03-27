@@ -82,7 +82,7 @@ namespace Integratieproject1.BL.Managers
             return ideationsRepository.GetIdea(ideaId);
         }
 
-        private void DeleteIdea(int ideaId)
+        public void DeleteIdea(int ideaId)
         {
             IoTManager ioTManager = new IoTManager(unitOfWorkManager);
             Idea idea = GetIdea(ideaId);
@@ -118,14 +118,14 @@ namespace Integratieproject1.BL.Managers
 
         #region Like
 
-        private void DeleteLike(int likeId)
+        public void DeleteLike(int likeId)
         {
             Like like = Getlike(likeId);
             ideationsRepository.RemoveLike(like);
             unitOfWorkManager.Save();
         }
 
-        private Like Getlike(int likeId)
+        public Like Getlike(int likeId)
         {
             return ideationsRepository.GetLike(likeId);
         }
@@ -162,7 +162,7 @@ namespace Integratieproject1.BL.Managers
             }
         }
 
-        private void DeleteReaction(int reactionId)
+        public void DeleteReaction(int reactionId)
         {
             Reaction reaction = GetReaction(reactionId);
             if (reaction.Likes != null)
@@ -176,7 +176,7 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
 
-        private Reaction GetReaction(int reactionId)
+        public Reaction GetReaction(int reactionId)
         {
             return ideationsRepository.GetReaction(reactionId);
         }

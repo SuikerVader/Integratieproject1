@@ -68,7 +68,7 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
 
-        private void DeleteQuestion(int questionId)
+        public void DeleteQuestion(int questionId)
         {
             Question question = GetQuestion(questionId);
             if (question.Answers != null)
@@ -83,7 +83,7 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
 
-        private Question GetQuestion(int questionId)
+        public Question GetQuestion(int questionId)
         {
             return surveysRepository.GetQuestion(questionId);
         }
@@ -98,14 +98,14 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
 
-        private void DeleteAnswer(int answerId)
+        public void DeleteAnswer(int answerId)
         {
             Answer answer = GetAnswer(answerId);
             surveysRepository.RemoveAnswer(answer);
             unitOfWorkManager.Save();
         }
 
-        private Answer GetAnswer(int answerId)
+        public Answer GetAnswer(int answerId)
         {
             return surveysRepository.GetAnswer(answerId);
         }

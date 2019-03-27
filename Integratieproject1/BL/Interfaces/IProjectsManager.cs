@@ -10,6 +10,6 @@ namespace Integratieproject1.BL.Interfaces
         Project GetProject(int projectId);
         void CreateProject(Project project, int userId);
         Phase GetPhase(int phaseId);
-        void CreatePhase(Phase phase);
+        Phase CreatePhase(Phase phase);
     }
 }

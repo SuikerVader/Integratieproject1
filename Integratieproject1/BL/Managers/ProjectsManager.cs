@@ -20,6 +20,7 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager = new UnitOfWorkManager();
             projectsRepository = new ProjectsRepository(unitOfWorkManager.UnitOfWork);
         }
+
         public ProjectsManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
@@ -31,92 +32,97 @@ namespace Integratieproject1.BL.Managers
 
         #region Platform
 
-
         public Platform GetPlatform(int platformId)
-                {
-                    return projectsRepository.GetPlatform(platformId);
-                }
+        {
+            return projectsRepository.GetPlatform(platformId);
+        }
+
         public void CreatePlatform(Platform platform)
-                                 {
-                                     projectsRepository.CreatePlatform(platform);
-                                     unitOfWorkManager.Save();
-                                 }
+        {
+            projectsRepository.CreatePlatform(platform);
+            unitOfWorkManager.Save();
+        }
 
         #endregion
 
         #region Project
 
         public Project GetProject(int projectId)
-                {
-                    return projectsRepository.GetProject(projectId);
-                }
+        {
+            return projectsRepository.GetProject(projectId);
+        }
+
         public IList<Project> GetAdminProjects(int userId)
+        {
+            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            LoggedInUser user = usersManager.GetLoggedInUser(userId);
+            List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(user).ToList();
+            List<Project> projects = new List<Project>();
+            foreach (AdminProject adminProject in adminProjects)
+            {
+                projects.Add(adminProject.Project);
+            }
+
+            return projects;
+        }
+
+        public void CreateProject(Project project, int userId)
+        {
+            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            LoggedInUser user = usersManager.GetLoggedInUser(userId);
+            project.Platform = GetPlatform(user.Platform.PlatformId);
+            DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+            project.Location = dataTypeManager.CheckLocation(project.Location);
+            //Project createdProject = projectsRepository.CreateProject(project);
+            AdminProject adminProject = new AdminProject
+            {
+                Project = project,
+                Admin = user
+            };
+            projectsRepository.CreateAdminProject(adminProject);
+            unitOfWorkManager.Save();
+        }
+
+        public void EditProject(Project project, int projectId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+            project.Location = dataTypeManager.CheckLocation(project.Location);
+            project.ProjectId = projectId;
+            projectsRepository.EditProject(project);
+            unitOfWorkManager.Save();
+        }
+
+        public void DeleteProject(int projectId)
+        {
+            Project project = projectsRepository.GetProject(projectId);
+            if (project.Phases != null)
+            {
+                foreach (Phase phase in project.Phases.ToList())
                 {
-                    UsersManager usersManager = new UsersManager(unitOfWorkManager);
-                    LoggedInUser user = usersManager.GetLoggedInUser(userId);
-                    List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(user).ToList();
-                    List<Project> projects = new List<Project>();
-                    foreach (AdminProject adminProject in adminProjects)
-                    {
-                        projects.Add(adminProject.Project);
-                    }
-
-                    return projects;
+                    this.DeletePhase(phase.PhaseId);
                 }
-         public void CreateProject(Project project, int userId )
-         {
-                    UsersManager usersManager = new UsersManager(unitOfWorkManager);
-                    LoggedInUser user = usersManager.GetLoggedInUser(userId);
-                    project.Platform = GetPlatform(user.Platform.PlatformId);
-                    DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
-                    project.Location = dataTypeManager.CheckLocation(project.Location);
-                    //Project createdProject = projectsRepository.CreateProject(project);
-                    AdminProject adminProject = new AdminProject
-                    {
-                        Project = project,
-                        Admin = user
-                    };
-                    projectsRepository.CreateAdminProject(adminProject);
-                    unitOfWorkManager.Save();
+            }
+
+            if (project.AdminProjects != null)
+            {
+                foreach (AdminProject adminProject in project.AdminProjects.ToList())
+                {
+                    this.DeleteAdminProject(adminProject.AdminProjectId);
                 }
-         public void EditProject(Project project, int projectId)
-         {
-             DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
-             project.Location = dataTypeManager.CheckLocation(project.Location);
-             project.ProjectId = projectId;
-             projectsRepository.EditProject(project);
-             unitOfWorkManager.Save();
-         }
-         public void DeleteProject(int projectId)
-         {
-             Project project = projectsRepository.GetProject(projectId);
-             if (project.Phases != null)
-             {
-                 foreach (Phase phase in project.Phases.ToList())
-                              {
-                                  this.DeletePhase(phase.PhaseId);
-                              }
-             }
+            }
 
-             if (project.AdminProjects != null)
-             {
-                 foreach (AdminProject adminProject in project.AdminProjects.ToList())
-                              {
-                                  this.DeleteAdminProject(adminProject.AdminProjectId);
-                              }
-             }            
-             projectsRepository.RemoveProject(project);
-             unitOfWorkManager.Save();
-         }
+            projectsRepository.RemoveProject(project);
+            unitOfWorkManager.Save();
+        }
 
-         private void DeleteAdminProject(int adminProjectId)
-         {
-             AdminProject adminProject = projectsRepository.GetAdminProject(adminProjectId);
-             projectsRepository.RemoveAdminProject(adminProject);
-             unitOfWorkManager.Save();
-         }
+        public void DeleteAdminProject(int adminProjectId)
+        {
+            AdminProject adminProject = projectsRepository.GetAdminProject(adminProjectId);
+            projectsRepository.RemoveAdminProject(adminProject);
+            unitOfWorkManager.Save();
+        }
 
-         #endregion
+        #endregion
 
         #region Phase
 
@@ -124,44 +130,52 @@ namespace Integratieproject1.BL.Managers
         {
             return projectsRepository.GetPhase(phaseId);
         }
+
         public IList<Phase> GetPhases(int projectId)
         {
             return projectsRepository.GetPhases(projectId).ToList();
         }
-        public void CreatePhase(Phase phase)
+
+        public Phase CreatePhase(Phase phase)
         {
-            projectsRepository.CreatePhase(phase);
+            Phase createdPhase = projectsRepository.CreatePhase(phase);
             unitOfWorkManager.Save();
+            return createdPhase;
         }
-        private void DeletePhase(int phaseId)
+
+        public void DeletePhase(int phaseId)
         {
-            IdeationsManager ideationsManager =new IdeationsManager(unitOfWorkManager);
+            IdeationsManager ideationsManager = new IdeationsManager(unitOfWorkManager);
             SurveysManager surveysManager = new SurveysManager(unitOfWorkManager);
             Phase phase = projectsRepository.GetPhase(phaseId);
             if (phase.Ideations != null)
             {
-               foreach (var ideation in phase.Ideations.ToList())
-                           {
-                               ideationsManager.DeleteIdeation(ideation.IdeationId);
-                           }
+                foreach (var ideation in phase.Ideations.ToList())
+                {
+                    ideationsManager.DeleteIdeation(ideation.IdeationId);
+                }
             }
 
             if (phase.Surveys != null)
             {
                 foreach (var survey in phase.Surveys.ToList())
-                            {
-                                surveysManager.DeleteSurvey(survey.SurveyId);
-                            }
+                {
+                    surveysManager.DeleteSurvey(survey.SurveyId);
+                }
             }
-        
+
             projectsRepository.RemovePhase(phase);
             unitOfWorkManager.Save();
         }
-        
+
+        public Phase EditPhase(Phase phase, int phaseId)
+        {
+            phase.PhaseId = phaseId;
+            Phase editedPhase = projectsRepository.EditPhase(phase);
+            unitOfWorkManager.Save();
+            return editedPhase;
+        }
 
         #endregion
-
-
-       
     }
 }
