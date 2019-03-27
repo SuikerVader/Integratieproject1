@@ -8,6 +8,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Integratieproject1.UI.Controllers
@@ -51,8 +52,13 @@ namespace Integratieproject1.UI.Controllers
         [HttpPost]
         public IActionResult EditProject(int projectId,Project project)
         {
-            projectsManager.EditProject(project, projectId);
-            return RedirectToAction("Index","Home");
+            if (ModelState.IsValid)
+            {
+                projectsManager.EditProject(project, projectId);
+                return RedirectToAction("Index","Home");
+            }
+
+            return RedirectToAction("EditProject", projectId);
         }
 
         public IActionResult CreateProject(int userId)
@@ -64,9 +70,12 @@ namespace Integratieproject1.UI.Controllers
         [HttpPost]
         public IActionResult CreateProject(Project project, int userId)
         {
-            
-            projectsManager.CreateProject(project, userId);
-            return RedirectToAction("Index","Home");
+            if (ModelState.IsValid)
+            {
+               projectsManager.CreateProject(project, userId); 
+               return RedirectToAction("Index","Home");
+            }
+            return RedirectToAction("CreateProject");
         }
     }
 }
