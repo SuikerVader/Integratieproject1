@@ -1,4 +1,5 @@
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.BL.Interfaces
 {
@@ -7,8 +8,8 @@ namespace Integratieproject1.BL.Interfaces
         Platform GetPlatform(int platformId);
         void CreatePlatform(Platform platform);
         Project GetProject(int projectId);
-        void CreateProject(Project project);
+        void CreateProject(Project project, int userId);
         Phase GetPhase(int phaseId);
-        void CreatePhase(Phase phase);
+        Phase CreatePhase(Phase phase);
     }
 }

@@ -1,0 +1,27 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Projects.Phase
+
+@{
+    ViewBag.Title = "PhasePage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Phase</h2>
+<div>
+    <form asp-controller="Admin" asp-action="EditPhase" asp-route-phaseId="@Model.PhaseId" method="post">
+        <label asp-for="PhaseName"></label>
+        <input required asp-for="PhaseName" value="@Model.PhaseName" class="form-control"/>
+        <label asp-for="StartDate"></label>
+        <input required id="startDateInput" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+        <label asp-for="EndDate"></label>
+        <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control"/>
+        <input type="submit" value="Save Phase">
+    </form>
+    <a asp-area="" asp-controller="Admin"
+       asp-action="DeletePhase" asp-route-phaseId="@Model.PhaseId"><button>Delete phase</button>
+    </a>
+    
+    
+</div>

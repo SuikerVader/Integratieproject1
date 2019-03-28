@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -301,6 +302,17 @@ namespace Integratieproject1.DAL
 
       #endregion
      
+      AdminProject adminProject = new AdminProject
+      {
+        Admin = admin,
+        Project = project
+      };
+      AdminProject adminProject2 = new AdminProject
+      {
+        Admin = admin,
+        Project = project2
+      };
+      admin.AdminProjects = new List<AdminProject>(){adminProject, adminProject2};
       platform.Users = new List<User>(){person, organisation,admin};
       reaction.Likes = new List<Like>(){like};
       idea.Reactions = new List<Reaction>(){reaction};

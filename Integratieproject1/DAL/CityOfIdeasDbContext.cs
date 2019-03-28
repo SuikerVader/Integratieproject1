@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.IdentityModel.Tokens;
+using Platform = Integratieproject1.Domain.Projects.Platform;
 
 namespace Integratieproject1.DAL
 {
@@ -44,6 +46,10 @@ namespace Integratieproject1.DAL
       public DbSet<Person> Persons { get; set; }
       public DbSet<Organisation> Organisations { get; set; }
       public DbSet<LoggedInUser> LoggedInUsers { get; set; }
+      public DbSet<AdminProject> AdminProjects { get; set; }
+      public DbSet<Location> Locations { get; set; }
+      public DbSet<Address> Addresses { get; set; }
+      public DbSet<Position> Positions { get; set; }
       
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

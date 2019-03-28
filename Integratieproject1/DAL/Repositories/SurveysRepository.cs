@@ -19,8 +19,9 @@ namespace Integratieproject1.DAL.Repositories
 
             ctx = unitOfWork.ctx;
         }
-        
-        
+
+        #region Survey
+
         // Survey methods
         public IEnumerable<Survey> GetSurveys()
         {
@@ -36,32 +37,56 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return survey;
         }
+        public void RemoveSurvey(Survey survey)
+        {
+            ctx.Surveys.Remove(survey);
+            ctx.SaveChanges();
+        }
+
+        #endregion
         
+        
+
+        #region Question
+
         // Question methods
         public IEnumerable<Question> GetQuestions()
         {
             return ctx.Questions.AsEnumerable();
         }
+
         public Question GetQuestion(int questionId)
         {
             return ctx.Questions.Find(questionId);
         }
+
         public Question CreateQuestion(Question question)
         {
             ctx.Questions.Add(question);
             ctx.SaveChanges();
             return question;
         }
+        public void RemoveQuestion(Question question)
+        {
+            ctx.Questions.Remove(question);
+            ctx.SaveChanges();
+        }
+
+        #endregion
         
+
+        #region Answer
         // Answer methods
         public IEnumerable<Answer> GetAnswers()
         {
             return ctx.Answers.AsEnumerable();
         }
+
         public Answer GetAnswer(int answerId)
         {
             return ctx.Answers.Find(answerId);
         }
+
         public Answer CreateAnswer(Answer answer)
         {
             ctx.Answers.Add(answer);
@@ -79,5 +104,17 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return answer;
         }
+
+        public void RemoveAnswer(Answer answer)
+        {
+            ctx.Answers.Remove(answer);
+            ctx.SaveChanges();
+        }
+        
+
+        #endregion
+
+
+        
     }
 }
