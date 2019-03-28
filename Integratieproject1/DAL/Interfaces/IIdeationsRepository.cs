@@ -6,7 +6,7 @@ namespace Integratieproject1.DAL.Interfaces
 {
     public interface IIdeationsRepository
     {
-        IEnumerable<Ideation> GetIdeations(Phase phase);
+        IEnumerable<Ideation> GetIdeations(int phaseId);
         Ideation GetIdeation(int ideationId);
         Ideation CreateIdeation(Ideation ideation);
         IEnumerable<Idea> GetIdeas(Ideation ideation);
