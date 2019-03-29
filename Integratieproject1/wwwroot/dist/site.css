@@ -486,14 +486,35 @@ select.form-control[size], select.form-control[multiple] {
   border-color: #17a2b8;
 }
 
-.btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active {
+.btn-info:not(:disabled):not(.disabled):active {
   color: #fff;
   background-color: #117a8b;
   border-color: #10707f;
 }
 
-.btn-info:not(:disabled):not(.disabled):active:focus, .btn-info:not(:disabled):not(.disabled).active:focus {
+.btn-info:not(:disabled):not(.disabled):active:focus {
   box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+.btn-link {
+  font-weight: 400;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.btn-link:focus {
+  text-decoration: underline;
+  box-shadow: none;
+}
+
+.btn-link:disabled {
+  color: #6c757d;
+  pointer-events: none;
 }
 
 .collapse:not(.show) {
@@ -664,9 +685,7 @@ select.form-control[size], select.form-control[multiple] {
 }
 
 .navbar-light .navbar-nav .show > .nav-link,
-.navbar-light .navbar-nav .active > .nav-link,
-.navbar-light .navbar-nav .nav-link.show,
-.navbar-light .navbar-nav .nav-link.active {
+.navbar-light .navbar-nav .nav-link.show {
   color: rgba(0, 0, 0, 0.9);
 }
 
@@ -772,10 +791,6 @@ button.bg-light:focus {
   border: 0;
 }
 
-.mr-auto {
-  margin-right: auto !important;
-}
-
 .text-danger {
   color: #dc3545 !important;
 }
@@ -830,30 +845,5 @@ a.text-danger:hover, a.text-danger:focus {
     background-color: #fff !important;
   }
 }
-/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
-for details on configuring this project to bundle and minify static web assets. */
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Carousel */
-
-/* Make .svg files in the carousel display properly in older browsers */
-
-/* QR code generator */
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-}
-
 
 /*# sourceMappingURL=site.css.map*/
