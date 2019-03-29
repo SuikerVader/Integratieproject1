@@ -117,7 +117,9 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult AddPhase(int projectId)
         {
+
             Phase phase = projectsManager.GetNewPhase(projectId);
+
             return View("/UI/Views/Admin/CreatePhase.cshtml", phase);
         }
 
@@ -149,6 +151,7 @@ namespace Integratieproject1.UI.Controllers
             IList<Ideation> ideations = ideationsManager.GetIdeations(phaseId);
             ViewData["PhaseId"] = phaseId;
             return View("/UI/Views/Admin/Ideations.cshtml", ideations);
+
         }
 
         public IActionResult EditIdeation(int ideationId)

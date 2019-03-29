@@ -158,6 +158,7 @@ namespace Integratieproject1.BL.Managers
             return createdPhase;
         }
 
+
         public Phase GetNewPhase(int projectId)
         {
             Phase phase = new Phase();
