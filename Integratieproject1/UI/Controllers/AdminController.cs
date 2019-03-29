@@ -117,21 +117,7 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult AddPhase(int projectId)
         {
-            Phase phase = new Phase();
-            Project project = projectsManager.GetProject(projectId);
-            phase.Project = project;
-            if (project.Phases != null && project.Phases.Count > 0)
-            {
-                phase.PhaseNr = project.Phases.Last().PhaseNr + 1;
-                phase.StartDate = project.Phases.Last().EndDate;
-            }
-            else
-            {
-                phase.PhaseNr = 1;
-                phase.StartDate = project.StartDate;
-            }
-
-            phase.EndDate = phase.StartDate;
+            Phase phase = projectsManager.GetNewPhase(projectId);
             return View("/UI/Views/Admin/CreatePhase.cshtml", phase);
         }
 
