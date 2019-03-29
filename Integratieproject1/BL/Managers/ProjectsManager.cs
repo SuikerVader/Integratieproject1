@@ -140,9 +140,43 @@ namespace Integratieproject1.BL.Managers
         {
             phase.PhaseNr = phaseNr;
             phase.Project = this.GetProject(projectId);
+            Project project = GetProject(projectId);
+            if (phaseNr != 1)
+            {
+                foreach (var previousPhase in project.Phases)
+                {
+                    if (previousPhase.PhaseNr == phaseNr-1)
+                    {
+                        
+                         previousPhase.EndDate = phase.StartDate;
+                         projectsRepository.EditPhase(previousPhase);
+                    }
+                }
+            }
             Phase createdPhase = projectsRepository.CreatePhase(phase);
             unitOfWorkManager.Save();
             return createdPhase;
+        }
+
+
+        public Phase GetNewPhase(int projectId)
+        {
+            Phase phase = new Phase();
+            Project project = GetProject(projectId);
+            phase.Project = project;
+            if (project.Phases != null && project.Phases.Count > 0)
+            {
+                phase.PhaseNr = project.Phases.Last().PhaseNr + 1;
+                //phase.StartDate = project.Phases.Last().EndDate;
+            }
+            else
+            {
+                phase.PhaseNr = 1;
+                phase.StartDate = project.StartDate;
+            }
+
+            phase.EndDate = project.EndDate;
+            return phase;
         }
 
         private bool CheckPhase(Phase phase)
