@@ -31,5 +31,11 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return ioTSetup;
         }
+
+        public void RemoveIoTSetup(IoTSetup ioTSetup)
+        {
+            ctx.IoTSetups.Remove(ioTSetup);
+            ctx.SaveChanges();
+        }
     }
 }

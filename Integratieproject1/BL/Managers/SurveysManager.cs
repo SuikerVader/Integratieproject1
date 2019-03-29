@@ -20,14 +20,17 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager = new UnitOfWorkManager();
             surveysRepository = new SurveysRepository(unitOfWorkManager.UnitOfWork);
         }
+
         public SurveysManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
                 throw new ArgumentNullException("unitOfWorkManager");
-            
+
             this.unitOfWorkManager = unitOfWorkManager;
             this.surveysRepository = new SurveysRepository(unitOfWorkManager.UnitOfWork);
         }
+
+        #region Survey
 
         public Survey GetSurvey(int surveyId)
         {
@@ -40,16 +43,71 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
 
+        public void DeleteSurvey(int surveyId)
+        {
+            Survey survey = GetSurvey(surveyId);
+            if (survey.Questions != null)
+            {
+                foreach (var question in survey.Questions.ToList())
+                {
+                    this.DeleteQuestion(question.QuestionId);
+                }
+            }
+
+            surveysRepository.RemoveSurvey(survey);
+            unitOfWorkManager.Save();
+        }
+
+        #endregion
+
+        #region Question
+
         public void CreateQuestion(Question question)
         {
             surveysRepository.CreateQuestion(question);
             unitOfWorkManager.Save();
         }
 
+        public void DeleteQuestion(int questionId)
+        {
+            Question question = GetQuestion(questionId);
+            if (question.Answers != null)
+            {
+                foreach (var answer in question.Answers.ToList())
+                {
+                    this.DeleteAnswer(answer.AnswerId);
+                }
+            }
+
+            surveysRepository.RemoveQuestion(question);
+            unitOfWorkManager.Save();
+        }
+
+        public Question GetQuestion(int questionId)
+        {
+            return surveysRepository.GetQuestion(questionId);
+        }
+
+        #endregion
+
+        #region Answer
+
         public void CreateAnswer(Answer answer)
         {
             surveysRepository.CreateAnswer(answer);
             unitOfWorkManager.Save();
+        }
+
+        public void DeleteAnswer(int answerId)
+        {
+            Answer answer = GetAnswer(answerId);
+            surveysRepository.RemoveAnswer(answer);
+            unitOfWorkManager.Save();
+        }
+
+        public Answer GetAnswer(int answerId)
+        {
+            return surveysRepository.GetAnswer(answerId);
         }
 
         public void UpdateAnswers(ArrayList answers, int surveyId)
@@ -94,5 +152,7 @@ namespace Integratieproject1.BL.Managers
                 }
             }
         }
+
+        #endregion
     }
 }
