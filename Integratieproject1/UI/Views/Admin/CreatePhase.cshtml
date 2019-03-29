@@ -12,9 +12,19 @@
         <label asp-for="PhaseName"></label>
         <input required asp-for="PhaseName" class="form-control"/>
         <label asp-for="StartDate"></label>
-        <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-        <label asp-for="EndDate"></label>
-        <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+        @if (Model.PhaseNr == 1)
+        {
+            <input required readonly="readonly"  asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+            <label asp-for="EndDate"></label>
+            <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+        }
+        else
+        {
+            <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+            <label asp-for="EndDate"></label>
+            <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+        }
+        
         <label asp-for="Description"></label>
         <input asp-for="Description" class="form-control"/>
         <input type="submit" value="Add Phase">
