@@ -136,11 +136,47 @@ namespace Integratieproject1.BL.Managers
             return projectsRepository.GetPhases(projectId).ToList();
         }
 
-        public Phase CreatePhase(Phase phase)
+        public Phase CreatePhase(Phase phase, int phaseNr, int projectId)
         {
+            phase.PhaseNr = phaseNr;
+            phase.Project = this.GetProject(projectId);
             Phase createdPhase = projectsRepository.CreatePhase(phase);
             unitOfWorkManager.Save();
             return createdPhase;
+        }
+
+        private bool CheckPhase(Phase phase)
+        {
+            if (phase.StartDate < phase.Project.StartDate)
+            {
+                return false;
+            }
+
+            if (phase.EndDate < phase.Project.EndDate)
+            {
+                return false;
+            }
+
+            IList<Phase> phases = phase.Project.Phases.ToList();
+            foreach (var listPhase in phases)
+            {
+                if (phase.PhaseNr > listPhase.PhaseNr)
+                {
+                    if (phase.StartDate < listPhase.EndDate)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (phase.EndDate < listPhase.StartDate)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public void DeletePhase(int phaseId)

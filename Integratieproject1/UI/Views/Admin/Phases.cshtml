@@ -24,6 +24,12 @@
                 <td>@phase.EndDate</td>
                 <td>
                     <a asp-area="" asp-controller="Admin"
+                       asp-action="Ideations" asp-route-phaseId="@phase.PhaseId">
+                        show Ideations
+                    </a>
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="Admin"
                        asp-action="EditPhase" asp-route-phaseId="@phase.PhaseId">
                         Edit
                     </a>

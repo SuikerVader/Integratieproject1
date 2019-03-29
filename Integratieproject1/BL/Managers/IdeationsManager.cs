@@ -7,6 +7,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.IoT;
+using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.BL.Managers
@@ -38,10 +39,28 @@ namespace Integratieproject1.BL.Managers
             return ideationsRepository.GetIdeation(ideationId);
         }
 
-        public void CreateIdeation(Ideation ideation)
+        public IList<Ideation> GetIdeations(int phaseId)
         {
+            return ideationsRepository.GetIdeations(phaseId).ToList();
+        }
+
+        public void CreateIdeation(Ideation ideation, int phaseId)
+        {
+            ProjectsManager projectsManager = new ProjectsManager(unitOfWorkManager);
+            Phase phase = projectsManager.GetPhase(phaseId);
+            ideation.Phase = phase;
             ideationsRepository.CreateIdeation(ideation);
             unitOfWorkManager.Save();
+        }
+        
+        public Ideation EditIdeation(Ideation ideation, int ideationId)
+        {
+            ideation.IdeationId = ideationId;
+            //ideation.Phase = GetIdeation(ideationId).Phase;
+            ideationsRepository.EditIdeation(ideation);
+            unitOfWorkManager.Save();
+            return ideation;
+
         }
 
         public void DeleteIdeation(int ideationId)
@@ -228,5 +247,8 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+
+        
     }
 }

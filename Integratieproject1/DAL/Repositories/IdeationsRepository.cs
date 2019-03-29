@@ -24,9 +24,9 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Ideation methods
 
-        public IEnumerable<Ideation> GetIdeations(Phase phase)
+        public IEnumerable<Ideation> GetIdeations(int phaseId)
         {
-            return ctx.Ideations.Where(ideation => ideation.Phase == phase).AsEnumerable();
+            return ctx.Ideations.Where(ideation => ideation.Phase.PhaseId == phaseId).AsEnumerable();
         }
 
         public Ideation GetIdeation(int ideationId)
@@ -40,6 +40,13 @@ namespace Integratieproject1.DAL.Repositories
         public Ideation CreateIdeation(Ideation ideation)
         {
             ctx.Ideations.Add(ideation);
+            ctx.SaveChanges();
+            return ideation;
+        }
+        
+        public Ideation EditIdeation(Ideation ideation)
+        {
+            ctx.Ideations.Update(ideation);
             ctx.SaveChanges();
             return ideation;
         }
@@ -193,6 +200,6 @@ namespace Integratieproject1.DAL.Repositories
         #endregion
 
 
-        
+       
     }
 }
