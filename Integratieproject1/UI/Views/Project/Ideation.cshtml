@@ -1,3 +1,4 @@
+@using Integratieproject1.Domain.Ideations
 @model Integratieproject1.Domain.Ideations.Ideation
 
 @{
@@ -16,3 +17,25 @@
         </a>
     </div>
 }
+
+@* <div> *@
+@*     <a asp-area="" asp-controller="Project" *@
+@*        asp-action="Ideation" asp-route-ideationId="@Model.IdeationId"> *@
+@*         <button>post idea</button> *@
+@*     </a> *@
+    
+<button onclick="showHideCreateIdea()">post idea</button>
+<div id="idea" style="display: none">
+    @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
+</div>
+
+<script>
+    function showHideCreateIdea() {
+        var x = document.getElementById('idea');
+        if (x.style.display === 'none') {
+            x.style.display = 'inline-block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+</script>

@@ -52,7 +52,7 @@ namespace Integratieproject1.BL.Managers
             ideationsRepository.CreateIdeation(ideation);
             unitOfWorkManager.Save();
         }
-        
+
         public Ideation EditIdeation(Ideation ideation, int ideationId)
         {
             ideation.IdeationId = ideationId;
@@ -60,7 +60,6 @@ namespace Integratieproject1.BL.Managers
             ideationsRepository.EditIdeation(ideation);
             unitOfWorkManager.Save();
             return ideation;
-
         }
 
         public void DeleteIdeation(int ideationId)
@@ -116,17 +115,17 @@ namespace Integratieproject1.BL.Managers
             if (idea.Votes != null)
             {
                 foreach (var vote in idea.Votes.ToList())
-                            {
-                                this.DeleteVote(vote.VoteId);
-                            }
+                {
+                    this.DeleteVote(vote.VoteId);
+                }
             }
 
             if (idea.Reactions != null)
             {
                 foreach (var reaction in idea.Reactions.ToList())
-                            {
-                                this.DeleteReaction(reaction.ReactionId);
-                            }
+                {
+                    this.DeleteReaction(reaction.ReactionId);
+                }
             }
 
             ideationsRepository.RemoveIdea(idea);
@@ -187,10 +186,11 @@ namespace Integratieproject1.BL.Managers
             if (reaction.Likes != null)
             {
                 foreach (var like in reaction.Likes.ToList())
-                            {
-                                this.DeleteLike(like.LikeId);
-                            }
+                {
+                    this.DeleteLike(like.LikeId);
+                }
             }
+
             ideationsRepository.RemoveReaction(reaction);
             unitOfWorkManager.Save();
         }
@@ -249,6 +249,20 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
-        
+        #region Idea
+
+        public void PostIdea(ArrayList parameters, int ideationId)
+        {
+            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            Idea idea = new Idea();
+            idea.Ideation = GetIdeation(ideationId);
+            idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
+            idea.Title = parameters[1].ToString();
+            idea.Text = parameters[2].ToString();
+            ideationsRepository.CreateIdea(idea);
+            unitOfWorkManager.Save();
+        }
+
+        #endregion
     }
 }
