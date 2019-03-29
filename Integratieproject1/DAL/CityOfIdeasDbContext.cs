@@ -14,10 +14,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.IdentityModel.Tokens;
 using Platform = Integratieproject1.Domain.Projects.Platform;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.DAL
 {
-    public class CityOfIdeasDbContext : DbContext
+    public class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
     {
       public CityOfIdeasDbContext()
       {
@@ -65,11 +67,8 @@ namespace Integratieproject1.DAL
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      /*base.OnModelCreating(modelBuilder);
-      modelBuilder.Entity<Project>().Property<int>("PlatformFK");
-      modelBuilder.Entity<Project>().HasOne<Platform>(p => p.Platform).WithMany(po => po.Projects).HasForeignKey("PlatformId");
-    */
-    }
+            base.OnModelCreating(modelBuilder);
+        }
 
     public override int SaveChanges()
     {

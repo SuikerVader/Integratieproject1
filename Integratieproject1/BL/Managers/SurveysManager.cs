@@ -153,6 +153,17 @@ namespace Integratieproject1.BL.Managers
             }
         }
 
+        //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
+        public void UpdateSingleAnswer(Question question, int response)
+        {
+            foreach ( Answer answer in question.Answers)
+            {
+                if (answer.AnswerId == response)
+                {
+                    surveysRepository.UpdateAnswer(answer);
+                }
+            }
+        }
         #endregion
     }
 }

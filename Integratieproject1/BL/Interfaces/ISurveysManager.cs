@@ -8,5 +8,6 @@ namespace Integratieproject1.BL.Interfaces
         void CreateSurvey(Survey survey);
         void CreateQuestion(Question question);
         void CreateAnswer(Answer answer);
+        void UpdateSingleAnswer(Question question, int response);
     }
 }
