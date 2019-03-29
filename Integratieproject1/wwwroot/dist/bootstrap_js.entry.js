@@ -81,21 +81,10 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./wwwroot/js/site.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./wwwroot/js/bootstrap_js.js");
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./node_modules/bootstrap/dist/css/bootstrap.css":
-/*!*******************************************************!*\
-  !*** ./node_modules/bootstrap/dist/css/bootstrap.css ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
 
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /*!*****************************************************!*\
@@ -17544,41 +17533,22 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./wwwroot/css/site.css":
-/*!******************************!*\
-  !*** ./wwwroot/css/site.css ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "./wwwroot/js/site.js":
-/*!****************************!*\
-  !*** ./wwwroot/js/site.js ***!
-  \****************************/
+/***/ "./wwwroot/js/bootstrap_js.js":
+/*!************************************!*\
+  !*** ./wwwroot/js/bootstrap_js.js ***!
+  \************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
-/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _css_site_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../css/site.css */ "./wwwroot/css/site.css");
-/* harmony import */ var _css_site_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_css_site_css__WEBPACK_IMPORTED_MODULE_2__);
-﻿
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);
 
 
-// Custom CSS imports
-
-
-console.log('The \'site\' bundle has been loaded!');
+console.log('The \'bootstrap_js\' bundle has been loaded!');
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=site.entry.js.map
+//# sourceMappingURL=bootstrap_js.entry.js.map
