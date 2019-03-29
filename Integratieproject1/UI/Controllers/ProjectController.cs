@@ -5,6 +5,7 @@ using System.Linq;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -122,16 +123,25 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostIdea(IFormCollection formCollection, int ideationId)
+        public void PostIdea(Idea idea, int ideationId, int loggedInUserId)
         {
-            ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                parameters.Add(pair.Value);
-            }
-            ideationsManager.PostIdea(parameters, ideationId);
-            Ideation ideation = ideationsManager.GetIdeation(ideationId);
-            return View("/UI/Views/Project/Ideation.cshtml", ideation);
+//            ViewData["ideationId"]
+
+//            ArrayList parameters = new ArrayList();
+//            foreach (KeyValuePair<string, StringValues> pair in formCollection)
+//            {
+//                parameters.Add(pair.Value);
+//            }
+//            ideationsManager.PostIdea(parameters, ideationId);
+//            Ideation ideation = ideationsManager.GetIdeation(ideationId);
+
+            Response.WriteAsync(idea.Title);
+            Response.WriteAsync(ideationId.ToString());
+            Response.WriteAsync(loggedInUserId.ToString());
+
+//            idea.Ideation = ideation;
+//            ideationsManager.CreateIdea(idea);
+//            return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
     }
 }

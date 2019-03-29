@@ -9,6 +9,7 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -26,7 +27,7 @@ namespace Integratieproject1.BL.Managers
         public IdeationsManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
-                throw new ArgumentNullException("unitOfWorkManager");
+                throw new ArgumentNullException(nameof(unitOfWorkManager));
 
             this.unitOfWorkManager = unitOfWorkManager;
             ideationsRepository = new IdeationsRepository(this.unitOfWorkManager.UnitOfWork);
@@ -89,6 +90,18 @@ namespace Integratieproject1.BL.Managers
 
         #region Idea
 
+//        [HttpPost]
+//        public void PostIdea(Idea idea, int ideationId)
+//        {
+//            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+////            Idea idea = new Idea();
+//            idea.Ideation = GetIdeation(ideationId); 
+////            idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
+////            idea.Title = parameters[1].ToString();
+//            ideationsRepository.CreateIdea(idea);
+//            unitOfWorkManager.Save();
+//        }
+        
         public void CreateIdea(Idea idea)
         {
             ideationsRepository.CreateIdea(idea);
@@ -244,23 +257,6 @@ namespace Integratieproject1.BL.Managers
         private Vote GetVote(int voteId)
         {
             return ideationsRepository.GetVote(voteId);
-        }
-
-        #endregion
-
-
-        #region Idea
-
-        public void PostIdea(ArrayList parameters, int ideationId)
-        {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            Idea idea = new Idea();
-            idea.Ideation = GetIdeation(ideationId);
-            idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
-            idea.Title = parameters[1].ToString();
-            idea.Text = parameters[2].ToString();
-            ideationsRepository.CreateIdea(idea);
-            unitOfWorkManager.Save();
         }
 
         #endregion
