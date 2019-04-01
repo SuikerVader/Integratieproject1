@@ -30,6 +30,12 @@
                 </td>
                 <td>
                     <a asp-area="" asp-controller="Admin"
+                       asp-action="Surveys" asp-route-phaseId="@phase.PhaseId">
+                        show Surveys
+                    </a>
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="Admin"
                        asp-action="EditPhase" asp-route-phaseId="@phase.PhaseId">
                         Edit
                     </a>

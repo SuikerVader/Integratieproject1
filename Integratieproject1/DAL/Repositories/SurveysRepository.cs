@@ -23,17 +23,28 @@ namespace Integratieproject1.DAL.Repositories
         #region Survey
 
         // Survey methods
-        public IEnumerable<Survey> GetSurveys()
+        public IEnumerable<Survey> GetSurveys(int phaseId)
         {
-            return ctx.Surveys.AsEnumerable();
+            return ctx.Surveys
+                .Where(p => p.Phase.PhaseId == phaseId)
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .AsEnumerable();
         }
         public Survey GetSurvey(int surveyId)
         {
-            return ctx.Surveys.Include(q => q.Questions).ThenInclude(a => a.Answers).Single(s => s.SurveyId == surveyId);;
+            return ctx.Surveys
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Single(s => s.SurveyId == surveyId);
         }
         public Survey CreateSurvey(Survey survey)
         {
             ctx.Surveys.Add(survey);
+            ctx.SaveChanges();
+            return survey;
+        }
+        public Survey EditSurvey(Survey survey)
+        {
+            ctx.Surveys.Update(survey);
             ctx.SaveChanges();
             return survey;
         }
@@ -58,6 +69,13 @@ namespace Integratieproject1.DAL.Repositories
         public Question GetQuestion(int questionId)
         {
             return ctx.Questions.Find(questionId);
+        }
+        
+        public Question EditQuestion(Question question)
+        {
+            ctx.Questions.Update(question);
+            ctx.SaveChanges();
+            return question;
         }
 
         public Question CreateQuestion(Question question)
@@ -93,6 +111,12 @@ namespace Integratieproject1.DAL.Repositories
             ctx.SaveChanges();
             return answer;
         }
+        public Answer EditAnswer(Answer answer)
+        {
+            ctx.Answers.Update(answer);
+            ctx.SaveChanges();
+            return answer;
+        }
 
         public Answer UpdateAnswer(Answer answer)
         {
@@ -115,6 +139,6 @@ namespace Integratieproject1.DAL.Repositories
         #endregion
 
 
-        
+       
     }
 }

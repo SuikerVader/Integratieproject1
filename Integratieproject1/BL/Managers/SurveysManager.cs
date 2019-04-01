@@ -6,6 +6,7 @@ using Integratieproject1.BL.Interfaces;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Ideations;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 
 namespace Integratieproject1.BL.Managers
@@ -36,10 +37,27 @@ namespace Integratieproject1.BL.Managers
         {
             return surveysRepository.GetSurvey(surveyId);
         }
+        public IList<Survey> GetSurveys(int phaseId)
+        {
+            return surveysRepository.GetSurveys(phaseId).ToList();
+        }
 
         public void CreateSurvey(Survey survey)
         {
             surveysRepository.CreateSurvey(survey);
+            unitOfWorkManager.Save();
+        }
+        public void CreateNewSurvey(int phaseId)
+        {
+            ProjectsManager projectsManager = new ProjectsManager(unitOfWorkManager);
+            Survey survey = new Survey {Phase = projectsManager.GetPhase(phaseId), Title = "_NewSurvey_"};
+            surveysRepository.CreateSurvey(survey);
+            unitOfWorkManager.Save();
+        }
+        public void EditSurvey(Survey survey, int surveyId)
+        {
+            survey.SurveyId = surveyId;
+            surveysRepository.EditSurvey(survey);
             unitOfWorkManager.Save();
         }
 
@@ -62,9 +80,17 @@ namespace Integratieproject1.BL.Managers
 
         #region Question
 
-        public void CreateQuestion(Question question)
+        public void CreateQuestion(Question question, int surveyId)
         {
+            question.Survey = GetSurvey(surveyId);
             surveysRepository.CreateQuestion(question);
+            unitOfWorkManager.Save();
+        }
+        
+        public void EditQuestion(Question question, int questionId)
+        {
+            question.QuestionId = questionId;
+            surveysRepository.EditQuestion(question);
             unitOfWorkManager.Save();
         }
 
@@ -108,6 +134,13 @@ namespace Integratieproject1.BL.Managers
         public Answer GetAnswer(int answerId)
         {
             return surveysRepository.GetAnswer(answerId);
+        }
+        
+        public void EditAnswer(Answer answer, int answerId)
+        {
+            answer.AnswerId = answerId;
+            surveysRepository.EditAnswer(answer);
+            unitOfWorkManager.Save();
         }
 
         public void UpdateAnswers(ArrayList answers, int surveyId)
@@ -165,5 +198,8 @@ namespace Integratieproject1.BL.Managers
             }
         }
         #endregion
+
+
+        
     }
 }
