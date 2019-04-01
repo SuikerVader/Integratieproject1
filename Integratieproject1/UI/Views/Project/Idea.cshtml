@@ -35,6 +35,18 @@
          this.parentNode.submit()
          data-size="large">
         <input type="submit" onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+
+    </div>
+</form>
+<form class="TwitterShare" asp-controller="Project" asp-action="CreateUserVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
+    <select name="user">
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+    <div class="twitter">
+
+        <input type="submit" onclick="share_tw()"  class="twitter-share-button" data-show-count="false">
+            Tweet</input>
             
     </div>
 </form>
@@ -80,11 +92,21 @@
             x.style.display = 'none';
         }
     }
+
     function share_fb(url) {
-        window.open('https://www.facebook.com/sharer/sharer.php?u='+url,'facebook-share-dialog',"width=626, height=436")
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + url,
+            'facebook-share-dialog',
+            "width=626, height=436")
+    }
+    function share_tw() {
+        window.open("https://twitter.com/share?ref_src=twsrc%5Etfw")
     }
 </script>
-<script 
+<script
     async defer crossorigin="anonymous"
     src="https://connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v3.2">
+</script>
+<script
+    async src="https://platform.twitter.com/widgets.js"
+    charset="utf-8">
 </script>
