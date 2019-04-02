@@ -5,6 +5,7 @@ using System.Linq;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -23,7 +24,6 @@ namespace Integratieproject1.UI.Controllers
             projectsManager = new ProjectsManager();
             ideationsManager = new IdeationsManager();
             surveysManager = new SurveysManager();
-            
         }
 
         public IActionResult Project(int projectId)
@@ -49,14 +49,16 @@ namespace Integratieproject1.UI.Controllers
             Domain.Ideations.Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
-        [HttpPost]    
+
+        [HttpPost]
         public IActionResult PostReaction(IFormCollection formCollection, int ideaId)
         {
             ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 parameters.Add(pair.Value);
             }
+
             ideationsManager.PostReaction(parameters, ideaId);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
@@ -66,10 +68,11 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult SaveSurveyFormData(IFormCollection formCollection, int surveyId)
         {
             ArrayList answers = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 answers.Add(pair.Value);
             }
+
             surveysManager.UpdateAnswers(answers, surveyId);
             Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/SurveyResults.cshtml", survey);
@@ -83,28 +86,30 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult CreateVote(int ideaId, VoteType voteType)
         {
-            ideationsManager.CreateVote(ideaId,voteType);
+            ideationsManager.CreateVote(ideaId, voteType);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
+
         [HttpPost]
-        public IActionResult CreateUserVote(int ideaId, VoteType voteType ,IFormCollection formCollection) 
+        public IActionResult CreateUserVote(int ideaId, VoteType voteType, IFormCollection formCollection)
         {
             ArrayList parameters = new ArrayList();
-           
-                foreach (KeyValuePair<string,StringValues> pair in formCollection)
-                {
-                    parameters.Add(pair.Value);
-                }
 
-                if (parameters.Count > 0)
-                {
-                    ideationsManager.CreateVote(ideaId, voteType, parameters[0].ToString());         
-                }
-                else
-                {
-                    throw new Exception("fout createVote");
-                }
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
+            {
+                parameters.Add(pair.Value);
+            }
+
+            if (parameters.Count > 0)
+            {
+                ideationsManager.CreateVote(ideaId, voteType, parameters[0].ToString());
+            }
+            else
+            {
+                throw new Exception("fout createVote");
+            }
+
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
@@ -112,14 +117,14 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult LikeReaction(int ideaId, int reactionId, IFormCollection formCollection)
         {
             ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 parameters.Add(pair.Value);
             }
+
             ideationsManager.LikeReaction(reactionId, parameters[0].ToString());
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
-
         }
 
         [HttpPost]
@@ -130,9 +135,17 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
-            ideationsManager.PostIdea(parameters, ideationId);
-            Ideation ideation = ideationsManager.GetIdeation(ideationId);
-            return View("/UI/Views/Project/Ideation.cshtml", ideation);
+
+            if (parameters.Count > 0)
+            {
+                ideationsManager.PostIdea(parameters, ideationId);
+                Ideation ideation = ideationsManager.GetIdeation(ideationId);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            else
+            {
+                throw new Exception("fout createIdea");
+            }
         }
     }
 }
