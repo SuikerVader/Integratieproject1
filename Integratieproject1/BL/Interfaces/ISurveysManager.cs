@@ -6,7 +6,8 @@ namespace Integratieproject1.BL.Interfaces
     {
         Survey GetSurvey(int surveyId);
         void CreateSurvey(Survey survey);
-        void CreateQuestion(Question question);
+        void CreateQuestion(Question question, int surveyId);
         void CreateAnswer(Answer answer);
+        void UpdateSingleAnswer(Question question, int response);
     }
 }

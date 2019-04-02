@@ -6,6 +6,7 @@ using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -84,7 +85,6 @@ namespace Integratieproject1.UI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         #endregion
 
         #region Phase
@@ -117,7 +117,6 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult AddPhase(int projectId)
         {
-
             Phase phase = projectsManager.GetNewPhase(projectId);
 
             return View("/UI/Views/Admin/CreatePhase.cshtml", phase);
@@ -126,7 +125,6 @@ namespace Integratieproject1.UI.Controllers
         [HttpPost]
         public IActionResult AddPhase(Phase phase, int phaseNr, int projectId)
         {
-
             if (ModelState.IsValid)
             {
                 Phase createdPhase = projectsManager.CreatePhase(phase, phaseNr, projectId);
@@ -151,7 +149,6 @@ namespace Integratieproject1.UI.Controllers
             IList<Ideation> ideations = ideationsManager.GetIdeations(phaseId);
             ViewData["PhaseId"] = phaseId;
             return View("/UI/Views/Admin/Ideations.cshtml", ideations);
-
         }
 
         public IActionResult EditIdeation(int ideationId)
@@ -188,7 +185,6 @@ namespace Integratieproject1.UI.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-
         }
 
         public IActionResult DeleteIdeation(int ideationId)
@@ -200,10 +196,107 @@ namespace Integratieproject1.UI.Controllers
         #endregion
 
 
+        /*public IActionResult Ideas(int ideationId)
+        {
+            IList<Idea> ideas = ideationsManager.GetIdeas(ideationId);
+            ViewData["IdeationId"] = ideationId;
+            return View("/UI/Views/Admin/Ideations.cshtml", ideas);
+        }*/
 
+        #region Survey
+
+        public IActionResult Surveys(int phaseId)
+        {
+            IList<Survey> surveys = surveysManager.GetSurveys(phaseId);
+            ViewData["PhaseId"] = phaseId;
+            return View("/UI/Views/Admin/Surveys.cshtml", surveys);
+        }
+
+        public IActionResult AddSurvey(int phaseId)
+        {
+            surveysManager.CreateNewSurvey(phaseId);
+            IList<Survey> surveys = surveysManager.GetSurveys(phaseId);
+            return View("/UI/Views/Admin/Surveys.cshtml", surveys);
+        }
+
+        public IActionResult EditSurvey(int surveyId)
+        {
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditSurvey(Survey survey, int surveyId)
+        {
+            if (ModelState.IsValid)
+            {
+                surveysManager.EditSurvey(survey, surveyId);
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult DeleteSurvey(int surveyId)
+        {
+            surveysManager.DeleteSurvey(surveyId);
+            return RedirectToAction("Index", "Home");
+        }
+
+        /*public IActionResult AddQuestion()
+        {
+            return PartialView("/UI/Views/Admin/_CreateQuestionPartial.cshtml");
+        }*/
+
+        [HttpPost]
+        public IActionResult AddQuestion(Question question, int surveyId)
+        {
+            surveysManager.CreateQuestion(question, surveyId);
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        [HttpPost]
+        public IActionResult EditQuestion(Question question, int questionId, int surveyId)
+        {
+            surveysManager.EditQuestion(question, questionId);
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        
+        public IActionResult DeleteQuestion(int questionId, int surveyId)
+        {
+           surveysManager.DeleteQuestion(questionId); 
+           Survey survey = surveysManager.GetSurvey(surveyId);
+           return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        
+        [HttpPost]
+        public IActionResult EditAnswer(Answer answer, int answerId, int surveyId)
+        {
+            surveysManager.EditAnswer(answer, answerId);
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        [HttpPost]
+        public IActionResult AddAnswer(Answer answer, int questionId, int surveyId)
+        {
+            answer.Question = surveysManager.GetQuestion(questionId);
+            surveysManager.CreateAnswer(answer);
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        
+        public IActionResult DeleteAnswer(int answerId, int surveyId)
+        {
+            surveysManager.DeleteAnswer(answerId);
+            Survey survey = surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+
+        #endregion
+
+
+        
     }
-
-
-
-
 }

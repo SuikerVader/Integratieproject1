@@ -141,18 +141,15 @@ namespace Integratieproject1.BL.Managers
             phase.PhaseNr = phaseNr;
             phase.Project = this.GetProject(projectId);
             Project project = GetProject(projectId);
-            if (phaseNr != 1)
-            {
+            
                 foreach (var previousPhase in project.Phases)
                 {
-                    if (previousPhase.PhaseNr == phaseNr-1)
+                    if (previousPhase.PhaseNr == phaseNr - 1)
                     {
-                        
-                         previousPhase.EndDate = phase.StartDate;
-                         projectsRepository.EditPhase(previousPhase);
+                        previousPhase.EndDate = phase.StartDate;
+                        projectsRepository.EditPhase(previousPhase);
                     }
                 }
-            }
             Phase createdPhase = projectsRepository.CreatePhase(phase);
             unitOfWorkManager.Save();
             return createdPhase;
@@ -181,12 +178,12 @@ namespace Integratieproject1.BL.Managers
 
         private bool CheckPhase(Phase phase)
         {
-            if (phase.StartDate < phase.Project.StartDate)
+            if (phase.StartDate >= phase.Project.StartDate)
             {
                 return false;
             }
 
-            if (phase.EndDate < phase.Project.EndDate)
+            if (phase.EndDate <= phase.Project.EndDate)
             {
                 return false;
             }
@@ -196,14 +193,14 @@ namespace Integratieproject1.BL.Managers
             {
                 if (phase.PhaseNr > listPhase.PhaseNr)
                 {
-                    if (phase.StartDate < listPhase.EndDate)
+                    if (phase.StartDate <= listPhase.EndDate)
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    if (phase.EndDate < listPhase.StartDate)
+                    if (phase.EndDate <= listPhase.StartDate)
                     {
                         return false;
                     }
@@ -240,11 +237,32 @@ namespace Integratieproject1.BL.Managers
 
         public Phase EditPhase(Phase phase, int phaseId)
         {
-            phase.PhaseId = phaseId;
-            Phase editedPhase = projectsRepository.EditPhase(phase);
+            Phase originalPhase = GetPhase(phaseId);
+            originalPhase.PhaseName = phase.PhaseName;
+            originalPhase.StartDate = phase.StartDate;
+            originalPhase.EndDate = phase.EndDate;
+            originalPhase.Description = phase.Description;
+            Project project = GetProject(originalPhase.Project.ProjectId);
+            foreach (var listPhase in project.Phases)
+            {
+                if (listPhase.PhaseNr == originalPhase.PhaseNr + 1)
+                {
+                    listPhase.StartDate = originalPhase.EndDate;
+                    projectsRepository.EditPhase(listPhase);
+                }
+
+                if (listPhase.PhaseNr == originalPhase.PhaseNr -1)
+                {
+                    listPhase.EndDate = originalPhase.StartDate;
+                    projectsRepository.EditPhase(listPhase);
+                }
+            }
+
+            Phase editedPhase = projectsRepository.EditPhase(originalPhase);
             unitOfWorkManager.Save();
             return editedPhase;
         }
+
 
         #endregion
     }

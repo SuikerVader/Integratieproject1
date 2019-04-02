@@ -109,7 +109,7 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
-        public IActionResult LikeReaction(int ideaId,int reactionId, IFormCollection formCollection)
+        public IActionResult LikeReaction(int ideaId, int reactionId, IFormCollection formCollection)
         {
             ArrayList parameters = new ArrayList();
             foreach (KeyValuePair<string,StringValues> pair in formCollection)
@@ -120,6 +120,19 @@ namespace Integratieproject1.UI.Controllers
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
 
+        }
+
+        [HttpPost]
+        public IActionResult PostIdea(IFormCollection formCollection, int ideationId)
+        {
+            ArrayList parameters = new ArrayList();
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
+            {
+                parameters.Add(pair.Value);
+            }
+            ideationsManager.PostIdea(parameters, ideationId);
+            Ideation ideation = ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
     }
 }

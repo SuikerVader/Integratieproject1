@@ -12,14 +12,16 @@
     "popper.js": "^1.14.7"
   },
   "devDependencies": {
+    "purgecss-webpack-plugin": "^1.4.0",
+    "mini-css-extract-plugin": "^0.5.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
     "css-loader": "^2.1.0",
-    "style-loader": "^0.23.1",
     "file-loader": "^3.0.1",
     "url-loader": "^1.1.2"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   }
 }

@@ -1,0 +1,21 @@
+@using Integratieproject1.Domain.Users
+@model Integratieproject1.Domain.Ideations.Idea
+
+@{
+    ViewBag.Title = "ideationPage";
+//    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-controller="Project" asp-action="PostIdea" asp-route-ideationId="@ViewBag.IdeationId" method="post">
+    
+    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
+    <select name="loggedinuser">
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+    <input type="text" name="title">
+    <input type="text" name="description">
+    <input type="submit" value="Post">
+</form>
+
+
