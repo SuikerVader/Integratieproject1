@@ -20,31 +20,35 @@
         {
             <h3>@question.QuestionText</h3>
             <p>@question.QuestionType</p>
+                                     
             <button onclick="showHide('@question.QuestionId.ToString()question')">Edit Question</button><br />
             <div id="@question.QuestionId.ToString()question" style="display: none">
                 @await Html.PartialAsync("_EditQuestionPartial.cshtml", question )
             </div><br />
+                  
             if (question.QuestionType != QuestionType.OPEN && question.QuestionType != QuestionType.EMAIL)
             {
                 <h4>Answers:</h4>
                 foreach (var answer in question.Answers)
                 {
                     <p>@answer.AnswerText</p>
-                    //@Html.ActionLink("Edit Answer","EditAnswer","Admin", answer.AnswerId)
+                    
                     <button onclick="showHide('@answer.AnswerId.ToString()answer')">Edit Answer</button><br />
                     <div id="@answer.AnswerId.ToString()answer" style="display: none">
                         @await Html.PartialAsync("_EditAnswerPartial.cshtml", answer)
                     </div><br />
                 }
-                //@Html.ActionLink("Add Answer","AddAnswer","Admin", question.questionId)
+                
+                
                 <button onclick="showHide('@question.QuestionId.ToString()newAnswer')">Add Answer</button><br />
                 <div id="@question.QuestionId.ToString()newAnswer" style="display: none">
                     @await Html.PartialAsync("_CreateAnswerPartial.cshtml", new Answer{Question = question})
                 </div><br />
             }
-            //@Html.ActionLink("Edit Question","EditQuestion","Admin", question.questionId)
+            
             
         }  
+        
         <button onclick="showHide('newQuestion')">Add Question</button><br />
         <div id="newQuestion" style="display: none">
             @await Html.PartialAsync("_CreateQuestionPartial.cshtml", new Question())

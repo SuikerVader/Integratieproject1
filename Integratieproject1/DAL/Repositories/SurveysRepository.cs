@@ -30,6 +30,10 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
                 .AsEnumerable();
         }
+        public Survey GetOnlySurvey(int surveyId)
+        {
+            return ctx.Surveys.Find(surveyId);
+        }
         public Survey GetSurvey(int surveyId)
         {
             return ctx.Surveys
@@ -139,6 +143,6 @@ namespace Integratieproject1.DAL.Repositories
         #endregion
 
 
-       
+        
     }
 }
