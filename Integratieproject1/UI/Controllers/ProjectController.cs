@@ -81,12 +81,13 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
 
-        /*public IActionResult CreateVote(int ideaId, VoteType voteType)
+        public IActionResult CreateVote(int ideaId, VoteType voteType)
         {
             ideationsManager.CreateVote(ideaId,voteType);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
-        }*/
+        }
+        [HttpPost]
         public IActionResult CreateUserVote(int ideaId, VoteType voteType ,IFormCollection formCollection) 
         {
             ArrayList parameters = new ArrayList();
