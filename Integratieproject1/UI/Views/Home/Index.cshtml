@@ -1,9 +1,13 @@
-﻿@model Integratieproject1.Domain.Projects.Platform
+﻿
+@model Integratieproject1.Domain.Projects.Platform
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div>  
+    <div id="share">
+        @Html.Partial("/UI/Views/Shared/_SharedPartial.cshtml")
+    </div>
     @foreach (var project in Model.Projects)
     {
         <div class="cell">
