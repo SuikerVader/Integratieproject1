@@ -46,7 +46,7 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult Idea(int ideaId)
         {
-            Domain.Ideations.Idea idea = ideationsManager.GetIdea(ideaId);
+            Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
         [HttpPost]    
