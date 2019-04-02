@@ -28,13 +28,15 @@
         <option value="1">1</option>
         <option value="2">2</option>
     </select>
-    <div class="fb-share-button"
+    <div class="facebook"
          data-href="https://developers.facebook.com/docs/plugins/"
-         data-layout="button"
-         this.parentNode.submit()
-         >
-        <input type="submit" onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
-
+         data-layout="button">
+        <button class="btn btn-facebook btn-lg "
+                
+                type="submit"
+                onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+            Share
+        </button>
     </div>
 </form>
 <form class="TwitterShare" asp-controller="Project" asp-action="CreateUserVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
@@ -43,8 +45,10 @@
         <option value="2">2</option>
     </select>
     <div class="twitter">
-        <input type="submit" onclick="share_tw()"  class="twitter-share-button" data-show-count="false">
-            Tweet</input> 
+        <button type="submit" onclick="share_tw()"
+                class="btn btn-twitter btn-lg">
+            Tweet
+        </button>
     </div>
 </form>
 
@@ -95,8 +99,11 @@
             'facebook-share-dialog',
             "width=626, height=436")
     }
+
     function share_tw() {
-        window.open("https://twitter.com/share?ref_src=twsrc%5Etfw")
+        window.open("https://twitter.com/share?ref_src=twsrc%5Etfw",
+            'twitter-share-dialog',
+            "width=626, height=436")
     }
 </script>
 <script
