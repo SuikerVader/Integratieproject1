@@ -87,9 +87,10 @@ namespace Integratieproject1.BL.Managers
             unitOfWorkManager.Save();
         }
         
-        public void EditQuestion(Question question, int questionId)
+        public void EditQuestion(Question question, int questionId, int surveyId)
         {
             question.QuestionId = questionId;
+            question.Survey = surveysRepository.GetOnlySurvey(surveyId);
             surveysRepository.EditQuestion(question);
             unitOfWorkManager.Save();
         }
@@ -136,9 +137,10 @@ namespace Integratieproject1.BL.Managers
             return surveysRepository.GetAnswer(answerId);
         }
         
-        public void EditAnswer(Answer answer, int answerId)
+        public void EditAnswer(Answer answer, int answerId, int questionId)
         {
             answer.AnswerId = answerId;
+            answer.Question = GetQuestion(questionId);
             surveysRepository.EditAnswer(answer);
             unitOfWorkManager.Save();
         }
