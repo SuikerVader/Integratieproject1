@@ -8,6 +8,9 @@ import 'jquery-validation-unobtrusive'
 // CSS Dependencies: Bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
 
+import 'bootstrap-social'
+
+
 // Custom JS imports
 // ... none at the moment
 
