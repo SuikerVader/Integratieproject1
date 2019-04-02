@@ -12,6 +12,6 @@ import 'bootstrap-social'
 
 
 // Custom JS imports
-// ... none at the moment
+import 'mdbootstrap'
 
 console.log('The \'site\' bundle has been loaded!');
