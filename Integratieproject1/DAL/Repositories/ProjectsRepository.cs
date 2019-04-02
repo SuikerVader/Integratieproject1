@@ -137,7 +137,11 @@ namespace Integratieproject1.DAL.Repositories
 
         public Phase GetPhase(int phaseId)
         {
-            return ctx.Phases.Include(i => i.Ideations).Include(s => s.Surveys).Single(p => p.PhaseId == phaseId);
+            return ctx.Phases
+                .Include(p => p.Project).ThenInclude(ph => ph.Phases)
+                .Include(i => i.Ideations)
+                .Include(s => s.Surveys)
+                .Single(p => p.PhaseId == phaseId);
         }
 
         public Phase CreatePhase(Phase phase)
