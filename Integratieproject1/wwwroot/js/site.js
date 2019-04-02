@@ -9,6 +9,6 @@ import 'jquery-validation-unobtrusive'
 import 'bootstrap/dist/css/bootstrap.css'
 
 // Custom JS imports
-// ... none at the moment
+import 'mdbootstrap'
 
 console.log('The \'site\' bundle has been loaded!');

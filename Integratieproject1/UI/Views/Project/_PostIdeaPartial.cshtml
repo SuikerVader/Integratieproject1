@@ -14,6 +14,21 @@
         <option value="2">2</option>
     </select>
     <input asp-for="Title" type="text" name="title">
+    <input asp-for="Text" type="text" name="text"/>
+    <div class="input-default-wrapper mt-3">
+
+        <span class="input-group-text mb-3" id="input1">Upload</span>
+
+        <input type="file" id="file-with-current" class="input-default-js">
+
+        <label class="label-for-default-js rounded-right mb-3" for="file-with-current"><span class="span-choose-file">Choose
+                file</span>
+
+            <div class="float-right span-browse">Browse</div>
+
+        </label>
+
+    </div>
     <input type="submit" value="Post">
 </form>
 
