@@ -7,7 +7,7 @@
 }
 
 <div>
-    <form asp-controller="Admin" asp-action="EditAnswer" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
+    <form asp-controller="Admin" asp-action="EditAnswer" asp-route-questionId="@Model.Question.QuestionId" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
         <label asp-for="AnswerText"></label>
         <input required asp-for="AnswerText" value="@Model.AnswerText" class="form-control"/>
         <input type="submit" value="Edit Answer">
