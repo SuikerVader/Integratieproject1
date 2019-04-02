@@ -259,7 +259,7 @@ namespace Integratieproject1.UI.Controllers
         [HttpPost]
         public IActionResult EditQuestion(Question question, int questionId, int surveyId)
         {
-            surveysManager.EditQuestion(question, questionId);
+            surveysManager.EditQuestion(question, questionId, surveyId);
             Survey survey = surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
@@ -272,11 +272,12 @@ namespace Integratieproject1.UI.Controllers
         }
         
         [HttpPost]
-        public IActionResult EditAnswer(Answer answer, int answerId, int surveyId)
+        public IActionResult EditAnswer(Answer answer, int answerId, int questionId, int surveyId)
         {
-            surveysManager.EditAnswer(answer, answerId);
+            surveysManager.EditAnswer(answer, answerId, questionId);
             Survey survey = surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            
         }
         [HttpPost]
         public IActionResult AddAnswer(Answer answer, int questionId, int surveyId)
