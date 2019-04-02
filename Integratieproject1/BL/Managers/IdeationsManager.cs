@@ -97,6 +97,8 @@ namespace Integratieproject1.BL.Managers
             idea.Ideation = GetIdeation(ideationId); 
             idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
             idea.Title = parameters[1].ToString();
+            
+            idea.Video = parameters[3].ToString();
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();
         }
