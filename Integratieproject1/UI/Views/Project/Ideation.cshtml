@@ -6,7 +6,7 @@
     ViewBag.ideationId = Model.IdeationId;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
+<div class="container">
 <h2>@Model.CentralQuestion</h2>
 <p>idea's: </p>
 @foreach (var idea in Model.Ideas)
@@ -29,7 +29,7 @@
 <div id="idea" style="display: none">
     @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
 </div>
-
+</div>
 <script>
     function showHideCreateIdea() {
         var x = document.getElementById('idea');

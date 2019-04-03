@@ -31,7 +31,9 @@ namespace Integratieproject1.DAL.Repositories
 
         public Platform GetPlatform(int platformId)
         {
-            return ctx.Platforms.Include(pl => pl.Projects).Single(pl => pl.PlatformId == platformId);
+            return ctx.Platforms
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Single(pl => pl.PlatformId == platformId);
         }
 
         public Platform CreatePlatform(Platform platform)

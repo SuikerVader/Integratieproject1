@@ -7,6 +7,7 @@
     ViewBag.ideaId = Model.IdeaId;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
 
 <h2>@Model.Title</h2>
 <p>votes: @Model.Votes.Count</p>
@@ -83,6 +84,7 @@
     </form>
     <br/>
 }
+</div>
 
 <script>
     function showHideCreateReaction() {

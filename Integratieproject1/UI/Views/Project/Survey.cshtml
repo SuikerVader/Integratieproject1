@@ -6,7 +6,7 @@
     ViewBag.Title = "SurveyPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
+<div class="container">
 <h2>@Model.Title</h2>
 <a asp-area="" asp-controller="Project"
    asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
@@ -51,3 +51,4 @@
     }
     <input type="submit" value="Submit" >
 </form>
+</div>

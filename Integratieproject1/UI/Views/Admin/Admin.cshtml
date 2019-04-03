@@ -4,12 +4,13 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Admin</h2>
-<div>
-    
-    <a asp-area="" asp-controller="Admin"
-       asp-action="Projects" asp-route-userId="@Model.UserId"><button>My Projects</button>
-    </a>
-
+<div class="container">
+  <h2>Admin</h2>
+  <div>
+      
+      <a asp-area="" asp-controller="Admin"
+         asp-action="Projects" asp-route-userId="@Model.UserId"><button>My Projects</button>
+      </a>
+  
+  </div>  
 </div>

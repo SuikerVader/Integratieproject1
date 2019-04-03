@@ -4,7 +4,7 @@
     ViewBag.Title = "ProjectPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
+<div class="container">
 <h2>@Model.ProjectName</h2>
 <div>
     @foreach (var phase in Model.Phases)
@@ -12,27 +12,28 @@
         <h3>@phase.PhaseName</h3>
         <p>ideations: </p>
         <div>
-        @foreach (var ideation in phase.Ideations)
-         {
-             <div>
-                 <h3>@ideation.CentralQuestion</h3>
-                 <a asp-area="" asp-controller="Project"
-                    asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId" ><button>view ideation</button>
-                 </a>
-             </div>
-         }
+            @foreach (var ideation in phase.Ideations)
+            {
+                <div>
+                    <h3>@ideation.CentralQuestion</h3>
+                    <a asp-area="" asp-controller="Project"
+                       asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId" ><button>view ideation</button>
+                    </a>
+                </div>
+            }
         </div>
         <p>surveys: </p>
         <div>
-        @foreach (var survey in phase.Surveys)
-        {
-            <div>
-                <h3> @survey.Title</h3>
-                <a asp-area="" asp-controller="Project"
-                        asp-action="Survey" asp-route-surveyId="@survey.SurveyId"><button>answer survey</button> 
-                </a>
-            </div>
-        }
+            @foreach (var survey in phase.Surveys)
+            {
+                <div>
+                    <h3> @survey.Title</h3>
+                    <a asp-area="" asp-controller="Project"
+                       asp-action="Survey" asp-route-surveyId="@survey.SurveyId"><button>answer survey</button> 
+                    </a>
+                </div>
+            }
         </div>
     }
+</div>
 </div>

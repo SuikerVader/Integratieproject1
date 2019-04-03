@@ -6,28 +6,29 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Surveys</h2>
-<div>
-    <table class="table">
-        <tr>
-            <th>title</th>
-        </tr>
-        @foreach (var survey in Model)
-        {
+<div class="container">
+    <h2>Surveys</h2>
+    <div>
+        <table class="table">
             <tr>
-                <td>@survey.Title</td>
-                <td>
-                    <a asp-area="" asp-controller="Admin"
-                       asp-action="EditSurvey" asp-route-surveyId="@survey.SurveyId">
-                        Edit
-                    </a>
-                </td>
+                <th>title</th>
             </tr>
-        }
-    </table>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="AddSurvey" asp-route-phaseId="@ViewData["PhaseId"]">
-        <button>Add Survey</button>
-    </a>
+            @foreach (var survey in Model)
+            {
+                <tr>
+                    <td>@survey.Title</td>
+                    <td>
+                        <a asp-area="" asp-controller="Admin"
+                           asp-action="EditSurvey" asp-route-surveyId="@survey.SurveyId">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <a asp-area="" asp-controller="Admin"
+           asp-action="AddSurvey" asp-route-phaseId="@ViewData["PhaseId"]">
+            <button>Add Survey</button>
+        </a>
+    </div>
 </div>

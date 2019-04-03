@@ -7,57 +7,59 @@
     ViewBag.SurveyId = Model.SurveyId;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Survey</h2>
-<div>
-    <form asp-controller="Admin" asp-action="EditSurvey" asp-route-surveyId="@Model.SurveyId" method="post">
-        <label asp-for="Title"></label>
-    <input required asp-for="Title" value="@Model.Title" class="form-control"/>
-    <input type="submit" value="Save Survey">
-    </form>
-        <h2>Questions:</h2>
-        @foreach (var question in Model.Questions)
-        {
-            <h3>@question.QuestionText</h3>
-            <p>@question.QuestionType</p>
-                                     
-            <button onclick="showHide('@question.QuestionId.ToString()question')">Edit Question</button><br />
-            <div id="@question.QuestionId.ToString()question" style="display: none">
-                @await Html.PartialAsync("_EditQuestionPartial.cshtml", question )
-            </div><br />
-                  
-            if (question.QuestionType != QuestionType.OPEN && question.QuestionType != QuestionType.EMAIL)
+<div class="container">
+    <h2>Survey</h2>
+    <div>
+        <form asp-controller="Admin" asp-action="EditSurvey" asp-route-surveyId="@Model.SurveyId" method="post">
+            <label asp-for="Title"></label>
+        <input required asp-for="Title" value="@Model.Title" class="form-control"/>
+        <input type="submit" value="Save Survey">
+        </form>
+            <h2>Questions:</h2>
+            @foreach (var question in Model.Questions)
             {
-                <h4>Answers:</h4>
-                foreach (var answer in question.Answers)
+                <h3>@question.QuestionText</h3>
+                <p>@question.QuestionType</p>
+                                         
+                <button onclick="showHide('@question.QuestionId.ToString()question')">Edit Question</button><br />
+                <div id="@question.QuestionId.ToString()question" style="display: none">
+                    @await Html.PartialAsync("_EditQuestionPartial.cshtml", question )
+                </div><br />
+                      
+                if (question.QuestionType != QuestionType.OPEN && question.QuestionType != QuestionType.EMAIL)
                 {
-                    <p>@answer.AnswerText</p>
+                    <h4>Answers:</h4>
+                    foreach (var answer in question.Answers)
+                    {
+                        <p>@answer.AnswerText</p>
+                        
+                        <button onclick="showHide('@answer.AnswerId.ToString()answer')">Edit Answer</button><br />
+                        <div id="@answer.AnswerId.ToString()answer" style="display: none">
+                            @await Html.PartialAsync("_EditAnswerPartial.cshtml", answer)
+                        </div><br />
+                    }
                     
-                    <button onclick="showHide('@answer.AnswerId.ToString()answer')">Edit Answer</button><br />
-                    <div id="@answer.AnswerId.ToString()answer" style="display: none">
-                        @await Html.PartialAsync("_EditAnswerPartial.cshtml", answer)
+                    
+                    <button onclick="showHide('@question.QuestionId.ToString()newAnswer')">Add Answer</button><br />
+                    <div id="@question.QuestionId.ToString()newAnswer" style="display: none">
+                        @await Html.PartialAsync("_CreateAnswerPartial.cshtml", new Answer{Question = question})
                     </div><br />
                 }
                 
                 
-                <button onclick="showHide('@question.QuestionId.ToString()newAnswer')">Add Answer</button><br />
-                <div id="@question.QuestionId.ToString()newAnswer" style="display: none">
-                    @await Html.PartialAsync("_CreateAnswerPartial.cshtml", new Answer{Question = question})
-                </div><br />
-            }
+            }  
             
+            <button onclick="showHide('newQuestion')">Add Question</button><br />
+            <div id="newQuestion" style="display: none">
+                @await Html.PartialAsync("_CreateQuestionPartial.cshtml", new Question())
+            </div><br />
             
-        }  
-        
-        <button onclick="showHide('newQuestion')">Add Question</button><br />
-        <div id="newQuestion" style="display: none">
-            @await Html.PartialAsync("_CreateQuestionPartial.cshtml", new Question())
-        </div><br />
-        
-    <a asp-area="" asp-controller="Admin"
-       asp-action="DeleteSurvey" asp-route-surveyId="@Model.SurveyId"><button>Delete survey</button>
-    </a>
+        <a asp-area="" asp-controller="Admin"
+           asp-action="DeleteSurvey" asp-route-surveyId="@Model.SurveyId"><button>Delete survey</button>
+        </a>
+    </div>
 </div>
+
 <script>
     function showHide(id) {
         var x = document.getElementById(id);
