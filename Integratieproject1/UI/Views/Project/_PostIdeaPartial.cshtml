@@ -18,14 +18,14 @@
 
     <div class="input-group">
         <input class="form-control" 
-               asp-for="Image" 
+               asp-for="Image"
                name="image" 
                type="file" 
-               id="file-with-current" 
+               id="UploadedImage" 
                accept="image/x-png,image/gif,image/jpeg"
                onchange="PreviewImage()">
         
-        <img src="" height="200" alt="Image preview..."/>
+        <img id="previewImage" src="" height="200" alt="Image preview..."/>
         @* <button type="button" asp-action="">Upload</button> *@
     </div>
 
@@ -41,7 +41,7 @@
         <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)"/>
         <button type="button" asp-action="">Check URL</button>
         
-        <iframe width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe id="previewVideo" width="560" height="315" src="" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <button type="submit">Post</button>
 </form>
@@ -50,7 +50,7 @@
 @* refactor naar js file *@
 <script>
     function PreviewImage() {
-        var preview = document.querySelector('img'); //selects the query named img
+        var preview = document.getElementById('previewImage'); //selects the query named img
         var file = document.querySelector('input[type=file]').files[0]; //sames as here
         var reader = new FileReader();
 
@@ -66,11 +66,9 @@
     }
 
     function PreviewVideo(url) {
-        var preview = document.querySelector('iframe');
+        var preview = document.getElementById('previewVideo');
+        url = url.replace("watch?v=", "embed/");
         preview.src = url;
     }
-
-    PreviewImage();  //calls the function named previewFile()
-    PreviewVideo();
 </script>
 @*************************@

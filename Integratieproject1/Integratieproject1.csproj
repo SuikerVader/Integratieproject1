@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
+    <Folder Include="Images" />
   </ItemGroup>
 
   <ItemGroup>
