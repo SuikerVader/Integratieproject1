@@ -71,7 +71,7 @@ namespace Integratieproject1.DAL.Repositories
         public Project GetProject(int projectId)
         {
             return ctx.Projects
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(id => id.Ideas)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
