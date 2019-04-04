@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -35,9 +36,12 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
-                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
+                    </li>
+                }
             </ul>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>
         </div>

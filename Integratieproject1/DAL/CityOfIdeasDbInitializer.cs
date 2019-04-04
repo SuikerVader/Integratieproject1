@@ -8,7 +8,10 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Integratieproject1.DAL
 {
@@ -25,24 +28,24 @@ namespace Integratieproject1.DAL
           context.Database.EnsureDeleted();
         
         if (context.Database.EnsureCreated())
-          Seed(context);
+          SeedAsync(context);
         
         hasRunDuringAppExecution = true;
       }
       
     }
 
-    private static void Seed(CityOfIdeasDbContext ctx)
+    private static async Task SeedAsync(CityOfIdeasDbContext ctx)
     {
       var previousBehaviour = ctx.ChangeTracker.QueryTrackingBehavior;
       // Stel gedrag 'tracked-entities' in
       ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
-      
+
       Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
       Location location = new Location {Address = address, LocationName = "test1"};
       Position position = new Position {Altitude = 0.0, Longitude = 0.0};
-      
-      
+
+
       Platform platform = new Platform
       {
         PlatformName = "test1",
@@ -82,12 +85,12 @@ namespace Integratieproject1.DAL
       };
       Ideation ideation = new Ideation
       {
-        CentralQuestion = "ideationtest1", 
-        InputIdeation = true, 
+        CentralQuestion = "ideationtest1",
+        InputIdeation = true,
         Phase = phase
       };
 
-      
+
       Person person = new Person
       {
         Email = "testPerson1@test.com",
@@ -98,7 +101,7 @@ namespace Integratieproject1.DAL
         Verified = false,
         LastName = "testPerson1",
         FirstName = "testPerson1",
-        BirthDate = new DateTime(1000,1,1)
+        BirthDate = new DateTime(1000, 1, 1)
       };
       Organisation organisation = new Organisation
       {
@@ -120,9 +123,9 @@ namespace Integratieproject1.DAL
         Verified = false,
         LastName = "testAdmin1",
         FirstName = "testAdmin1",
-        BirthDate = new DateTime(1000,1,1)
+        BirthDate = new DateTime(1000, 1, 1)
       };
-      
+
       Idea idea = new Idea
       {
         Title = "testIdea1",
@@ -156,7 +159,7 @@ namespace Integratieproject1.DAL
 
       #region Survey
 
- Survey survey = new Survey
+      Survey survey = new Survey
       {
         Title = "SurveyTest",
         Phase = phase
@@ -168,7 +171,7 @@ namespace Integratieproject1.DAL
         QuestionType = QuestionType.OPEN,
         QuestionText = "Wat is het belangrijkste voor dit plein?"
       };
-      
+
       Question radioQuestion = new Question
       {
         QuestionNr = 2,
@@ -176,7 +179,7 @@ namespace Integratieproject1.DAL
         QuestionType = QuestionType.RADIO,
         QuestionText = "Voor wie is het plein het belangrijkste?"
       };
-      
+
       Question checkQuestion = new Question
       {
         QuestionNr = 3,
@@ -184,7 +187,7 @@ namespace Integratieproject1.DAL
         QuestionType = QuestionType.CHECK,
         QuestionText = "Wat zou je graag willen doen op dit plein?"
       };
-      
+
       Question dropQuestion = new Question
       {
         QuestionNr = 4,
@@ -192,7 +195,7 @@ namespace Integratieproject1.DAL
         QuestionType = QuestionType.DROP,
         QuestionText = "Hoe belangrijk is dit plein voor jou?"
       };
-      
+
       Question emailQuestion = new Question
       {
         QuestionNr = 5,
@@ -200,108 +203,108 @@ namespace Integratieproject1.DAL
         QuestionType = QuestionType.EMAIL,
         QuestionText = "Geef je email om je stem te bevestigen!"
       };
-      
+
       Answer open = new Answer
       {
         TotalTimesChosen = 0,
         Question = openQuestion,
         AnswerText = ""
       };
-      
+
       Answer radio1 = new Answer
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
         AnswerText = "Jongeren"
       };
-      
+
       Answer radio2 = new Answer
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
         AnswerText = "Volwassenen"
       };
-      
+
       Answer radio3 = new Answer
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
         AnswerText = "Ouderen"
       };
-      
+
       Answer radio4 = new Answer
       {
         TotalTimesChosen = 0,
         Question = radioQuestion,
         AnswerText = "Iedereen"
       };
-      
+
       Answer check1 = new Answer
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
         AnswerText = "Sporten"
       };
-      
+
       Answer check2 = new Answer
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
         AnswerText = "Spelen"
       };
-      
+
       Answer check3 = new Answer
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
         AnswerText = "Ontspannen"
       };
-      
+
       Answer check4 = new Answer
       {
         TotalTimesChosen = 0,
         Question = checkQuestion,
         AnswerText = "Geen mening"
       };
-      
+
       Answer drop1 = new Answer
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
         AnswerText = "Niet belangrijk"
       };
-      
+
       Answer drop2 = new Answer
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
         AnswerText = "Beetje belangrijk"
       };
-      
+
       Answer drop3 = new Answer
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
         AnswerText = "Vrij belangrijk"
       };
-      
+
       Answer drop4 = new Answer
       {
         TotalTimesChosen = 0,
         Question = dropQuestion,
         AnswerText = "Heel belangrijk"
       };
-      
+
       Answer email = new Answer
       {
         TotalTimesChosen = 0,
         Question = emailQuestion,
         AnswerText = ""
       };
-      
+
 
       #endregion
-     
+
       AdminProject adminProject = new AdminProject
       {
         Admin = admin,
@@ -312,50 +315,78 @@ namespace Integratieproject1.DAL
         Admin = admin,
         Project = project2
       };
-      admin.AdminProjects = new List<AdminProject>(){adminProject, adminProject2};
-      platform.Users = new List<User>(){person, organisation,admin};
-      reaction.Likes = new List<Like>(){like};
-      idea.Reactions = new List<Reaction>(){reaction};
-      idea.Votes = new List<Vote>(){vote};
+      admin.AdminProjects = new List<AdminProject>() {adminProject, adminProject2};
+      platform.Users = new List<User>() {person, organisation, admin};
+      reaction.Likes = new List<Like>() {like};
+      idea.Reactions = new List<Reaction>() {reaction};
+      idea.Votes = new List<Vote>() {vote};
       //ctx.Answers.Add(answer);
-      openQuestion.Answers = new List<Answer>(){open};
-      radioQuestion.Answers = new List<Answer>(){radio1, radio2, radio3, radio4};
-      checkQuestion.Answers = new List<Answer>(){check1, check2, check3, check4};
-      dropQuestion.Answers = new List<Answer>(){drop1, drop2, drop3, drop4};
-      emailQuestion.Answers = new List<Answer>(){email};
+      openQuestion.Answers = new List<Answer>() {open};
+      radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};
+      checkQuestion.Answers = new List<Answer>() {check1, check2, check3, check4};
+      dropQuestion.Answers = new List<Answer>() {drop1, drop2, drop3, drop4};
+      emailQuestion.Answers = new List<Answer>() {email};
       //ctx.Questions.Add(question);
-      survey.Questions = new List<Question>(){openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
+      survey.Questions = new List<Question>() {openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
       //ctx.Surveys.Add(survey);
-      phase.Surveys = new List<Survey>(){survey};
+      phase.Surveys = new List<Survey>() {survey};
       //ctx.Ideas.Add(idea);
-      ideation.Ideas = new List<Idea>(){idea,idea2};
+      ideation.Ideas = new List<Idea>() {idea, idea2};
       //ctx.Ideations.Add(ideation);
-      phase.Ideations = new List<Ideation>(){ideation};
+      phase.Ideations = new List<Ideation>() {ideation};
       //ctx.Phases.Add(phase);
       project.Phases = new List<Phase>() {phase};
       //ctx.Projects.AddRange(project,project2);
-      platform.Projects = new List<Project>(){project, project2};
+      platform.Projects = new List<Project>() {project, project2};
       ctx.Platforms.Add(platform);
-            
-      
-      
+
       //platform.Projects.Add(project2);    
-      
-      
-      
-      
-      
-      
-      
-       
-      ctx.SaveChanges();
+
+            ctx.SaveChanges();
       Console.WriteLine("seed");
-      
-      foreach (var entry in ctx.ChangeTracker.Entries().ToList())
+
+            foreach (var entry in ctx.ChangeTracker.Entries().ToList())
         entry.State = EntityState.Detached;
             
       // Herstel gedrag 'ChangTracker.QueryTrackingBehavior'
       ctx.ChangeTracker.QueryTrackingBehavior = previousBehaviour;
     }
+    
+    public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    {
+      // Rollen aanmaken
+      var superAdminRole = new IdentityRole {NormalizedName = "SuperAdmin", Name = "SuperAdmin"};
+      var adminRole = new IdentityRole {NormalizedName = "Admin", Name = "Admin"};
+      var modRole = new IdentityRole {NormalizedName = "Mod", Name = "Mod"};
+      var userRole = new IdentityRole {NormalizedName = "User", Name = "User"};
+      var organisationRole = new IdentityRole {NormalizedName = "Organisation", Name = "Organisation"};
+
+      // Rollen opslaan
+      await roleManager.CreateAsync(superAdminRole);
+      await roleManager.CreateAsync(adminRole);
+      await roleManager.CreateAsync(modRole);
+      await roleManager.CreateAsync(organisationRole);
+      await roleManager.CreateAsync(userRole);
+      
+      // TestUsers aanmaken
+              var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com"};
+              var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com"};
+              var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com"};
+              var organisationTest = new IdentityUser {UserName = "organisation@gmail.com", Email = "organisation@gmail.com"};
+              var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com"};
+              
+              //Users opslaan
+              await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");
+              await userManager.CreateAsync(adminTest, "Admin123!");
+              await userManager.CreateAsync(modTest, "Mod123!");
+              await userManager.CreateAsync(organisationTest, "Organisation123!");
+              await userManager.CreateAsync(userTest, "User123!");
+
+              await userManager.AddToRoleAsync(superAdminTest, "SuperAdmin");
+              await userManager.AddToRoleAsync(adminTest, "Admin");
+              await userManager.AddToRoleAsync(modTest, "Mod");
+              await userManager.AddToRoleAsync(organisationTest, "Organisation");
+              await userManager.AddToRoleAsync(userTest, "User");
+    }   
   }
 }
