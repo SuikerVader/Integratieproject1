@@ -8,12 +8,15 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Integratieproject1.UI.Controllers
-{
+namespace Integratieproject1.UI.Controllers{}
+
+    [Authorize(Roles="Admin")]
     public class AdminController : Controller
     {
         private ProjectsManager projectsManager;
@@ -29,9 +32,8 @@ namespace Integratieproject1.UI.Controllers
             surveysManager = new SurveysManager();
         }
 
-        public IActionResult Admin(int userId)
+        public IActionResult Admin(IdentityUser user)
         {
-            LoggedInUser user = usersManager.GetLoggedInUser(userId);
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
 
@@ -300,4 +302,3 @@ namespace Integratieproject1.UI.Controllers
 
         
     }
-}

@@ -5,31 +5,33 @@
     ViewBag.Title = "PhasePage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Phase</h2>
-<div>
-    <form asp-controller="Admin" asp-action="AddPhase" asp-route-phaseNr="@Model.PhaseNr" asp-route-projectId="@Model.Project.ProjectId" method="post">
-        <label asp-for="PhaseName"></label>
-        <input required asp-for="PhaseName" class="form-control"/>
-        <label asp-for="StartDate"></label>
-        @if (Model.PhaseNr == 1)
-        {
-            <input required readonly="readonly"  asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-            <label asp-for="EndDate"></label>
-            <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-        }
-        else
-        {
-            <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-            <label asp-for="EndDate"></label>
-            <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-        }
+<div class="container">
+    <h2>Phase</h2>
+    <div>
+        <form asp-controller="Admin" asp-action="AddPhase" asp-route-phaseNr="@Model.PhaseNr" asp-route-projectId="@Model.Project.ProjectId" method="post">
+            <label asp-for="PhaseName"></label>
+            <input required asp-for="PhaseName" class="form-control"/>
+            <label asp-for="StartDate"></label>
+            @if (Model.PhaseNr == 1)
+            {
+                <input required readonly="readonly"  asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                <label asp-for="EndDate"></label>
+                <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+            }
+            else
+            {
+                <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                <label asp-for="EndDate"></label>
+                <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+            }
+            
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control"/>
+            <input type="submit" value="Add Phase">
+        </form>
         
-        <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control"/>
-        <input type="submit" value="Add Phase">
-    </form>
-    
+</div>
+
     
     
 </div>

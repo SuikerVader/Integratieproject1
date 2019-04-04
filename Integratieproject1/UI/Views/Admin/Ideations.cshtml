@@ -5,37 +5,38 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Ideations</h2>
-<div>
-    <table class="table">
-        <tr>
-            <th>CentralQuestion</th>
-            <th>InputIdeation</th>
-        </tr>
-        @foreach (var ideation in Model)
-        {
+<div class="container">
+    <h2>Ideations</h2>
+    <div>
+        <table class="table">
             <tr>
-                <td>@ideation.CentralQuestion</td>
-                <td>@ideation.InputIdeation</td>
-                <td>
-                    <a asp-area="" asp-controller="Admin"
-                       asp-action="EditIdeation" asp-route-ideationId="@ideation.IdeationId">
-                        Edit
-                    </a>
- 
-                </td>
-                <td>
-                    @*<a asp-area="" asp-controller="Admin"
-                       asp-action="Ideas" asp-route-ideationId="@ideation.IdeationId">
-                        show ideas
-                    </a>*@
-                </td>
+                <th>CentralQuestion</th>
+                <th>InputIdeation</th>
             </tr>
-        }
-    </table>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="AddIdeation" asp-route-phaseId="@ViewData["PhaseId"]">
-        <button>Add Ideation</button>
-    </a>
+            @foreach (var ideation in Model)
+            {
+                <tr>
+                    <td>@ideation.CentralQuestion</td>
+                    <td>@ideation.InputIdeation</td>
+                    <td>
+                        <a asp-area="" asp-controller="Admin"
+                           asp-action="EditIdeation" asp-route-ideationId="@ideation.IdeationId">
+                            Edit
+                        </a>
+     
+                    </td>
+                    <td>
+                        @*<a asp-area="" asp-controller="Admin"
+                           asp-action="Ideas" asp-route-ideationId="@ideation.IdeationId">
+                            show ideas
+                        </a>*@
+                    </td>
+                </tr>
+            }
+        </table>
+        <a asp-area="" asp-controller="Admin"
+           asp-action="AddIdeation" asp-route-phaseId="@ViewData["PhaseId"]">
+            <button>Add Ideation</button>
+        </a>
+    </div>
 </div>

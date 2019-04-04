@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -6,7 +7,9 @@
     <title>@ViewData["Title"] - Integratieproject1</title>
 
     <script type="module" src="~/dist/site.entry.js" defer></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="~/dist/site.css">
+    <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,7 +23,7 @@
         @*     </button> *@
         @*     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Integratieproject1</a> *@
         @* </div> *@
-        <a class="navbar-brand" href="#">Integratieproject</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">Integratieproject</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,18 +38,22 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
-                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
+                    </li>
+                }
             </ul>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>
+            <partial name="/UI/Views/Shared/_SharedPartial.cshtml"/>
         </div>
     </div>
 </nav>
 
-<partial name="/UI/Views/Shared/_CookieConsentPartial.cshtml"/>
+@*<partial name="/UI/Views/Shared/_CookieConsentPartial.cshtml"/>*@
 
-<div class="container body-content">
+<div class="body-content">
     @RenderBody()
     <hr/>
     <footer>

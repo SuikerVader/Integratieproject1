@@ -31,7 +31,9 @@ namespace Integratieproject1.DAL.Repositories
 
         public Platform GetPlatform(int platformId)
         {
-            return ctx.Platforms.Include(pl => pl.Projects).Single(pl => pl.PlatformId == platformId);
+            return ctx.Platforms
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Single(pl => pl.PlatformId == platformId);
         }
 
         public Platform CreatePlatform(Platform platform)
@@ -69,7 +71,7 @@ namespace Integratieproject1.DAL.Repositories
         public Project GetProject(int projectId)
         {
             return ctx.Projects
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(id => id.Ideas)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)

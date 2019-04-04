@@ -1,31 +1,216 @@
-﻿
-@model Integratieproject1.Domain.Projects.Platform
+﻿@model Integratieproject1.Domain.Projects.Platform
 @{
     ViewData["Title"] = "Home Page";
-//    Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<div>  
-    <div id="share">
-        @Html.Partial("/UI/Views/Shared/_SharedPartial.cshtml")
+<div class="jumbotron jumbotron-fluid text-center">
+    <h1 class="display-4">@Model.PlatformName</h1>
+    <p>@Model.Description</p>
+    <a class="btn btn-primary btn-lg" href="#projects" role="button">Give your idea!</a>
+</div>
+<div class="container">
+    
+    
+    <div class="d-flex flex-row flex-wrap justify-content-center">
+        <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">active projects</button>
+                             <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">future projects</button>
+                             <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">closed projects</button>
     </div>
-    @foreach (var project in Model.Projects)
-    {
-        <div class="cell">
-            <h1>@project.ProjectName</h1>
-            <p>@project.Description</p>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15%</div>
-                <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%</div>
-                <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
-            </div>
-            <a asp-area="" asp-controller="Project"
-               asp-action="Project"
-               asp-route-projectId="@project.ProjectId">
-                see project
-            </a>
-        </div> 
+    <br/>
+    <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
+        @foreach (var project in Model.Projects)
+        {
+            if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
+            {
+                <div class="card text-center activeProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px;">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays)/((project.EndDate - project.StartDate).TotalDays)*100),0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            
+                        
+                            }
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p> <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+                
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
+                    </div>
+                </div>  
+            
+            }
+            else if (DateTime.Now > project.EndDate)
+            {
+                <div class="card text-center closedProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays)/((project.EndDate - project.StartDate).TotalDays)*100),0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            
+                        
+                            }
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p> <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+                
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
+                    </div>
+                </div>  
+            }
+            else if (DateTime.Now < project.StartDate)
+            {
+                <div class="card text-center futureProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays)/((project.EndDate - project.StartDate).TotalDays)*100),0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                {
+                                    <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            
+                        
+                            }
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p> <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+                
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
+                    </div>
+                </div>  
+            }
+        
+        }
+    </div>
+</div>
+
+<script>
+    function displayActiveProjects() {
+        var active = document.getElementsByClassName("activeProject");
+        var i;
+        for (i = 0; i < active.length; i++) {
+            active[i].style.display = "inline-block";
+        }
+        var closed = document.getElementsByClassName("closedProject");
+        var j;
+        for (j = 0; j < closed.length; j++) {
+            closed[j].style.display = "none";
+        }
+        var k;
+        var future = document.getElementsByClassName("futureProject");
+        for (k = 0; k < future.length; k++) {
+            future[k].style.display = "none";
+        }
+        document.getElementById("btnActiveProject").classList.add("btn-primary");
+        document.getElementById("btnActiveProject").classList.remove("btn-secondary");
+        document.getElementById("btnClosedProject").classList.add("btn-secondary");
+        document.getElementById("btnClosedProject").classList.remove("btn-primary");
+        document.getElementById("btnFutureProject").classList.add("btn-secondary");
+        document.getElementById("btnFutureProject").classList.remove("btn-primary");
+    }
+    function displayFutureProjects() {
+        var active = document.getElementsByClassName("activeProject");
+           var i;
+           for (i = 0; i < active.length; i++) {
+               active[i].style.display = "none";
+           }
+        var closed = document.getElementsByClassName("closedProject");
+        var j;
+        for (j = 0; j < closed.length; j++) {
+            closed[j].style.display = "none";
+        }
+        var k;
+        var future = document.getElementsByClassName("futureProject");
+        for (k = 0; k < future.length; k++) {
+            future[k].style.display = "inline-block";
+        }
+        document.getElementById("btnActiveProject").classList.add("btn-secondary");
+        document.getElementById("btnActiveProject").classList.remove("btn-primary");
+        document.getElementById("btnClosedProject").classList.add("btn-secondary");
+        document.getElementById("btnClosedProject").classList.remove("btn-primary");
+        document.getElementById("btnFutureProject").classList.add("btn-primary");
+        document.getElementById("btnFutureProject").classList.remove("btn-secondary");
         
     }
-
-</div>
+    function displayClosedProjects() {
+        var active = document.getElementsByClassName("activeProject");
+        var i;
+        for (i = 0; i < active.length; i++) {
+            active[i].style.display = "none";
+        }
+        var closed = document.getElementsByClassName("closedProject");
+        var j;
+        for (j = 0; j < closed.length; j++) {
+            closed[j].style.display = "inline-block";
+        }
+        var k;
+        var future = document.getElementsByClassName("futureProject");
+        for (k = 0; k < future.length; k++) {
+            future[k].style.display = "none";
+        }
+        document.getElementById("btnActiveProject").classList.add("btn-secondary");
+        document.getElementById("btnActiveProject").classList.remove("btn-primary");
+        document.getElementById("btnClosedProject").classList.add("btn-primary");
+        document.getElementById("btnClosedProject").classList.remove("btn-secondary");
+        document.getElementById("btnFutureProject").classList.add("btn-secondary");
+        document.getElementById("btnFutureProject").classList.remove("btn-primary");
+         }
+</script>

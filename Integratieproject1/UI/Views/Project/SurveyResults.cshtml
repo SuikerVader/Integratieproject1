@@ -6,17 +6,19 @@
     ViewBag.Title = "SurveyPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>@Model.Title Results:</h2>
-    @foreach (var question in Model.Questions)
-    {
-        <h3>@question.QuestionText</h3>
-        foreach (var answer in question.Answers)
+<div class="container">
+    <h2>@Model.Title Results:</h2>
+        @foreach (var question in Model.Questions)
         {
-            if (!answer.AnswerText.Equals(""))
+            <h3>@question.QuestionText</h3>
+            foreach (var answer in question.Answers)
             {
-                <p>@answer.AnswerText: @answer.TotalTimesChosen keer gekozen</p>
+                if (!answer.AnswerText.Equals(""))
+                {
+                    <p>@answer.AnswerText: @answer.TotalTimesChosen keer gekozen</p>
+                }
             }
         }
-    }
+
+</div>
 
