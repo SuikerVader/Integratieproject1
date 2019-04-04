@@ -48,7 +48,8 @@ namespace Integratieproject1.DAL
 
       Platform platform = new Platform
       {
-        PlatformName = "test1",
+        PlatformName = "CityOfIdeas",
+        Description = "Help building projects inside your city! Give your ideas and input on projects that inspire you.",
         Address = address
       };
 
@@ -66,8 +67,8 @@ namespace Integratieproject1.DAL
       Project project2 = new Project
       {
         ProjectName = "test2",
-        StartDate = DateTime.Today,
-        EndDate = DateTime.Today.AddYears(1),
+        StartDate = DateTime.Today.AddMonths(1),
+        EndDate = DateTime.Today.AddMonths(1).AddYears(1),
         Platform = platform,
         Objective = "test2",
         Description = "test2",
@@ -79,8 +80,26 @@ namespace Integratieproject1.DAL
         PhaseNr = 1,
         PhaseName = "phasetest1",
         Description = "phasedescriptiontest1",
-        StartDate = DateTime.Today,
-        EndDate = DateTime.Today.AddMonths(1),
+        StartDate = project.StartDate,
+        EndDate = project.StartDate.AddMonths(4),
+        Project = project
+      };
+      Phase phase2 = new Phase
+      {
+        PhaseNr = 2,
+        PhaseName = "phasetest2",
+        Description = "phasedescriptiontest2",
+        StartDate = phase.EndDate,
+        EndDate = phase.EndDate.AddMonths(4),
+        Project = project
+      };
+      Phase phase3 = new Phase
+      {
+        PhaseNr = 3,
+        PhaseName = "phasetest3",
+        Description = "phasedescriptiontest3",
+        StartDate = phase2.EndDate,
+        EndDate = project.EndDate,
         Project = project
       };
       Ideation ideation = new Ideation
@@ -335,7 +354,7 @@ namespace Integratieproject1.DAL
       //ctx.Ideations.Add(ideation);
       phase.Ideations = new List<Ideation>() {ideation};
       //ctx.Phases.Add(phase);
-      project.Phases = new List<Phase>() {phase};
+      project.Phases = new List<Phase>() {phase, phase2, phase3};
       //ctx.Projects.AddRange(project,project2);
       platform.Projects = new List<Project>() {project, project2};
       ctx.Platforms.Add(platform);

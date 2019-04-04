@@ -5,18 +5,20 @@
     ViewBag.Title = "PhasePage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Phase</h2>
-<div>
-    <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewData["PhaseId"]" method="post">
-        <label asp-for="CentralQuestion"></label>
-        <input required asp-for="CentralQuestion" class="form-control"/>
-        <formgroup>
-            <label asp-for="InputIdeation"></label><br/>
-            <input asp-for="InputIdeation"  value="True" type="radio" >yes<br/>
-                    <input asp-for="InputIdeation"  value="False" type="radio">no<br/>
-        </formgroup>
-        <input type="submit" value="Add Ideation">
-    </form>
-    
+<div class="container">
+    <h2>Phase</h2>
+                      <div>
+                          <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewData["PhaseId"]" method="post">
+                              <label asp-for="CentralQuestion"></label>
+                              <input required asp-for="CentralQuestion" class="form-control"/>
+                              <formgroup>
+                                  <label asp-for="InputIdeation"></label><br/>
+                                  <input asp-for="InputIdeation"  value="True" type="radio" >yes<br/>
+                                          <input asp-for="InputIdeation"  value="False" type="radio">no<br/>
+                              </formgroup>
+                              <input type="submit" value="Add Ideation">
+                          </form>
+                          
+                      </div>
 </div>
+                  
