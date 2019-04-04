@@ -19682,8 +19682,6 @@ module.exports = g;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var mdbootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mdbootstrap */ "./node_modules/mdbootstrap/js/mdb.min.js");
-/* harmony import */ var mdbootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mdbootstrap__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var jquery_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery-validation */ "./node_modules/jquery-validation/dist/jquery.validate.js");
@@ -19694,8 +19692,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap-social */ "./node_modules/bootstrap-social/bootstrap-social.css");
 /* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap_social__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var mdbootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mdbootstrap */ "./node_modules/mdbootstrap/js/mdb.min.js");
+/* harmony import */ var mdbootstrap__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(mdbootstrap__WEBPACK_IMPORTED_MODULE_6__);
 ﻿// JS Dependencies: Bootstrap & JQuery
-
 
 
 // Using the next two lines is like including partial view _ValidationScriptsPartial.cshtml
@@ -19709,7 +19708,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // Custom JS imports
-// ... none at the moment
+
 
 console.log('The \'site\' bundle has been loaded!');
 

@@ -51,23 +51,27 @@ body {
     margin: 10px;
 }
 .progress {
-    background-color: white;
+    background-color: transparent;
     margin-left: 20px; 
     margin-right:20px;
 }
 .progress-bar {
     background-color: lightslategrey;
     border-radius: 5px;
-    border-right: solid white 2px;
-    border-left: solid white 2px;
+    border-right: solid transparent 2px;
+    border-left: solid transparent 2px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 .card {
     margin:10px;
 }
 .jumbotron-fluid {
-    width: 100%;
     margin-left: -15px;
     margin-right:-15px;
+    padding: 30px;
+    padding-left: 100px;
+    padding-right: 100px;
 }
 .container{
     position: relative;
