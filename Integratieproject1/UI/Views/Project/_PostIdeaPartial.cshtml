@@ -3,33 +3,75 @@
 
 @{
     ViewBag.Title = "ideationPage";
-//    Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="Project" asp-action="PostIdea" asp-route-ideationId="@ViewBag.IdeationId" method="post">
-    
-    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
-    <select asp-for="LoggedInUser" name="loggedinuser">
+<form asp-controller="Project" 
+      asp-action="PostIdea" 
+      asp-route-ideationId="@ViewBag.IdeationId" 
+      asp-route-image="@ViewData["image"]"
+      enctype="multipart/form-data"
+      method="post">
+
+    <label for="loggedInUser" class="control-label">User</label>
+    <select asp-for="LoggedInUser" name="loggedInUser" id="loggedInUser" class="form-control">
         <option value="1">1</option>
         <option value="2">2</option>
     </select>
-    <input asp-for="Title" type="text" name="title">
-    <input asp-for="Text" type="text" name="text"/>
-    <div class="input-default-wrapper mt-3">
+    
+    <label for="title" class="control-label">Title</label>
+    <input class="form-control" asp-for="Title" type="text" name="title" id="title">
+    
+    <label for="description" class="control-label">Description</label>
+    <input class="form-control" asp-for="Text" type="text" name="text" id="description"/>
 
-        <span class="input-group-text mb-3" id="input1">Upload</span>
+    <div class="input-group">
+        <label for="uploadedImage" class="control-label">Images</label>
+        <input class="form-control"
+               asp-for="Image"
+               name="image"
+               type="file"
+               id="uploadedImage"
+               accept="image/x-png,image/gif,image/jpeg"
+               onchange="PreviewImage()">
 
-        <input type="file" id="file-with-current" class="input-default-js">
-
-        <label class="label-for-default-js rounded-right mb-3" for="file-with-current"><span class="span-choose-file">Choose
-                file</span>
-
-            <div class="float-right span-browse">Browse</div>
-
-        </label>
-
+        <img id="previewImage" src="" height="200" alt="Image preview..."/>
     </div>
-    <input type="submit" value="Post">
+
+    <div class="input-group">
+        <label for="uploadedVideo" class="control-label">Video</label>
+        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo"/>
+
+        <iframe id="previewVideo" width="560" height="315" src=""
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
+    </div>
+    
+    <button type="submit">Post</button>
 </form>
 
+@*************************@
+@* refactor naar js file *@
+<script>
+    function PreviewImage() {
+        var preview = document.getElementById('previewImage');
+        var file = document.querySelector('input[type=file]').files[0];
+        var reader = new FileReader();
 
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    }
+
+    function PreviewVideo(url) {
+        var preview = document.getElementById('previewVideo');
+        url = url.replace("watch?v=", "embed/");
+        preview.src = url;
+    }
+</script>
+@*************************@

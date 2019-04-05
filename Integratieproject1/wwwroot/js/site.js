@@ -8,10 +8,7 @@ import 'jquery-validation-unobtrusive'
 // CSS Dependencies: Bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
 
-import 'bootstrap-social'
-
-
 // Custom JS imports
-import 'mdbootstrap'
+import 'bootstrap-social'
 
 console.log('The \'site\' bundle has been loaded!');
