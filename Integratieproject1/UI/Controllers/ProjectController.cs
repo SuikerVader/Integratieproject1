@@ -142,15 +142,20 @@ namespace Integratieproject1.UI.Controllers
                 string uploads = "/images/uploads/";
                 string path = wwwroot + uploads;
 
-                if (image.Length > 0)
+                if (image != null && image.Length > 0)
                 {
                     string imagePath = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                    
                     using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
                     {
-                        image.CopyToAsync(fileStream);
+                        image.CopyTo(fileStream);
                     }
                     
                     ideationsManager.PostIdea(parameters, Path.Combine(uploads, imagePath), ideationId);
+                }
+                else
+                {
+                    ideationsManager.PostIdea(parameters, "", ideationId);
                 }
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
