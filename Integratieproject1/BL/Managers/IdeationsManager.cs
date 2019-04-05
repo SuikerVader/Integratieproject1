@@ -99,8 +99,8 @@ namespace Integratieproject1.BL.Managers
             idea.IdentityUser = projectsManager.GetUser(userId);
             idea.Title = parameters[1].ToString();
             idea.Text = parameters[2].ToString();
-            idea.Image = fileName;
-            idea.Video = parameters[3].ToString();
+            idea.Image = imagePath;
+            idea.Video = parameters[3].ToString().Replace("watch?v=", "embed/");
             
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();

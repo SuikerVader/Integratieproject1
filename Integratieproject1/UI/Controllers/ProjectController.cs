@@ -9,7 +9,6 @@ using System.Web;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -147,16 +146,19 @@ namespace Integratieproject1.UI.Controllers
 
             if (parameters.Count > 0)
             {
-                string filePath = "..\\Integratieproject1\\Uploads\\";
+                string wwwroot = "wwwroot/";
+                string uploads = "/images/uploads/";
+                string path = wwwroot + uploads;
 
                 if (image.Length > 0)
                 {
-                    string fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
-                    
-                    using (var fileStream = new FileStream(Path.Combine(filePath, image.FileName), FileMode.Create))
+                    string imagePath = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                    using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
                     {
                         image.CopyToAsync(fileStream);
                     }
+                    
+                    ideationsManager.PostIdea(parameters, Path.Combine(uploads, imagePath), ideationId);
                 }
                 ClaimsPrincipal currentUser = User;
                 var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
