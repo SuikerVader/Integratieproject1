@@ -61,6 +61,7 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
+
             ClaimsPrincipal currentUser = User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             ideationsManager.PostReaction(parameters, ideaId, currentUserID);
@@ -127,6 +128,7 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
+
             ClaimsPrincipal currentUser = User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             ideationsManager.LikeReaction(reactionId, parameters[0].ToString(), currentUserID);
@@ -157,20 +159,21 @@ namespace Integratieproject1.UI.Controllers
                     {
                         image.CopyToAsync(fileStream);
                     }
-                    
-                    ideationsManager.PostIdea(parameters, Path.Combine(uploads, imagePath), ideationId);
-                }
-                ClaimsPrincipal currentUser = User;
-                var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ideationsManager.PostIdea(parameters, Path.Combine(filePath, image.FileName), ideationId, currentUserID);
 
+                    ClaimsPrincipal currentUser = User;
+                    var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    ideationsManager.PostIdea(parameters, Path.Combine(uploads, imagePath), ideationId, currentUserID);
+
+                   
+                }
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);
             }
             else
-            {
-                throw new Exception("fout createIdea");
-            }
+                {
+                    throw new Exception("fout createIdea");
+                }
+            
         }
     }
 }
