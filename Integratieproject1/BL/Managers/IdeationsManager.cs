@@ -90,13 +90,17 @@ namespace Integratieproject1.BL.Managers
 
         #region Idea
 
-        public void PostIdea(ArrayList parameters, int ideationId)
+        public void PostIdea(ArrayList parameters, string fileName, int ideationId)
         {
             UsersManager usersManager = new UsersManager(unitOfWorkManager);
             Idea idea = new Idea();
             idea.Ideation = GetIdeation(ideationId); 
             idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
             idea.Title = parameters[1].ToString();
+            idea.Text = parameters[2].ToString();
+            idea.Image = fileName;
+            idea.Video = parameters[3].ToString();
+            
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();
         }
