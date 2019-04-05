@@ -98,19 +98,8 @@ namespace Integratieproject1.BL.Managers
             idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
             idea.Title = parameters[1].ToString();
             idea.Text = parameters[2].ToString();
-            idea.Image = parameters[3].ToString();
-            idea.Video = parameters[4].ToString();
-            
-            Console.WriteLine("New Idea: " + 
-                              idea.Title + 
-                              " - " + 
-                              idea.LoggedInUser + 
-                              " - " + 
-                              idea.Ideation.IdeationId + 
-                              " - " + 
-                              idea.Image + 
-                              " - " + 
-                              idea.Video);
+            idea.Image = fileName;
+            idea.Video = parameters[3].ToString();
             
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();

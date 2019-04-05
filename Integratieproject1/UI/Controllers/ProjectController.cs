@@ -131,7 +131,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostIdea(IFormCollection formCollection, IFormFile file, int ideationId)
+        public IActionResult PostIdea(IFormCollection formCollection, IFormFile image, int ideationId)
         {
             ArrayList parameters = new ArrayList();
 
@@ -139,18 +139,22 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
-            
+
             if (parameters.Count > 0)
             {
-                string fileName = "";
-//                string filePath = "../../Images/" + fileName;
+                string filePath = "..\\Integratieproject1\\Uploads\\";
 
-//                using (var stream = new FileStream(filePath, FileMode.Create))
-//                {
-//                    file.CopyToAsync(stream);
-//                }
+                if (image.Length > 0)
+                {
+                    string fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
+                    
+                    using (var fileStream = new FileStream(Path.Combine(filePath, image.FileName), FileMode.Create))
+                    {
+                        image.CopyToAsync(fileStream);
+                    }
+                }
 
-                ideationsManager.PostIdea(parameters, fileName, ideationId);
+                ideationsManager.PostIdea(parameters, Path.Combine(filePath, image.FileName), ideationId);
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);

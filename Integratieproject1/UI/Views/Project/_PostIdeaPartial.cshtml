@@ -6,9 +6,13 @@
     //    Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="Project" asp-action="PostIdea" asp-route-ideationId="@ViewBag.IdeationId" method="post">
+<form asp-controller="Project" 
+      asp-action="PostIdea" 
+      asp-route-ideationId="@ViewBag.IdeationId" 
+      asp-route-image="@ViewData["image"]"
+      enctype="multipart/form-data"
+      method="post">
 
-    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
     <select asp-for="LoggedInUser" name="loggedinuser">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -26,22 +30,14 @@
                onchange="PreviewImage()">
         
         <img id="previewImage" src="" height="200" alt="Image preview..."/>
-        @* <button type="button" asp-action="">Upload</button> *@
     </div>
-
-    @* <div class="form-row"> *@
-    @*     <label>Choose File</label> *@
-    @*     <div class="custom-file"> *@
-    @*         <input type="file" class="custom-file-input" id="custom" /> *@
-    @*         <label class="custom-file-label" for="custom"></label> *@
-    @*     </div> *@
-    @* </div> *@
 
     <div class="input-group">
         <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)"/>
-        <button type="button" asp-action="">Check URL</button>
         
-        <iframe id="previewVideo" width="560" height="315" src="" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe id="previewVideo" width="560" height="315" src=""
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
     </div>
     <button type="submit">Post</button>
 </form>
@@ -50,8 +46,8 @@
 @* refactor naar js file *@
 <script>
     function PreviewImage() {
-        var preview = document.getElementById('previewImage'); //selects the query named img
-        var file = document.querySelector('input[type=file]').files[0]; //sames as here
+        var preview = document.getElementById('previewImage');
+        var file = document.querySelector('input[type=file]').files[0];
         var reader = new FileReader();
 
         reader.onloadend = function () {
@@ -59,7 +55,7 @@
         }
 
         if (file) {
-            reader.readAsDataURL(file); //reads the data as a URL
+            reader.readAsDataURL(file);
         } else {
             preview.src = "";
         }
