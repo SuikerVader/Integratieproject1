@@ -110,70 +110,48 @@ namespace Integratieproject1.DAL
       };
 
 
-      Person person = new Person
+      IdentityUser person = new IdentityUser
       {
-        Email = "testPerson1@test.com",
-        Platform = platform,
-        Password = "test1",
-        RoleType = RoleType.LOGGEDINUSER,
-        ZipCode = "0000",
-        Verified = false,
-        LastName = "testPerson1",
-        FirstName = "testPerson1",
-        BirthDate = new DateTime(1000, 1, 1)
+        Email = "testPerson1@test.com"
       };
-      Organisation organisation = new Organisation
+      IdentityUser organisation = new IdentityUser
       {
-        Email = "testOrganisation1@test.com",
-        Platform = platform,
-        Password = "test1",
-        RoleType = RoleType.LOGGEDINUSER,
-        ZipCode = "0000",
-        Verified = true,
-        OrganisationName = "testOrganisation1",
+        Email = "testOrganisation1@test.com"
       };
-      Person admin = new Person
+      IdentityUser admin = new IdentityUser
       {
-        Email = "testAdmin1@test.com",
-        Platform = platform,
-        Password = "test1",
-        RoleType = RoleType.ADMIN,
-        ZipCode = "0000",
-        Verified = false,
-        LastName = "testAdmin1",
-        FirstName = "testAdmin1",
-        BirthDate = new DateTime(1000, 1, 1)
+        Email = "testAdmin1@test.com"
       };
 
       Idea idea = new Idea
       {
         Title = "testIdea1",
         Ideation = ideation,
-        LoggedInUser = person
+        IdentityUser = person
       };
       Idea idea2 = new Idea
       {
         Title = "testIdea2",
         Ideation = ideation,
-        LoggedInUser = organisation,
+        IdentityUser = organisation
       };
       Reaction reaction = new Reaction
       {
         Idea = idea,
         ReactionText = "reactionTest1",
-        LoggedInUser = person
+        IdentityUser = person
       };
       Vote vote = new Vote
       {
         VoteType = VoteType.VOTE,
-        User = person,
+        IdentityUser = person,
         Confirmed = true,
         Idea = idea
       };
       Like like = new Like
       {
         Reaction = reaction,
-        LoggedInUser = person
+        IdentityUser = person
       };
 
       #region Survey
@@ -334,8 +312,8 @@ namespace Integratieproject1.DAL
         Admin = admin,
         Project = project2
       };
-      admin.AdminProjects = new List<AdminProject>() {adminProject, adminProject2};
-      platform.Users = new List<User>() {person, organisation, admin};
+      project.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
+      platform.Users = new List<IdentityUser> {person, organisation, admin};
       reaction.Likes = new List<Like>() {like};
       idea.Reactions = new List<Reaction>() {reaction};
       idea.Votes = new List<Vote>() {vote};

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Web;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
@@ -61,8 +62,9 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
-
-            ideationsManager.PostReaction(parameters, ideaId);
+            ClaimsPrincipal currentUser = User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ideationsManager.PostReaction(parameters, ideaId, currentUserID);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
@@ -89,7 +91,9 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult CreateVote(int ideaId, VoteType voteType)
         {
-            ideationsManager.CreateVote(ideaId, voteType);
+            ClaimsPrincipal currentUser = User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ideationsManager.CreateVote(ideaId, voteType, currentUserID);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
@@ -124,8 +128,9 @@ namespace Integratieproject1.UI.Controllers
             {
                 parameters.Add(pair.Value);
             }
-
-            ideationsManager.LikeReaction(reactionId, parameters[0].ToString());
+            ClaimsPrincipal currentUser = User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ideationsManager.LikeReaction(reactionId, parameters[0].ToString(), currentUserID);
             Idea idea = ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
@@ -153,8 +158,9 @@ namespace Integratieproject1.UI.Controllers
                         image.CopyToAsync(fileStream);
                     }
                 }
-
-                ideationsManager.PostIdea(parameters, Path.Combine(filePath, image.FileName), ideationId);
+                ClaimsPrincipal currentUser = User;
+                var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ideationsManager.PostIdea(parameters, Path.Combine(filePath, image.FileName), ideationId, currentUserID);
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);

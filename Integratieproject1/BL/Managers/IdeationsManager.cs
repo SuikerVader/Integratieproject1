@@ -9,6 +9,7 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.BL.Managers
@@ -90,12 +91,12 @@ namespace Integratieproject1.BL.Managers
 
         #region Idea
 
-        public void PostIdea(ArrayList parameters, string fileName, int ideationId)
+        public void PostIdea(ArrayList parameters, string fileName, int ideationId,string userId)
         {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            ProjectsManager projectsManager = new ProjectsManager();
             Idea idea = new Idea();
             idea.Ideation = GetIdeation(ideationId); 
-            idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
+            idea.IdentityUser = projectsManager.GetUser(userId);
             idea.Title = parameters[1].ToString();
             idea.Text = parameters[2].ToString();
             idea.Image = fileName;
@@ -168,24 +169,25 @@ namespace Integratieproject1.BL.Managers
 
         #region Reaction
 
-        public void PostReaction(ArrayList parameters, int ideaId)
+        public void PostReaction(ArrayList parameters, int ideaId, string userId)
         {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
+            ProjectsManager projectsManager = new ProjectsManager();
+            IdentityUser identityUser = projectsManager.GetUser(userId);
             Reaction reaction = new Reaction();
             reaction.Idea = GetIdea(ideaId);
-            reaction.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
+            reaction.IdentityUser = identityUser;
             reaction.ReactionText = parameters[1].ToString();
             ideationsRepository.CreateReaction(reaction);
             unitOfWorkManager.Save();
         }
 
-        public void LikeReaction(int reactionId, string user)
+        public void LikeReaction(int reactionId, string user, string userId)
         {
+            ProjectsManager projectsManager = new ProjectsManager();
+            IdentityUser identityUser = projectsManager.GetUser(userId);
             Reaction reaction = ideationsRepository.GetReaction(reactionId);
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            LoggedInUser loggedInUser = usersManager.GetLoggedInUser(Int32.Parse(user));
-            Like like = new Like {Reaction = reaction, LoggedInUser = loggedInUser};
-            if (ideationsRepository.CheckLike(reaction, loggedInUser) == true)
+            Like like = new Like {Reaction = reaction, IdentityUser = identityUser};
+            if (ideationsRepository.CheckLike(reaction, identityUser) == true)
             {
                 ideationsRepository.CreateLike(like);
                 unitOfWorkManager.Save();
@@ -220,17 +222,17 @@ namespace Integratieproject1.BL.Managers
 
         #region Vote
 
-        public void CreateVote(int ideaId, VoteType voteType, string userId = null)
+        public void CreateVote(int ideaId, VoteType voteType, string userId)
         {
             Vote vote = new Vote();
             Idea idea = GetIdea(ideaId);
             if (userId != null)
             {
-                UsersManager usersManager = new UsersManager(unitOfWorkManager);
-                User user = usersManager.GetUser(Int32.Parse(userId));
+                ProjectsManager  projectsManager = new ProjectsManager();
+                IdentityUser user = projectsManager.GetUser(userId);
                 if (ideationsRepository.CheckUserVote(user, voteType, idea) == true)
                 {
-                    vote.User = user;
+                    vote.IdentityUser = user;
                     vote.VoteType = voteType;
                     vote.Idea = idea;
                     ideationsRepository.CreateVote(vote);

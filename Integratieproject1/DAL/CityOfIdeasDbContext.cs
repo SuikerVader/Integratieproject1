@@ -45,7 +45,7 @@ namespace Integratieproject1.DAL
 
         public DbSet<IoTSetup> IoTSetups { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<IdentityUser> Users { get; set; }
       public DbSet<Person> Persons { get; set; }
       public DbSet<Organisation> Organisations { get; set; }
       public DbSet<LoggedInUser> LoggedInUsers { get; set; }

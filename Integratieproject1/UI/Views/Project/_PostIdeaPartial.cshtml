@@ -1,4 +1,3 @@
-@using Integratieproject1.Domain.Users
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
@@ -13,7 +12,7 @@
       method="post">
 
     <label for="loggedInUser" class="control-label">User</label>
-    <select asp-for="LoggedInUser" name="loggedInUser" id="loggedInUser" class="form-control">
+    <select asp-for="IdentityUser" name="identityUser" id="identityUser" class="form-control">
         <option value="1">1</option>
         <option value="2">2</option>
     </select>

@@ -5,6 +5,8 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -59,15 +61,18 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        public IEnumerable<AdminProject> GetAdminProjects(LoggedInUser user)
+        public IEnumerable<AdminProject> GetAdminProjects(string userId)
         {
+            UserStore<IdentityUser> userStore = new UserStore<IdentityUser>(ctx);
+            IdentityUser identityUser = userStore.FindByIdAsync(userId).Result;
             return ctx.AdminProjects
-                .Where(a => a.Admin == user)
+                .Where(p => p.Admin == identityUser)
                 .Include(p => p.Project).ThenInclude(l => l.Location).ThenInclude(a => a.Address)
                 .Include(p => p.Project).ThenInclude(p => p.Platform)
                 .AsEnumerable();
         }
 
+        
         public Project GetProject(int projectId)
         {
             return ctx.Projects
