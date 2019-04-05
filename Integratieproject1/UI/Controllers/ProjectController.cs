@@ -142,19 +142,21 @@ namespace Integratieproject1.UI.Controllers
 
             if (parameters.Count > 0)
             {
-                string filePath = "..\\Integratieproject1\\Uploads\\";
+                string wwwroot = "wwwroot/";
+                string uploads = "/images/uploads/";
+                string path = wwwroot + uploads;
 
                 if (image.Length > 0)
-                {
-                    string fileName = ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName.Trim('"');
-                    
-                    using (var fileStream = new FileStream(Path.Combine(filePath, image.FileName), FileMode.Create))
+                {                    
+                    using (var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create))
+
                     {
                         image.CopyToAsync(fileStream);
                     }
                 }
 
-                ideationsManager.PostIdea(parameters, Path.Combine(filePath, image.FileName), ideationId);
+                ideationsManager.PostIdea(parameters, Path.Combine(uploads, image.FileName), ideationId);
+
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);

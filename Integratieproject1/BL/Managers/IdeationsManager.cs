@@ -90,7 +90,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Idea
 
-        public void PostIdea(ArrayList parameters, string fileName, int ideationId)
+        public void PostIdea(ArrayList parameters, string imagePath, int ideationId)
         {
             UsersManager usersManager = new UsersManager(unitOfWorkManager);
             Idea idea = new Idea();
@@ -98,8 +98,8 @@ namespace Integratieproject1.BL.Managers
             idea.LoggedInUser = usersManager.GetLoggedInUser(Int32.Parse(parameters[0].ToString()));
             idea.Title = parameters[1].ToString();
             idea.Text = parameters[2].ToString();
-            idea.Image = fileName;
-            idea.Video = parameters[3].ToString();
+            idea.Image = imagePath;
+            idea.Video = parameters[3].ToString().Replace("watch?v=", "embed/");
             
             ideationsRepository.CreateIdea(idea);
             unitOfWorkManager.Save();

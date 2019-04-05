@@ -7,29 +7,32 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-<h2>@Model.CentralQuestion</h2>
-<p>idea's: </p>
-@foreach (var idea in Model.Ideas)
-{
-    <div>
-        <h3>@idea.Title</h3>
-        <a asp-area="" asp-controller="Project"
-           asp-action="Idea" asp-route-ideaId="@idea.IdeaId"><button>view idea</button>
-        </a>
-    </div>
-}
-
-@* <div> *@
-@*     <a asp-area="" asp-controller="Project" *@
-@*        asp-action="Ideation" asp-route-ideationId="@Model.IdeationId"> *@
-@*         <button>post idea</button> *@
-@*     </a> *@
+    <h2>@Model.CentralQuestion</h2>
+    <p>idea's: </p>
+    @foreach (var idea in Model.Ideas)
+    {
+        <div>
+            <h3>@idea.Title</h3>
+            <p>@idea.Text</p>
+            <img src="@idea.Image" alt="projectImage"/>
+            <iframe src="@idea.Video" width="560" height="315"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+            <a asp-area="" asp-controller="Project"
+               asp-action="Idea" asp-route-ideaId="@idea.IdeaId"><button>view idea</button>
+            </a>
+        </div>
+    }
     
-<button onclick="showHideCreateIdea()">post idea</button>
-<div id="idea" style="display: none">
-    @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
+    <button onclick="showHideCreateIdea()">post idea</button>
+    <div id="idea" style="display: none">
+        @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
+    </div>
 </div>
-</div>
+
+
+@*************************@
+@* refactor naar js file *@
 <script>
     function showHideCreateIdea() {
         var x = document.getElementById('idea');
@@ -40,3 +43,4 @@
         }
     }
 </script>
+@*************************@
