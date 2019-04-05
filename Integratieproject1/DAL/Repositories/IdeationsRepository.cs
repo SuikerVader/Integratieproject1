@@ -5,6 +5,7 @@ using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -69,7 +70,7 @@ namespace Integratieproject1.DAL.Repositories
         public Idea GetIdea(int ideaId)
         {
             return ctx.Ideas
-                .Include(r => r.Reactions).ThenInclude(l => l.LoggedInUser)
+                .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(v => v.Votes)
                 .Single(i => i.IdeaId == ideaId);
@@ -144,9 +145,9 @@ namespace Integratieproject1.DAL.Repositories
             return vote;
         }
 
-        public bool CheckUserVote(User user, VoteType voteType, Idea idea)
+        public bool CheckUserVote(IdentityUser user, VoteType voteType, Idea idea)
         {
-            if (ctx.Votes.Where(v => v.Idea == idea).Where(v => v.User == user).Where(v => v.VoteType == voteType)
+            if (ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user).Where(v => v.VoteType == voteType)
                 .AsEnumerable().Any())
             {
                 return false;
@@ -167,9 +168,9 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Like
 
-        public bool CheckLike(Reaction reaction, LoggedInUser loggedInUser)
+        public bool CheckLike(Reaction reaction, IdentityUser loggedInUser)
         {
-            if (ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.LoggedInUser == loggedInUser).AsEnumerable()
+            if (ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.IdentityUser == loggedInUser).AsEnumerable()
                 .Any())
             {
                 return false;

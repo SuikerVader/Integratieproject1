@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.Domain.Ideations
 {
@@ -10,7 +11,7 @@ namespace Integratieproject1.Domain.Ideations
         public int ReactionId { get; set; }
         public string ReactionText { get; set; }
     [Required] 
-    public LoggedInUser LoggedInUser { get; set; }
+    public IdentityUser IdentityUser { get; set; }
     public Ideation Ideation { get; set; }
     public Idea Idea { get; set; }
     
