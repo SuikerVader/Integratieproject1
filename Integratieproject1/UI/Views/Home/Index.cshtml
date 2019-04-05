@@ -22,120 +22,120 @@
             if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
             {
                 
-                    <div class="card text-center activeProject">
-                        <div class="card-body">
-                            <h5 class="card-title">@project.ProjectName</h5>
-                            <p class="card-text">@project.Description</p>
-                            <div class="progress" style="height: 30px;">
-                                @foreach (var phase in project.Phases)
+                <div class="card text-center activeProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px;">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
                                 {
-                                    var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                    if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
-                                    {
-                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            <strong>@phase.PhaseName</strong>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            @phase.PhaseName
-                                        </div>
-                                    }
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
                                 }
-                            </div>
-                            <div class="d-flex flex-row justify-content-between">
-                                <p>@project.StartDate.ToString("d")</p>
-                                <p>@project.EndDate.ToString("d")</p>
-
-                            </div>
-
-                            <a class="btn btn-primary" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                See Project
-                            </a>
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            }
                         </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p>
+                            <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
                     </div>
+                </div>
                 
             }
             else if (DateTime.Now > project.EndDate)
             {
                 
-                    <div class="card text-center closedProject">
-                        <div class="card-body">
-                            <h5 class="card-title">@project.ProjectName</h5>
-                            <p class="card-text">@project.Description</p>
-                            <div class="progress" style="height: 30px">
-                                @foreach (var phase in project.Phases)
+                <div class="card text-center closedProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
                                 {
-                                    var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                    if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
-                                    {
-                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            <strong>@phase.PhaseName</strong>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            @phase.PhaseName
-                                        </div>
-                                    }
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
                                 }
-                            </div>
-                            <div class="d-flex flex-row justify-content-between">
-                                <p>@project.StartDate.ToString("d")</p>
-                                <p>@project.EndDate.ToString("d")</p>
-
-                            </div>
-
-                            <a class="btn btn-primary" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                See Project
-                            </a>
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            }
                         </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p>
+                            <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
                     </div>
+                </div>
             }
             else if (DateTime.Now < project.StartDate)
             {
                 
-                    <div class="card text-center futureProject">
-                        <div class="card-body">
-                            <h5 class="card-title">@project.ProjectName</h5>
-                            <p class="card-text">@project.Description</p>
-                            <div class="progress" style="height: 30px">
-                                @foreach (var phase in project.Phases)
+                <div class="card text-center futureProject">
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text">@project.Description</p>
+                        <div class="progress" style="height: 30px">
+                            @foreach (var phase in project.Phases)
+                            {
+                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
                                 {
-                                    var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                    if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
-                                    {
-                                        <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            <strong>@phase.PhaseName</strong>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                            @phase.PhaseName
-                                        </div>
-                                    }
+                                    <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        <strong>@phase.PhaseName</strong>
+                                    </div>
                                 }
-                            </div>
-                            <div class="d-flex flex-row justify-content-between">
-                                <p>@project.StartDate.ToString("d")</p>
-                                <p>@project.EndDate.ToString("d")</p>
-
-                            </div>
-
-                            <a class="btn btn-primary" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                See Project
-                            </a>
+                                else
+                                {
+                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                        @phase.PhaseName
+                                    </div>
+                                }
+                            }
                         </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p>@project.StartDate.ToString("d")</p>
+                            <p>@project.EndDate.ToString("d")</p>
+
+                        </div>
+
+                        <a class="btn btn-primary" asp-area=""
+                           asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                            See Project
+                        </a>
                     </div>
+                </div>
                                     
             }
         }

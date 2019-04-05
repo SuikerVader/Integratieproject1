@@ -7,6 +7,7 @@ using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Users;
+using Microsoft.CodeAnalysis.CodeActions;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -147,7 +148,11 @@ namespace Integratieproject1.BL.Managers
                     if (previousPhase.PhaseNr == phaseNr - 1)
                     {
                         previousPhase.EndDate = phase.StartDate;
-                        projectsRepository.EditPhase(previousPhase);
+                        if (previousPhase.EndDate < previousPhase.StartDate)
+                        {
+                            previousPhase.StartDate = previousPhase.EndDate;
+                        }
+                        EditPhase(previousPhase, previousPhase.PhaseId);
                     }
                 }
             Phase createdPhase = projectsRepository.CreatePhase(phase);
