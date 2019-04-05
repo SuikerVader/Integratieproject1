@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Web;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
@@ -150,12 +149,14 @@ namespace Integratieproject1.UI.Controllers
                 if (image.Length > 0)
                 {                    
                     using (var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create))
+
                     {
                         image.CopyToAsync(fileStream);
                     }
                 }
 
                 ideationsManager.PostIdea(parameters, Path.Combine(uploads, image.FileName), ideationId);
+
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);
