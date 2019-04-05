@@ -2,14 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Web;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -148,14 +143,15 @@ namespace Integratieproject1.UI.Controllers
                 string path = wwwroot + uploads;
 
                 if (image.Length > 0)
-                {                    
-                    using (var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create))
+                {
+                    string imagePath = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                    using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
                     {
                         image.CopyToAsync(fileStream);
                     }
+                    
+                    ideationsManager.PostIdea(parameters, Path.Combine(uploads, imagePath), ideationId);
                 }
-
-                ideationsManager.PostIdea(parameters, Path.Combine(uploads, image.FileName), ideationId);
 
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);
