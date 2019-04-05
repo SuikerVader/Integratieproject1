@@ -3,7 +3,6 @@
 
 @{
     ViewBag.Title = "ideationPage";
-    //    Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 
 <form asp-controller="Project" 
@@ -13,32 +12,40 @@
       enctype="multipart/form-data"
       method="post">
 
-    <select asp-for="LoggedInUser" name="loggedinuser">
+    <label for="loggedInUser" class="control-label">User</label>
+    <select asp-for="LoggedInUser" name="loggedInUser" id="loggedInUser" class="form-control">
         <option value="1">1</option>
         <option value="2">2</option>
     </select>
-    <input class="form-control" asp-for="Title" type="text" name="title">
-    <input class="form-control" asp-for="Text" type="text" name="text"/>
+    
+    <label for="title" class="control-label">Title</label>
+    <input class="form-control" asp-for="Title" type="text" name="title" id="title">
+    
+    <label for="description" class="control-label">Description</label>
+    <input class="form-control" asp-for="Text" type="text" name="text" id="description"/>
 
     <div class="input-group">
-        <input class="form-control" 
+        <label for="uploadedImage" class="control-label">Images</label>
+        <input class="form-control"
                asp-for="Image"
-               name="image" 
-               type="file" 
-               id="UploadedImage" 
+               name="image"
+               type="file"
+               id="uploadedImage"
                accept="image/x-png,image/gif,image/jpeg"
                onchange="PreviewImage()">
-        
+
         <img id="previewImage" src="" height="200" alt="Image preview..."/>
     </div>
 
     <div class="input-group">
-        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)"/>
-        
+        <label for="uploadedVideo" class="label">Video</label>
+        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo"/>
+
         <iframe id="previewVideo" width="560" height="315" src=""
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
     </div>
+    
     <button type="submit">Post</button>
 </form>
 
