@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Web;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
@@ -128,9 +131,10 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostIdea(IFormCollection formCollection, int ideationId)
+        public IActionResult PostIdea(IFormCollection formCollection, IFormFile image, int ideationId)
         {
             ArrayList parameters = new ArrayList();
+
             foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 parameters.Add(pair.Value);
@@ -138,7 +142,22 @@ namespace Integratieproject1.UI.Controllers
 
             if (parameters.Count > 0)
             {
-                ideationsManager.PostIdea(parameters, ideationId);
+                string wwwroot = "wwwroot/";
+                string uploads = "/images/uploads/";
+                string path = wwwroot + uploads;
+
+                if (image.Length > 0)
+                {                    
+                    using (var fileStream = new FileStream(Path.Combine(path, image.FileName), FileMode.Create))
+
+                    {
+                        image.CopyToAsync(fileStream);
+                    }
+                }
+
+                ideationsManager.PostIdea(parameters, Path.Combine(uploads, image.FileName), ideationId);
+
+
                 Ideation ideation = ideationsManager.GetIdeation(ideationId);
                 return View("/UI/Views/Project/Ideation.cshtml", ideation);
             }

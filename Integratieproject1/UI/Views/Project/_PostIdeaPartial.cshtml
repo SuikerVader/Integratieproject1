@@ -3,46 +3,49 @@
 
 @{
     ViewBag.Title = "ideationPage";
-    //    Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-controller="Project" asp-action="PostIdea" asp-route-ideationId="@ViewBag.IdeationId" method="post">
+<form asp-controller="Project" 
+      asp-action="PostIdea" 
+      asp-route-ideationId="@ViewBag.IdeationId" 
+      asp-route-image="@ViewData["image"]"
+      enctype="multipart/form-data"
+      method="post">
 
-    @*<select asp-for="LoggedInUser" asp-items="@(new SelectList(ViewBag.LoggedInUsers, "UserId", "Email"))" class="form-control"></select>*@
-    <select asp-for="LoggedInUser" name="loggedinuser">
+    <label for="loggedInUser" class="control-label">User</label>
+    <select asp-for="LoggedInUser" name="loggedInUser" id="loggedInUser" class="form-control">
         <option value="1">1</option>
         <option value="2">2</option>
     </select>
-    <input class="form-control" asp-for="Title" type="text" name="title">
-    <input class="form-control" asp-for="Text" type="text" name="text"/>
+    
+    <label for="title" class="control-label">Title</label>
+    <input class="form-control" asp-for="Title" type="text" name="title" id="title">
+    
+    <label for="description" class="control-label">Description</label>
+    <input class="form-control" asp-for="Text" type="text" name="text" id="description"/>
 
     <div class="input-group">
-        <input class="form-control" 
-               asp-for="Image" 
-               name="image" 
-               type="file" 
-               id="file-with-current" 
+        <label for="uploadedImage" class="control-label">Images</label>
+        <input class="form-control"
+               asp-for="Image"
+               name="image"
+               type="file"
+               id="uploadedImage"
                accept="image/x-png,image/gif,image/jpeg"
                onchange="PreviewImage()">
-        
-        <img src="" height="200" alt="Image preview..."/>
-        @* <button type="button" asp-action="">Upload</button> *@
-    </div>
 
-    @* <div class="form-row"> *@
-    @*     <label>Choose File</label> *@
-    @*     <div class="custom-file"> *@
-    @*         <input type="file" class="custom-file-input" id="custom" /> *@
-    @*         <label class="custom-file-label" for="custom"></label> *@
-    @*     </div> *@
-    @* </div> *@
+        <img id="previewImage" src="" height="200" alt="Image preview..."/>
+    </div>
 
     <div class="input-group">
-        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)"/>
-        <button type="button" asp-action="">Check URL</button>
-        
-        <iframe width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <label for="uploadedVideo" class="control-label">Video</label>
+        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo"/>
+
+        <iframe id="previewVideo" width="560" height="315" src=""
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
     </div>
+    
     <button type="submit">Post</button>
 </form>
 
@@ -50,8 +53,8 @@
 @* refactor naar js file *@
 <script>
     function PreviewImage() {
-        var preview = document.querySelector('img'); //selects the query named img
-        var file = document.querySelector('input[type=file]').files[0]; //sames as here
+        var preview = document.getElementById('previewImage');
+        var file = document.querySelector('input[type=file]').files[0];
         var reader = new FileReader();
 
         reader.onloadend = function () {
@@ -59,18 +62,16 @@
         }
 
         if (file) {
-            reader.readAsDataURL(file); //reads the data as a URL
+            reader.readAsDataURL(file);
         } else {
             preview.src = "";
         }
     }
 
     function PreviewVideo(url) {
-        var preview = document.querySelector('iframe');
+        var preview = document.getElementById('previewVideo');
+        url = url.replace("watch?v=", "embed/");
         preview.src = url;
     }
-
-    PreviewImage();  //calls the function named previewFile()
-    PreviewVideo();
 </script>
 @*************************@
