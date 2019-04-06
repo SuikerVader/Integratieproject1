@@ -1,4 +1,3 @@
-@using Integratieproject1.Domain.Users
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
@@ -11,12 +10,6 @@
       asp-route-image="@ViewData["image"]"
       enctype="multipart/form-data"
       method="post">
-
-    <label for="loggedInUser" class="control-label">User</label>
-    <select asp-for="LoggedInUser" name="loggedInUser" id="loggedInUser" class="form-control">
-        <option value="1">1</option>
-        <option value="2">2</option>
-    </select>
     
     <label for="title" class="control-label">Title</label>
     <input class="form-control" asp-for="Title" type="text" name="title" id="title">

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
-    <Folder Include="Uploads" />
+    <Folder Include="wwwroot\images\uploads" />
   </ItemGroup>
 
   <ItemGroup>

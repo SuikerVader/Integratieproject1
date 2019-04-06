@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -19,16 +21,12 @@ namespace Integratieproject1.DAL.Repositories
             ctx = unitOfWork.ctx;
         }
 
-        public User GetUser(int userId)
+        public IdentityUser GetUser(string id)
         {
-          return  ctx.Users
-              .Include(p => p.Platform)
-              .Single(u => u.UserId == userId);
+            IdentityUser identityUser = ctx.Users.Find(id);
+            return identityUser;
         }
 
-        public IEnumerable<User> GetLoggedInUsers()
-        {
-          return ctx.Users.Where(u => u.GetType() == typeof(LoggedInUser)).AsEnumerable();
-        }
+        
     }
 }

@@ -1,10 +1,12 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
-using Microsoft.AspNetCore.Internal;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -21,9 +23,11 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost("Vote/{id}")]
-        public async Task IoTVote(int id)
+        public void IoTVote(int id)
         {
-           ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT);
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+           ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT, userId:currentUserID);
         }
         
         //wordt gebruikt voor IoT-opstellingen die meerdere knoppen bevatten (1-4) in mate van hoe eens ze het zijn

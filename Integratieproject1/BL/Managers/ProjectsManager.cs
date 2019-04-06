@@ -7,6 +7,8 @@ using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Integratieproject1.BL.Managers
 {
@@ -52,11 +54,9 @@ namespace Integratieproject1.BL.Managers
             return projectsRepository.GetProject(projectId);
         }
 
-        public IList<Project> GetAdminProjects(int userId)
+        public IList<Project> GetAdminProjects(string userId)
         {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            LoggedInUser user = usersManager.GetLoggedInUser(userId);
-            List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(user).ToList();
+            List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(userId).ToList();
             List<Project> projects = new List<Project>();
             foreach (AdminProject adminProject in adminProjects)
             {
@@ -66,18 +66,22 @@ namespace Integratieproject1.BL.Managers
             return projects;
         }
 
-        public void CreateProject(Project project, int userId)
+        public IdentityUser GetUser(string id)
         {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            LoggedInUser user = usersManager.GetLoggedInUser(userId);
-            project.Platform = GetPlatform(user.Platform.PlatformId);
+            UsersManager userManager = new UsersManager(unitOfWorkManager);
+            return userManager.GetUser(id);
+        }
+        public void CreateProject(Project project, string userId)
+        {
+            IdentityUser identityUser = GetUser(userId);
+            project.Platform = GetPlatform(1);
             DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
             AdminProject adminProject = new AdminProject
             {
                 Project = project,
-                Admin = user
+                Admin = identityUser
             };
             projectsRepository.CreateAdminProject(adminProject);
             unitOfWorkManager.Save();
@@ -147,7 +151,11 @@ namespace Integratieproject1.BL.Managers
                     if (previousPhase.PhaseNr == phaseNr - 1)
                     {
                         previousPhase.EndDate = phase.StartDate;
-                        projectsRepository.EditPhase(previousPhase);
+                        if (previousPhase.EndDate < previousPhase.StartDate)
+                        {
+                            previousPhase.StartDate = previousPhase.EndDate;
+                        }
+                        EditPhase(previousPhase, previousPhase.PhaseId);
                     }
                 }
             Phase createdPhase = projectsRepository.CreatePhase(phase);

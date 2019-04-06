@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using Integratieproject1.BL.Managers;
+using Integratieproject1.DAL;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
@@ -11,8 +13,6 @@ using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Integratieproject1.UI.Controllers{}
 
@@ -39,9 +39,11 @@ namespace Integratieproject1.UI.Controllers{}
 
         #region Project
 
-        public IActionResult Projects(int userId)
+        public IActionResult Projects()
         {
-            IList<Project> projects = projectsManager.GetAdminProjects(userId);
+            ClaimsPrincipal currentUser = User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IList<Project> projects = projectsManager.GetAdminProjects(currentUserID);
             return View("/UI/Views/Admin/Projects.cshtml", projects);
         }
 
@@ -70,11 +72,13 @@ namespace Integratieproject1.UI.Controllers{}
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project, int userId)
+        public IActionResult CreateProject(Project project)
         {
+            ClaimsPrincipal currentUser = User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (ModelState.IsValid)
             {
-                projectsManager.CreateProject(project, userId);
+                projectsManager.CreateProject(project, currentUserID);
                 return RedirectToAction("Index", "Home");
             }
 
