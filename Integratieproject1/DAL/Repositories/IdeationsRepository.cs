@@ -14,7 +14,6 @@ namespace Integratieproject1.DAL.Repositories
     {
         private readonly CityOfIdeasDbContext _ctx;
 
-
         public IdeationsRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
@@ -94,6 +93,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Ideas.Remove(idea);
             _ctx.SaveChanges();
         }
+        
         #endregion
 
         #region Reaction methods

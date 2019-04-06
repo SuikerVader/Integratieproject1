@@ -98,16 +98,11 @@ namespace Integratieproject1.BL.Managers
             var images = GetImages(ideaId);
             ideaToAddImageTo.Images = images != null ? images.ToList() : new List<Image>();
             ideaToAddImageTo.Images.Add(image);
-            
+                        
             // Save in DB
             _dataTypeRepository.CreateImage(image);
             _ideationsManager.ChangeIdea(ideaToAddImageTo);
             _unitOfWorkManager.Save();
-        }
-
-        public void UpdateImage(Image image)
-        {
-            _dataTypeRepository.UpdateImage(image);
         }
 
         public IEnumerable<Image> GetImages(int ideaId)

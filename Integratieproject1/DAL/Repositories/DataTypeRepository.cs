@@ -49,17 +49,6 @@ namespace Integratieproject1.DAL.Repositories
             return image;
         }
 
-        public Image UpdateImage(Image newImage)
-        {
-            Image image = _ctx.Images.Find(newImage.ImageId);
-            image.ImageName = newImage.ImageName;
-            image.ImagePath = newImage.ImagePath;
-            image.Idea = newImage.Idea;
-            
-            _ctx.SaveChanges();
-            return image;
-        }
-
         public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
         {
             return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
