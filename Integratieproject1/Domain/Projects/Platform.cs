@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.Domain.Projects
 {
@@ -17,6 +18,6 @@ namespace Integratieproject1.Domain.Projects
         public string Phonenumber { get; set; }
         public string Description { get; set; }
         public ICollection<Project> Projects { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<IdentityUser> Users { get; set; }
     }
 }

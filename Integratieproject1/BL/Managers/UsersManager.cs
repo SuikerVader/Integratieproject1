@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -27,14 +28,14 @@ namespace Integratieproject1.BL.Managers
             usersRepository = new UsersRepository(this.unitOfWorkManager.UnitOfWork);
         }
 
-        public User GetUser(int userId)
+        public IdentityUser GetUser(string userId)
         {
             return usersRepository.GetUser(userId);
         }
 
-        public LoggedInUser GetLoggedInUser(int userId)
+        /*public LoggedInUser GetLoggedInUser(string userId)
         {
-            User user = usersRepository.GetUser(userId);
+            IdentityUser user = usersRepository.GetUser(userId);
             try
             {
                 LoggedInUser loggedInUser = (LoggedInUser) user;
@@ -45,9 +46,9 @@ namespace Integratieproject1.BL.Managers
                 Console.WriteLine("not a loggedInUser exception: " + e);
                 throw;
             }
-        }
+        }*/
 
-        public IList<LoggedInUser> GetLoggedInUsers()
+        /*public IList<LoggedInUser> GetLoggedInUsers()
         {
             IEnumerable<User> users = usersRepository.GetLoggedInUsers();
             IList<LoggedInUser> loggedInUsers = new List<LoggedInUser>();
@@ -67,6 +68,6 @@ namespace Integratieproject1.BL.Managers
             }
 
             return loggedInUsers;
-        }
+        }*/
     }
 }
