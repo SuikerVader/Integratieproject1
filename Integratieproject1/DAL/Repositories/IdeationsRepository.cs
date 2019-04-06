@@ -12,7 +12,7 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class IdeationsRepository : IIdeationsRepository
     {
-        private readonly CityOfIdeasDbContext ctx;
+        private readonly CityOfIdeasDbContext _ctx;
 
 
         public IdeationsRepository(UnitOfWork unitOfWork)
@@ -20,19 +20,19 @@ namespace Integratieproject1.DAL.Repositories
             if (unitOfWork == null)
                 throw new ArgumentNullException(nameof(unitOfWork));
 
-            ctx = unitOfWork.ctx;
+            _ctx = unitOfWork.Ctx;
         }
 
         #region Ideation methods
 
         public IEnumerable<Ideation> GetIdeations(int phaseId)
         {
-            return ctx.Ideations.Where(ideation => ideation.Phase.PhaseId == phaseId).AsEnumerable();
+            return _ctx.Ideations.Where(ideation => ideation.Phase.PhaseId == phaseId).AsEnumerable();
         }
 
         public Ideation GetIdeation(int ideationId)
         {
-            return ctx.Ideations
+            return _ctx.Ideations
                 .Include(i => i.Ideas)
                 .ThenInclude(r => r.Reactions)
                 .Single(id => id.IdeationId == ideationId);
@@ -40,22 +40,22 @@ namespace Integratieproject1.DAL.Repositories
 
         public Ideation CreateIdeation(Ideation ideation)
         {
-            ctx.Ideations.Add(ideation);
-            ctx.SaveChanges();
+            _ctx.Ideations.Add(ideation);
+            _ctx.SaveChanges();
             return ideation;
         }
         
         public Ideation EditIdeation(Ideation ideation)
         {
-            ctx.Ideations.Update(ideation);
-            ctx.SaveChanges();
+            _ctx.Ideations.Update(ideation);
+            _ctx.SaveChanges();
             return ideation;
         }
 
         public void RemoveIdeation(Ideation ideation)
         {
-            ctx.Ideations.Remove(ideation);
-            ctx.SaveChanges();
+            _ctx.Ideations.Remove(ideation);
+            _ctx.SaveChanges();
         }
         #endregion
 
@@ -64,12 +64,12 @@ namespace Integratieproject1.DAL.Repositories
         //Idea methods
         public IEnumerable<Idea> GetIdeas(Ideation ideation)
         {
-            return ctx.Ideas.Where(idea => idea.Ideation == ideation).AsEnumerable();
+            return _ctx.Ideas.Where(idea => idea.Ideation == ideation).AsEnumerable();
         }
 
         public Idea GetIdea(int ideaId)
         {
-            return ctx.Ideas
+            return _ctx.Ideas
                 .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(v => v.Votes)
@@ -78,15 +78,21 @@ namespace Integratieproject1.DAL.Repositories
 
         public Idea CreateIdea(Idea idea)
         {
-            ctx.Ideas.Add(idea);
-            ctx.SaveChanges();
+            _ctx.Ideas.Add(idea);
+            _ctx.SaveChanges();
             return idea;
+        }
+
+        public void UpdateIdea(Idea idea)
+        {
+            _ctx.Entry(idea).State = EntityState.Modified;
+            _ctx.SaveChanges();
         }
 
         public void RemoveIdea(Idea idea)
         {
-            ctx.Ideas.Remove(idea);
-            ctx.SaveChanges();
+            _ctx.Ideas.Remove(idea);
+            _ctx.SaveChanges();
         }
         #endregion
 
@@ -94,45 +100,44 @@ namespace Integratieproject1.DAL.Repositories
 
         public IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation)
         {
-            return ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
+            return _ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
         }
 
         public IEnumerable<Reaction> GetReactionsOnIdea(Idea idea)
         {
-            return ctx.Reactions.Where(reaction => reaction.Idea == idea).AsEnumerable();
+            return _ctx.Reactions.Where(reaction => reaction.Idea == idea).AsEnumerable();
         }
 
         public Reaction GetReaction(int reactionId)
         {
-            return ctx.Reactions.Find(reactionId);
+            return _ctx.Reactions.Find(reactionId);
         }
 
         public Reaction CreateReaction(Reaction reaction)
         {
-            ctx.Reactions.Add(reaction);
-            ctx.SaveChanges();
+            _ctx.Reactions.Add(reaction);
+            _ctx.SaveChanges();
             return reaction;
         }
 
         public void RemoveReaction(Reaction reaction)
         {
-            ctx.Reactions.Remove(reaction);
-            ctx.SaveChanges();
+            _ctx.Reactions.Remove(reaction);
+            _ctx.SaveChanges();
         }
         #endregion
-
 
         #region Vote methods
 
         //Vote methods
         public IEnumerable<Vote> GetVotes()
         {
-            return ctx.Votes.AsEnumerable();
+            return _ctx.Votes.AsEnumerable();
         }
 
         public Vote GetVote(int voteId)
         {
-            return ctx.Votes.Find(voteId);
+            return _ctx.Votes.Find(voteId);
         }
 
         public Vote CreateVote(Vote vote)
@@ -140,14 +145,14 @@ namespace Integratieproject1.DAL.Repositories
             /*Idea idea = GetIdea(vote.Idea.IdeaId);
             idea.Votes.Add(vote);
             ctx.Ideas.Update(idea);*/
-            ctx.Votes.Add(vote);
-            ctx.SaveChanges();
+            _ctx.Votes.Add(vote);
+            _ctx.SaveChanges();
             return vote;
         }
 
         public bool CheckUserVote(IdentityUser user, VoteType voteType, Idea idea)
         {
-            if (ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user).Where(v => v.VoteType == voteType)
+            if (_ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user).Where(v => v.VoteType == voteType)
                 .AsEnumerable().Any())
             {
                 return false;
@@ -160,17 +165,17 @@ namespace Integratieproject1.DAL.Repositories
 
         public void RemoveVote(Vote vote)
         {
-            ctx.Votes.Remove(vote);
-            ctx.SaveChanges();
+            _ctx.Votes.Remove(vote);
+            _ctx.SaveChanges();
         }
 
         #endregion
 
-        #region Like
+        #region Like methods
 
         public bool CheckLike(Reaction reaction, IdentityUser loggedInUser)
         {
-            if (ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.IdentityUser == loggedInUser).AsEnumerable()
+            if (_ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.IdentityUser == loggedInUser).AsEnumerable()
                 .Any())
             {
                 return false;
@@ -183,24 +188,21 @@ namespace Integratieproject1.DAL.Repositories
 
         public Like CreateLike(Like like)
         {
-            ctx.Likes.Add(like);
-            ctx.SaveChanges();
+            _ctx.Likes.Add(like);
+            _ctx.SaveChanges();
             return like;
         }
 
         public Like GetLike(int likeId)
         {
-            return ctx.Likes.Find(likeId);
+            return _ctx.Likes.Find(likeId);
         }
 
         public void RemoveLike(Like like)
         {
-            ctx.Likes.Remove(like);
-            ctx.SaveChanges();
+            _ctx.Likes.Remove(like);
+            _ctx.SaveChanges();
         }
         #endregion
-
-
-       
     }
 }

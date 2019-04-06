@@ -14,27 +14,27 @@ namespace Integratieproject1.UI.Controllers
     [ApiController]
     public class IoTApiController
     {
-        private IdeationsManager ideationsManager;
-        private IoTManager ioTManager;
+        private readonly IdeationsManager _ideationsManager;
+        private IoTManager _ioTManager;
 
         public IoTApiController()
         {
-            this.ideationsManager = new IdeationsManager();
+            this._ideationsManager = new IdeationsManager();
         }
 
         [HttpPost("Vote/{id}")]
         public void IoTVote(int id)
         {
             ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
-            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-           ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT, userId:currentUserID);
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+           _ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT, userId:currentUserId);
         }
         
         //wordt gebruikt voor IoT-opstellingen die meerdere knoppen bevatten (1-4) in mate van hoe eens ze het zijn
         [HttpPost("Vote/{id}/{supportLv}")]
         public async Task IoTVote(int id, int supportLv)
         {
-            ioTManager.RegisterComplexVote(id, supportLv);
+            _ioTManager.RegisterComplexVote(id, supportLv);
         }
     }
 }

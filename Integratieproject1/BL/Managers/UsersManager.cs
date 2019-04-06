@@ -10,27 +10,27 @@ namespace Integratieproject1.BL.Managers
 {
     public class UsersManager : IUsersManager
     {
-        private UsersRepository usersRepository;
-        private UnitOfWorkManager unitOfWorkManager;
+        private readonly UsersRepository _usersRepository;
+        private readonly UnitOfWorkManager _unitOfWorkManager;
 
         public UsersManager()
         {
-            unitOfWorkManager = new UnitOfWorkManager();
-            usersRepository = new UsersRepository(unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = new UnitOfWorkManager();
+            _usersRepository = new UsersRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         public UsersManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
-                throw new ArgumentNullException("unitOfWorkManager");
+                throw new ArgumentNullException(nameof(unitOfWorkManager));
 
-            this.unitOfWorkManager = unitOfWorkManager;
-            usersRepository = new UsersRepository(this.unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = unitOfWorkManager;
+            _usersRepository = new UsersRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         public IdentityUser GetUser(string userId)
         {
-            return usersRepository.GetUser(userId);
+            return _usersRepository.GetUser(userId);
         }
 
         /*public LoggedInUser GetLoggedInUser(string userId)

@@ -14,7 +14,13 @@
         <div>
             <h3>@idea.Title</h3>
             <p>@idea.Text</p>
-            <img src="@idea.Image" alt="projectImage"/>
+            @if (idea.Images != null)
+            {
+                 foreach (var image in idea.Images)
+                 {
+                     <img src="@image.ImagePath" alt="@image.ImageName"/>
+                 }
+            }
             <iframe src="@idea.Video" width="560" height="315"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>

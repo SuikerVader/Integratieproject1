@@ -12,18 +12,18 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
-        private CityOfIdeasDbContext ctx = null;
+        private readonly CityOfIdeasDbContext _ctx;
         public UsersRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
+                throw new ArgumentNullException(nameof(unitOfWork));
                 
-            ctx = unitOfWork.ctx;
+            _ctx = unitOfWork.Ctx;
         }
 
         public IdentityUser GetUser(string id)
         {
-            IdentityUser identityUser = ctx.Users.Find(id);
+            IdentityUser identityUser = _ctx.Users.Find(id);
             return identityUser;
         }
 
