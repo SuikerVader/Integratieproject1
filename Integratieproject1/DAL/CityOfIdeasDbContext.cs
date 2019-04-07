@@ -9,7 +9,6 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
-using Integratieproject1.Domain.Users;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -45,10 +44,7 @@ namespace Integratieproject1.DAL
 
         public DbSet<IoTSetup> IoTSetups { get; set; }
 
-        public DbSet<IdentityUser> Users { get; set; }
-      public DbSet<Person> Persons { get; set; }
-      public DbSet<Organisation> Organisations { get; set; }
-      public DbSet<LoggedInUser> LoggedInUsers { get; set; }
+
       public DbSet<AdminProject> AdminProjects { get; set; }
       public DbSet<Location> Locations { get; set; }
       public DbSet<Address> Addresses { get; set; }

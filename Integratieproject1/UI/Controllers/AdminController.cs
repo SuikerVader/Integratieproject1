@@ -9,7 +9,6 @@ using Integratieproject1.Domain;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
