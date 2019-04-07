@@ -9,7 +9,6 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

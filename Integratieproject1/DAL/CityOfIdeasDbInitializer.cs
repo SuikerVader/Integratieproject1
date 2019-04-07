@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Areas.Identity.Pages.Account;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -386,5 +386,5 @@ namespace Integratieproject1.DAL
             await userManager.AddToRoleAsync(organisationTest, "Organisation");
             await userManager.AddToRoleAsync(userTest, "User");
         }
-    }
+  }
 }

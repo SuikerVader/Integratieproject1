@@ -6,7 +6,6 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -65,6 +64,12 @@ namespace Integratieproject1.BL.Managers
 
             return projects;
         }
+        
+        public IList<AdminProject> GetAllAdminProjects(string userId)
+        {
+            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
+            return adminProjects;
+        }
 
         public IdentityUser GetUser(string id)
         {
@@ -119,11 +124,16 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private void DeleteAdminProject(int adminProjectId)
+        public void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);
             _unitOfWorkManager.Save();
+        }
+        
+        public AdminProject GetAdminProject(int adminProjectId)
+        {
+            return _projectsRepository.GetAdminProject(adminProjectId);
         }
 
         #endregion
