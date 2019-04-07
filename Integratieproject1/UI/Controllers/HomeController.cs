@@ -9,15 +9,15 @@ namespace Integratieproject1.UI.Controllers
 {
     public class HomeController : Controller
     {
-        private ProjectsManager projectsManager;
+        private readonly ProjectsManager _projectsManager;
 
         public HomeController()
         {
-            projectsManager = new ProjectsManager();
+            _projectsManager = new ProjectsManager();
         }
         public IActionResult Index()
         {
-            Platform platform = projectsManager.GetPlatform(1);
+            Platform platform = _projectsManager.GetPlatform(1);
             return View("/UI/Views/Home/Index.cshtml", platform);
         }
 

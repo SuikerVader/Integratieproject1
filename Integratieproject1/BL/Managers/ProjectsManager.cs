@@ -14,35 +14,35 @@ namespace Integratieproject1.BL.Managers
 {
     public class ProjectsManager : IProjectsManager
     {
-        private ProjectsRepository projectsRepository;
-        private UnitOfWorkManager unitOfWorkManager;
+        private readonly ProjectsRepository _projectsRepository;
+        private readonly UnitOfWorkManager _unitOfWorkManager;
 
         public ProjectsManager()
         {
-            unitOfWorkManager = new UnitOfWorkManager();
-            projectsRepository = new ProjectsRepository(unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = new UnitOfWorkManager();
+            _projectsRepository = new ProjectsRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         public ProjectsManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
-                throw new ArgumentNullException("unitOfWorkManager");
+                throw new ArgumentNullException(nameof(unitOfWorkManager));
 
-            this.unitOfWorkManager = unitOfWorkManager;
-            this.projectsRepository = new ProjectsRepository(unitOfWorkManager.UnitOfWork);
+            this._unitOfWorkManager = unitOfWorkManager;
+            this._projectsRepository = new ProjectsRepository(unitOfWorkManager.UnitOfWork);
         }
 
         #region Platform
 
         public Platform GetPlatform(int platformId)
         {
-            return projectsRepository.GetPlatform(platformId);
+            return _projectsRepository.GetPlatform(platformId);
         }
 
         public void CreatePlatform(Platform platform)
         {
-            projectsRepository.CreatePlatform(platform);
-            unitOfWorkManager.Save();
+            _projectsRepository.CreatePlatform(platform);
+            _unitOfWorkManager.Save();
         }
 
         #endregion
@@ -51,12 +51,12 @@ namespace Integratieproject1.BL.Managers
 
         public Project GetProject(int projectId)
         {
-            return projectsRepository.GetProject(projectId);
+            return _projectsRepository.GetProject(projectId);
         }
 
         public IList<Project> GetAdminProjects(string userId)
         {
-            List<AdminProject> adminProjects = projectsRepository.GetAdminProjects(userId).ToList();
+            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
             List<Project> projects = new List<Project>();
             foreach (AdminProject adminProject in adminProjects)
             {
@@ -68,14 +68,14 @@ namespace Integratieproject1.BL.Managers
 
         public IdentityUser GetUser(string id)
         {
-            UsersManager userManager = new UsersManager(unitOfWorkManager);
+            UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
         public void CreateProject(Project project, string userId)
         {
             IdentityUser identityUser = GetUser(userId);
             project.Platform = GetPlatform(1);
-            DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
             AdminProject adminProject = new AdminProject
@@ -83,22 +83,22 @@ namespace Integratieproject1.BL.Managers
                 Project = project,
                 Admin = identityUser
             };
-            projectsRepository.CreateAdminProject(adminProject);
-            unitOfWorkManager.Save();
+            _projectsRepository.CreateAdminProject(adminProject);
+            _unitOfWorkManager.Save();
         }
 
         public void EditProject(Project project, int projectId)
         {
-            DataTypeManager dataTypeManager = new DataTypeManager(unitOfWorkManager);
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             project.ProjectId = projectId;
-            projectsRepository.EditProject(project);
-            unitOfWorkManager.Save();
+            _projectsRepository.EditProject(project);
+            _unitOfWorkManager.Save();
         }
 
         public void DeleteProject(int projectId)
         {
-            Project project = projectsRepository.GetProject(projectId);
+            Project project = _projectsRepository.GetProject(projectId);
             if (project.Phases != null)
             {
                 foreach (Phase phase in project.Phases.ToList())
@@ -115,15 +115,15 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            projectsRepository.RemoveProject(project);
-            unitOfWorkManager.Save();
+            _projectsRepository.RemoveProject(project);
+            _unitOfWorkManager.Save();
         }
 
-        public void DeleteAdminProject(int adminProjectId)
+        private void DeleteAdminProject(int adminProjectId)
         {
-            AdminProject adminProject = projectsRepository.GetAdminProject(adminProjectId);
-            projectsRepository.RemoveAdminProject(adminProject);
-            unitOfWorkManager.Save();
+            AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
+            _projectsRepository.RemoveAdminProject(adminProject);
+            _unitOfWorkManager.Save();
         }
 
         #endregion
@@ -132,18 +132,18 @@ namespace Integratieproject1.BL.Managers
 
         public Phase GetPhase(int phaseId)
         {
-            return projectsRepository.GetPhase(phaseId);
+            return _projectsRepository.GetPhase(phaseId);
         }
 
         public IList<Phase> GetPhases(int projectId)
         {
-            return projectsRepository.GetPhases(projectId).ToList();
+            return _projectsRepository.GetPhases(projectId).ToList();
         }
 
         public Phase CreatePhase(Phase phase, int phaseNr, int projectId)
         {
             phase.PhaseNr = phaseNr;
-            phase.Project = this.GetProject(projectId);
+            phase.Project = GetProject(projectId);
             Project project = GetProject(projectId);
             
                 foreach (var previousPhase in project.Phases)
@@ -158,8 +158,8 @@ namespace Integratieproject1.BL.Managers
                         EditPhase(previousPhase, previousPhase.PhaseId);
                     }
                 }
-            Phase createdPhase = projectsRepository.CreatePhase(phase);
-            unitOfWorkManager.Save();
+            Phase createdPhase = _projectsRepository.CreatePhase(phase);
+            _unitOfWorkManager.Save();
             return createdPhase;
         }
 
@@ -220,9 +220,9 @@ namespace Integratieproject1.BL.Managers
 
         public void DeletePhase(int phaseId)
         {
-            IdeationsManager ideationsManager = new IdeationsManager(unitOfWorkManager);
-            SurveysManager surveysManager = new SurveysManager(unitOfWorkManager);
-            Phase phase = projectsRepository.GetPhase(phaseId);
+            IdeationsManager ideationsManager = new IdeationsManager(_unitOfWorkManager);
+            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
+            Phase phase = _projectsRepository.GetPhase(phaseId);
             if (phase.Ideations != null)
             {
                 foreach (var ideation in phase.Ideations.ToList())
@@ -239,8 +239,8 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            projectsRepository.RemovePhase(phase);
-            unitOfWorkManager.Save();
+            _projectsRepository.RemovePhase(phase);
+            _unitOfWorkManager.Save();
         }
 
         public Phase EditPhase(Phase phase, int phaseId)
@@ -256,18 +256,18 @@ namespace Integratieproject1.BL.Managers
                 if (listPhase.PhaseNr == originalPhase.PhaseNr + 1)
                 {
                     listPhase.StartDate = originalPhase.EndDate;
-                    projectsRepository.EditPhase(listPhase);
+                    _projectsRepository.EditPhase(listPhase);
                 }
 
                 if (listPhase.PhaseNr == originalPhase.PhaseNr -1)
                 {
                     listPhase.EndDate = originalPhase.StartDate;
-                    projectsRepository.EditPhase(listPhase);
+                    _projectsRepository.EditPhase(listPhase);
                 }
             }
 
-            Phase editedPhase = projectsRepository.EditPhase(originalPhase);
-            unitOfWorkManager.Save();
+            Phase editedPhase = _projectsRepository.EditPhase(originalPhase);
+            _unitOfWorkManager.Save();
             return editedPhase;
         }
 

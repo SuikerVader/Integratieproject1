@@ -7,7 +7,7 @@
 <form asp-controller="Project" 
       asp-action="PostIdea" 
       asp-route-ideationId="@ViewBag.IdeationId" 
-      asp-route-image="@ViewData["image"]"
+      asp-route-formFiles="@ViewData["formFiles"]"
       enctype="multipart/form-data"
       method="post">
     
@@ -18,12 +18,13 @@
     <input class="form-control" asp-for="Text" type="text" name="text" id="description"/>
 
     <div class="input-group">
-        <label for="uploadedImage" class="control-label">Images</label>
+        <label for="uploadedImages" class="control-label">Images</label>
         <input class="form-control"
-               asp-for="Image"
-               name="image"
+               @* asp-for="Images" *@
+               name="formFiles"
                type="file"
-               id="uploadedImage"
+               multiple
+               id="uploadedImages"
                accept="image/x-png,image/gif,image/jpeg"
                onchange="PreviewImage()">
 

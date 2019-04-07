@@ -6,6 +6,6 @@ namespace Integratieproject1.BL.Interfaces
     {
         Ideation GetIdeation(int ideationId);
         void CreateIdeation(Ideation ideation, int phaseId);
-        void CreateIdea(Idea idea);
+        Idea CreateIdea(Idea idea);
     }
 }
