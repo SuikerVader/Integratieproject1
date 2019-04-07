@@ -48,6 +48,7 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult DeleteAdminRole(string adminId)
         {
             usersManager.DeleteRole(adminId,"ADMIN");
+            usersManager.GiveRole(adminId,"USER");
             IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }

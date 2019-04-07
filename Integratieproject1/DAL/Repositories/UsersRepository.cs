@@ -14,13 +14,12 @@ namespace Integratieproject1.DAL.Repositories
     public class UsersRepository : IUsersRepository
     {
         private UserStore<IdentityUser> _userStore;
-        private CityOfIdeasDbContext ctx = null;
+        private readonly CityOfIdeasDbContext ctx = null;
         public UsersRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
-                
-            ctx = unitOfWork.ctx;
+                throw new ArgumentNullException(nameof(unitOfWork));
+            ctx = unitOfWork.Ctx;
             _userStore = new UserStore<IdentityUser>(ctx);
         }
 

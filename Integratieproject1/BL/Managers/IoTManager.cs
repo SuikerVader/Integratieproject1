@@ -10,28 +10,30 @@ namespace Integratieproject1.BL.Managers
 {
     public class IoTManager : IIoTProjectsManager
     {
-        private IoTRepository ioTRepository;
-        private UnitOfWorkManager unitOfWorkManager;
-        private SurveysManager surveysManager;
+        private readonly IoTRepository _ioTRepository;
+        private readonly UnitOfWorkManager _unitOfWorkManager;
+        private readonly SurveysManager _surveysManager;
 
-        public IoTManager()
+        public IoTManager(SurveysManager surveysManager)
         {
-            unitOfWorkManager = new UnitOfWorkManager();
-            ioTRepository = new IoTRepository(unitOfWorkManager.UnitOfWork);
+            _surveysManager = surveysManager;
+            _unitOfWorkManager = new UnitOfWorkManager();
+            _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
-        public IoTManager( UnitOfWorkManager unitOfWorkManager)
+        public IoTManager(UnitOfWorkManager unitOfWorkManager, SurveysManager surveysManager)
         {
             if (unitOfWorkManager == null)
-                throw new ArgumentNullException("unitOfWorkManager");
+                throw new ArgumentNullException(nameof(unitOfWorkManager));
 
-            this.unitOfWorkManager = unitOfWorkManager;
-            ioTRepository = new IoTRepository(this.unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = unitOfWorkManager;
+            _surveysManager = surveysManager;
+            _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         public void DeleteIoTSetup(IoTSetup ioTSetup)
         {
-            ioTRepository.RemoveIoTSetup(ioTSetup);
-            unitOfWorkManager.Save();
+            _ioTRepository.RemoveIoTSetup(ioTSetup);
+            _unitOfWorkManager.Save();
         }
         
         public void CreateIoT(Position position, Idea idea, Question question)
@@ -40,21 +42,21 @@ namespace Integratieproject1.BL.Managers
             {
                 Idea = idea, Position = position, Question = question, Code = GenerateIoTUrl()
             };
-            ioTRepository.CreateIoTSetup(setup);
-            unitOfWorkManager.Save();
+            _ioTRepository.CreateIoTSetup(setup);
+            _unitOfWorkManager.Save();
         }
         
         public string GenerateIoTUrl()
         {
             //TODO: creeer link die doorverwijst naar sign-up page.
-            return "randomsignupurl" + DateTime.Now;
+            return "randomSignUpUrl" + DateTime.Now;
         }
 
         //in case of an IoTSetup that offers multiple options (buttons)
         public void RegisterComplexVote(int id, int supportLv)
         {
-            IoTSetup setup = ioTRepository.GetIoTSetupByIdea(id);
-            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+            IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
+            _surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
         }
     }
 }

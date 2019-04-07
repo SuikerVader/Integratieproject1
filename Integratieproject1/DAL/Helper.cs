@@ -5,7 +5,7 @@ namespace Integratieproject1.DAL
 {
     public static class Helper
     {
-        internal static void PrintDbContextTrackedEntitiesStates(DbContext context, string title = "CURRENT ENITIES STATES")
+        internal static void PrintDbContextTrackedEntitiesStates(DbContext context, string title = "CURRENT ENTITIES STATES")
         {
             System.Diagnostics.Debug.WriteLine("=== BEGIN: "+title+" ===");
             foreach (var entry in context.ChangeTracker.Entries().ToList())
