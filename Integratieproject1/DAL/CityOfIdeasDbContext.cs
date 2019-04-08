@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.DAL
 {
-    public class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
+    public sealed class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
     {
         public CityOfIdeasDbContext()
         {
@@ -81,7 +81,7 @@ namespace Integratieproject1.DAL
             Helper.PrintDbContextTrackedEntitiesStates(this,
                 "STATES BEFORE correction of EntityState's ('Added' to 'Unchanged' if has (existing) PK!");
 
-            foreach (EntityEntry e in this.ChangeTracker.Entries().ToList())
+            foreach (EntityEntry e in ChangeTracker.Entries().ToList())
             {
                 if (e.State == EntityState.Added && e.IsKeySet)
                 {
