@@ -6,20 +6,16 @@ namespace Integratieproject1.Domain.Ideations
 {
     public class Vote
     {
-        [Key]
-        public int VoteId { get; set; }
+        [Key] public int VoteId { get; set; }
         public bool Confirmed { get; set; }
-    [Required]
-        public VoteType VoteType { get; set; }
-
+        [Required] public VoteType VoteType { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        [Required] public Idea Idea { get; set; }
+
+        /*[ForeignKey("User")]
+        public int UserFK { get; set; }
         [Required]
-        public Idea Idea { get; set; }
-    
-    /*[ForeignKey("User")]
-    public int UserFK { get; set; }
-    [Required]
-    [ForeignKey("Idea")]
-    public int IdeaFK { get; set; }*/
-  }
+        [ForeignKey("Idea")]
+        public int IdeaFK { get; set; }*/
+    }
 }
