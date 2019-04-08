@@ -14,16 +14,26 @@
         <div>
             <h3>@idea.Title</h3>
             <p>@idea.Text</p>
-            <img src="@idea.Image" alt="projectImage"/>
-            <iframe src="@idea.Video" width="560" height="315"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-            </iframe>
+            @if (idea.Images != null)
+            {
+                foreach (var image in idea.Images)
+                {
+                    <img src="@image.ImagePath" alt="@image.ImageName"/>
+                }
+            }
+            @if (idea.Video != null)
+            {
+                <iframe src="@idea.Video" width="560" height="315"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                </iframe>
+            }
             <a asp-area="" asp-controller="Project"
-               asp-action="Idea" asp-route-ideaId="@idea.IdeaId"><button>view idea</button>
+               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                <button>view idea</button>
             </a>
         </div>
     }
-    
+
     <button onclick="showHideCreateIdea()">post idea</button>
     <div id="idea" style="display: none">
         @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())

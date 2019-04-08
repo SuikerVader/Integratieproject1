@@ -6,9 +6,9 @@ using Integratieproject1.BL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,13 +16,17 @@ namespace Integratieproject1.BL.Managers
 {
     public class IdeationsManager : IIdeationsManager
     {
-        private IdeationsRepository ideationsRepository;
-        private UnitOfWorkManager unitOfWorkManager;
+        private readonly IdeationsRepository _ideationsRepository;
+        private readonly UnitOfWorkManager _unitOfWorkManager;
+        private readonly UsersManager _usersManager;
+        private readonly DataTypeManager _dataTypeManager;
 
         public IdeationsManager()
         {
-            unitOfWorkManager = new UnitOfWorkManager();
-            ideationsRepository = new IdeationsRepository(unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = new UnitOfWorkManager();
+            _ideationsRepository = new IdeationsRepository(_unitOfWorkManager.UnitOfWork);
+            _usersManager = new UsersManager(_unitOfWorkManager);
+            _dataTypeManager = new DataTypeManager(_unitOfWorkManager);
         }
 
         public IdeationsManager(UnitOfWorkManager unitOfWorkManager)
@@ -30,37 +34,37 @@ namespace Integratieproject1.BL.Managers
             if (unitOfWorkManager == null)
                 throw new ArgumentNullException(nameof(unitOfWorkManager));
 
-            this.unitOfWorkManager = unitOfWorkManager;
-            ideationsRepository = new IdeationsRepository(this.unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = unitOfWorkManager;
+            _ideationsRepository = new IdeationsRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         #region Ideation
 
         public Ideation GetIdeation(int ideationId)
         {
-            return ideationsRepository.GetIdeation(ideationId);
+            return _ideationsRepository.GetIdeation(ideationId);
         }
 
         public IList<Ideation> GetIdeations(int phaseId)
         {
-            return ideationsRepository.GetIdeations(phaseId).ToList();
+            return _ideationsRepository.GetIdeations(phaseId).ToList();
         }
 
         public void CreateIdeation(Ideation ideation, int phaseId)
         {
-            ProjectsManager projectsManager = new ProjectsManager(unitOfWorkManager);
+            ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
             Phase phase = projectsManager.GetPhase(phaseId);
             ideation.Phase = phase;
-            ideationsRepository.CreateIdeation(ideation);
-            unitOfWorkManager.Save();
+            _ideationsRepository.CreateIdeation(ideation);
+            _unitOfWorkManager.Save();
         }
 
         public Ideation EditIdeation(Ideation ideation, int ideationId)
         {
             ideation.IdeationId = ideationId;
             //ideation.Phase = GetIdeation(ideationId).Phase;
-            ideationsRepository.EditIdeation(ideation);
-            unitOfWorkManager.Save();
+            _ideationsRepository.EditIdeation(ideation);
+            _unitOfWorkManager.Save();
             return ideation;
         }
 
@@ -83,44 +87,49 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            ideationsRepository.RemoveIdeation(ideation);
-            unitOfWorkManager.Save();
+            _ideationsRepository.RemoveIdeation(ideation);
+            _unitOfWorkManager.Save();
         }
 
         #endregion
 
         #region Idea
 
-        public void PostIdea(ArrayList parameters, string imagePath, int ideationId, string userId)
+        public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
         {
-            UsersManager usersManager = new UsersManager(unitOfWorkManager);
-            
-            Idea idea = new Idea();
-            idea.Ideation = GetIdeation(ideationId); 
-            idea.IdentityUser = usersManager.GetUser(userId);
-            idea.Title = parameters[1].ToString();
-            idea.Text = parameters[2].ToString();
-            idea.Image = imagePath;
-            idea.Video = parameters[3].ToString().Replace("watch?v=", "embed/");
-            
-            ideationsRepository.CreateIdea(idea);
-            unitOfWorkManager.Save();
+            Idea idea = new Idea
+            {
+                Ideation = GetIdeation(ideationId),
+                IdentityUser = _usersManager.GetUser(userId),
+                Title = parameters[0].ToString(),
+                Text = parameters[1].ToString(),
+                Video = parameters[2].ToString().Replace("watch?v=", "embed/")
+            };
+
+            return CreateIdea(idea);
         }
         
-        public void CreateIdea(Idea idea)
+        public Idea CreateIdea(Idea idea)
         {
-            ideationsRepository.CreateIdea(idea);
-            unitOfWorkManager.Save();
+            Idea created = _ideationsRepository.CreateIdea(idea);
+            _unitOfWorkManager.Save();
+            return created;
+        }
+
+        public void ChangeIdea(Idea idea)
+        {
+            _ideationsRepository.UpdateIdea(idea);
+            _unitOfWorkManager.Save();
         }
 
         public Idea GetIdea(int ideaId)
         {
-            return ideationsRepository.GetIdea(ideaId);
+            return _ideationsRepository.GetIdea(ideaId);
         }
 
-        public void DeleteIdea(int ideaId)
+        private void DeleteIdea(int ideaId)
         {
-            IoTManager ioTManager = new IoTManager(unitOfWorkManager);
+            IoTManager ioTManager = new IoTManager(_unitOfWorkManager, new SurveysManager());
             Idea idea = GetIdea(ideaId);
             if (idea.IoTSetups != null)
             {
@@ -146,24 +155,24 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            ideationsRepository.RemoveIdea(idea);
-            unitOfWorkManager.Save();
+            _ideationsRepository.RemoveIdea(idea);
+            _unitOfWorkManager.Save();
         }
 
         #endregion
 
         #region Like
 
-        public void DeleteLike(int likeId)
+        private void DeleteLike(int likeId)
         {
-            Like like = Getlike(likeId);
-            ideationsRepository.RemoveLike(like);
-            unitOfWorkManager.Save();
+            Like like = GetLike(likeId);
+            _ideationsRepository.RemoveLike(like);
+            _unitOfWorkManager.Save();
         }
 
-        public Like Getlike(int likeId)
+        private Like GetLike(int likeId)
         {
-            return ideationsRepository.GetLike(likeId);
+            return _ideationsRepository.GetLike(likeId);
         }
 
         #endregion
@@ -174,24 +183,31 @@ namespace Integratieproject1.BL.Managers
         {
             ProjectsManager projectsManager = new ProjectsManager();
             IdentityUser identityUser = projectsManager.GetUser(userId);
-            Reaction reaction = new Reaction();
-            reaction.Idea = GetIdea(ideaId);
-            reaction.IdentityUser = identityUser;
-            reaction.ReactionText = parameters[1].ToString();
-            ideationsRepository.CreateReaction(reaction);
-            unitOfWorkManager.Save();
+            
+            Reaction reaction = new Reaction
+            {
+                Idea = GetIdea(ideaId), IdentityUser = identityUser, ReactionText = parameters[1].ToString()
+            };
+            
+            _ideationsRepository.CreateReaction(reaction);
+            _unitOfWorkManager.Save();
         }
 
         public void LikeReaction(int reactionId, string user, string userId)
         {
             ProjectsManager projectsManager = new ProjectsManager();
             IdentityUser identityUser = projectsManager.GetUser(userId);
-            Reaction reaction = ideationsRepository.GetReaction(reactionId);
-            Like like = new Like {Reaction = reaction, IdentityUser = identityUser};
-            if (ideationsRepository.CheckLike(reaction, identityUser) == true)
+            Reaction reaction = _ideationsRepository.GetReaction(reactionId);
+            
+            Like like = new Like
             {
-                ideationsRepository.CreateLike(like);
-                unitOfWorkManager.Save();
+                Reaction = reaction, IdentityUser = identityUser
+            };
+            
+            if (_ideationsRepository.CheckLike(reaction, identityUser))
+            {
+                _ideationsRepository.CreateLike(like);
+                _unitOfWorkManager.Save();
             }
             else
             {
@@ -199,7 +215,7 @@ namespace Integratieproject1.BL.Managers
             }
         }
 
-        public void DeleteReaction(int reactionId)
+        private void DeleteReaction(int reactionId)
         {
             Reaction reaction = GetReaction(reactionId);
             if (reaction.Likes != null)
@@ -210,13 +226,13 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            ideationsRepository.RemoveReaction(reaction);
-            unitOfWorkManager.Save();
+            _ideationsRepository.RemoveReaction(reaction);
+            _unitOfWorkManager.Save();
         }
 
-        public Reaction GetReaction(int reactionId)
+        private Reaction GetReaction(int reactionId)
         {
-            return ideationsRepository.GetReaction(reactionId);
+            return _ideationsRepository.GetReaction(reactionId);
         }
 
         #endregion
@@ -231,13 +247,14 @@ namespace Integratieproject1.BL.Managers
             {
                 ProjectsManager  projectsManager = new ProjectsManager();
                 IdentityUser user = projectsManager.GetUser(userId);
-                if (ideationsRepository.CheckUserVote(user, voteType, idea) == true)
+                
+                if (_ideationsRepository.CheckUserVote(user, voteType, idea) == true)
                 {
                     vote.IdentityUser = user;
                     vote.VoteType = voteType;
                     vote.Idea = idea;
-                    ideationsRepository.CreateVote(vote);
-                    unitOfWorkManager.Save();
+                    _ideationsRepository.CreateVote(vote);
+                    _unitOfWorkManager.Save();
                 }
                 else
                 {
@@ -248,21 +265,21 @@ namespace Integratieproject1.BL.Managers
             {
                 vote.VoteType = voteType;
                 vote.Idea = idea;
-                ideationsRepository.CreateVote(vote);
-                unitOfWorkManager.Save();
+                _ideationsRepository.CreateVote(vote);
+                _unitOfWorkManager.Save();
             }
         }
 
         private void DeleteVote(int voteId)
         {
             Vote vote = GetVote(voteId);
-            ideationsRepository.RemoveVote(vote);
-            unitOfWorkManager.Save();
+            _ideationsRepository.RemoveVote(vote);
+            _unitOfWorkManager.Save();
         }
 
         private Vote GetVote(int voteId)
         {
-            return ideationsRepository.GetVote(voteId);
+            return _ideationsRepository.GetVote(voteId);
         }
 
         #endregion

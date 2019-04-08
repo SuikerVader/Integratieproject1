@@ -1,5 +1,4 @@
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.BL.Interfaces
