@@ -67,9 +67,8 @@ namespace Integratieproject1.UI.Controllers{}
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult CreateProject(int userId)
+        public IActionResult CreateProject()
         {
-            ViewData["UserId"] = userId;
             return View("/UI/Views/Admin/CreateProject.cshtml");
         }
 

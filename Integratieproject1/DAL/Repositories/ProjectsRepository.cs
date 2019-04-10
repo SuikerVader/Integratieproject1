@@ -57,6 +57,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
         }
+        
+        public IEnumerable<Project> GetAllProjects()
+        {
+            return _ctx.Projects
+                .Include(l => l.Location).ThenInclude(a => a.Address)
+                .Include(p => p.Platform)
+                .AsEnumerable();
+        }
 
         public IEnumerable<AdminProject> GetAdminProjects(string userId)
         {
