@@ -38,6 +38,40 @@ namespace Integratieproject1.UI.Controllers{}
             IdentityUser user = _usersManager.GetUser(currentUserId);
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
+        
+        public IActionResult Moderators()
+        {
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult DeleteModRole(string modId)
+        {
+            _usersManager.DeleteRole(modId,"MOD");
+            _usersManager.GiveRole(modId,"USER");
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult GiveModRole(string userId)
+        {
+            _usersManager.GiveRole(userId,"MOD");
+            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            return View("/UI/Views/Admin/Users.cshtml", users);
+        }
+        
+        public IActionResult DeleteMod(string modId)
+        {
+            _usersManager.DeleteUser(modId);
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult Users()
+        {
+            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            return View("/UI/Views/Admin/Users.cshtml", users);
+        }
 
         #region Project
 
