@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -7,7 +6,7 @@
     <title>@ViewData["Title"] - Integratieproject1</title>
 
     <script type="module" src="~/dist/site.entry.js" defer></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    @* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> *@
     <link rel="stylesheet" href="~/dist/site.css">
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
@@ -53,6 +52,7 @@
             </ul>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>
             <partial name="/UI/Views/Shared/_SharedPartial.cshtml"/>
+            <partial name="/UI/Views/Shared/_SearchPartial.cshtml"/>
         </div>
     </div>
 </nav>

@@ -1,3 +1,4 @@
+@using Integratieproject1.Domain.Datatypes
 @using Integratieproject1.Domain.Ideations
 @model Integratieproject1.Domain.Ideations.Ideation
 
@@ -16,11 +17,13 @@
             <p>@idea.Text</p>
             @if (idea.Images != null)
             {
-                foreach (var image in idea.Images)
+                <p>@idea.Images.Count images</p>
+                                      
+                foreach (Image image in idea.Images)
                 {
                     <img src="@image.ImagePath" alt="@image.ImageName"/>
                 }
-            }
+            } else {<p>No images</p>}
             @if (idea.Video != null)
             {
                 <iframe src="@idea.Video" width="560" height="315"

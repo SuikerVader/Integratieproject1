@@ -13,7 +13,7 @@ namespace Integratieproject1.DAL
 
         public UnitOfWork(CityOfIdeasDbContext ctx)
         {
-            this.Ctx = ctx;
+            Ctx = ctx;
         }
         
         internal CityOfIdeasDbContext Ctx { get; }

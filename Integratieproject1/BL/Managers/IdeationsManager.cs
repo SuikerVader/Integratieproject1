@@ -9,6 +9,7 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,11 @@ namespace Integratieproject1.BL.Managers
         public IList<Ideation> GetIdeations(int phaseId)
         {
             return _ideationsRepository.GetIdeations(phaseId).ToList();
+        }
+
+        public IList<Ideation> GetAllIdeations(int platformId)
+        {
+            return _ideationsRepository.GetAllIdeations(platformId).ToList();
         }
 
         public void CreateIdeation(Ideation ideation, int phaseId)
@@ -94,6 +100,11 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
         #region Idea
+
+        public IList<Idea> GetAllIdeas(int platformId)
+        {
+            return _ideationsRepository.GetAllIdeas(platformId).ToList();
+        }
 
         public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
         {
@@ -178,6 +189,11 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
         #region Reaction
+        
+        public IList<Reaction> GetAllReactions(int platformId)
+        {
+            return _ideationsRepository.GetAllReactions(platformId).ToList();
+        }
 
         public void PostReaction(ArrayList parameters, int ideaId, string userId)
         {

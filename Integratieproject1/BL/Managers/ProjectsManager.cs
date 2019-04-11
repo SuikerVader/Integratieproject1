@@ -6,6 +6,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -53,6 +54,11 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetProject(projectId);
         }
 
+        public IList<Project> GetProjects(int platformId)
+        {
+            return _projectsRepository.GetProjects(platformId).ToList();
+        }
+
         public IList<Project> GetAdminProjects(string userId)
         {
             List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
@@ -64,28 +70,16 @@ namespace Integratieproject1.BL.Managers
 
             return projects;
         }
-        
-        public IList<AdminProject> GetAllAdminProjects(string userId)
-        {
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
-            return adminProjects;
-        }
-        
-        public IList<Project> GetAllProjects()
-        {
-            List<Project> projects = _projectsRepository.GetAllProjects().ToList();
-            return projects;
-        }
 
         public IdentityUser GetUser(string id)
         {
             UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
-        public void CreateProject(Project project, string userId, int platformId = 1)
+        public void CreateProject(Project project, string userId)
         {
             IdentityUser identityUser = GetUser(userId);
-            project.Platform = GetPlatform(platformId);
+            project.Platform = GetPlatform(1);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
@@ -114,7 +108,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (Phase phase in project.Phases.ToList())
                 {
-                    this.DeletePhase(phase.PhaseId);
+                    DeletePhase(phase.PhaseId);
                 }
             }
 
@@ -122,7 +116,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (AdminProject adminProject in project.AdminProjects.ToList())
                 {
-                    this.DeleteAdminProject(adminProject.AdminProjectId);
+                    DeleteAdminProject(adminProject.AdminProjectId);
                 }
             }
 
@@ -130,16 +124,11 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void DeleteAdminProject(int adminProjectId)
+        private void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);
             _unitOfWorkManager.Save();
-        }
-        
-        public AdminProject GetAdminProject(int adminProjectId)
-        {
-            return _projectsRepository.GetAdminProject(adminProjectId);
         }
 
         #endregion
@@ -154,6 +143,11 @@ namespace Integratieproject1.BL.Managers
         public IList<Phase> GetPhases(int projectId)
         {
             return _projectsRepository.GetPhases(projectId).ToList();
+        }
+
+        public IList<Phase> GetAllPhases(int platformId)
+        {
+            return _projectsRepository.GetAllPhases(platformId).ToList();
         }
 
         public Phase CreatePhase(Phase phase, int phaseNr, int projectId)

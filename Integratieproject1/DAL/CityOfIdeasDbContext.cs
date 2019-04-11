@@ -9,6 +9,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -19,7 +20,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.DAL
 {
-    public class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
+    public sealed class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
     {
         public CityOfIdeasDbContext()
         {
@@ -44,14 +45,18 @@ namespace Integratieproject1.DAL
 
         public DbSet<IoTSetup> IoTSetups { get; set; }
 
-      public DbSet<AdminProject> AdminProjects { get; set; }
-      public DbSet<Location> Locations { get; set; }
-      public DbSet<Address> Addresses { get; set; }
-      public DbSet<Position> Positions { get; set; }
-      public DbSet<Image> Images { get; set; }
-      
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+        public DbSet<IdentityUser> Users { get; set; }
+        public DbSet<Person> Persons { get; set; }
+        public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<LoggedInUser> LoggedInUsers { get; set; }
+        public DbSet<AdminProject> AdminProjects { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Image> Images { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source=CityOfIdeas.db");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(
@@ -76,7 +81,7 @@ namespace Integratieproject1.DAL
             Helper.PrintDbContextTrackedEntitiesStates(this,
                 "STATES BEFORE correction of EntityState's ('Added' to 'Unchanged' if has (existing) PK!");
 
-            foreach (EntityEntry e in this.ChangeTracker.Entries().ToList())
+            foreach (EntityEntry e in ChangeTracker.Entries().ToList())
             {
                 if (e.State == EntityState.Added && e.IsKeySet)
                 {
