@@ -7,25 +7,19 @@ namespace Integratieproject1.Domain.Projects
 {
     public class Project : IValidatableObject
     {
-        [Key]
-        public int ProjectId { get; set; }
-    [Required]
-        public string ProjectName { get; set; }
+        [Key] public int ProjectId { get; set; }
+        [Required] public string ProjectName { get; set; }
         public string Logo { get; set; }
-    [Required]
-    
-        public DateTime StartDate { get; set; }
-    [Required]
-    public DateTime EndDate { get; set; }
+        [Required] public DateTime StartDate { get; set; }
+        [Required] public DateTime EndDate { get; set; }
         public string Objective { get; set; }
         public string Description { get; set; }
-    [Required]
-        public Location Location { get; set; }
+        [Required] public Location Location { get; set; }
         public string Status { get; set; }
-     
+
         //[Required] 
         public Platform Platform { get; set; }
-        
+
         public ICollection<Phase> Phases { get; set; }
         public ICollection<AdminProject> AdminProjects { get; set; }
 
@@ -34,12 +28,12 @@ namespace Integratieproject1.Domain.Projects
             List<ValidationResult> errors = new List<ValidationResult>();
             if (EndDate <= StartDate || StartDate < DateTime.Now)
             {
-                errors.Add(new ValidationResult("EndDate cant be before startdate and the startdate cant be in the past", new  string[] {"EndDate","StartDate"}));
+                errors.Add(new ValidationResult(
+                    "EndDate cant be before startdate and the startdate cant be in the past",
+                    new string[] {"EndDate", "StartDate"}));
             }
 
             return errors;
         }
     }
-
-    
 }

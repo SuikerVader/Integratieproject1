@@ -53,6 +53,11 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetProject(projectId);
         }
 
+        public IList<Project> GetProjects(int platformId)
+        {
+            return _projectsRepository.GetProjects(platformId).ToList();
+        }
+
         public IList<Project> GetAdminProjects(string userId)
         {
             List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
@@ -114,7 +119,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (Phase phase in project.Phases.ToList())
                 {
-                    this.DeletePhase(phase.PhaseId);
+                    DeletePhase(phase.PhaseId);
                 }
             }
 
@@ -122,7 +127,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (AdminProject adminProject in project.AdminProjects.ToList())
                 {
-                    this.DeleteAdminProject(adminProject.AdminProjectId);
+                    DeleteAdminProject(adminProject.AdminProjectId);
                 }
             }
 
@@ -130,7 +135,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void DeleteAdminProject(int adminProjectId)
+        private void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);
@@ -154,6 +159,11 @@ namespace Integratieproject1.BL.Managers
         public IList<Phase> GetPhases(int projectId)
         {
             return _projectsRepository.GetPhases(projectId).ToList();
+        }
+
+        public IList<Phase> GetAllPhases(int platformId)
+        {
+            return _projectsRepository.GetAllPhases(platformId).ToList();
         }
 
         public Phase CreatePhase(Phase phase, int phaseNr, int projectId)

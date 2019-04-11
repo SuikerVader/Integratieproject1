@@ -93,7 +93,7 @@ namespace Integratieproject1.BL.Managers
                 ImagePath = path,
                 Idea = ideaToAddImageTo
             };
-            
+          
             // Add image to idea
             var images = GetImages(ideaId);
             ideaToAddImageTo.Images = images != null ? images.ToList() : new List<Image>();

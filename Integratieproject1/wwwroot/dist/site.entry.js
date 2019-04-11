@@ -4553,6 +4553,17 @@
 
 /***/ }),
 
+/***/ "./node_modules/font-awesome/less/font-awesome.less":
+/*!**********************************************************!*\
+  !*** ./node_modules/font-awesome/less/font-awesome.less ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+throw new Error("Module parse failed: Unexpected character '@' (6:0)\nYou may need an appropriate loader to handle this file type.\n|  */\n| \n> @import \"variables.less\";\n| @import \"mixins.less\";\n| @import \"path.less\";");
+
+/***/ }),
+
 /***/ "./node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js":
 /*!****************************************************************************************!*\
   !*** ./node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js ***!
@@ -19673,9 +19684,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery_validation_unobtrusive__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery_validation_unobtrusive__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap-social */ "./node_modules/bootstrap-social/bootstrap-social.css");
-/* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap_social__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var font_awesome_less_font_awesome_less__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! font-awesome/less/font-awesome.less */ "./node_modules/font-awesome/less/font-awesome.less");
+/* harmony import */ var font_awesome_less_font_awesome_less__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(font_awesome_less_font_awesome_less__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bootstrap-social */ "./node_modules/bootstrap-social/bootstrap-social.css");
+/* harmony import */ var bootstrap_social__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(bootstrap_social__WEBPACK_IMPORTED_MODULE_6__);
 ﻿// JS Dependencies: Bootstrap & JQuery
+
 
 
 // Using the next two lines is like including partial view _ValidationScriptsPartial.cshtml
@@ -19683,6 +19697,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // CSS Dependencies: Bootstrap
+
+
 
 
 // Custom JS imports

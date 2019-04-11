@@ -386,5 +386,5 @@ namespace Integratieproject1.DAL
             await userManager.AddToRoleAsync(organisationTest, "Organisation");
             await userManager.AddToRoleAsync(userTest, "User");
         }
-  }
+    }
 }
