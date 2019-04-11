@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +55,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
+                .AsEnumerable();
+        }
+        
+        public IEnumerable<Project> GetAllProjects()
+        {
+            return _ctx.Projects
+                .Include(l => l.Location).ThenInclude(a => a.Address)
+                .Include(p => p.Platform)
                 .AsEnumerable();
         }
 

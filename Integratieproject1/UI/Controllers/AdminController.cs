@@ -9,7 +9,6 @@ using Integratieproject1.Domain;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,6 @@ namespace Integratieproject1.UI.Controllers{}
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly UsersManager _usersManager;
-        private readonly string _currentUserId;
 
         public AdminController()
         {
@@ -31,20 +29,57 @@ namespace Integratieproject1.UI.Controllers{}
             _usersManager = new UsersManager();
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
-            ClaimsPrincipal currentUser = User;
-            _currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 
-        public IActionResult Admin(IdentityUser user)
+        public IActionResult Admin()
         {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IdentityUser user = _usersManager.GetUser(currentUserId);
             return View("/UI/Views/Admin/Admin.cshtml", user);
+        }
+        
+        public IActionResult Moderators()
+        {
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult DeleteModRole(string modId)
+        {
+            _usersManager.DeleteRole(modId,"MOD");
+            _usersManager.GiveRole(modId,"USER");
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult GiveModRole(string userId)
+        {
+            _usersManager.GiveRole(userId,"MOD");
+            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            return View("/UI/Views/Admin/Users.cshtml", users);
+        }
+        
+        public IActionResult DeleteMod(string modId)
+        {
+            _usersManager.DeleteUser(modId);
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
+        
+        public IActionResult Users()
+        {
+            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            return View("/UI/Views/Admin/Users.cshtml", users);
         }
 
         #region Project
 
         public IActionResult Projects()
         {
-            IList<Project> projects = _projectsManager.GetAdminProjects(_currentUserId);
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
             return View("/UI/Views/Admin/Projects.cshtml", projects);
         }
 
@@ -66,9 +101,8 @@ namespace Integratieproject1.UI.Controllers{}
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult CreateProject(int userId)
+        public IActionResult CreateProject()
         {
-            ViewData["UserId"] = userId;
             return View("/UI/Views/Admin/CreateProject.cshtml");
         }
 
@@ -77,7 +111,9 @@ namespace Integratieproject1.UI.Controllers{}
         {
             if (ModelState.IsValid)
             {
-                _projectsManager.CreateProject(project, _currentUserId);
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                _projectsManager.CreateProject(project, currentUserId);
                 return RedirectToAction("Index", "Home");
             }
 

@@ -43,6 +43,12 @@
                         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
                     </li>
                 }
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">SuperAdmin</a>
+                    </li>
+                }
             </ul>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>
             <partial name="/UI/Views/Shared/_SharedPartial.cshtml"/>

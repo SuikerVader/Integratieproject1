@@ -93,17 +93,11 @@ namespace Integratieproject1.BL.Managers
                 ImagePath = path,
                 Idea = ideaToAddImageTo
             };
-            
-            Console.WriteLine("Image " + "\"" + image.ImageName + 
-                              " - " + image.ImagePath + 
-                              " (" + image.Idea.IdeaId + ")\" created");
-            
+          
             // Add image to idea
             var images = GetImages(ideaId);
             ideaToAddImageTo.Images = images != null ? images.ToList() : new List<Image>();
             ideaToAddImageTo.Images.Add(image);
-            
-//            Console.WriteLine(ideaToAddImageTo.Images.Count + " images voor idea " + ideaToAddImageTo.IdeaId);
                         
             // Save in DB
             _dataTypeRepository.CreateImage(image);

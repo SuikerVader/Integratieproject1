@@ -6,7 +6,6 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -70,16 +69,28 @@ namespace Integratieproject1.BL.Managers
 
             return projects;
         }
+        
+        public IList<AdminProject> GetAllAdminProjects(string userId)
+        {
+            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
+            return adminProjects;
+        }
+        
+        public IList<Project> GetAllProjects()
+        {
+            List<Project> projects = _projectsRepository.GetAllProjects().ToList();
+            return projects;
+        }
 
         public IdentityUser GetUser(string id)
         {
             UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
-        public void CreateProject(Project project, string userId)
+        public void CreateProject(Project project, string userId, int platformId = 1)
         {
             IdentityUser identityUser = GetUser(userId);
-            project.Platform = GetPlatform(1);
+            project.Platform = GetPlatform(platformId);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
@@ -129,6 +140,11 @@ namespace Integratieproject1.BL.Managers
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);
             _unitOfWorkManager.Save();
+        }
+        
+        public AdminProject GetAdminProject(int adminProjectId)
+        {
+            return _projectsRepository.GetAdminProject(adminProjectId);
         }
 
         #endregion

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Integratieproject1.Domain.Datatypes;
-using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.Domain.Projects
 {

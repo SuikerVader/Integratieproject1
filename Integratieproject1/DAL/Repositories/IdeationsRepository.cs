@@ -4,7 +4,6 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,15 +99,8 @@ namespace Integratieproject1.DAL.Repositories
 
         public void UpdateIdea(Idea idea)
         {
-//            _ctx.Ideas.Update(idea);
-            _ctx.Ideas.Attach(idea);
-            _ctx.Entry(idea).Collection(nameof(idea.Images)).IsModified = true;
-//            _ctx.Entry(idea).State = EntityState.Modified;
-
-            Console.WriteLine("State van idea (" + idea.IdeaId + "): " + _ctx.Entry(idea).State);
-            Console.WriteLine(idea.Images.Count + " images voor idea " + idea.IdeaId);
-            
-            _ctx.SaveChanges();            
+            _ctx.Entry(idea).State = EntityState.Modified;
+            _ctx.SaveChanges();
         }
 
         public void RemoveIdea(Idea idea)

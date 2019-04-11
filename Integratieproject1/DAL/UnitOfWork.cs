@@ -22,6 +22,5 @@ namespace Integratieproject1.DAL
         {
             Ctx.CommitChanges();
         }
-
     }
 }

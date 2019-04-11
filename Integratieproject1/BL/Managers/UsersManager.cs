@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.BL.Managers
@@ -32,42 +32,34 @@ namespace Integratieproject1.BL.Managers
         {
             return _usersRepository.GetUser(userId);
         }
-
-        /*public LoggedInUser GetLoggedInUser(string userId)
+        
+        public void DeleteUser(string userId)
         {
-            IdentityUser user = usersRepository.GetUser(userId);
-            try
-            {
-                LoggedInUser loggedInUser = (LoggedInUser) user;
-                return loggedInUser;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("not a loggedInUser exception: " + e);
-                throw;
-            }
-        }*/
+            IdentityUser identityUser = GetUser(userId);
+            _usersRepository.DeleteUser(identityUser);
+        }
 
-        /*public IList<LoggedInUser> GetLoggedInUsers()
+        public void DeleteRole(string userId, string role)
         {
-            IEnumerable<User> users = usersRepository.GetLoggedInUsers();
-            IList<LoggedInUser> loggedInUsers = new List<LoggedInUser>();
-            foreach (var user in users)
-            {
-                try
-                {
-                    LoggedInUser loggedInUser = (LoggedInUser) user;
-                    loggedInUsers.Add(loggedInUser);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("not a loggedinuser exception: " + e);
-                    throw;
-                }
-
-            }
-
-            return loggedInUsers;
-        }*/
+            IdentityUser identityUser = GetUser(userId);
+            _usersRepository.DeleteRole(identityUser, role);
+        }
+        
+        public IList<IdentityUser> GetUsers(string role)
+        {
+            return _usersRepository.GetUsers(role).ToList();
+        }
+        
+        public void GiveRole(string userId, string role)
+        {
+            IdentityUser identityUser = GetUser(userId);
+            _usersRepository.DeleteRole(identityUser, "USER");
+            _usersRepository.GiveRole(identityUser, role);
+        }
+        
+        public void CreateUser(IdentityUser identityUser)
+        {
+            _usersRepository.CreateUser(identityUser);
+        }
     }
 }
