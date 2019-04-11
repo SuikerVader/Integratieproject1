@@ -84,5 +84,56 @@ namespace Integratieproject1.UI.Controllers
             projectsManager.DeleteAdminProject(adminProjectId);
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult Projects()
+        {
+
+            IList<Project> projects = projectsManager.GetAllProjects();
+            return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
+        }
+        
+        public IActionResult DeleteProject(int projectId)
+        {
+            projectsManager.DeleteProject(projectId);
+            IList<Project> projects = projectsManager.GetAllProjects();
+            return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
+        }
+        
+        public IActionResult CreateProject()
+        {
+            return View("/UI/Views/SuperAdmin/CreateProject.cshtml");
+        }
+        
+        [HttpPost]
+        public IActionResult CreateProject(Project project, int platformId)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                projectsManager.CreateProject(project, currentUserId,platformId);
+            }
+
+            IList<Project> projects = projectsManager.GetAllProjects();
+            return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
+        }
+        
+        public IActionResult EditProject(int projectId)
+        {
+            Project project = projectsManager.GetProject(projectId);
+            return View("/UI/Views/SuperAdmin/EditProject.cshtml", project);
+        }
+        
+        [HttpPost]
+        public IActionResult EditProject(int projectId, Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                projectsManager.EditProject(project, projectId);
+            }
+                
+            IList<Project> projects = projectsManager.GetAllProjects();
+            return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Integratieproject1.BL.Interfaces
         Platform GetPlatform(int platformId);
         void CreatePlatform(Platform platform);
         Project GetProject(int projectId);
-        void CreateProject(Project project, string id);
+        void CreateProject(Project project, string id, int platformId);
         IdentityUser GetUser(string id);
         Phase GetPhase(int phaseId);
         Phase CreatePhase(Phase phase, int phaseNr, int projectId);

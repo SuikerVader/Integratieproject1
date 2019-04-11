@@ -70,16 +70,22 @@ namespace Integratieproject1.BL.Managers
             List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
             return adminProjects;
         }
+        
+        public IList<Project> GetAllProjects()
+        {
+            List<Project> projects = _projectsRepository.GetAllProjects().ToList();
+            return projects;
+        }
 
         public IdentityUser GetUser(string id)
         {
             UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
-        public void CreateProject(Project project, string userId)
+        public void CreateProject(Project project, string userId, int platformId = 1)
         {
             IdentityUser identityUser = GetUser(userId);
-            project.Platform = GetPlatform(1);
+            project.Platform = GetPlatform(platformId);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
