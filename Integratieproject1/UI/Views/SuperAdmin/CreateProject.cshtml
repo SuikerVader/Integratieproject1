@@ -2,13 +2,13 @@
 @model Project
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "SuperAdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <h2>New Project</h2>
     <div>
-        <form asp-controller="Admin" asp-action="CreateProject" method="post">
+        <form asp-controller="SuperAdmin" asp-action="CreateProject" method="post">
             <label asp-for="ProjectName"></label>
             <input required asp-for="ProjectName" class="form-control"/>
             <label asp-for="StartDate"></label>
@@ -31,6 +31,8 @@
             <input required asp-for="Location.Address.ZipCode" class="form-control"/>
             <label asp-for="Location.LocationName" value="Location name"></label>
             <input required asp-for="Location.LocationName" class="form-control"/>
+            <label value="PlatformID">Platform ID</label>
+            <input required name="PlatformID" class="form-control"/>
             <input type="submit" value="Create Project">
         </form>
         

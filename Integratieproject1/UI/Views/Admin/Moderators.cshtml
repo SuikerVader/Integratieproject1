@@ -1,0 +1,35 @@
+@model IList<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@{
+    ViewBag.Title = "AdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Moderators</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+            </tr>
+            @foreach (var mod in Model)
+            {
+                <tr>
+                    <td>@mod.UserName</td>
+                    <td>@mod.Email</td>
+                    <td>@mod.PhoneNumber</td>
+                    <td><a asp-area="" asp-controller="Admin"
+                           asp-action="DeleteModRole" asp-route-modId="@mod.Id">Verwijder Moderator Rol
+                    </a></td>
+                    <td><a asp-area="" asp-controller="Admin"
+                           asp-action="DeleteMod" asp-route-modId="@mod.Id">Verwijder Account
+                    </a></td>      
+                </tr>
+            }
+        </table>
+    </div>
+    <a asp-area="" asp-controller="Admin"
+       asp-action="Users" >Geef Moderator rol aan gebruiker
+    </a>
+</div>

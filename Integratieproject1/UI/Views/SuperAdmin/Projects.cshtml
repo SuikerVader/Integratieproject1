@@ -1,0 +1,39 @@
+@model IList<Integratieproject1.Domain.Projects.Project>
+
+@{
+    ViewBag.Title = "SuperAdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>All Projects</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Projectnaam</th>
+                <th>Description</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Location</th>
+            </tr>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.ProjectName</td>
+                    <td>@project.Description</td>
+                    <td>@project.StartDate</td>
+                    <td>@project.EndDate</td>
+                    <td>@project.Location.LocationName</td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="EditProject" asp-route-projectId="@project.ProjectId">Edit
+                    </a></td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="DeleteProject" asp-route-projectId="@project.ProjectId">Delete
+                    </a></td>
+                </tr>
+            }
+        </table>
+        <a asp-area="" asp-controller="SuperAdmin"
+           asp-action="CreateProject"><button>Create Project</button>
+        </a>
+    </div>
+</div>

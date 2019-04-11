@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.IoT;
-using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.Domain.Ideations
@@ -13,7 +12,6 @@ namespace Integratieproject1.Domain.Ideations
         [Key] public int IdeaId { get; set; }
         public Position Position { get; set; }
         public String Video { get; set; }
-        public String Image { get; set; }
         public String Theme { get; set; }
         public String Text { get; set; }
         [Required] public String Title { get; set; }
@@ -22,6 +20,7 @@ namespace Integratieproject1.Domain.Ideations
         public ICollection<IoTSetup> IoTSetups { get; set; }
         public ICollection<Vote> Votes { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<Image> Images { get; set; }
 
 
         /*[Required]

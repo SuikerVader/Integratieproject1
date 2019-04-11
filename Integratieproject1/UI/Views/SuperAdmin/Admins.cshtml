@@ -1,0 +1,38 @@
+@model IList<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@{
+    ViewBag.Title = "SuperAdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>My Admins</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+            </tr>
+            @foreach (var admin in Model)
+            {
+                <tr>
+                    <td>@admin.UserName</td>
+                    <td>@admin.Email</td>
+                    <td>@admin.PhoneNumber</td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">Verwijder Admin Rol
+                    </a></td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="DeleteAdmin" asp-route-adminId="@admin.Id">Verwijder Account
+                    </a></td>      
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="AdminProjects" asp-route-adminId="@admin.Id">Projecten
+                    </a></td> 
+                </tr>
+            }
+        </table>
+    </div>
+    <a asp-area="" asp-controller="SuperAdmin"
+       asp-action="Users" >Geef Adminrol aan gebruiker
+    </a>
+</div>
