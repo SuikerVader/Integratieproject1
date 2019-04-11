@@ -1,4 +1,6 @@
-﻿@model Integratieproject1.Domain.SearchResultModel
+﻿@using Integratieproject1.Domain.Ideations
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.SearchResultModel
 @{
     ViewBag.Title = "SearchResultsPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
@@ -6,30 +8,29 @@
 
 <p>Search results of "@Model.SearchString"</p>
 
-@foreach (var project in Model.SearchedProjects)
+@foreach (var result in Model.SearchResults)
 {
-    <h1>@project.ProjectName</h1>
-    <p>@project.Description</p>
-}
-
-@foreach (var phase in Model.SearchedPhases)
-{
-    <h1>@phase.PhaseName</h1>
-    <p>@phase.Description</p>
-}
-
-@foreach (var ideation in Model.SearchedIdeations)
-{
-    <h1>@ideation.CentralQuestion</h1>
-}
-
-@foreach (var idea in Model.SearchedIdeas)
-{
-    <h1>@idea.Title</h1>
-    <p>@idea.Text</p>
-}
-
-@foreach (var reaction in Model.SearchedReactions)
-{
-    <h1>@reaction.ReactionText</h1>
+    if (result.GetType() == typeof(Project))
+    {
+        <h1>@(((Project)result).ProjectName)</h1>
+         <p>@(((Project)result).Description)</p>
+    }
+    else if (result.GetType() == typeof(Phase))
+    {
+        <h1>@(((Phase)result).PhaseName)</h1>
+        <p>@(((Phase)result).Description)</p>
+    }
+    else if (result.GetType() == typeof(Ideation))
+    {
+        <h1>@(((Ideation)result).CentralQuestion)</h1>
+    }
+    else if (result.GetType() == typeof(Idea))
+    {
+        <h1>@(((Idea)result).Title)</h1>
+        <p>@(((Idea)result).Text)</p>
+    }
+    else if (result.GetType() == typeof(Reaction))
+    {
+        <h1>@(((Reaction)result).ReactionText)</h1>
+    }
 }
