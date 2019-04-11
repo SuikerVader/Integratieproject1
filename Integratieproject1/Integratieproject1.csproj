@@ -75,6 +75,7 @@
     <_ContentIncludedByDefault Remove="Views\Project\Survey.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\images\Uploads\handtekeningbeter.PNG" />
     <_ContentIncludedByDefault Remove="wwwroot\images\Uploads\handtekeningkleinr.jpg" />
+    <_ContentIncludedByDefault Remove="UI\Views\Shared\EditorTemplates\Search.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

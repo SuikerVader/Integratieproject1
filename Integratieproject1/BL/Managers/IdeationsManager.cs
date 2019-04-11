@@ -51,6 +51,11 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetIdeations(phaseId).ToList();
         }
 
+        public IList<Ideation> GetAllIdeations(int platformId)
+        {
+            return _ideationsRepository.GetAllIdeations(platformId).ToList();
+        }
+
         public void CreateIdeation(Ideation ideation, int phaseId)
         {
             ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
@@ -95,6 +100,11 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
         #region Idea
+
+        public IList<Idea> GetAllIdeas(int platformId)
+        {
+            return _ideationsRepository.GetAllIdeas(platformId).ToList();
+        }
 
         public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
         {
@@ -179,6 +189,11 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
         #region Reaction
+        
+        public IList<Reaction> GetAllReactions(int platformId)
+        {
+            return _ideationsRepository.GetAllReactions(platformId).ToList();
+        }
 
         public void PostReaction(ArrayList parameters, int ideaId, string userId)
         {

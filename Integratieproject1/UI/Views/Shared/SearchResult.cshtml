@@ -1,0 +1,35 @@
+﻿@model Integratieproject1.Domain.SearchResultModel
+@{
+    ViewBag.Title = "SearchResultsPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<p>Search results of "@Model.SearchString"</p>
+
+@foreach (var project in Model.SearchedProjects)
+{
+    <h1>@project.ProjectName</h1>
+    <p>@project.Description</p>
+}
+
+@foreach (var phase in Model.SearchedPhases)
+{
+    <h1>@phase.PhaseName</h1>
+    <p>@phase.Description</p>
+}
+
+@foreach (var ideation in Model.SearchedIdeations)
+{
+    <h1>@ideation.CentralQuestion</h1>
+}
+
+@foreach (var idea in Model.SearchedIdeas)
+{
+    <h1>@idea.Title</h1>
+    <p>@idea.Text</p>
+}
+
+@foreach (var reaction in Model.SearchedReactions)
+{
+    <h1>@reaction.ReactionText</h1>
+}

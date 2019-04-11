@@ -140,6 +140,14 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Phase> GetAllPhases(int platformId)
+        {
+            return _ctx.Phases
+                .Where(p => p.Project.Platform.PlatformId == platformId)
+                .AsEnumerable();
+
+        }
+
         public Phase GetPhase(int phaseId)
         {
             return _ctx.Phases

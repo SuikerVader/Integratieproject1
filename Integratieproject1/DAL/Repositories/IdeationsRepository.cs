@@ -26,7 +26,16 @@ namespace Integratieproject1.DAL.Repositories
 
         public IEnumerable<Ideation> GetIdeations(int phaseId)
         {
-            return _ctx.Ideations.Where(ideation => ideation.Phase.PhaseId == phaseId).AsEnumerable();
+            return _ctx.Ideations
+                .Where(ideation => ideation.Phase.PhaseId == phaseId)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<Ideation> GetAllIdeations(int platformId)
+        {
+            return _ctx.Ideations
+                .Where(i => i.Phase.Project.Platform.PlatformId == platformId)
+                .AsEnumerable();
         }
 
         public Ideation GetIdeation(int ideationId)
@@ -64,6 +73,13 @@ namespace Integratieproject1.DAL.Repositories
         public IEnumerable<Idea> GetIdeas(Ideation ideation)
         {
             return _ctx.Ideas.Where(idea => idea.Ideation == ideation).AsEnumerable();
+        }
+        
+        public IEnumerable<Idea> GetAllIdeas(int platformId)
+        {
+            return _ctx.Ideas
+                .Where(i => i.Ideation.Phase.Project.Platform.PlatformId == platformId)
+                .AsEnumerable();
         }
 
         public Idea GetIdea(int ideaId)
@@ -105,6 +121,13 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Reaction methods
 
+        public IEnumerable<Reaction> GetAllReactions(int platformId)
+        {
+            return _ctx.Reactions
+                .Where(r => r.Ideation.Phase.Project.Platform.PlatformId == platformId || r.Idea.Ideation.Phase.Project.Platform.PlatformId == platformId)
+                .AsEnumerable();
+        }
+        
         public IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation)
         {
             return _ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
