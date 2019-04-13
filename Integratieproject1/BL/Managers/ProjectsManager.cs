@@ -141,6 +141,11 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.RemoveAdminProject(adminProject);
             _unitOfWorkManager.Save();
         }
+        
+        public AdminProject GetAdminProject(int adminProjectId)
+        {
+            return _projectsRepository.GetAdminProject(adminProjectId);
+        }
 
         #endregion
 

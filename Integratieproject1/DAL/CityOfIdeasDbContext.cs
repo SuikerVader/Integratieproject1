@@ -45,15 +45,14 @@ namespace Integratieproject1.DAL
 
         public DbSet<IoTSetup> IoTSetups { get; set; }
 
-        public DbSet<IdentityUser> Users { get; set; }
         public DbSet<AdminProject> AdminProjects { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Image> Images { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
+      
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source=CityOfIdeas.db");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(
