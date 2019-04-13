@@ -58,6 +58,11 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetProjects(platformId).ToList();
         }
+        
+        public IList<Project> GetAllProjects()
+        {
+            return _projectsRepository.GetAllProjects().ToList();
+        }
 
         public IList<Project> GetAdminProjects(string userId)
         {
@@ -71,15 +76,21 @@ namespace Integratieproject1.BL.Managers
             return projects;
         }
 
+        public IList<AdminProject> GetAllAdminProjects(string userId)
+        {
+            return _projectsRepository.GetAdminProjects(userId).ToList();
+        }
+
         public IdentityUser GetUser(string id)
         {
             UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
-        public void CreateProject(Project project, string userId)
+        
+        public void CreateProject(Project project, string userId, int platformId)
         {
             IdentityUser identityUser = GetUser(userId);
-            project.Platform = GetPlatform(1);
+            project.Platform = GetPlatform(platformId);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             //Project createdProject = projectsRepository.CreateProject(project);
@@ -124,7 +135,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private void DeleteAdminProject(int adminProjectId)
+        public void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);
