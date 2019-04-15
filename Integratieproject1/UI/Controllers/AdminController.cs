@@ -113,7 +113,7 @@ namespace Integratieproject1.UI.Controllers{}
             {
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _projectsManager.CreateProject(project, currentUserId);
+                _projectsManager.CreateProject(project, currentUserId, 1);
                 return RedirectToAction("Index", "Home");
             }
 
