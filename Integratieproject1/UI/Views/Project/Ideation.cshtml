@@ -21,7 +21,7 @@
                                       
                 foreach (Image image in idea.Images)
                 {
-                    <img src="@image.ImagePath" alt="@image.ImageName"/>
+                    <img src="@image.ImagePath" alt="@image.ImageName" width="100px" height="100px"/>
                 }
             } else {<p>No images</p>}
             @if (idea.Video != null)
@@ -32,12 +32,12 @@
             }
             <a asp-area="" asp-controller="Project"
                asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                <button>view idea</button>
+                <button class="btn btn-secondary">view idea</button>
             </a>
         </div>
     }
 
-    <button onclick="showHideCreateIdea()">post idea</button>
+    <button onclick="showHideCreateIdea()" class="btn btn-primary">post idea</button>
     <div id="idea" style="display: none">
         @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
     </div>

@@ -1,3 +1,22 @@
+/*
+ * Social Buttons for Bootstrap
+ *
+ * Copyright 2013-2016 Panayiotis Lipiridis
+ * Licensed under the MIT License
+ *
+ * https://github.com/lipis/bootstrap-social
+ */
+.btn-facebook{color:#fff;background-color:#3b5998;border-color:rgba(0,0,0,0.2)}.btn-facebook:focus{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:hover{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}.btn-facebook:active:hover,.btn-facebook.active:hover,.open>.dropdown-toggle.btn-facebook:hover,.btn-facebook:active:focus,.btn-facebook.active:focus,.open>.dropdown-toggle.btn-facebook:focus{color:#fff;background-color:#23345a;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{background-image:none}
+.btn-facebook[disabled]:hover,.btn-facebook[disabled]:focus{background-color:#3b5998;border-color:rgba(0,0,0,0.2)}
+.btn-twitter{color:#fff;background-color:#55acee;border-color:rgba(0,0,0,0.2)}.btn-twitter:focus{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:hover{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}.btn-twitter:active:hover,.btn-twitter.active:hover,.open>.dropdown-toggle.btn-twitter:hover,.btn-twitter:active:focus,.btn-twitter.active:focus,.open>.dropdown-toggle.btn-twitter:focus{color:#fff;background-color:#1583d7;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{background-image:none}
+.btn-twitter[disabled]:hover,.btn-twitter[disabled]:focus{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
+
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -184,7 +203,8 @@ button:focus {
 
 input,
 button,
-select {
+select,
+textarea {
   margin: 0;
   font-family: inherit;
   font-size: inherit;
@@ -238,6 +258,11 @@ input[type="time"],
 input[type="datetime-local"],
 input[type="month"] {
   -webkit-appearance: listbox;
+}
+
+textarea {
+  overflow: auto;
+  resize: vertical;
 }
 
 legend {
@@ -361,15 +386,6 @@ a > code {
   }
 }
 
-.row {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
 .table {
   width: 100%;
   margin-bottom: 1rem;
@@ -455,6 +471,14 @@ select.form-control:focus::-ms-value {
 
 select.form-control[size], select.form-control[multiple] {
   height: auto;
+}
+
+textarea.form-control {
+  height: auto;
+}
+
+.form-group {
+  margin-bottom: 1rem;
 }
 
 .btn {
@@ -598,6 +622,38 @@ select.form-control[size], select.form-control[multiple] {
   box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
 }
 
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+ .btn-outline-secondary:disabled {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-outline-secondary.dropdown-toggle {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-secondary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
 .btn-link {
   font-weight: 400;
   color: #007bff;
@@ -716,6 +772,44 @@ select.form-control[size], select.form-control[multiple] {
 }
 
 .input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+
+.input-group-append {
+  display: -ms-flexbox;
+  display: flex;
+}
+
+
+.input-group-append .btn {
+  position: relative;
+  z-index: 2;
+}
+
+
+.input-group-append .btn:focus {
+  z-index: 3;
+}
+
+
+.input-group-append .btn + .btn {
+  margin-left: -1px;
+}
+
+.input-group-append {
+  margin-left: -1px;
+}
+
+
+.input-group > .input-group-append:not(:last-child) > .btn,
+.input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group > .input-group-append > .btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -1212,24 +1306,64 @@ a.text-danger:hover, a.text-danger:focus {
     background-color: #fff !important;
   }
 }
-/*
- * Social Buttons for Bootstrap
- *
- * Copyright 2013-2016 Panayiotis Lipiridis
- * Licensed under the MIT License
- *
- * https://github.com/lipis/bootstrap-social
+/*!
+ *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
-.btn-facebook{color:#fff;background-color:#3b5998;border-color:rgba(0,0,0,0.2)}.btn-facebook:focus{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
-.btn-facebook:hover{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}
-.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{color:#fff;background-color:#2d4373;border-color:rgba(0,0,0,0.2)}.btn-facebook:active:hover,.btn-facebook.active:hover,.open>.dropdown-toggle.btn-facebook:hover,.btn-facebook:active:focus,.btn-facebook.active:focus,.open>.dropdown-toggle.btn-facebook:focus{color:#fff;background-color:#23345a;border-color:rgba(0,0,0,0.2)}
-.btn-facebook:active,.btn-facebook.active,.open>.dropdown-toggle.btn-facebook{background-image:none}
-.btn-facebook[disabled]:hover,.btn-facebook[disabled]:focus{background-color:#3b5998;border-color:rgba(0,0,0,0.2)}
-.btn-twitter{color:#fff;background-color:#55acee;border-color:rgba(0,0,0,0.2)}.btn-twitter:focus{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
-.btn-twitter:hover{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}
-.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{color:#fff;background-color:#2795e9;border-color:rgba(0,0,0,0.2)}.btn-twitter:active:hover,.btn-twitter.active:hover,.open>.dropdown-toggle.btn-twitter:hover,.btn-twitter:active:focus,.btn-twitter.active:focus,.open>.dropdown-toggle.btn-twitter:focus{color:#fff;background-color:#1583d7;border-color:rgba(0,0,0,0.2)}
-.btn-twitter:active,.btn-twitter.active,.open>.dropdown-toggle.btn-twitter{background-image:none}
-.btn-twitter[disabled]:hover,.btn-twitter[disabled]:focus{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
+/* FONT PATH
+ * -------------------------- */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url(674f50d287a8c48dc19ba404d20fe713.eot);
+  src: url(674f50d287a8c48dc19ba404d20fe713.eot?#iefix&v=4.7.0) format('embedded-opentype'), url(af7ae505a9eed503f8b8e6982036873e.woff2) format('woff2'), url(fee66e712a8a08eef5805a46892932ad.woff) format('woff'), url(b06871f281fee6b241d60582ae9369b9.ttf) format('truetype'), url(912ec66d7572ff821749319396470bde.svg#fontawesomeregular) format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* makes the font 33% larger relative to the icon container */
+/* Deprecated as of 4.4.0 */
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+.fa-search:before {
+  content: "\f002";
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 
 
 /*# sourceMappingURL=site.css.map*/

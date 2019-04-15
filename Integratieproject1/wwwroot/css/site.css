@@ -23,6 +23,21 @@ body {
     width: 100%;
 }
 
+/* Make default file-input hidden */
+.input-default-js {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Remove margin between input and input-group-append */
+.input-group-append > .btn {
+    margin: 0 !important;
+}
+
 /* QR code generator */
 #qrCode {
     margin: 15px;
