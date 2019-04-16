@@ -10,7 +10,7 @@
 <div class="container">
     <div id="ideationGrid" >
         <div id="ideationInfo" >
-            <div class="card text-center" style="border-top: none; border-right: none; border-bottom: none;">
+            <div class="card text-center infoCard" >
                 <div class="card-body">
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
@@ -39,7 +39,7 @@
             <div class="d-flex flex-row justify-content-around flex-wrap">
                 @foreach (var idea in Model.Ideas)
                             {
-                                <div class="card text-center" style="width: 48%">
+                                <div class="card text-center idea">
                                     <div class="card-body">
                                         <h5 class="card-title">@idea.Title</h5>
                                         <p class="card-text">@idea.Text</p>
@@ -49,7 +49,7 @@
                 
                                             foreach (Image image in idea.Images)
                                             {
-                                                <img src="@image.ImagePath"  alt="@image.ImageName"/><br/>
+                                                <img src="@image.ImagePath" style="width:100%"  alt="@image.ImageName"/><br/>
                                             }
                                         }
                                         else

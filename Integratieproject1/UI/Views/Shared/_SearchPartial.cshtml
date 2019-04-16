@@ -1,4 +1,4 @@
-<form class="form-inline mx-auto" asp-controller="Home" asp-action="Search" asp-route-searchString="@ViewData["searchString"]" method="get">
+<form class="form-inline mx-auto my-2 my-lg-0" asp-controller="Home" asp-action="Search" asp-route-searchString="@ViewData["searchString"]" method="get">
         @* <div class="input-group-btn search-panel"> *@
         @*     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> *@
         @*         <span id="search_concept">Filter by</span> <span class="caret"></span> *@
@@ -12,8 +12,9 @@
         @*         <li><a href="#all">Anything</a></li> *@
         @*     </ul> *@
         @* </div> *@
-        <input type="text" class="form-control " name="searchString" placeholder="Search term...">
-            <button class="btn btn-primary " type="submit">
+        <input type="text" class="form-control mr-sm-2" style="width:auto" name="searchString" placeholder="Search term...">
+            
+            <button class="btn btn-primary my-2 my-sm-0 " type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
 </form>

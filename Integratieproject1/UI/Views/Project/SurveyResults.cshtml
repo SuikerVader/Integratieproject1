@@ -10,7 +10,7 @@
 <div class="container">
     <div id="surveyResultsGrid">
         <div id="surveyResultsInfo">
-            <div class="card text-center" style="border-top: none; border-right: none; border-bottom: none;">
+            <div class="card text-center infoCard">
                 <div class="card-body">
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
@@ -37,7 +37,7 @@
                 <div class="result">
                     @if (question.QuestionType != QuestionType.EMAIL)
                     {
-                        <h3>@question.QuestionText</h3>
+                        <h5>@question.QuestionText</h5>
                         if (question.Answers == null || question.Answers.Count == 0)
                         {
                             <p>No answers</p>
