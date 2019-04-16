@@ -8,7 +8,7 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <div id="ideationGrid" style="padding-top: 20px;">
+    <div id="ideationGrid" >
         <div id="ideationInfo" >
             <div class="card text-center" style="border-top: none; border-right: none; border-bottom: none;">
                 <div class="card-body">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div id="ideation">
-            <div class="card text-center" style="border: none;border-left: none; border-right: none; border-bottom: none;">
+            <div class="card text-center" style="border: none;">
                 <div class="card-body">
                     <h1 class="card-title">@Model.CentralQuestion</h1>
                     @if (User.Identity.IsAuthenticated)
@@ -68,8 +68,8 @@
                                         </a>
                                     </div>
                                     <div class="card-footer d-flex flex-row justify-content-around">
-                                        <i class="fa fa-heart">@idea.Votes.Count</i>
-                                        <i class="fa fa-comment">@idea.Reactions.Count</i>
+                                        <div><i class="fa fa-heart"></i> @idea.Votes.Count</div>
+                                        <div><i class="fa fa-comment"></i> @idea.Reactions.Count</div>
                                     </div>
                                 </div>   
                             }

@@ -1415,6 +1415,9 @@ a.text-danger:hover, a.text-danger:focus {
 .fa-facebook:before {
   content: "\f09a";
 }
+.fa-lightbulb-o:before {
+  content: "\f0eb";
+}
 .sr-only {
   position: absolute;
   width: 1px;
