@@ -1,5 +1,6 @@
 @using System.Linq
 @using Integratieproject1.Domain.Surveys
+@using Microsoft.AspNetCore.Routing
 @model Integratieproject1.Domain.Surveys.Survey
 
 @{
@@ -7,18 +8,57 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>@Model.Title Results:</h2>
-        @foreach (var question in Model.Questions)
-        {
-            <h3>@question.QuestionText</h3>
-            foreach (var answer in question.Answers)
+    <div id="surveyResultsGrid">
+        <div id="surveyResultsInfo">
+            <div class="card text-center" style="border-top: none; border-right: none; border-bottom: none;">
+                <div class="card-body">
+                    <h5>Info:</h5>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
+                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+                    Phase description: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId"> @Model.Phase.PhaseName</a><br/>
+                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
+        <div id="surveyResults">
+            <div class="card text-center" style="border: none;">
+                <div class="card-body">
+                    <h1 class="card-title">Results: @Model.Title</h1>
+                    <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                       asp-action="Survey" asp-route-surveyId="@Model.SurveyId">
+                        Answer survey
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="results">
+            @foreach (var question in Model.Questions)
             {
-                if (!answer.AnswerText.Equals(""))
-                {
-                    <p>@answer.AnswerText: @answer.TotalTimesChosen keer gekozen</p>
-                }
+                <div class="result">
+                    @if (question.QuestionType != QuestionType.EMAIL)
+                    {
+                        <h3>@question.QuestionText</h3>
+                        if (question.Answers == null || question.Answers.Count == 0)
+                        {
+                            <p>No answers</p>
+                        }
+                        else
+                        {
+                            foreach (var answer in question.Answers)
+                            {
+                                if (!answer.AnswerText.Equals(""))
+                                {
+                                    <p>@answer.AnswerText: @answer.TotalTimesChosen times chosen</p>
+                                }
+                            }
+                        }
+                    }
+                </div>
             }
-        }
+        </div>
+
+
+    </div>
+
 
 </div>
-

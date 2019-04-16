@@ -317,7 +317,7 @@ namespace Integratieproject1.DAL
             idea.Reactions = new List<Reaction>() {reaction};
             idea.Votes = new List<Vote>() {vote};
             //ctx.Answers.Add(answer);
-            openQuestion.Answers = new List<Answer>() {open};
+            openQuestion.Answers = new List<Answer>() {};
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};
             checkQuestion.Answers = new List<Answer>() {check1, check2, check3, check4};
             dropQuestion.Answers = new List<Answer>() {drop1, drop2, drop3, drop4};

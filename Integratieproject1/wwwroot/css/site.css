@@ -81,6 +81,58 @@ body {
 #ideas {
     grid-area: ideas;
 }
+#surveyGrid{
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "survey survey surveyInfo"
+            "questions questions questions"
+}
+#surveyInfo{
+    grid-area: surveyInfo;
+}
+#survey{
+    grid-area: survey;
+}
+#questions{
+    grid-area: questions;
+}
+
+.question{
+    padding: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+#surveyResultsGrid{
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "surveyResults surveyResults surveyResultsInfo"
+            "results results results"
+}
+#surveyResultsInfo{
+    grid-area: surveyResultsInfo;
+}
+#surveyResults{
+    grid-area: surveyResults;
+}
+#results{
+    grid-area: results;
+}
+.result{
+    padding: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
 /* edits */
 .btn {
     margin: 10px;
