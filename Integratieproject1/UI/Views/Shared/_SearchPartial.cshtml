@@ -1,5 +1,8 @@
 <form asp-controller="Home" asp-action="Search" asp-route-searchString="@ViewData["searchString"]" method="get">
     <div class="input-group">
+        
+        @* filter toevoegen? *@
+        
         @* <div class="input-group-btn search-panel"> *@
         @*     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> *@
         @*         <span id="search_concept">Filter by</span> <span class="caret"></span> *@
@@ -13,6 +16,7 @@
         @*         <li><a href="#all">Anything</a></li> *@
         @*     </ul> *@
         @* </div> *@
+        
         <input type="text" class="form-control" name="searchString" placeholder="Search term...">
         <div class="input-group-append">
             <button class="btn btn-outline-primary" type="submit">
