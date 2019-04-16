@@ -316,6 +316,8 @@ namespace Integratieproject1.DAL
             reaction.Likes = new List<Like>() {like};
             idea.Reactions = new List<Reaction>() {reaction};
             idea.Votes = new List<Vote>() {vote};
+            idea.Images = new List<Image>(){};
+            idea2.Images = new List<Image>(){};
             //ctx.Answers.Add(answer);
             openQuestion.Answers = new List<Answer>() {};
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};
