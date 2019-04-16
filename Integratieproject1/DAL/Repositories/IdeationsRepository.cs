@@ -4,6 +4,7 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +43,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideations
                 .Include(i => i.Ideas)
                 .ThenInclude(r => r.Reactions)
+                .Include(i => i.Ideas).ThenInclude(im => im.Images)
                 .Single(id => id.IdeationId == ideationId);
         }
 

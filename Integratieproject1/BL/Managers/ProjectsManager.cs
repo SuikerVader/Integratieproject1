@@ -6,6 +6,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -57,6 +58,11 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetProjects(platformId).ToList();
         }
+        
+        public IList<Project> GetAllProjects()
+        {
+            return _projectsRepository.GetAllProjects().ToList();
+        }
 
         public IList<Project> GetAdminProjects(string userId)
         {
@@ -69,17 +75,10 @@ namespace Integratieproject1.BL.Managers
 
             return projects;
         }
-        
+
         public IList<AdminProject> GetAllAdminProjects(string userId)
         {
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
-            return adminProjects;
-        }
-        
-        public IList<Project> GetAllProjects()
-        {
-            List<Project> projects = _projectsRepository.GetAllProjects().ToList();
-            return projects;
+            return _projectsRepository.GetAdminProjects(userId).ToList();
         }
 
         public IdentityUser GetUser(string id)
@@ -87,7 +86,8 @@ namespace Integratieproject1.BL.Managers
             UsersManager userManager = new UsersManager(_unitOfWorkManager);
             return userManager.GetUser(id);
         }
-        public void CreateProject(Project project, string userId, int platformId = 1)
+        
+        public void CreateProject(Project project, string userId, int platformId)
         {
             IdentityUser identityUser = GetUser(userId);
             project.Platform = GetPlatform(platformId);
@@ -135,7 +135,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private void DeleteAdminProject(int adminProjectId)
+        public void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
             _projectsRepository.RemoveAdminProject(adminProject);

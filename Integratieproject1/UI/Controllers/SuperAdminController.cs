@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
@@ -75,7 +76,7 @@ namespace Integratieproject1.UI.Controllers
         
         public IActionResult AdminProjects(string adminId)
         {
-            IList<AdminProject> adminProjects = projectsManager.GetAllAdminProjects(adminId);
+            IList<AdminProject> adminProjects = projectsManager.GetAllAdminProjects(adminId).ToList();
             return View("/UI/Views/SuperAdmin/AdminProjects.cshtml", adminProjects);
         }
         
@@ -86,7 +87,6 @@ namespace Integratieproject1.UI.Controllers
         }
         public IActionResult Projects()
         {
-
             IList<Project> projects = projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
