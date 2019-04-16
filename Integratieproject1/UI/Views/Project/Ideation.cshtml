@@ -55,9 +55,13 @@
                         <div class="card-body">
                             <h5 class="card-title">@idea.Title</h5>
                             <p class="card-text">@idea.Text</p>
-                            <p>
-                                <small>submitted by : @idea.IdentityUser.Email</small>
-                            </p>
+                            @if (Model.InputIdeation == true)
+                            {
+                                <p>
+                                                                <small>submitted by : @idea.IdentityUser.Email</small>
+                                                            </p>
+                            }
+                            
                             @if (idea.Images != null && idea.Images.Count > 0)
                             {
                                 foreach (Image image in idea.Images)
