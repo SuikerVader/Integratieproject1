@@ -60,6 +60,26 @@ body {
         width: 50%;
     } 
 }
+
+#ideationGrid {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "ideation ideation ideationInfo"
+            "ideas ideas ideas"
+}
+#ideationInfo{
+    grid-area: ideationInfo;
+}
+#ideation {
+    grid-area: ideation;
+}
+#ideas {
+    grid-area: ideas;
+}
 /* edits */
 .btn {
     margin: 10px;

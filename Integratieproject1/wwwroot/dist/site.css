@@ -100,14 +100,16 @@ address {
   line-height: inherit;
 }
 
-
+ol,
 ul {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-
-ul ul {
+ol ol,
+ul ul,
+ol ul,
+ul ol {
   margin-bottom: 0;
 }
 
@@ -361,15 +363,6 @@ a > code {
   }
 }
 
-.row {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
 .table {
   width: 100%;
   margin-bottom: 1rem;
@@ -455,6 +448,35 @@ select.form-control:focus::-ms-value {
 
 select.form-control[size], select.form-control[multiple] {
   height: auto;
+}
+
+.form-inline {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+@media (min-width: 576px) {
+  .form-inline label {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  .form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+  .form-inline .input-group {
+    width: auto;
+  }
 }
 
 .btn {
@@ -598,27 +620,6 @@ select.form-control[size], select.form-control[multiple] {
   box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
 }
 
-.btn-link {
-  font-weight: 400;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.btn-link:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
-.btn-link:focus {
-  text-decoration: underline;
-  box-shadow: none;
-}
-
-.btn-link:disabled {
-  color: #6c757d;
-  pointer-events: none;
-}
-
 .btn-lg {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
@@ -677,6 +678,37 @@ select.form-control[size], select.form-control[multiple] {
 .dropdown-menu[x-placement^="top"], .dropdown-menu[x-placement^="right"], .dropdown-menu[x-placement^="bottom"], .dropdown-menu[x-placement^="left"] {
   right: auto;
   bottom: auto;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #007bff;
+}
+
+ .dropdown-item:disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: transparent;
 }
 
 .dropdown-menu.show {
@@ -1037,6 +1069,78 @@ select.form-control[size], select.form-control[multiple] {
   }
 }
 
+.carousel {
+  position: relative;
+}
+
+.carousel-inner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-inner::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.carousel-indicators {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 15;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-left: 0;
+  margin-right: 15%;
+  margin-left: 15%;
+  list-style: none;
+}
+
+.carousel-indicators li {
+  box-sizing: content-box;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  width: 30px;
+  height: 3px;
+  margin-right: 3px;
+  margin-left: 3px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  opacity: .5;
+  transition: opacity 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-indicators li {
+    transition: none;
+  }
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+}
+
+.carousel-caption {
+  position: absolute;
+  right: 15%;
+  bottom: 20px;
+  left: 15%;
+  z-index: 10;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  text-align: center;
+}
+
 @-webkit-keyframes spinner-border {
   to {
     -webkit-transform: rotate(360deg);
@@ -1153,6 +1257,20 @@ button.bg-light:focus {
   border: 0;
 }
 
+.p-4 {
+  padding: 1.5rem !important;
+}
+
+
+.mx-auto {
+  margin-right: auto !important;
+}
+
+
+.mx-auto {
+  margin-left: auto !important;
+}
+
 .text-center {
   text-align: center !important;
 }
@@ -1212,6 +1330,80 @@ a.text-danger:hover, a.text-danger:focus {
     background-color: #fff !important;
   }
 }
+/*!
+ *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ */
+/* FONT PATH
+ * -------------------------- */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url(674f50d287a8c48dc19ba404d20fe713.eot);
+  src: url(674f50d287a8c48dc19ba404d20fe713.eot?#iefix&v=4.7.0) format('embedded-opentype'), url(af7ae505a9eed503f8b8e6982036873e.woff2) format('woff2'), url(fee66e712a8a08eef5805a46892932ad.woff) format('woff'), url(b06871f281fee6b241d60582ae9369b9.ttf) format('truetype'), url(912ec66d7572ff821749319396470bde.svg#fontawesomeregular) format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* makes the font 33% larger relative to the icon container */
+/* Deprecated as of 4.4.0 */
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+.fa-search:before {
+  content: "\f002";
+}
+.fa-heart:before {
+  content: "\f004";
+}
+.fa-user:before {
+  content: "\f007";
+}
+.fa-chevron-left:before {
+  content: "\f053";
+}
+.fa-chevron-right:before {
+  content: "\f054";
+}
+.fa-comment:before {
+  content: "\f075";
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 /*
  * Social Buttons for Bootstrap
  *
