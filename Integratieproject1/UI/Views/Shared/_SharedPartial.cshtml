@@ -1,22 +1,31 @@
 ﻿<ul class="nav navbar-nav">
-    <li class="nav-item" id="FacebookShare">
-        <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=large&width=73&height=28&appId"
-                width="73"
-                height="28"
-                style="border: darkblue; overflow: hidden"
-                scrolling="no"
-                frameborder=""
-                allowTransparency="true"
-                allow="encrypted-media">
-        </iframe>
+    <li class="nav-item" 
+        id="FacebookShare">
+        <button class="btn btn-facebook btn-lg "
+                
+                        type="submit"
+                        onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+            Share
+        </button>
     </li>
-    <li class="nav-item" id="TwitterShare">
-        <iframe id="twitFrame"
-                allowtransparency="true"
-                frameborder="0"
-                scrolling="no"
-                src="//platform.twitter.com/widgets/tweet_button.html?via=dting"
-                style="width: 200px; height: 25px;">
-        </iframe>
+    <li class="nav-item" 
+        id="TwitterShare">
+        <button type="submit" 
+                onclick="share_tw()"
+                class="btn btn-twitter btn-lg">
+            Tweet
+        </button>
     </li>
 </ul>
+<script>
+    function share_tw() {
+        window.open("https://twitter.com/share?ref_src=twsrc%5Etfw",
+            'twitter-share-dialog',
+            "width=626, height=436")
+    }
+    function share_fb(url) {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + url,
+            'facebook-share-dialog',
+            "width=626, height=436")
+    }
+</script>
