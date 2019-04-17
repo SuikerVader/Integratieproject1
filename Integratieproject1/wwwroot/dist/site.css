@@ -470,6 +470,14 @@ select.form-control:focus::-ms-value {
   background-color: #fff;
 }
 
+.form-control-sm {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
 select.form-control[size], select.form-control[multiple] {
   height: auto;
 }
@@ -1314,6 +1322,10 @@ button.bg-light:focus {
   border-left: 1px solid #dee2e6 !important;
 }
 
+.border-info {
+  border-color: #17a2b8 !important;
+}
+
 .d-none {
   display: none !important;
 }
@@ -1351,6 +1363,11 @@ button.bg-light:focus {
 .justify-content-start {
   -ms-flex-pack: start !important;
   justify-content: flex-start !important;
+}
+
+.justify-content-end {
+  -ms-flex-pack: end !important;
+  justify-content: flex-end !important;
 }
 
 .justify-content-center {
@@ -1407,7 +1424,7 @@ button.bg-light:focus {
   margin-right: auto !important;
 }
 
-.ml-auto,
+
 .mx-auto {
   margin-left: auto !important;
 }
@@ -1439,6 +1456,14 @@ button.bg-light:focus {
 
 .text-center {
   text-align: center !important;
+}
+
+.text-info {
+  color: #17a2b8 !important;
+}
+
+a.text-info:hover, a.text-info:focus {
+  color: #0f6674 !important;
 }
 
 .text-danger {
@@ -1566,6 +1591,9 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-lightbulb-o:before {
   content: "\f0eb";
+}
+.fa-thumbs-up:before {
+  content: "\f164";
 }
 .sr-only {
   position: absolute;

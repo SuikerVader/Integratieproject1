@@ -108,7 +108,12 @@ namespace Integratieproject1.DAL
                 InputIdeation = true,
                 Phase = phase
             };
-
+            Ideation ideation2 = new Ideation
+            {
+                CentralQuestion = "ideationTest2",
+                InputIdeation = false,
+                Phase = phase
+            };
 
             IdentityUser person = new IdentityUser
             {
@@ -126,20 +131,51 @@ namespace Integratieproject1.DAL
             Idea idea = new Idea
             {
                 Title = "testIdea1",
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+
                 Ideation = ideation,
                 IdentityUser = person
             };
             Idea idea2 = new Idea
             {
                 Title = "testIdea2",
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
+
                 Ideation = ideation,
                 IdentityUser = organisation
+            };
+            Idea idea3 = new Idea
+            {
+                Title = "testIdea3",
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
+                Ideation = ideation2,
+                IdentityUser = admin
+            };
+            Idea idea4 = new Idea
+                          {
+                              Title = "testIdea4",
+                              Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                              Ideation = ideation2,
+                              IdentityUser = admin
+                          };
+            Idea idea5 = new Idea
+            {
+                Title = "testIdea5",
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
+                Ideation = ideation2,
+                IdentityUser = admin
             };
             Reaction reaction = new Reaction
             {
                 Idea = idea,
                 ReactionText = "reactionTest1",
                 IdentityUser = person
+            };
+            Reaction reaction2 = new Reaction
+            {
+                Ideation = ideation2,
+                ReactionText = "reactionTest2",
+                IdentityUser = admin
             };
             Vote vote = new Vote
             {
@@ -331,8 +367,10 @@ namespace Integratieproject1.DAL
             phase.Surveys = new List<Survey>() {survey};
             //ctx.Ideas.Add(idea);
             ideation.Ideas = new List<Idea>() {idea, idea2};
+            ideation2.Ideas = new List<Idea>(){idea3, idea4, idea5};
+            ideation2.Reactions = new List<Reaction>(){reaction2};
             //ctx.Ideations.Add(ideation);
-            phase.Ideations = new List<Ideation>() {ideation};
+            phase.Ideations = new List<Ideation>() {ideation, ideation2};
             //ctx.Phases.Add(phase);
             project.Phases = new List<Phase>() {phase, phase2, phase3};
             //ctx.Projects.AddRange(project,project2);

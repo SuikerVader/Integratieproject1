@@ -54,7 +54,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostReaction(IFormCollection formCollection, int ideaId)
+        public IActionResult PostReaction(IFormCollection formCollection, int id, string element)
         {
             ArrayList parameters = new ArrayList();
             foreach (KeyValuePair<string, StringValues> pair in formCollection)
@@ -65,9 +65,24 @@ namespace Integratieproject1.UI.Controllers
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            _ideationsManager.PostReaction(parameters, ideaId, currentUserId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
+            _ideationsManager.PostReaction(parameters, id, currentUserId, element);
+            if (element.Equals("idea"))
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                            return View("/UI/Views/Project/Idea.cshtml", idea);
+            } else if(element.Equals("ideation"))
+
+            {
+                Domain.Ideations.Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            else
+            {
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            
         }
 
         [HttpPost]

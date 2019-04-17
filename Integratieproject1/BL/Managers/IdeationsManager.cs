@@ -194,16 +194,22 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
 
-        public void PostReaction(ArrayList parameters, int ideaId, string userId)
+        public void PostReaction(ArrayList parameters, int id, string userId, string element)
         {
             ProjectsManager projectsManager = new ProjectsManager();
             IdentityUser identityUser = projectsManager.GetUser(userId);
+            Reaction reaction = new Reaction();
+            reaction.IdentityUser = identityUser;
+            reaction.ReactionText = parameters[0].ToString();
             
-            Reaction reaction = new Reaction
+            if (element.Equals("idea"))
             {
-                Idea = GetIdea(ideaId), IdentityUser = identityUser, ReactionText = parameters[1].ToString()
-            };
-            
+              reaction.Idea = GetIdea(id);
+            }else if (element.Equals("ideation"))
+            {
+                reaction.Ideation = GetIdeation(id);
+            }
+
             _ideationsRepository.CreateReaction(reaction);
             _unitOfWorkManager.Save();
         }
