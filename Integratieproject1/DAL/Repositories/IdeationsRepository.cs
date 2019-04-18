@@ -75,9 +75,9 @@ namespace Integratieproject1.DAL.Repositories
         #region Idea methods
 
         //Idea methods
-        public IEnumerable<Idea> GetIdeas(Ideation ideation)
+        public IEnumerable<Idea> GetIdeas(int ideationId)
         {
-            return _ctx.Ideas.Where(idea => idea.Ideation == ideation).AsEnumerable();
+            return _ctx.Ideas.Where(idea => idea.Ideation.IdeationId == ideationId).AsEnumerable();
         }
         
         public IEnumerable<Idea> GetAllIdeas(int platformId)

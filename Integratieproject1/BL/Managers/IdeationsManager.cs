@@ -104,7 +104,10 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
-        
+        public IList<Idea> GetIdeas(int ideationId)
+        {
+            return _ideationsRepository.GetIdeas(ideationId).ToList();
+        }
         public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
         {
             Idea idea = new Idea
@@ -304,5 +307,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+        
     }
 }

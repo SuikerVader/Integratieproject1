@@ -9,7 +9,7 @@ namespace Integratieproject1.DAL.Interfaces
         IEnumerable<Ideation> GetIdeations(int phaseId);
         Ideation GetIdeation(int ideationId);
         Ideation CreateIdeation(Ideation ideation);
-        IEnumerable<Idea> GetIdeas(Ideation ideation);
+        IEnumerable<Idea> GetIdeas(int ideationId);
         Idea GetIdea(int ideaId);
         Idea CreateIdea(Idea idea);
         IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation);

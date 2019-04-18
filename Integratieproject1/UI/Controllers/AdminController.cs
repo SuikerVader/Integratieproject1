@@ -133,7 +133,7 @@ namespace Integratieproject1.UI.Controllers{}
         public IActionResult Phases(int projectId)
         {
             IList<Phase> phases = _projectsManager.GetPhases(projectId);
-            ViewData["ProjectId"] = projectId;
+            ViewBag.Project = _projectsManager.GetProject(projectId);
             return View("/UI/Views/Admin/Phases.cshtml", phases);
         }
 
@@ -159,7 +159,6 @@ namespace Integratieproject1.UI.Controllers{}
         public IActionResult AddPhase(int projectId)
         {
             Phase phase = _projectsManager.GetNewPhase(projectId);
-
             return View("/UI/Views/Admin/CreatePhase.cshtml", phase);
         }
 
@@ -188,7 +187,7 @@ namespace Integratieproject1.UI.Controllers{}
         public IActionResult Ideations(int phaseId)
         {
             IList<Ideation> ideations = _ideationsManager.GetIdeations(phaseId);
-            ViewData["PhaseId"] = phaseId;
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/Ideations.cshtml", ideations);
         }
 
@@ -212,7 +211,7 @@ namespace Integratieproject1.UI.Controllers{}
 
         public IActionResult AddIdeation(int phaseId)
         {
-            ViewData["PhaseId"] = phaseId;
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/CreateIdeation.cshtml");
         }
 
@@ -234,22 +233,21 @@ namespace Integratieproject1.UI.Controllers{}
             return RedirectToAction("Index", "Home");
         }
 
-        #endregion
-
-
-        /*public IActionResult Ideas(int ideationId)
+        public IActionResult Ideas(int ideationId)
         {
-            IList<Idea> ideas = ideationsManager.GetIdeas(ideationId);
-            ViewData["IdeationId"] = ideationId;
-            return View("/UI/Views/Admin/Ideations.cshtml", ideas);
-        }*/
+            IList<Idea> ideas = _ideationsManager.GetIdeas(ideationId);
+            ViewBag.Ideation = _ideationsManager.GetIdeation(ideationId);
+            ViewBag.IdeationId = ideationId;
+            return View("/UI/Views/Admin/Ideas.cshtml", ideas);
+        }
+        #endregion
 
         #region Survey
 
         public IActionResult Surveys(int phaseId)
         {
             IList<Survey> surveys = _surveysManager.GetSurveys(phaseId);
-            ViewData["PhaseId"] = phaseId;
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/Surveys.cshtml", surveys);
         }
 
@@ -257,6 +255,7 @@ namespace Integratieproject1.UI.Controllers{}
         {
             _surveysManager.CreateNewSurvey(phaseId);
             IList<Survey> surveys = _surveysManager.GetSurveys(phaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/Surveys.cshtml", surveys);
         }
 
