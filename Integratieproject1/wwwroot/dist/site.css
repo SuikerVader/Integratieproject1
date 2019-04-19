@@ -1698,6 +1698,16 @@ a.text-danger:hover, a.text-danger:focus {
 .fa-user:before {
   content: "\f007";
 }
+.fa-check:before {
+  content: "\f00c";
+}
+
+.fa-times:before {
+  content: "\f00d";
+}
+.fa-flag:before {
+  content: "\f024";
+}
 .fa-edit:before {
   content: "\f044";
 }
@@ -1729,6 +1739,13 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-thumbs-up:before {
   content: "\f164";
+}
+
+.fa-paper-plane:before {
+  content: "\f1d8";
+}
+.fa-user-times:before {
+  content: "\f235";
 }
 .sr-only {
   position: absolute;

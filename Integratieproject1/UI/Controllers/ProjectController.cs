@@ -10,6 +10,7 @@ using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Primitives;
 
 namespace Integratieproject1.UI.Controllers
@@ -51,6 +52,28 @@ namespace Integratieproject1.UI.Controllers
         {
             Idea idea = _ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
+        
+        public IActionResult ReportPost(int id, string type)
+        {
+            _ideationsManager.ReportPost( id, type);
+            if (type.Equals("reaction"))
+            {
+                Reaction reaction = _ideationsManager.GetReaction(id);
+                if (reaction.Idea == null && reaction.Ideation != null)
+                {
+                    Ideation ideation = _ideationsManager.GetIdeation(id);
+                    return View("/UI/Views/Project/Ideation.cshtml", ideation);
+                }else
+                {
+                    Idea idea = _ideationsManager.GetIdea(id);
+                    return View("/UI/Views/Project/Idea.cshtml", idea);
+                }   
+            }else
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                return View("/UI/Views/Project/Idea.cshtml", idea);
+            }
         }
 
         [HttpPost]
@@ -206,5 +229,7 @@ namespace Integratieproject1.UI.Controllers
                 }
             }
         }
+
+        
     }
 }

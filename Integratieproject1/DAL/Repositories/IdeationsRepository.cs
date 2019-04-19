@@ -95,6 +95,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(v => v.Votes)
                 .Single(i => i.IdeaId == ideaId);
         }
+        
+        public IEnumerable<Idea> GetReportedIdeas(int projectId)
+        {
+            return _ctx.Ideas
+                .Where(i => i.Ideation.Phase.Project.ProjectId == projectId)
+                .Where(i => i.Reported == true)
+                .AsEnumerable();
+        }
 
         public Idea CreateIdea(Idea idea)
         {
@@ -126,6 +134,15 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
         
+        public IEnumerable<Reaction> GetReportedReactions(int projectId)
+        {
+            return _ctx.Reactions
+                .Where(r => r.Idea.Ideation.Phase.Project.ProjectId == projectId ||
+                            r.Ideation.Phase.Project.ProjectId == projectId)
+                .Where(r => r.Reported == true)
+                .AsEnumerable();
+        }
+        
         public IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation)
         {
             return _ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
@@ -146,6 +163,12 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Reactions.Add(reaction);
             _ctx.SaveChanges();
             return reaction;
+        }
+        
+        public void UpdateReaction(Reaction reaction)
+        {
+            _ctx.Reactions.Update(reaction);
+            _ctx.SaveChanges();
         }
 
         public void RemoveReaction(Reaction reaction)
@@ -232,5 +255,8 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
         #endregion
+
+
+        
     }
 }

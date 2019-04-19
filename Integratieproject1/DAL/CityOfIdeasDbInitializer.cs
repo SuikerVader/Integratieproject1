@@ -171,11 +171,12 @@ namespace Integratieproject1.DAL
                 ReactionText = "reactionTest1",
                 IdentityUser = person
             };
+            
             Reaction reaction2 = new Reaction
             {
                 Ideation = ideation2,
                 ReactionText = "reactionTest2",
-                IdentityUser = admin
+                IdentityUser = admin,
             };
             Vote vote = new Vote
             {
