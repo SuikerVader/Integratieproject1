@@ -1511,6 +1511,11 @@ button.bg-light:focus {
   justify-content: space-around !important;
 }
 
+.align-items-center {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+}
+
 .align-content-stretch {
   -ms-flex-line-pack: stretch !important;
   align-content: stretch !important;
@@ -1705,6 +1710,12 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-comment:before {
   content: "\f075";
+}
+.fa-chevron-up:before {
+  content: "\f077";
+}
+.fa-chevron-down:before {
+  content: "\f078";
 }
 .fa-twitter:before {
   content: "\f099";

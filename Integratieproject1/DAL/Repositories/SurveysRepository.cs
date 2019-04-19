@@ -64,9 +64,9 @@ namespace Integratieproject1.DAL.Repositories
         #region Question
 
         // Question methods
-        public IEnumerable<Question> GetQuestions()
+        public IEnumerable<Question> GetQuestions(int surveyId)
         {
-            return _ctx.Questions.AsEnumerable();
+            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr).AsEnumerable();
         }
 
         public Question GetQuestion(int questionId)

@@ -304,6 +304,20 @@ namespace Integratieproject1.UI.Controllers{}
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
         
+        public IActionResult QuestionNrUp(int questionId, int surveyId)
+        {
+            _surveysManager.QuestionNrChange(questionId, "up", surveyId);
+            Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        
+        public IActionResult QuestionNrDown(int questionId, int surveyId)
+        {
+            _surveysManager.QuestionNrChange(questionId, "down", surveyId);
+            Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+        }
+        
         public IActionResult DeleteQuestion(int questionId, int surveyId)
         {
            _surveysManager.DeleteQuestion(questionId); 
