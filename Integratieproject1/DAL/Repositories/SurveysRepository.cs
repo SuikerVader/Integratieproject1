@@ -38,6 +38,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Surveys
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Include(p => p.Phase).ThenInclude(pr => pr.Project)
                 .Single(s => s.SurveyId == surveyId);
         }
         public Survey CreateSurvey(Survey survey)

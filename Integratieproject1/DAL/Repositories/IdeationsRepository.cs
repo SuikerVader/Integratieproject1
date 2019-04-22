@@ -41,9 +41,11 @@ namespace Integratieproject1.DAL.Repositories
         public Ideation GetIdeation(int ideationId)
         {
             return _ctx.Ideations
-                .Include(i => i.Ideas)
-                .ThenInclude(r => r.Reactions)
+                .Include(i => i.Ideas).ThenInclude(r => r.Reactions)
+                .Include(i => i.Ideas).ThenInclude(v => v.Votes)
                 .Include(i => i.Ideas).ThenInclude(im => im.Images)
+                .Include(i => i.Ideas).ThenInclude(u => u.IdentityUser)
+                .Include(p => p.Phase).ThenInclude(p => p.Project)
                 .Single(id => id.IdeationId == ideationId);
         }
 
