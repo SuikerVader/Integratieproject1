@@ -101,6 +101,8 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Where(i => i.Ideation.Phase.Project.ProjectId == projectId)
                 .Where(i => i.Reported == true)
+                .Include(i => i.Ideation)
+                .Include(i => i.IdentityUser)
                 .AsEnumerable();
         }
 
@@ -140,6 +142,9 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(r => r.Idea.Ideation.Phase.Project.ProjectId == projectId ||
                             r.Ideation.Phase.Project.ProjectId == projectId)
                 .Where(r => r.Reported == true)
+                .Include(r => r.Idea)
+                .Include(r => r.Ideation)
+                .Include(r => r.IdentityUser)
                 .AsEnumerable();
         }
         
@@ -155,7 +160,10 @@ namespace Integratieproject1.DAL.Repositories
 
         public Reaction GetReaction(int reactionId)
         {
-            return _ctx.Reactions.Find(reactionId);
+            return _ctx.Reactions
+                .Include(r => r.Idea)
+                .Include(r => r.Ideation)
+                .Single(r => r.ReactionId == reactionId);
         }
 
         public Reaction CreateReaction(Reaction reaction)
