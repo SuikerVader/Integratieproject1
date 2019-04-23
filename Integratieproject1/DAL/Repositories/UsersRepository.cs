@@ -57,5 +57,12 @@ namespace Integratieproject1.DAL.Repositories
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.CreateAsync(identityUser);
         }
+
+        public async void BlockUser(string userId)
+        {
+            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
+            IdentityUser identityUser = GetUser(userId);
+            await userManager.SetLockoutEnabledAsync(identityUser, true);
+        }
     }
 }

@@ -1,9 +1,8 @@
 @using Integratieproject1.Domain.Ideations
 @model Integratieproject1.Domain.Projects.Project
-@using Integratieproject1.Domain.Users
 
 @{
-    ViewBag.Title = "ModeratorPage";
+    ViewBag.Title = "Reported Users";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -72,12 +71,6 @@
                                     <td>idea: @reaction.Idea.Title</td>
                                 }                             
                                 <td>@reaction.IdentityUser.Email</td>
-                                <td>
-                                    <a asp-area="" asp-controller="Moderator"
-                                       asp-action="BlockUser" asp-route-userId="@reaction.IdentityUser.UserId">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </td>
                                 <td>
                                     <a asp-area="" asp-controller="Moderator"
                                        asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">

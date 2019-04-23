@@ -4,6 +4,7 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.UI.Controllers
@@ -51,6 +52,12 @@ namespace Integratieproject1.UI.Controllers
             _ideationsManager.DeletePost(id, type);
                         Project project = _projectsManager.GetProject(projectId);
                         return View("/UI/Views/Moderator/Posts.cshtml", project);
+        }
+
+        public IActionResult BlockUser(int userId)
+        {
+            _usersManager.BlockUser(userId);
+            return View("/UI/Views/Moderator/Posts.cshtml");
         }
     }
 }
