@@ -18,18 +18,10 @@
    asp-action="CreateVote" asp-route-votType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId"><button>vote</button>
 </a><br/>*@
 
-    <form asp-controller="Project" asp-action="CreateUserVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
-        <select name="user">
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
+    <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
         <input type="submit" value="user vote">
     </form><br/>
-    <form class="facebookShare" asp-controller="Project" asp-action="CreateUserVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
-        <select name="user">
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
+    <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
         <div class="facebook"
              data-href="https://developers.facebook.com/docs/plugins/"
              data-layout="button">
@@ -41,11 +33,7 @@
             </button>
         </div>
     </form>
-    <form class="TwitterShare" asp-controller="Project" asp-action="CreateUserVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
-        <select name="user">
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
+    <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
         <div class="twitter">
             <button type="submit"
                     onclick="share_tw()"
@@ -68,11 +56,6 @@
         <p>total likes: @reaction.Likes.Count</p>
         <br/>
         <form asp-controller="Project" asp-action="LikeReaction" asp-route-ideaId="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
-
-            <select name="user">
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select>
             <input type="submit" value="like reactie">         
         </form>
         <a asp-area="" asp-controller="Project"
