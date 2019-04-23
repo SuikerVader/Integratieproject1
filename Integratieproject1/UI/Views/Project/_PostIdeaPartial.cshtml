@@ -4,68 +4,90 @@
     ViewBag.Title = "ideationPage";
 }
 
-<form asp-controller="Project" 
-      asp-action="PostIdea" 
-      asp-route-ideationId="@ViewBag.IdeationId" 
+<form asp-controller="Project"
+      asp-action="PostIdea"
+      asp-route-ideationId="@ViewBag.IdeationId"
       asp-route-formFiles="@ViewData["formFiles"]"
       enctype="multipart/form-data"
       method="post">
-    
-    <label for="title" class="control-label">Title</label>
-    <input class="form-control" asp-for="Title" type="text" name="title" id="title">
-    
-    <label for="description" class="control-label">Description</label>
-    <input class="form-control" asp-for="Text" type="text" name="text" id="description"/>
 
-    <div class="input-group">
-        <label for="uploadedImages" class="control-label">Images</label>
-        <input class="form-control"
-               @* asp-for="Images" *@
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input class="form-control" asp-for="Title" type="text" name="title" id="title">
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" asp-for="Text" name="text" id="description" rows="5"></textarea>
+    </div>
+
+    <div class="form-group" id="imagesUpload">
+        <label for="uploadedImages">
+            Images
+            <div class="input-group">
+                <span class="form-control" id="chosenImages">
+                    Choose images...
+                </span>
+                <div class="input-group-append">
+                    <span class="input-group-text btn btn-outline-secondary">Browse</span>
+                </div>
+            </div>
+        </label>
+        <input class="input-default-js"
                name="formFiles"
                type="file"
                multiple
+               data-multiple-target=" files selected"
                id="uploadedImages"
                accept="image/x-png,image/gif,image/jpeg"
-               onchange="PreviewImage()">
-
-        <img id="previewImage" src="" height="200" alt="Image preview..."/>
+               onchange="PreviewImage(this)">
     </div>
 
-    <div class="input-group">
-        <label for="uploadedVideo" class="control-label">Video</label>
-        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo"/>
+    <div class="form-group">
+        <label for="uploadedVideo">Video</label>
+        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
 
         <iframe id="previewVideo" width="560" height="315" src=""
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
     </div>
-    
-    <button type="submit">Post</button>
+
+    <button type="submit" class="btn btn-primary">Post</button>
 </form>
 
 @*************************@
 @* refactor naar js file *@
 <script>
-    function PreviewImage() {
-        var preview = document.getElementById('previewImage');
-        var file = document.querySelector('input[type=file]').files[0];
-        var reader = new FileReader();
+    function PreviewImage(fileInput) {
+        var files = fileInput.files;
+        var imagesUpload = document.getElementById('imagesUpload');
+        var chosenImages = document.getElementById('chosenImages');
 
-        reader.onloadend = function () {
-            preview.src = reader.result;
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onloadend = function(event) {
+                var preview = document.createElement('img');
+                preview.setAttribute('src', event.target.result);
+                preview.setAttribute('alt', 'Image preview...');
+                preview.setAttribute('width', '100px');
+                preview.setAttribute('height', '100px');
+                imagesUpload.appendChild(preview);
+            }
+
+            if (files[i]) {
+                reader.readAsDataURL(files[i]);
+            }
         }
 
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = "";
-        }
+        chosenImages.innerHTML = files.length + fileInput.getAttribute('data-multiple-target');
     }
 
     function PreviewVideo(url) {
         var preview = document.getElementById('previewVideo');
         url = url.replace("watch?v=", "embed/");
         preview.src = url;
+        
     }
 </script>
 @*************************@
