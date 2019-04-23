@@ -12,25 +12,52 @@
 {
     if (result.GetType() == typeof(Project))
     {
-        <h1>@(((Project)result).ProjectName)</h1>
-         <p>@(((Project)result).Description)</p>
+        <a asp-controller="Project"
+           asp-action="Project" asp-route-projectId="@(((Project) result).ProjectId)">
+            <h1>@(((Project) result).ProjectName)</h1>
+            <p>@(((Project) result).Description)</p>
+        </a>
     }
     else if (result.GetType() == typeof(Phase))
     {
-        <h1>@(((Phase)result).PhaseName)</h1>
-        <p>@(((Phase)result).Description)</p>
+        <a asp-controller="Project"
+           asp-action="Project" asp-route-projectId="@(((Phase) result).Project.ProjectId)">
+            <h1>@(((Phase) result).PhaseName)</h1>
+            <p>@(((Phase) result).Description)</p>
+        </a>
     }
     else if (result.GetType() == typeof(Ideation))
     {
-        <h1>@(((Ideation)result).CentralQuestion)</h1>
+        <a asp-controller="Project"
+           asp-action="Ideation" asp-route-ideationId="@(((Ideation) result).IdeationId)">
+            <h1>@(((Ideation) result).CentralQuestion)</h1>
+        </a>
     }
     else if (result.GetType() == typeof(Idea))
     {
-        <h1>@(((Idea)result).Title)</h1>
-        <p>@(((Idea)result).Text)</p>
+        <a asp-controller="Project"
+           asp-action="Idea" asp-route-ideaId="@(((Idea) result).IdeaId)">
+            <h1>@(((Idea) result).Title)</h1>
+            <p>@(((Idea) result).Text)</p>
+        </a>
     }
     else if (result.GetType() == typeof(Reaction))
     {
-        <h1>@(((Reaction)result).ReactionText)</h1>
+        if (((Reaction) result).Ideation != null)
+        {
+            <a asp-controller="Project"
+               asp-action="Ideation" 
+               asp-route-ideaId="@(((Reaction) result).Ideation.IdeationId)">
+                <h1>@(((Reaction) result).ReactionText)</h1>
+            </a>
+        }
+        else if (((Reaction) result).Idea != null)
+        {
+            <a asp-controller="Project"
+               asp-action="Idea"
+               asp-route-ideaId="@(((Reaction) result).Idea.IdeaId)">
+                <h1>@(((Reaction) result).ReactionText)</h1>
+            </a>
+        }
     }
 }
