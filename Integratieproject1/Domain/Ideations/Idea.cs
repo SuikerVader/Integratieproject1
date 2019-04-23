@@ -12,9 +12,9 @@ namespace Integratieproject1.Domain.Ideations
     {
         [Key] public int IdeaId { get; set; }
         public Position Position { get; set; }
-        public String Video { get; set; }
+        public ICollection<Video> Videos { get; set; }
         public String Theme { get; set; }
-        public String Text { get; set; }
+        public ICollection<TextField> TextFields { get; set; }
         
         [DefaultValue(false)]
         public Boolean Reported { get; set; }
@@ -27,12 +27,5 @@ namespace Integratieproject1.Domain.Ideations
         public ICollection<Image> Images { get; set; }
         
 
-
-        /*[Required]
-    [ForeignKey("LoggedInUser")]
-    public int LoggedInUserFk { get; set; }
-    [Required]
-    [ForeignKey("Ideation")]
-    public int IdeationFk { get; set; }*/
     }
 }

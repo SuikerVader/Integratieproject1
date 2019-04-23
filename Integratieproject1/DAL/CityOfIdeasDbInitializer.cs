@@ -127,19 +127,16 @@ namespace Integratieproject1.DAL
             {
                 Email = "testAdmin1@test.com"
             };
-
+            
             Idea idea = new Idea
             {
                 Title = "testIdea1",
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-
                 Ideation = ideation,
                 IdentityUser = person
             };
             Idea idea2 = new Idea
             {
                 Title = "testIdea2",
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
 
                 Ideation = ideation,
                 IdentityUser = organisation
@@ -147,23 +144,40 @@ namespace Integratieproject1.DAL
             Idea idea3 = new Idea
             {
                 Title = "testIdea3",
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
-                Ideation = ideation2,
+              Ideation = ideation2,
                 IdentityUser = admin
             };
             Idea idea4 = new Idea
                           {
                               Title = "testIdea4",
-                              Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                              Ideation = ideation2,
+                                Ideation = ideation2,
                               IdentityUser = admin
                           };
             Idea idea5 = new Idea
             {
                 Title = "testIdea5",
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque.",
-                Ideation = ideation2,
+                  Ideation = ideation2,
                 IdentityUser = admin
+            };
+            TextField textfield1 = new TextField
+            {
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                Idea = idea
+            };
+            TextField textfield2 = new TextField
+            {
+                Idea = idea,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
+            };
+            TextField textfield3 = new TextField
+            {
+                Idea = idea2,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+            };
+            TextField textfield4 = new TextField
+            {
+                Idea = idea3,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
             };
             Reaction reaction = new Reaction
             {
@@ -355,6 +369,16 @@ namespace Integratieproject1.DAL
             idea.Votes = new List<Vote>() {vote};
             idea.Images = new List<Image>(){};
             idea2.Images = new List<Image>(){};
+            idea.TextFields = new List<TextField>(){textfield1,textfield2};
+            idea2.TextFields = new List<TextField>(){textfield3};
+            idea3.TextFields = new List<TextField>(){textfield4};
+            idea4.TextFields = new List<TextField>(){};
+            idea5.TextFields = new List<TextField>(){};
+            idea.Videos = new List<Video>(){};
+            idea2.Videos = new List<Video>(){};
+            idea3.Videos = new List<Video>(){};
+            idea4.Videos = new List<Video>(){};
+            idea5.Videos = new List<Video>(){};
             //ctx.Answers.Add(answer);
             openQuestion.Answers = new List<Answer>() {};
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};

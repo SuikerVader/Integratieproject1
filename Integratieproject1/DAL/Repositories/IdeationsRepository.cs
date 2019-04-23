@@ -45,6 +45,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Ideas).ThenInclude(v => v.Votes)
                 .Include(i => i.Ideas).ThenInclude(im => im.Images)
                 .Include(i => i.Ideas).ThenInclude(u => u.IdentityUser)
+                .Include(i => i.Ideas).ThenInclude(id => id.Videos)
+                .Include(i => i.Ideas).ThenInclude(id => id.TextFields)
                 .Include(p => p.Phase).ThenInclude(p => p.Project)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(r => r.Reactions).ThenInclude(u => u.IdentityUser)
@@ -93,6 +95,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(v => v.Votes)
+                .Include(i => i.TextFields)
+                .Include(i => i.Videos)
                 .Single(i => i.IdeaId == ideaId);
         }
         

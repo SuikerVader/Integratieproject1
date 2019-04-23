@@ -166,6 +166,21 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetReportedIdeas(projectId).ToList();
         }
         
+        public Idea CreateNewIdea(int ideationId, string userId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IdentityUser user = usersManager.GetUser(userId);
+            Idea idea = new Idea()
+            {
+                Ideation = GetIdeation(ideationId),
+                Title = "_NewIdea_",
+                IdentityUser = user
+            };
+            _ideationsRepository.CreateIdea(idea);
+            _unitOfWorkManager.Save();
+            return idea;
+        }
+        
         public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
         {
             Idea idea = new Idea
@@ -173,10 +188,17 @@ namespace Integratieproject1.BL.Managers
                 Ideation = GetIdeation(ideationId),
                 IdentityUser = _usersManager.GetUser(userId),
                 Title = parameters[0].ToString(),
-                Text = parameters[1].ToString(),
-                Video = parameters[2].ToString().Replace("watch?v=", "embed/")
             };
-
+            TextField textField = new TextField
+            {
+                Text = parameters[1].ToString(),
+            };
+            Video video = new Video
+            {
+                Url = parameters[2].ToString().Replace("watch?v=", "embed/"),
+            };
+            idea.TextFields = new List<TextField>(){textField};
+            idea.Videos = new List<Video>(){video};
             return CreateIdea(idea);
         }
         
@@ -197,8 +219,16 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdea(ideaId);
         }
+        
+        public void EditIdea(Idea idea, int ideaId)
+        {
+            idea.IdeaId = ideaId;
+            //ideation.Phase = GetIdeation(ideationId).Phase;
+            _ideationsRepository.UpdateIdea(idea);
+            _unitOfWorkManager.Save();
+        }
 
-        private void DeleteIdea(int ideaId)
+        public void DeleteIdea(int ideaId)
         {
             IoTManager ioTManager = new IoTManager(_unitOfWorkManager, new SurveysManager());
             Idea idea = GetIdea(ideaId);

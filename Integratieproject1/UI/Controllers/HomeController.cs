@@ -84,12 +84,12 @@ namespace Integratieproject1.UI.Controllers
                     .ToList()
                 );
 
-                searchResults.AddRange(ideas
+                /*searchResults.AddRange(ideas
                     .Where(i => string.IsNullOrEmpty(i.Text)
                         ? i.Title.Contains(searchString)
                         : i.Title.Contains(searchString) || i.Text.Contains(searchString))
                     .ToList()
-                );
+                );*/
 
                 searchResults.AddRange(reactions
                     .Where(r => r.ReactionText.Contains(searchString))

@@ -38,7 +38,7 @@
         <a asp-controller="Project"
            asp-action="Idea" asp-route-ideaId="@(((Idea) result).IdeaId)">
             <h1>@(((Idea) result).Title)</h1>
-            <p>@(((Idea) result).Text)</p>
+            <p>@(((Idea) result).TextFields.First())</p>
         </a>
     }
     else if (result.GetType() == typeof(Reaction))

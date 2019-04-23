@@ -207,6 +207,28 @@ namespace Integratieproject1.UI.Controllers
             }
         }
 
-        
+
+        public IActionResult CreateIdea(int ideationId )
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult EditIdea(Idea idea,int ideaId, int ideationId)
+        {
+            _ideationsManager.EditIdea(idea, ideaId);
+            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", returnIdea);
+        }
+
+        public IActionResult DeleteIdea(int ideaId, int ideationId)
+        {
+            _ideationsManager.DeleteIdea(ideaId);
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Project/Ideation.cshtml", ideation);
+        }
     }
 }
