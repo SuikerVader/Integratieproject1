@@ -14,14 +14,17 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static Integratieproject1.DAL.MqttClient;
 
 namespace Integratieproject1
 {
     public class Startup
     {
+        private MqttClient mqttClient = new MqttClient();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
         }
 
         public IConfiguration Configuration { get; }
