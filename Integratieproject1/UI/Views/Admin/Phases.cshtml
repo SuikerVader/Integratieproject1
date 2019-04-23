@@ -5,34 +5,64 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>phases</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>PhaseNr</th>
+                        <th>PhaseName</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                    </tr>
+                    @foreach (var phase in Model)
+                    {
+                        <tr>
+                            <td>@phase.PhaseNr</td>
+                            <td>@phase.PhaseName</td>
+                            <td>@phase.StartDate</td>
+                            <td>@phase.EndDate</td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="Ideations" asp-route-phaseId="@phase.PhaseId">
+                                    show Ideations
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="Surveys" asp-route-phaseId="@phase.PhaseId">
+                                    show Surveys
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="EditPhase" asp-route-phaseId="@phase.PhaseId">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                   asp-action="AddPhase" asp-route-projectId="@ViewBag.Project.ProjectId">
+                    Add Phase
+                </a>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5><strong>Info:</strong></h5>
+                    <strong>Project:</strong> @ViewBag.Project.ProjectName<br/>
+                    <strong>Project periode:</strong><br/>
+                    @ViewBag.Project.StartDate.ToString("d") - @ViewBag.Project.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h2>phases</h2>
-<div>
-    <table class="table">
-        <tr>
-            <th>PhaseNr</th>
-            <th>PhaseName</th>
-            <th>StartDate</th>
-            <th>EndDate</th>
-        </tr>
-        @foreach (var phase in Model)
-        {
-            <tr>
-                <td>@phase.PhaseNr</td>
-                <td>@phase.PhaseName</td>
-                <td>@phase.StartDate</td>
-                <td>@phase.EndDate</td>
-                <td>
-                    <a asp-area="" asp-controller="Admin"
-                       asp-action="EditPhase" asp-route-phaseId="@phase.PhaseId">
-                        Edit
-                    </a>
-                </td>
-            </tr>
-        }
-    </table>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="AddPhase" asp-route-projectId="@ViewData["ProjectId"]">
-        <button>Add Phase</button>
-    </a>
 </div>

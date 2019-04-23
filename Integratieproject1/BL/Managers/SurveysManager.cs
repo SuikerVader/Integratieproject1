@@ -6,41 +6,62 @@ using Integratieproject1.BL.Interfaces;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.DAL;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Ideations;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 
 namespace Integratieproject1.BL.Managers
 {
     public class SurveysManager : ISurveysManager
     {
-        private SurveysRepository surveysRepository;
-        private UnitOfWorkManager unitOfWorkManager;
+        private readonly SurveysRepository _surveysRepository;
+        private readonly UnitOfWorkManager _unitOfWorkManager;
 
         public SurveysManager()
         {
-            unitOfWorkManager = new UnitOfWorkManager();
-            surveysRepository = new SurveysRepository(unitOfWorkManager.UnitOfWork);
+            _unitOfWorkManager = new UnitOfWorkManager();
+            _surveysRepository = new SurveysRepository(_unitOfWorkManager.UnitOfWork);
         }
 
         public SurveysManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
-                throw new ArgumentNullException("unitOfWorkManager");
+                throw new ArgumentNullException(nameof(unitOfWorkManager));
 
-            this.unitOfWorkManager = unitOfWorkManager;
-            this.surveysRepository = new SurveysRepository(unitOfWorkManager.UnitOfWork);
+            this._unitOfWorkManager = unitOfWorkManager;
+            this._surveysRepository = new SurveysRepository(unitOfWorkManager.UnitOfWork);
         }
 
         #region Survey
 
         public Survey GetSurvey(int surveyId)
         {
-            return surveysRepository.GetSurvey(surveyId);
+            return _surveysRepository.GetSurvey(surveyId);
+        }
+
+        public IList<Survey> GetSurveys(int phaseId)
+        {
+            return _surveysRepository.GetSurveys(phaseId).ToList();
         }
 
         public void CreateSurvey(Survey survey)
         {
-            surveysRepository.CreateSurvey(survey);
-            unitOfWorkManager.Save();
+            _surveysRepository.CreateSurvey(survey);
+            _unitOfWorkManager.Save();
+        }
+
+        public void CreateNewSurvey(int phaseId)
+        {
+            ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
+            Survey survey = new Survey {Phase = projectsManager.GetPhase(phaseId), Title = "_NewSurvey_"};
+            _surveysRepository.CreateSurvey(survey);
+            _unitOfWorkManager.Save();
+        }
+
+        public void EditSurvey(Survey survey, int surveyId)
+        {
+            survey.SurveyId = surveyId;
+            _surveysRepository.EditSurvey(survey);
+            _unitOfWorkManager.Save();
         }
 
         public void DeleteSurvey(int surveyId)
@@ -54,18 +75,61 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            surveysRepository.RemoveSurvey(survey);
-            unitOfWorkManager.Save();
+            _surveysRepository.RemoveSurvey(survey);
+            _unitOfWorkManager.Save();
         }
 
         #endregion
 
         #region Question
 
-        public void CreateQuestion(Question question)
+        public void CreateQuestion(Question question, int surveyId)
         {
-            surveysRepository.CreateQuestion(question);
-            unitOfWorkManager.Save();
+            IEnumerable<Question> questions = _surveysRepository.GetQuestions(surveyId);
+            question.QuestionNr = questions.Count()+1;
+            question.Survey = GetSurvey(surveyId);
+            _surveysRepository.CreateQuestion(question);
+            _unitOfWorkManager.Save();
+        }
+
+        public void EditQuestion(Question question, int questionId, int surveyId)
+        {
+            question.QuestionId = questionId;
+            question.Survey = _surveysRepository.GetOnlySurvey(surveyId);
+            _surveysRepository.EditQuestion(question);
+            _unitOfWorkManager.Save();
+        }
+
+        public void QuestionNrChange(int questionId, string changer, int surveyId)
+        {
+            Question question = _surveysRepository.GetQuestion(questionId);
+            IEnumerable<Question> questions = _surveysRepository.GetQuestions(surveyId);
+            if (changer.Equals("up"))
+            {
+                foreach (var listQuestion in questions)
+                {
+                    if (listQuestion.QuestionNr == question.QuestionNr - 1)
+                    {
+                        listQuestion.QuestionNr = listQuestion.QuestionNr + 1;
+                        question.QuestionNr = question.QuestionNr - 1;
+                        _surveysRepository.EditQuestion(question);
+                        _surveysRepository.EditQuestion(listQuestion);
+                    }
+                }
+            } else if (changer.Equals("down"))
+            {
+                foreach (var listQuestion in questions)
+                {
+                    if (listQuestion.QuestionNr == question.QuestionNr + 1)
+                    {
+                        listQuestion.QuestionNr = listQuestion.QuestionNr - 1;
+                        question.QuestionNr = question.QuestionNr + 1;
+                        _surveysRepository.EditQuestion(question);
+                        _surveysRepository.EditQuestion(listQuestion);
+                    }
+                } 
+            }
+            _unitOfWorkManager.Save();
         }
 
         public void DeleteQuestion(int questionId)
@@ -79,13 +143,13 @@ namespace Integratieproject1.BL.Managers
                 }
             }
 
-            surveysRepository.RemoveQuestion(question);
-            unitOfWorkManager.Save();
+            _surveysRepository.RemoveQuestion(question);
+            _unitOfWorkManager.Save();
         }
 
         public Question GetQuestion(int questionId)
         {
-            return surveysRepository.GetQuestion(questionId);
+            return _surveysRepository.GetQuestion(questionId);
         }
 
         #endregion
@@ -94,20 +158,28 @@ namespace Integratieproject1.BL.Managers
 
         public void CreateAnswer(Answer answer)
         {
-            surveysRepository.CreateAnswer(answer);
-            unitOfWorkManager.Save();
+            _surveysRepository.CreateAnswer(answer);
+            _unitOfWorkManager.Save();
         }
 
         public void DeleteAnswer(int answerId)
         {
             Answer answer = GetAnswer(answerId);
-            surveysRepository.RemoveAnswer(answer);
-            unitOfWorkManager.Save();
+            _surveysRepository.RemoveAnswer(answer);
+            _unitOfWorkManager.Save();
         }
 
-        public Answer GetAnswer(int answerId)
+        private Answer GetAnswer(int answerId)
         {
-            return surveysRepository.GetAnswer(answerId);
+            return _surveysRepository.GetAnswer(answerId);
+        }
+
+        public void EditAnswer(Answer answer, int answerId, int questionId)
+        {
+            answer.AnswerId = answerId;
+            answer.Question = GetQuestion(questionId);
+            _surveysRepository.EditAnswer(answer);
+            _unitOfWorkManager.Save();
         }
 
         public void UpdateAnswers(ArrayList answers, int surveyId)
@@ -144,7 +216,7 @@ namespace Integratieproject1.BL.Managers
                             {
                                 if (answer.AnswerText.Equals(s))
                                 {
-                                    surveysRepository.UpdateAnswer(answer);
+                                    _surveysRepository.UpdateAnswer(answer);
                                 }
                             }
                         }
@@ -156,14 +228,15 @@ namespace Integratieproject1.BL.Managers
         //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
         public void UpdateSingleAnswer(Question question, int response)
         {
-            foreach ( Answer answer in question.Answers)
+            foreach (Answer answer in question.Answers)
             {
                 if (answer.AnswerId == response)
                 {
-                    surveysRepository.UpdateAnswer(answer);
+                    _surveysRepository.UpdateAnswer(answer);
                 }
             }
         }
+
         #endregion
     }
 }

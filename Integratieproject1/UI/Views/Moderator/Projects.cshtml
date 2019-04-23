@@ -1,0 +1,33 @@
+@model IList<Integratieproject1.Domain.Projects.Project>
+
+@{
+    ViewBag.Title = "ModeratorPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>All Projects</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Projectnaam</th>
+                <th>Description</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Location</th>
+            </tr>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.ProjectName</td>
+                    <td>@project.Description</td>
+                    <td>@project.StartDate</td>
+                    <td>@project.EndDate</td>
+                    <td>@project.Location.LocationName</td>
+                    <td><a asp-area="" asp-controller="Moderator"
+                           asp-action="Posts" asp-route-projectId="@project.ProjectId">show posts
+                    </a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

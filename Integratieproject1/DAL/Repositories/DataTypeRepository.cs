@@ -5,32 +5,55 @@ using Integratieproject1.Domain.Datatypes;
 
 namespace Integratieproject1.DAL.Repositories
 {
-    public class DataTypeRepostiory
+    public class DataTypeRepository
     {
-        private readonly CityOfIdeasDbContext ctx;
+        private readonly CityOfIdeasDbContext _ctx;
 
-   
-        public DataTypeRepostiory(UnitOfWork unitOfWork)
+        public DataTypeRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
+                throw new ArgumentNullException(nameof(unitOfWork));
       
-            ctx = unitOfWork.ctx;
+            _ctx = unitOfWork.Ctx;
         }
 
+        #region Locations
+        
+        public IEnumerable<Location> GetLocations()
+        {
+            return _ctx.Locations.AsEnumerable();
+        }
+        
+        #endregion
+        
+        #region Addresses
+        
         public Address GetAddress(int addressId)
         {
-           return ctx.Addresses.Find(addressId);
+           return _ctx.Addresses.Find(addressId);
         }
 
         public IEnumerable<Address> GetAddresses()
         {
-            return ctx.Addresses.AsEnumerable();
+            return _ctx.Addresses.AsEnumerable();
         }
 
-        public IEnumerable<Location> GetLocations()
+        #endregion
+
+        #region Images
+
+        public Image CreateImage(Image image)
         {
-            return ctx.Locations.AsEnumerable();
+            _ctx.Images.Add(image);
+            _ctx.SaveChanges();
+            return image;
         }
+
+        public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
+        {
+            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
+        }
+
+        #endregion
     }
 }

@@ -1,15 +1,18 @@
-@model Integratieproject1.Domain.Users.LoggedInUser
+
 
 @{
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
+<div class="container">
 <h2>Admin</h2>
 <div>
     
-    <a asp-area="" asp-controller="Admin"
-       asp-action="Projects" asp-route-userId="@Model.UserId"><button>My Projects</button>
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="Projects">My Projects
     </a>
-
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="Moderators">Manage Mods
+    </a>
+</div>
 </div>

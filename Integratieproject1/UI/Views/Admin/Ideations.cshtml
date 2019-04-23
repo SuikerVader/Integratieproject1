@@ -1,0 +1,65 @@
+@using Integratieproject1.Domain.Projects
+@model IList<Integratieproject1.Domain.Ideations.Ideation>
+
+@{
+    ViewBag.Title = "AdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Ideations</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>CentralQuestion</th>
+                        <th>InputIdeation</th>
+                    </tr>
+                    @foreach (var ideation in Model)
+                    {
+                        <tr>
+                            <td>@ideation.CentralQuestion</td>
+                            <td>@ideation.InputIdeation</td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="EditIdeation" asp-route-ideationId="@ideation.IdeationId">
+                                    Edit
+                                </a>
+
+                            </td>
+                            @if (ideation.InputIdeation == false)
+                            {
+                                <td>
+                                    <a asp-area="" asp-controller="Admin"
+                                       asp-action="Ideas" asp-route-ideationId="@ideation.IdeationId">
+                                        show ideas
+                                    </a>
+                                </td>
+                            }
+
+                        </tr>
+                    }
+                </table>
+                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                   asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId">
+                    Add Ideation
+                </a>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5><strong>Info:</strong></h5>
+                    <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
+                    <strong>Phase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Phase periode:</strong><br/>
+                    @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

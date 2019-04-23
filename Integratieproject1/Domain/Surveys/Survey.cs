@@ -10,7 +10,8 @@ namespace Integratieproject1.Domain.Surveys
         public int SurveyId { get; set; }
     [Required]
         public string Title { get; set; }
-    [Required] public Phase Phase { get; set; }
+    //[Required]
+    public Phase Phase { get; set; }
     public ICollection<Question> Questions { get; set; }
     
     /*[ForeignKey("Fase")]

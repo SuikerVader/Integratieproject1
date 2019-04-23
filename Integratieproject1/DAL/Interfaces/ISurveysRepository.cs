@@ -5,10 +5,10 @@ namespace Integratieproject1.DAL.Interfaces
 {
     public interface ISurveysRepository
     {
-        IEnumerable<Survey> GetSurveys();
+        IEnumerable<Survey> GetSurveys(int phaseId);
         Survey GetSurvey(int surveyId);
         Survey CreateSurvey(Survey survey);
-        IEnumerable<Question> GetQuestions();
+        IEnumerable<Question> GetQuestions(int surveyId);
         Question GetQuestion(int questionId);
         Question CreateQuestion(Question question);
         IEnumerable<Answer> GetAnswers();

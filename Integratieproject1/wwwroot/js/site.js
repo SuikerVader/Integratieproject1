@@ -1,4 +1,17 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// JS Dependencies: Bootstrap & JQuery
+import 'bootstrap'
+import 'jquery'
+import 'bootstrap-social'
 
-// Write your JavaScript code.
+// Using the next two lines is like including partial view _ValidationScriptsPartial.cshtml
+import 'jquery-validation'
+import 'jquery-validation-unobtrusive'
+
+// CSS Dependencies: Bootstrap
+import 'bootstrap/dist/css/bootstrap.css'
+import 'font-awesome/css/font-awesome.css'
+import 'bootstrap-social/bootstrap-social.css'
+
+// Custom JS imports
+
+console.log('The \'site\' bundle has been loaded!');
