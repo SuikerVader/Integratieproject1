@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,14 +10,17 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static Integratieproject1.DAL.MqttClient;
 
 namespace Integratieproject1
 {
     public class Startup
     {
+        private MqttClient mqttClient = new MqttClient();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
         }
 
         public IConfiguration Configuration { get; }

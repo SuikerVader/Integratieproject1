@@ -15,6 +15,7 @@ namespace Integratieproject1.BL.Managers
     {
         private IdeationsRepository ideationsRepository;
         private UnitOfWorkManager unitOfWorkManager;
+        private SurveysManager surveysManager;
 
         public IdeationsManager()
         {
@@ -84,7 +85,7 @@ namespace Integratieproject1.BL.Managers
 
         public void DeleteIdea(int ideaId)
         {
-            IoTManager ioTManager = new IoTManager(unitOfWorkManager);
+            IoTManager ioTManager = new IoTManager(surveysManager);
             Idea idea = GetIdea(ideaId);
             if (idea.IoTSetups != null)
             {
