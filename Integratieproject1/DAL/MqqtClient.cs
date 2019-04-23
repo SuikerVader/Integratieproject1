@@ -38,7 +38,7 @@ namespace Integratieproject1.DAL
                 {
                     if (Int32.TryParse(payload, out int i))
                     {
-                        ideationsManager.CreateVote(i, VoteType.IOT);
+                        ideationsManager.CreateVote(i, VoteType.IOT, null);
                         Console.WriteLine("simple vote " + i);
                     }
                 }
