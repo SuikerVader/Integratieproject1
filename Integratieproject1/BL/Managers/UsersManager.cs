@@ -61,5 +61,11 @@ namespace Integratieproject1.BL.Managers
         {
             _usersRepository.CreateUser(identityUser);
         }
+
+        public void BlockUser(string userId, int days)
+        {
+            IdentityUser identityUser = GetUser(userId);
+            _usersRepository.BlockUser(identityUser, days);
+        }
     }
 }
