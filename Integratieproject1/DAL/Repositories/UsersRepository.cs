@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -56,5 +57,20 @@ namespace Integratieproject1.DAL.Repositories
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.CreateAsync(identityUser);
         }
+        
+        
+        #region VerificationRequest
+
+        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        {
+            return _ctx.VerificationRequests.AsEnumerable();
+        }
+
+        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        {
+            _ctx.VerificationRequests.Add(verificationRequest);
+        }
+        
+        #endregion
     }
 }

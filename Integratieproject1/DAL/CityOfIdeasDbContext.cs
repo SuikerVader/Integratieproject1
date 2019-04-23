@@ -50,6 +50,7 @@ namespace Integratieproject1.DAL
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<VerificationRequest> VerificationRequests { get; set; }
       
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
