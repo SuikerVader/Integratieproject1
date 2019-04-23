@@ -59,14 +59,17 @@
                             <p>
                                 <small>
                                     <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
-                                <small>
-                                    <a asp-area="" asp-controller="Project"
-                                       asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                        <i class="fa fa-flag"></i>
-                                    </a>
-                                </small>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <small>
+                                        <a asp-area="" asp-controller="Project"
+                                           asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                            <i class="fa fa-flag"></i>
+                                        </a>
+                                    </small>
+                                }
                             </p>
-                            
+
                         </div>
                     </p>
                 }
@@ -94,13 +97,14 @@
                 @foreach (var idea in Model.Ideas)
                 {
                     <div id="@idea.IdeaId" class="card text-center idea">
+
                         <div class="card-body">
                             <h5 class="card-title">@idea.Title</h5>
                             <p class="card-text">@idea.Text</p>
                             @if (Model.InputIdeation == true)
                             {
                                 <p>
-                                    <small>submitted by : @idea.IdentityUser.Email</small>
+                                    <small>submitted by: @idea.IdentityUser.Email</small>
                                 </p>
                             }
 
