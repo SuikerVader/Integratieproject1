@@ -6,48 +6,83 @@
     ViewBag.Title = "SurveyPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>@Model.Title</h2>
-<a asp-area="" asp-controller="Project"
-   asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Resultaten bekijken
-</a><form asp-controller="Project" asp-action="SaveSurveyFormData" asp-route-surveyId="@Model.SurveyId" method="post" >
-    @foreach (var question in Model.Questions)
-    {
-        <div>
-            <h3>@question.QuestionText</h3>
-            @if (question.QuestionType == QuestionType.OPEN)
-            {
-                <input required type="text" name="@question.QuestionNr">
-            }
-            else if (question.QuestionType == QuestionType.RADIO)
-            {
-                 
-                foreach (var answer in question.Answers)
-                {
-                    <input required type="radio" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
-                }
-            }
-            else if (question.QuestionType == QuestionType.CHECK)
-            {
-                foreach (var answer in question.Answers)
-                {
-                    <input type="checkbox" name="@question.QuestionNr" value="@answer.AnswerText"> @answer.AnswerText
-                }
-            }
-            else if (question.QuestionType == QuestionType.DROP)
-            {
-                <select required name="@question.QuestionNr">
-                    @foreach (var answer in question.Answers)
-                    {
-                        <option value="@answer.AnswerText">@answer.AnswerText</option>
-                    }
-                </select>
-            }
-            else if (question.QuestionType == QuestionType.EMAIL)
-            {
-                <input required type="email" name="@question.QuestionNr">
-            }    
+<div class="container">
+    <div id="surveyGrid">
+        <div id="surveyInfo">
+            <div class="card text-center infoCard" >
+                <div class="card-body">
+                    <h5>Info:</h5>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
+                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+<<<<<<< HEAD
+                    Phase description: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId"> @Model.Phase.PhaseName</a><br/>
+=======
+>>>>>>> b39b4e77617c3cabb4d07584c7526e97422f8669
+                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                </div>
+            </div>
         </div>
-    }
-    <input type="submit" value="Submit" >
-</form>
+        <div id="survey">
+            <div class="card text-center" style="border: none;">
+                <div class="card-body">
+                    <h1 class="card-title">@Model.Title</h1>
+                    <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                       asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Results
+                    </a>  
+                </div>
+            </div>
+        </div>
+        <div class="card " id="questions">
+            <div class="card-body">
+                 <form asp-controller="Project" asp-action="SaveSurveyFormData" asp-route-surveyId="@Model.SurveyId" method="post">
+                @foreach (var question in Model.Questions)
+                {
+                    <div class="question">
+                        <h5>@question.QuestionText</h5>
+                        @if (question.QuestionType == QuestionType.OPEN)
+                        {
+                            <input required type="text" class="form-control" name="@question.QuestionNr">
+                        }
+                        else if (question.QuestionType == QuestionType.RADIO)
+                        {
+
+                            foreach (var answer in question.Answers)
+                            {
+                                <input  required type="radio" name="@question.QuestionNr" value="@answer.AnswerText">
+                                @answer.AnswerText<br/>
+                            }
+                        }
+                        else if (question.QuestionType == QuestionType.CHECK)
+                        {
+                            foreach (var answer in question.Answers)
+                            {
+                                <input type="checkbox" name="@question.QuestionNr" value="@answer.AnswerText">
+                                @answer.AnswerText<br/>
+                            }
+                        }
+                        else if (question.QuestionType == QuestionType.DROP)
+                        {
+                            <select required class="form-control" name="@question.QuestionNr">
+                                @foreach (var answer in question.Answers)
+                                {
+                                    <option value="@answer.AnswerText">@answer.AnswerText</option>
+                                }
+                            </select>
+                        }
+                        else if (question.QuestionType == QuestionType.EMAIL)
+                        {
+                            <input class="form-control" required type="email" name="@question.QuestionNr" placeholder="name@example.com">
+                        }
+                    </div>
+                }
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
+                
+            </form>
+            </div>
+        </div>
+        
+
+    </div>
+</div>

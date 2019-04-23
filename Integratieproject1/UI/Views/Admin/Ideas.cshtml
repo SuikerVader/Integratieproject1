@@ -1,0 +1,69 @@
+@using Integratieproject1.Domain.Ideations
+@using Integratieproject1.Domain.Projects
+@model IList<Integratieproject1.Domain.Ideations.Idea>
+
+@{
+    ViewBag.Title = "AdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>ideas</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Title</th>
+                    </tr>
+                    @foreach (var idea in Model)
+                    {
+                        <tr>
+                            <td>@idea.Title</td>
+                            <td>
+                                <a>
+                                    Edit
+                                </a>
+                            </td>
+                            <td>
+                                <a>
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idea</button>
+                <div id="idea" style="display: none">
+                    @await Html.PartialAsync("/UI/Views/Project/_PostIdeaPartial.cshtml", new Idea())
+                </div>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5>
+                        <strong>Info:</strong>
+                    </h5>
+                    <strong>Project:</strong> @ViewBag.Ideation.Phase.Project.ProjectName<br/>
+                    <strong>Phase:</strong> @ViewBag.Ideation.Phase.PhaseName<br/>
+                    <strong>Ideation:</strong> @ViewBag.Ideation.CentralQuestion<br/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showHideCreateIdea() {
+        var x = document.getElementById('idea');
+        if (x.style.display === 'none') {
+            x.style.display = 'inline-block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+
+</script>

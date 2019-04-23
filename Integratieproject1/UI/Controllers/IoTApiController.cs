@@ -1,10 +1,12 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Ideations;
-using Microsoft.AspNetCore.Internal;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -12,25 +14,27 @@ namespace Integratieproject1.UI.Controllers
     [ApiController]
     public class IoTApiController
     {
-        private IdeationsManager ideationsManager;
-        private IoTManager ioTManager;
+        private readonly IdeationsManager _ideationsManager;
+        private IoTManager _ioTManager;
 
         public IoTApiController()
         {
-            this.ideationsManager = new IdeationsManager();
+            this._ideationsManager = new IdeationsManager();
         }
 
         [HttpPost("Vote/{id}")]
-        public async Task IoTVote(int id)
+        public void IoTVote(int id)
         {
-           ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT);
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+           _ideationsManager.CreateVote(ideaId:id,voteType:VoteType.IOT, userId:currentUserId);
         }
         
         //wordt gebruikt voor IoT-opstellingen die meerdere knoppen bevatten (1-4) in mate van hoe eens ze het zijn
         [HttpPost("Vote/{id}/{supportLv}")]
         public async Task IoTVote(int id, int supportLv)
         {
-            ioTManager.RegisterComplexVote(id, supportLv);
+            _ioTManager.RegisterComplexVote(id, supportLv);
         }
     }
 }

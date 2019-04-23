@@ -5,36 +5,43 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>My Projects</h2>
-<div>
-    <table class="table">
-        <tr>
-            <th>Projectnaam</th>
-            <th>Description</th>
-            <th>StartDate</th>
-            <th>EndDate</th>
-            <th>Location</th>
-        </tr>
-        @foreach (var project in Model)
-        {
+<div class="container">
+    <h2>My Projects</h2>
+    <div>
+        <table class="table">
             <tr>
-                <td>@project.ProjectName</td>
-                <td>@project.Description</td>
-                <td>@project.StartDate</td>
-                <td>@project.EndDate</td>
-                <td>@project.Location.LocationName</td>
-                <td><a asp-area="" asp-controller="Admin"
-                       asp-action="Phases" asp-route-projectId="@project.ProjectId">show phases
-                </a></td>
-                <td><a asp-area="" asp-controller="Admin"
-                       asp-action="EditProject" asp-route-projectId="@project.ProjectId">Edit
-                </a></td>
-                
+                <th>Projectnaam</th>
+                <th>Description</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Location</th>
             </tr>
-        }
-    </table>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="CreateProject" asp-route-userId="3"><button>Create Project</button>
-    </a>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.ProjectName</td>
+                    <td>@project.Description</td>
+                    <td>@project.StartDate</td>
+                    <td>@project.EndDate</td>
+                    <td>@project.Location.LocationName</td>
+                    <td><a asp-area="" asp-controller="Admin"
+                           asp-action="Phases" asp-route-projectId="@project.ProjectId">show phases
+                    </a></td>
+                    <td><a asp-area="" asp-controller="Admin"
+                           asp-action="EditProject" asp-route-projectId="@project.ProjectId">Edit
+                    </a></td>
+                    
+                </tr>
+            }
+        </table>
+<<<<<<< HEAD
+        <a asp-area="" asp-controller="Admin"
+           asp-action="CreateProject" asp-route-userId="3"><button>Create Project</button>
+=======
+        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+           asp-action="CreateProject" asp-route-userId="3">Create Project
+>>>>>>> b39b4e77617c3cabb4d07584c7526e97422f8669
+        </a>
+    </div>
 </div>
+
