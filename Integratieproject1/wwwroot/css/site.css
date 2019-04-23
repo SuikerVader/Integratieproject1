@@ -112,11 +112,11 @@ body {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
     grid-template-rows: auto auto;
     grid-template-areas:
-            "reportedPosts reportedPosts reportedPosts"
-            "moderatorNav posts posts"
+            "reportedPosts reportedPosts reportedPosts reportedPosts reportedPosts"
+            "moderatorNav posts posts posts posts"
 
 }
 #reportedPosts{

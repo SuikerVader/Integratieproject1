@@ -62,11 +62,11 @@ namespace Integratieproject1.UI.Controllers
                 Reaction reaction = _ideationsManager.GetReaction(id);
                 if (reaction.Idea == null && reaction.Ideation != null)
                 {
-                    Ideation ideation = _ideationsManager.GetIdeation(id);
+                    Ideation ideation = _ideationsManager.GetIdeation(reaction.Ideation.IdeationId);
                     return View("/UI/Views/Project/Ideation.cshtml", ideation);
                 }else
                 {
-                    Idea idea = _ideationsManager.GetIdea(id);
+                    Idea idea = _ideationsManager.GetIdea(reaction.Idea.IdeaId);
                     return View("/UI/Views/Project/Idea.cshtml", idea);
                 }   
             }else

@@ -82,6 +82,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Projects
                 .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(i => i.IdentityUser)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Surveys)
                 .Include(p => p.Location).ThenInclude(l => l.Address)
