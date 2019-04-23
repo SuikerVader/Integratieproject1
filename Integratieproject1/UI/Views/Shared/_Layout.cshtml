@@ -49,7 +49,7 @@
                 @if (User.IsInRole("Mod"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderator</a>
+                        <a class="nav-link" asp-area="" asp-controller="Moderator" asp-action="Index">Moderator</a>
                     </li>
                 }
                 @if (User.IsInRole("SuperAdmin"))
