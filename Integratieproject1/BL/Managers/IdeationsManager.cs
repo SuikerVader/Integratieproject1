@@ -261,8 +261,8 @@ namespace Integratieproject1.BL.Managers
 
         public void PostReaction(ArrayList parameters, int id, string userId, string element)
         {
-            ProjectsManager projectsManager = new ProjectsManager();
-            IdentityUser identityUser = projectsManager.GetUser(userId);
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IdentityUser identityUser = usersManager.GetUser(userId);
             Reaction reaction = new Reaction();
             reaction.IdentityUser = identityUser;
             reaction.ReactionText = parameters[0].ToString();
@@ -281,8 +281,8 @@ namespace Integratieproject1.BL.Managers
 
         public void LikeReaction(int reactionId, string user, string userId)
         {
-            ProjectsManager projectsManager = new ProjectsManager();
-            IdentityUser identityUser = projectsManager.GetUser(userId);
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IdentityUser identityUser = usersManager.GetUser(userId);
             Reaction reaction = _ideationsRepository.GetReaction(reactionId);
             
             Like like = new Like
@@ -331,8 +331,8 @@ namespace Integratieproject1.BL.Managers
             Idea idea = GetIdea(ideaId);
             if (userId != null)
             {
-                ProjectsManager  projectsManager = new ProjectsManager();
-                IdentityUser user = projectsManager.GetUser(userId);
+                UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+                IdentityUser user = usersManager.GetUser(userId);
                 
                 if (_ideationsRepository.CheckUserVote(user, voteType, idea) == true)
                 {

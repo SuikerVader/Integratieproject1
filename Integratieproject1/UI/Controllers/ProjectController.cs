@@ -138,29 +138,6 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
-        [HttpPost]
-        public IActionResult CreateUserVote(int ideaId, VoteType voteType, IFormCollection formCollection)
-        {
-            ArrayList parameters = new ArrayList();
-
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                parameters.Add(pair.Value);
-            }
-
-            if (parameters.Count > 0)
-            {
-                _ideationsManager.CreateVote(ideaId, voteType, parameters[0].ToString());
-            }
-            else
-            {
-                throw new Exception("fout createVote");
-            }
-
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
-        }
-
         public IActionResult LikeReaction(int ideaId, int reactionId, IFormCollection formCollection)
         {
             ArrayList parameters = new ArrayList();
