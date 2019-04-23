@@ -43,7 +43,13 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin" asp-route-userId="3">Admin</a>
+                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin">Admin</a>
+                    </li>
+                }
+                @if (User.IsInRole("Mod"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderator</a>
                     </li>
                 }
                 @if (User.IsInRole("SuperAdmin"))

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,6 +10,8 @@ namespace Integratieproject1.Domain.Ideations
     {
         [Key] public int ReactionId { get; set; }
         public string ReactionText { get; set; }
+        [DefaultValue(false)]
+        public Boolean Reported { get; set; }
         [Required] public IdentityUser IdentityUser { get; set; }
         public Ideation Ideation { get; set; }
         public Idea Idea { get; set; }
