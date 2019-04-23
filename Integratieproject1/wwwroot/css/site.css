@@ -75,6 +75,134 @@ body {
         width: 50%;
     } 
 }
+
+.infoCard{
+    border-left: none ; 
+    border-right: none ; 
+    border-bottom: none ;
+}
+@media screen and  (min-width: 768px) {
+    .infoCard{
+        border-left: 1px solid rgba(0, 0, 0, 0.125);
+        border-top: none ;
+        border-right: none ;
+        border-bottom: none ;
+    }
+}
+
+#ideationGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "ideation"
+            "ideationInfo"
+            "ideas"
+    
+}
+#ideationInfo{
+    grid-area: ideationInfo;
+}
+#ideation {
+    grid-area: ideation;
+}
+#ideas {
+    grid-area: ideas;
+}
+.idea {
+    width: 100%;
+}
+
+@media screen and (min-width: 768px){
+    #ideationGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "ideation ideation ideationInfo"
+                "ideas ideas ideas"
+    }
+    .idea{
+        width: 48%;
+    }
+}
+#surveyGrid{
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "survey"
+            "surveyInfo"
+            "questions"
+}
+#surveyInfo{
+    grid-area: surveyInfo;
+}
+#survey{
+    grid-area: survey;
+}
+#questions{
+    grid-area: questions;
+}
+
+.question{
+    padding: 20px;
+}
+@media screen and (min-width: 768px){
+    #surveyGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "survey survey surveyInfo"
+                "questions questions questions"
+    }
+    .question{
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
+#surveyResultsGrid{
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "surveyResults"
+            "surveyResultsInfo"
+            "results"
+}
+#surveyResultsInfo{
+    grid-area: surveyResultsInfo;
+}
+#surveyResults{
+    grid-area: surveyResults;
+}
+#results{
+    grid-area: results;
+}
+.result{
+    padding: 20px;
+}
+@media screen and (min-width: 768px){
+    #surveyResultsGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "surveyResults surveyResults surveyResultsInfo"
+                "results results results"
+    }
+    .result{
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
 /* edits */
 .btn {
     margin: 10px;

@@ -8,38 +8,92 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>@Model.CentralQuestion</h2>
-    <p>idea's: </p>
-    @foreach (var idea in Model.Ideas)
-    {
-        <div>
-            <h3>@idea.Title</h3>
-            <p>@idea.Text</p>
-            @if (idea.Images != null)
-            {
-                <p>@idea.Images.Count images</p>
-                                      
-                foreach (Image image in idea.Images)
-                {
-                    <img src="@image.ImagePath" alt="@image.ImageName" width="100px" height="100px"/>
-                }
-            } else {<p>No images</p>}
-            @if (idea.Video != null)
-            {
-                <iframe src="@idea.Video" width="560" height="315"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                </iframe>
-            }
-            <a asp-area="" asp-controller="Project"
-               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                <button class="btn btn-secondary">view idea</button>
-            </a>
+    <div id="ideationGrid">
+        <div id="ideationInfo">
+            <div class="card text-center infoCard">
+                <div class="card-body">
+                    <h5>Info:</h5>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
+                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+                    Phase description: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId"> @Model.Phase.PhaseName</a><br/>
+                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                </div>
+            </div>
         </div>
-    }
+        <div id="ideation">
+            <div class="card text-center" style="border: none;">
+                <div class="card-body">
+                    <h1 class="card-title">@Model.CentralQuestion</h1>
+                    @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
+                    {
+                        <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idea</button>
+                    }
+                    @if (Model.InputIdeation == false)
+                    {
+                        <div class="d-flex flex-row justify-content-center flex-wrap">
+                            @foreach (var idea in Model.Ideas)
+                            {
+                                <a class="btn btn-primary" href="#@idea.IdeaId" >@idea.Title</a>
+                            }
+                        </div>
+                    }
 
-    <button onclick="showHideCreateIdea()" class="btn btn-primary">post idea</button>
-    <div id="idea" style="display: none">
-        @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
+                </div>
+            </div>
+        </div>
+        <div id="ideas">
+            <div id="idea" style="display: none">
+                @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
+            </div>
+            <div class="text-center" style="padding: 20px">
+                <h1><i class="fa fa-lightbulb-o"></i> Ideas <i class="fa fa-lightbulb-o"></i></h1>
+            </div>
+            <div class="d-flex flex-row justify-content-around flex-wrap">
+                @foreach (var idea in Model.Ideas)
+                {
+                    <div id="@idea.IdeaId" class="card text-center idea">
+                        <div class="card-body">
+                            <h5 class="card-title">@idea.Title</h5>
+                            <p class="card-text">@idea.Text</p>
+                            @if (Model.InputIdeation == true)
+                            {
+                                <p>
+                                                                <small>submitted by : @idea.IdentityUser.Email</small>
+                                                            </p>
+                            }
+                            
+                            @if (idea.Images != null && idea.Images.Count > 0)
+                            {
+                                foreach (Image image in idea.Images)
+                                {
+                                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
+                                }
+                            }
+                            <br/>
+                            @if (idea.Video != null && !idea.Video.Equals(""))
+                            {
+                                <iframe src="@idea.Video" width="100%"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                </iframe>
+                                <br/>
+                            }
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                                <button class="btn btn-primary">view idea</button>
+                            </a>
+                        </div>
+                        <div class="card-footer d-flex flex-row justify-content-around">
+                            <div>
+                                <i class="fa fa-heart"></i> @idea.Votes.Count</div>
+                            <div>
+                                <i class="fa fa-comment"></i> @idea.Reactions.Count</div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+
     </div>
 </div>
 
