@@ -15,8 +15,7 @@
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
                     Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
-                    Phase description: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId"> @Model.Phase.PhaseName</a><br/>
-                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
                 </div>
             </div>
         </div>

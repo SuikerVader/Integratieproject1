@@ -38,6 +38,59 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository = new IdeationsRepository(_unitOfWorkManager.UnitOfWork);
         }
 
+
+
+        #region Posts
+
+        public void ReportPost(int id, string type)
+        {
+            if (type.Equals("reaction"))
+            {
+                Reaction reaction = GetReaction(id);
+                reaction.Reported = true;
+                _ideationsRepository.UpdateReaction(reaction);
+            }
+            else
+            {
+                Idea idea = GetIdea(id);
+                idea.Reported = true;
+                _ideationsRepository.UpdateIdea(idea);
+            }
+            _unitOfWorkManager.Save();
+        }
+        public void PostCorrect(int id, string type)
+        {
+            if (type.Equals("reaction"))
+            {
+                Reaction reaction = GetReaction(id);
+                reaction.Reported = false;
+                _ideationsRepository.UpdateReaction(reaction);
+            }
+            else
+            {
+                Idea idea = GetIdea(id);
+                idea.Reported = false;
+                _ideationsRepository.UpdateIdea(idea);
+            }
+            _unitOfWorkManager.Save();
+        }
+        public void DeletePost(int id, string type)
+        {
+            if (type.Equals("reaction"))
+            {
+                DeleteReaction(id);
+            }
+            else
+            {
+                DeleteIdea(id);
+            }
+            _unitOfWorkManager.Save();
+        }
+
+        #endregion
+
+        
+        
         #region Ideation
 
         public Ideation GetIdeation(int ideationId)
@@ -103,6 +156,14 @@ namespace Integratieproject1.BL.Managers
         public IList<Idea> GetAllIdeas(int platformId)
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
+        }
+        public IList<Idea> GetIdeas(int ideationId)
+        {
+            return _ideationsRepository.GetIdeas(ideationId).ToList();
+        }
+        public IList<Idea> GetReportedIdeas(int projectId)
+        {
+            return _ideationsRepository.GetReportedIdeas(projectId).ToList();
         }
         
         public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
@@ -193,17 +254,27 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
+        public IList<Reaction> GetReportedReactions(int projectId)
+        {
+            return _ideationsRepository.GetReportedReactions(projectId).ToList();
+        }
 
-        public void PostReaction(ArrayList parameters, int ideaId, string userId)
+        public void PostReaction(ArrayList parameters, int id, string userId, string element)
         {
             ProjectsManager projectsManager = new ProjectsManager();
             IdentityUser identityUser = projectsManager.GetUser(userId);
+            Reaction reaction = new Reaction();
+            reaction.IdentityUser = identityUser;
+            reaction.ReactionText = parameters[0].ToString();
             
-            Reaction reaction = new Reaction
+            if (element.Equals("idea"))
             {
-                Idea = GetIdea(ideaId), IdentityUser = identityUser, ReactionText = parameters[1].ToString()
-            };
-            
+              reaction.Idea = GetIdea(id);
+            }else if (element.Equals("ideation"))
+            {
+                reaction.Ideation = GetIdeation(id);
+            }
+
             _ideationsRepository.CreateReaction(reaction);
             _unitOfWorkManager.Save();
         }
@@ -245,7 +316,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private Reaction GetReaction(int reactionId)
+        public Reaction GetReaction(int reactionId)
         {
             return _ideationsRepository.GetReaction(reactionId);
         }
@@ -298,5 +369,8 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+
+        
     }
 }

@@ -1,12 +1,11 @@
-@using Integratieproject1.Domain.Projects
 @model IList<Integratieproject1.Domain.Projects.Project>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "ModeratorPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>My Projects</h2>
+    <h2>All Projects</h2>
     <div>
         <table class="table">
             <tr>
@@ -24,19 +23,11 @@
                     <td>@project.StartDate</td>
                     <td>@project.EndDate</td>
                     <td>@project.Location.LocationName</td>
-                    <td><a asp-area="" asp-controller="Admin"
-                           asp-action="Phases" asp-route-projectId="@project.ProjectId">show phases
+                    <td><a asp-area="" asp-controller="Moderator"
+                           asp-action="Posts" asp-route-projectId="@project.ProjectId">show posts
                     </a></td>
-                    <td><a asp-area="" asp-controller="Admin"
-                           asp-action="EditProject" asp-route-projectId="@project.ProjectId">Edit
-                    </a></td>
-                    
                 </tr>
             }
         </table>
-        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-           asp-action="CreateProject" asp-route-userId="3">Create Project
-        </a>
     </div>
 </div>
-
