@@ -27,8 +27,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public IdentityUser GetUser(string id)
         {
-            IdentityUser identityUser = _userStore.FindByIdAsync(id).Result;
-            return identityUser;
+            return _userStore.FindByIdAsync(id).Result;
         }
         
         public async void DeleteUser(IdentityUser identityUser)
