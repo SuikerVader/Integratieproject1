@@ -14,14 +14,17 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static Integratieproject1.DAL.MqttClient;
 
 namespace Integratieproject1
 {
     public class Startup
     {
+        private MqttClient mqttClient = new MqttClient();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
         }
 
         public IConfiguration Configuration { get; }
@@ -35,6 +38,16 @@ namespace Integratieproject1
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             }).Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            }).AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
 
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
