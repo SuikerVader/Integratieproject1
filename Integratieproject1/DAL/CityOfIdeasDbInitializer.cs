@@ -162,20 +162,25 @@ namespace Integratieproject1.DAL
             TextField textfield1 = new TextField
             {
                 Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                Idea = idea
+                Idea = idea,
+                OrderNr = 2
             };
             TextField textfield2 = new TextField
             {
                 Idea = idea,
+                OrderNr = 1,
                 Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
+                
             };
             TextField textfield3 = new TextField
             {
+                OrderNr = 1,
                 Idea = idea2,
                 Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
             };
             TextField textfield4 = new TextField
             {
+                OrderNr = 1,
                 Idea = idea3,
                 Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
             };
@@ -367,18 +372,11 @@ namespace Integratieproject1.DAL
             reaction.Likes = new List<Like>() {like};
             idea.Reactions = new List<Reaction>() {reaction};
             idea.Votes = new List<Vote>() {vote};
-            idea.Images = new List<Image>(){};
-            idea2.Images = new List<Image>(){};
-            idea.TextFields = new List<TextField>(){textfield1,textfield2};
-            idea2.TextFields = new List<TextField>(){textfield3};
-            idea3.TextFields = new List<TextField>(){textfield4};
-            idea4.TextFields = new List<TextField>(){};
-            idea5.TextFields = new List<TextField>(){};
-            idea.Videos = new List<Video>(){};
-            idea2.Videos = new List<Video>(){};
-            idea3.Videos = new List<Video>(){};
-            idea4.Videos = new List<Video>(){};
-            idea5.Videos = new List<Video>(){};
+            idea.IdeaObjects = new List<IdeaObject>(){textfield1,textfield2};
+            idea2.IdeaObjects = new List<IdeaObject>(){textfield3};
+            idea3.IdeaObjects = new List<IdeaObject>(){textfield4};
+            idea4.IdeaObjects = new List<IdeaObject>(){};
+            idea5.IdeaObjects = new List<IdeaObject>(){};
             //ctx.Answers.Add(answer);
             openQuestion.Answers = new List<Answer>() {};
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};

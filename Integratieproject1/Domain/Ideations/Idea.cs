@@ -12,9 +12,8 @@ namespace Integratieproject1.Domain.Ideations
     {
         [Key] public int IdeaId { get; set; }
         public Position Position { get; set; }
-        public ICollection<Video> Videos { get; set; }
+        public ICollection<IdeaObject> IdeaObjects { get; set; }
         public String Theme { get; set; }
-        public ICollection<TextField> TextFields { get; set; }
         
         [DefaultValue(false)]
         public Boolean Reported { get; set; }
@@ -24,8 +23,46 @@ namespace Integratieproject1.Domain.Ideations
         public ICollection<IoTSetup> IoTSetups { get; set; }
         public ICollection<Vote> Votes { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
-        public ICollection<Image> Images { get; set; }
-        
+
+        public List<Image> GetImages()
+        {
+            List<Image> images = new List<Image>();
+            foreach (var ideaObject in IdeaObjects)
+            {
+                if (ideaObject.GetType() == typeof(Image))
+                {
+                    images.Add((Image)ideaObject);
+                }
+            }
+
+            return images;
+        }
+        public List<TextField> GetTextFields()
+        {
+            List<TextField> textFields = new List<TextField>();
+            foreach (var ideaObject in IdeaObjects)
+            {
+                if (ideaObject.GetType() == typeof(TextField))
+                {
+                    textFields.Add((TextField)ideaObject);
+                }
+            }
+
+            return textFields;
+        }
+        public List<Video> GetVideos()
+        {
+            List<Video> videos = new List<Video>();
+            foreach (var ideaObject in IdeaObjects)
+            {
+                if (ideaObject.GetType() == typeof(Video))
+                {
+                    videos.Add((Video)ideaObject);
+                }
+            }
+
+            return videos;
+        }
 
     }
 }

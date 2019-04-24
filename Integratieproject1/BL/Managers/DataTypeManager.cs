@@ -80,36 +80,6 @@ namespace Integratieproject1.BL.Managers
         
         #endregion
 
-        #region Images
-
-        public void CreateImage(string name, string path, int ideaId)
-        {
-            Idea ideaToAddImageTo = _ideationsManager.GetIdea(ideaId);
-            
-            // Create image
-            Image image = new Image
-            {
-                ImageName = name, 
-                ImagePath = path,
-                Idea = ideaToAddImageTo
-            };
-          
-            // Add image to idea
-            var images = GetImages(ideaId);
-            ideaToAddImageTo.Images = images != null ? images.ToList() : new List<Image>();
-            ideaToAddImageTo.Images.Add(image);
-                        
-            // Save in DB
-            _dataTypeRepository.CreateImage(image);
-            _ideationsManager.ChangeIdea(ideaToAddImageTo);
-            _unitOfWorkManager.Save();
-        }
-
-        public IEnumerable<Image> GetImages(int ideaId)
-        {
-            return _dataTypeRepository.ReadImagesOfIdea(ideaId);
-        }
-
-        #endregion
+        
     }
 }

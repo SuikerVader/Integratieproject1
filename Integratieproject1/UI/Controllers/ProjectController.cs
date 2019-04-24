@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Primitives;
@@ -202,7 +204,7 @@ namespace Integratieproject1.UI.Controllers
                         file.CopyTo(fileStream);
                     }
 
-                    _dataTypeManager.CreateImage(Path.GetFileName(file.FileName), Path.Combine(uploads, imagePath), ideaId);
+                    _ideationsManager.CreateImage(Path.GetFileName(file.FileName), Path.Combine(uploads, imagePath), ideaId);
                 }
             }
         }
@@ -214,14 +216,42 @@ namespace Integratieproject1.UI.Controllers
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(idea.IdeaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(idea.IdeaId).Count;
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
 
+        public IActionResult EditIdea(int ideaId)
+        {
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        [HttpPost]
         public IActionResult EditIdea(Idea idea,int ideaId, int ideationId)
         {
             _ideationsManager.EditIdea(idea, ideaId);
             Idea returnIdea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
             return View("/UI/Views/Project/Idea.cshtml", returnIdea);
+        }
+        public IActionResult OrderNrUp(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult OrderNrDown(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
         public IActionResult DeleteIdea(int ideaId, int ideationId)
@@ -230,5 +260,74 @@ namespace Integratieproject1.UI.Controllers
             Ideation ideation = _ideationsManager.GetIdeation(ideationId);
             return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
+        public IActionResult AddVideo(Video video, int ideaId)
+        {
+            _ideationsManager.AddVideo(video, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult AddTextField(TextField textField, int ideaId)
+        {
+            _ideationsManager.AddTextField(textField, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        public IActionResult EditTextField(TextField textField, int ideaId, int textFieldId)
+        {
+            _ideationsManager.EditTextField(textField, textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult AddImage(List<IFormFile> formFiles, int ideaId)
+        {
+            UploadImages(formFiles,ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult DeleteImage(int imageId, int ideaId)
+        {
+            _ideationsManager.DeleteImage(imageId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        public IActionResult DeleteVideo(int videoId, int ideaId)
+        {
+            _ideationsManager.DeleteVideo(videoId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult DeleteTextField(int textFieldId, int ideaId)
+        {
+            _ideationsManager.DeleteTextField(textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
+            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        
     }
 }

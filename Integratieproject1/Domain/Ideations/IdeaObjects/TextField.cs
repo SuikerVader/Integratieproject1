@@ -4,12 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Integratieproject1.Domain.Datatypes
 {
-    public class TextField
+    public class TextField : IdeaObject
     {
-        [Key]
-        public int TextId { get; set; }
+
         public string Text { get; set; }
-        [Required] public Idea Idea { get; set; }
-        public int OrderNr { get; set; }
     }
 }

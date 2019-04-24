@@ -1,0 +1,14 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Datatypes.TextField
+
+@{
+    ViewBag.Title = "AddQuestionPage";
+}
+
+<div>
+    <form class="form-inline" asp-controller="Project" asp-action="AddTextField" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+        <input class="form-control" required asp-for="Text" placeholder="Question text ..." class="form-control"/>
+        <input class="btn btn-primary btn-sm" type="submit" value="Add TextField">
+    </form>
+    
+</div>

@@ -1,9 +1,12 @@
+@using Integratieproject1.Domain.Datatypes
+@using Integratieproject1.Domain.Ideations
 @using Integratieproject1.Domain.Projects
 @using Integratieproject1.Domain.Surveys
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
     ViewBag.Title = "IdeaPage";
+    ViewBag.IdeaId = Model.IdeaId;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -15,7 +18,7 @@
         }
         else
         {
-          <input required asp-for="Title" value="@Model.Title" class="form-control"/>  
+            <input required asp-for="Title" value="@Model.Title" class="form-control"/>  
         }
         <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
         @if (Model.Title.Equals("_NewIdea_"))
@@ -31,9 +34,89 @@
                asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
                 Delete idea
             </a> 
-        }
-        
+        }        
     </form>
+    @foreach (IdeaObject ideaObject in ViewBag.Objects)
+    {
+        if(ideaObject.GetType() == typeof(TextField))
+        {
+            var textField = (TextField) ideaObject;
+            <p>@textField.Text</p>
+            <button class="btn btn-primary" onclick="showHide('@textField.IdeaObjectId.ToString()editTextField')" >Edit TextField</button>             
+            <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
+                @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
+            </div>
+
+        }
+        if (ideaObject.GetType() == typeof(Image))
+        {
+            <br/>
+            var image = (Image) ideaObject;
+            <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/> 
+            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+               asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                Delete image
+            </a> 
+            
+        }
+        if (ideaObject.GetType() == typeof(Video))
+        {
+            var video = (Video) ideaObject;
+            <iframe src="@video.Url" width="100%"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+            <br/> 
+            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+               asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                Delete video
+            </a>
+        }
+        if (ideaObject.OrderNr > 1)
+         {
+             <a asp-area="" asp-controller="Project"
+                asp-action="OrderNrUp" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                 <i class="fa fa-chevron-up"></i>
+             </a>
+         }
+        if (ideaObject.OrderNr < ViewBag.ObjectsCount)
+         {
+             <a asp-area="" asp-controller="Project"
+                asp-action="OrderNrDown" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                 <i class="fa fa-chevron-down"></i>
+             </a>
+         }
+        
+    }
+    
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Add
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button class="dropdown-item" onclick="showHide('newTextField')" type="button" >TextField</button>
+            <button class="dropdown-item" onclick="showHide('newImage')" type="button" >Image</button>
+            <button class="dropdown-item" onclick="showHide('newVideo')" type="button" >Video</button>
+        </div>
+    </div>
+    <div id="newTextField" style="display: none">
+        @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
+    </div>
+    <div id="newImage" style="display: none">
+        @await Html.PartialAsync("_AddImagePartial.cshtml")
+    </div>
+    <div id="newVideo" style="display: none">
+        @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
+    </div>
 
 
 </div>
+<script>
+    function showHide(id) {
+        var x = document.getElementById(id);
+        if (x.style.display === 'none') {
+            x.style.display = 'inline-block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+</script>

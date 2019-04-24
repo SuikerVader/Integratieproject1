@@ -104,9 +104,9 @@
 
                         <div class="card-body">
                             <h5 class="card-title">@idea.Title</h5>
-                            @if (idea.TextFields != null && idea.TextFields.Count > 0 )
+                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0 )
                             {
-                                <p class="card-text">@idea.TextFields.First().Text</p>
+                                <p class="card-text">@idea.GetTextFields().First().Text</p>
                             }
                             
                             @if (Model.InputIdeation == true)
@@ -116,26 +116,23 @@
                                 </p>
                             }
 
-                            @if (idea.Images != null && idea.Images.Count > 0)
+                            @if (idea.GetImages() != null && idea.GetImages().Count > 0)
                             {
-                                foreach (Image image in idea.Images)
+                                foreach (Image image in idea.GetImages())
                                 {
                                     <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
                                 }
                             }
                             <br/>
-                            @if (idea.Videos != null && idea.Videos.Count > 0)
+                            @if (idea.GetVideos() != null && idea.GetVideos().Count > 0)
                             {
-                                foreach (var video in idea.Videos)
-                                {
-                                    if (!video.Url.Equals(""))
+                                    if (!idea.GetVideos().First().Url.Equals(""))
                                     {
-                                       <iframe src="@video.Url" width="100%"
+                                       <iframe src="@idea.GetVideos().First().Url" width="100%"
                                                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                                                                        </iframe>
                                                                        <br/> 
                                     }
-                                }
                                 
                             }
                             <a asp-area="" asp-controller="Project"
