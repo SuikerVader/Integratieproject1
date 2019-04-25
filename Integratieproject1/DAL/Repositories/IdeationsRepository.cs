@@ -95,7 +95,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(v => v.Votes)
                 .Include(i => i.IdeaObjects)
-                .Include(i=>i.Ideation)
+                .Include(i => i.IdentityUser)
+                .Include(i=>i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
                 .Single(i => i.IdeaId == ideaId);
         }
         

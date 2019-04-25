@@ -229,8 +229,9 @@ namespace Integratieproject1.BL.Managers
 
         public void EditIdea(Idea idea, int ideaId)
         {
-            idea.IdeaId = ideaId;
-            _ideationsRepository.UpdateIdea(idea);
+            Idea returnIdea = GetIdea(ideaId);
+            returnIdea.Title = idea.Title;
+            _ideationsRepository.UpdateIdea(returnIdea);
             _unitOfWorkManager.Save();
         }
 
@@ -526,7 +527,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void LikeReaction(int reactionId, string user, string userId)
+        public void LikeReaction(int reactionId, string userId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
             IdentityUser identityUser = usersManager.GetUser(userId);

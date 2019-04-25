@@ -140,20 +140,24 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
-        public IActionResult LikeReaction(int ideaId, int reactionId, IFormCollection formCollection)
+        public IActionResult LikeReaction(int id, string type, int reactionId)
         {
-            ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                parameters.Add(pair.Value);
-            }
 
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             
-            _ideationsManager.LikeReaction(reactionId, parameters[0].ToString(), currentUserId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
+            _ideationsManager.LikeReaction(reactionId, currentUserId);
+            if (type.Equals("idea"))
+            {
+              Idea idea = _ideationsManager.GetIdea(id);
+                          return View("/UI/Views/Project/Idea.cshtml", idea);  
+            }
+            else
+            {
+                Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            
         }
 
         [HttpPost]
@@ -216,16 +220,12 @@ namespace Integratieproject1.UI.Controllers
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(idea.IdeaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(idea.IdeaId).Count;
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
 
         public IActionResult EditIdea(int ideaId)
         {
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
         [HttpPost]
@@ -233,24 +233,18 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.EditIdea(idea, ideaId);
             Idea returnIdea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
             return View("/UI/Views/Project/Idea.cshtml", returnIdea);
         }
         public IActionResult OrderNrUp(int ideaObjectId, int ideaId)
         {
             _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
         public IActionResult OrderNrDown(int ideaObjectId, int ideaId)
         {
             _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -264,8 +258,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddVideo(video, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
@@ -274,8 +266,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddTextField(textField, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
@@ -283,9 +273,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.EditTextField(textField, textFieldId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
-
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
 
@@ -293,8 +280,6 @@ namespace Integratieproject1.UI.Controllers
         {
             UploadImages(formFiles,ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
@@ -303,8 +288,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteImage(imageId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
@@ -312,8 +295,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteVideo(videoId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
@@ -322,8 +303,6 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteTextField(textFieldId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.Objects = _ideationsManager.GetIdeaObjects(ideaId).OrderBy(o => o.OrderNr);
-            ViewBag.ObjectsCount = _ideationsManager.GetIdeaObjects(ideaId).Count;
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);  
         }
