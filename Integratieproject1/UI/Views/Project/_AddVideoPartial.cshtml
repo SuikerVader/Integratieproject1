@@ -6,14 +6,18 @@
 }
 
 <div>
-    <form class="form-inline" asp-controller="Project" asp-action="AddVideo" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-        <label for="uploadedVideo">Video</label>
-        <input class="form-control" asp-for="Url" type="url" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
-
-        <iframe id="previewVideo" width="560" height="315" src=""
+    <form class="" asp-controller="Project" asp-action="AddVideo" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+        <div class="form-row">
+            <div class="col-10 text-center">
+                <input required class="form-control" asp-for="Url" type="url" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
+            </div>
+            <div class="col-2 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Add Video">
+            </div>
+        </div>
+        <iframe id="previewVideo" width="100%" src=""
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
-        <input class="btn btn-primary btn-sm" type="submit" value="Add Video">
     </form>
 </div>
 <script>

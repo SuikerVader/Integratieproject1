@@ -5,11 +5,12 @@
 }
 
 <div>
-    <form class="form-inline" asp-controller="Project" asp-action="AddImage" asp-route-ideaId="@ViewBag.IdeaId" method="post" enctype="multipart/form-data">
-        <div class="form-group" id="imagesUpload">
-            <label for="uploadedImages">
-                        Images
-                        <div class="input-group">
+    <form class="" asp-controller="Project" asp-action="AddImage" asp-route-ideaId="@ViewBag.IdeaId" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="col-10 text-center">
+                <div class="form-group" id="imagesUpload" >
+                    <label for="uploadedImages" style="width: 100%">
+                        <div class="input-group" >
                             <span class="form-control" id="chosenImages">
                                 Choose images...
                             </span>
@@ -22,14 +23,18 @@
                            name="formFiles"
                            type="file"
                            multiple
+                           required
                            data-multiple-target=" files selected"
                            id="uploadedImages"
                            accept="image/x-png,image/gif,image/jpeg"
                            onchange="PreviewImage(this)">
+                </div>
+            </div>
+            <div class="col-2 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Add Image">
+            </div>
         </div>
-        <input class="btn btn-primary btn-sm" type="submit" value="Add Image">
     </form>
-    
 </div>
 <script>
     function PreviewImage(fileInput) {
