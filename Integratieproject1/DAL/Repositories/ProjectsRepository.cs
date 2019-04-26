@@ -43,6 +43,18 @@ namespace Integratieproject1.DAL.Repositories
             return platform;
         }
 
+        public void RemovePlatform(Platform platform)
+        {
+            _ctx.Platforms.Remove(platform);
+            _ctx.SaveChanges();
+        }
+        
+        public void EditPlatform(Platform platform)
+        {
+            _ctx.Platforms.Update(platform);
+            _ctx.SaveChanges();
+        }
+
         #endregion
 
         #region Project

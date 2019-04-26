@@ -16,11 +16,13 @@ namespace Integratieproject1.BL.Managers
     {
         private readonly ProjectsRepository _projectsRepository;
         private readonly UnitOfWorkManager _unitOfWorkManager;
+        private readonly UsersManager _usersManager;
 
         public ProjectsManager()
         {
             _unitOfWorkManager = new UnitOfWorkManager();
             _projectsRepository = new ProjectsRepository(_unitOfWorkManager.UnitOfWork);
+            _usersManager = new UsersManager(_unitOfWorkManager);
         }
 
         public ProjectsManager(UnitOfWorkManager unitOfWorkManager)
@@ -42,6 +44,41 @@ namespace Integratieproject1.BL.Managers
         public void CreatePlatform(Platform platform)
         {
             _projectsRepository.CreatePlatform(platform);
+            _unitOfWorkManager.Save();
+        }
+
+        public IList<Platform> GetAllPlatforms()
+        {
+            return _projectsRepository.GetPlatforms().ToList();
+        }
+
+        public void DeletePlatform(int platformId)
+        {
+            Platform platform = _projectsRepository.GetPlatform(platformId);
+            if (platform.Projects != null)
+            {
+                foreach (Project project in platform.Projects.ToList())
+                {
+                    DeleteProject(project.ProjectId);
+                }
+            }
+
+            if (platform.Users != null)
+            {
+                foreach (IdentityUser identityUser in platform.Users.ToList())
+                {
+                    _usersManager.DeleteUser(identityUser.Id);
+                }
+            }
+
+            _projectsRepository.RemovePlatform(platform);
+            _unitOfWorkManager.Save();
+        }
+        
+        public void EditPlatform(Platform platform, int platformId)
+        {
+            platform.PlatformId = platformId;
+            _projectsRepository.EditPlatform(platform);
             _unitOfWorkManager.Save();
         }
 
