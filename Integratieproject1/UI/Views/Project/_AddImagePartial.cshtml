@@ -1,0 +1,64 @@
+@using Integratieproject1.Domain.Projects
+
+@{
+    ViewBag.Title = "AddImagePage";
+}
+
+<div>
+    <form class="" asp-controller="Project" asp-action="AddImage" asp-route-ideaId="@ViewBag.IdeaId" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="col-10 text-center">
+                <div class="form-group" id="imagesUpload" >
+                    <label for="uploadedImages" style="width: 100%">
+                        <div class="input-group" >
+                            <span class="form-control" id="chosenImages">
+                                Choose images...
+                            </span>
+                            <div class="input-group-append">
+                                <span class="input-group-text btn btn-outline-secondary">Browse</span>
+                            </div>
+                        </div>
+                    </label>
+                    <input class="input-default-js"
+                           name="formFiles"
+                           type="file"
+                           multiple
+                           required
+                           data-multiple-target=" files selected"
+                           id="uploadedImages"
+                           accept="image/x-png,image/gif,image/jpeg"
+                           onchange="PreviewImage(this)">
+                </div>
+            </div>
+            <div class="col-2 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Add Image">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function PreviewImage(fileInput) {
+        var files = fileInput.files;
+        var imagesUpload = document.getElementById('imagesUpload');
+        var chosenImages = document.getElementById('chosenImages');
+
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onloadend = function(event) {
+                var preview = document.createElement('img');
+                preview.setAttribute('src', event.target.result);
+                preview.setAttribute('alt', 'Image preview...');
+                preview.setAttribute('width', '100px');
+                preview.setAttribute('height', '100px');
+                imagesUpload.appendChild(preview);
+            }
+
+            if (files[i]) {
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        chosenImages.innerHTML = files.length + fileInput.getAttribute('data-multiple-target');
+    }
+</script>

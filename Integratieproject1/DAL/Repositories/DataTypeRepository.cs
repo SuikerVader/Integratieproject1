@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.Domain.Datatypes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -40,20 +41,8 @@ namespace Integratieproject1.DAL.Repositories
 
         #endregion
 
-        #region Images
+        
 
-        public Image CreateImage(Image image)
-        {
-            _ctx.Images.Add(image);
-            _ctx.SaveChanges();
-            return image;
-        }
-
-        public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
-        {
-            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
-        }
-
-        #endregion
+        
     }
 }

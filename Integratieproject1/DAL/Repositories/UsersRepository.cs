@@ -78,5 +78,11 @@ namespace Integratieproject1.DAL.Repositories
         }
         
         #endregion
+
+        public async void BlockUser(IdentityUser identityUser, int days)
+        {
+            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore, null, null, null, null, null, null, null, null);
+            await userManager.SetLockoutEndDateAsync(identityUser, DateTime.Now.AddDays(days));
+        }
     }
 }
