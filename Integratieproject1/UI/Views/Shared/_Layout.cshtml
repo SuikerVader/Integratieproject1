@@ -25,13 +25,13 @@
         @*     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Integratieproject1</a> *@
         @* </div> *@
         
-        <a class="navbar-brand" asp-controller="Home" asp-action="Index">Integratieproject</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">CityOfIdeas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                @*<li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li class="nav-item">
@@ -39,25 +39,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                </li>
-                @if (User.IsInRole("Admin"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin">Admin</a>
-                    </li>
-                }
-                @if (User.IsInRole("Mod"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Moderator" asp-action="Index">Moderator</a>
-                    </li>
-                }
-                @if (User.IsInRole("SuperAdmin"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">SuperAdmin</a>
-                    </li>
-                }
+                </li>*@
             </ul>
             <partial name="/UI/Views/Shared/_SearchPartial.cshtml"/>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>

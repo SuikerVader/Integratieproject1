@@ -12,7 +12,21 @@
                      <form class="dropdown-menu" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new {area = ""})" method="post" id="logoutForm" class="dropdown-menu p-4">
                          <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
                          <button type="submit" class="dropdown-item">Logout</button>
+                         <div class="dropdown-divider"></div>
+                         @if (User.IsInRole("Admin"))
+                         {
+                             <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Admin Pages</a>
+                         }
+                         @if (User.IsInRole("Mod"))
+                         {
+                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderator Pages</a>
+                         }
+                         @if (User.IsInRole("SuperAdmin"))
+                         {
+                                 <a class="dropdown-item" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">SuperAdmin Pages</a>
+                         }
                      </form>
+                     
                  </li>
              </ul>
 }

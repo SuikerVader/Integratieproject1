@@ -46,38 +46,89 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="d-flex flex-row justify-content-center">
-                            <div>
-                                <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
-                                    <button class="btn btn-primary voteBtn" type="submit">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-                                </form>
-                            </div>
-                            <div>
-                                <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="facebook"
-                                         data-href="https://developers.facebook.com/docs/plugins/"
-                                         data-layout="button">
-                                        <button class="btn btn-primary voteBtn "
+                            @if (ViewBag.voteCheck == true)
+                            {
+                                <div>
+                                    <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
+                                        <button class="btn btn-primary voteBtn" type="submit">
+                                            <i class="fa fa-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
+                                        <button disabled class="btn btn-secondary voteBtn" type="submit">
+                                            <i class="fa fa-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            @if (ViewBag.sharefbCheck == true)
+                            {
+                                <div>
+                                    <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
+                                        <div class="facebook"
+                                             data-href="https://developers.facebook.com/docs/plugins/"
+                                             data-layout="button">
+                                            <button class="btn btn-primary voteBtn "
 
-                                                type="submit"
-                                                onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
-                                            <i class="fa fa-facebook"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div>
-                                <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="twitter">
-                                        <button type="submit"
-                                                onclick="share_tw()"
-                                                class="btn btn-primary voteBtn">
-                                            <i class="fa fa-twitter"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                                    type="submit"
+                                                    onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+                                                <i class="fa fa-facebook"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
+                                        <div class="facebook"
+                                             data-href="https://developers.facebook.com/docs/plugins/"
+                                             data-layout="button">
+                                            <button disabled class="btn btn-secondary voteBtn "
+
+                                                    type="submit"
+                                                    onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+                                                <i class="fa fa-facebook"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                            @if (ViewBag.sharetwCheck == true)
+                            {
+                                <div>
+                                    <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
+                                        <div class="twitter">
+                                            <button type="submit"
+                                                    onclick="share_tw()"
+                                                    class="btn btn-primary voteBtn">
+                                                <i class="fa fa-twitter"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>  
+                            }
+                            else
+                            {
+                                <div>
+                                    <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
+                                        <div class="twitter">
+                                            <button disabled type="submit"
+                                                    onclick="share_tw()"
+                                                    class="btn btn-secondary voteBtn">
+                                                <i class="fa fa-twitter"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div> 
+                            }
+                            
                         </div>
                         <br/>
                     }
@@ -128,7 +179,9 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
-                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()"><i class="fa fa-comment"></i></button>
+                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
+                            <i class="fa fa-comment"></i>
+                        </button>
                         <div id="createReaction" style="display: none">
                             @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
                         </div>
@@ -141,23 +194,23 @@
                 @foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
                 {
                     <div class="ideaObject text-center">
-                    @if (ideaObject.GetType() == typeof(TextField))
-                    {
-                        var textField = (TextField) ideaObject;
+                        @if (ideaObject.GetType() == typeof(TextField))
+                        {
+                            var textField = (TextField) ideaObject;
                             <p>@textField.Text</p>
-                    }
-                    @if (ideaObject.GetType() == typeof(Image))
-                    {
-                        var image = (Image) ideaObject;
+                        }
+                        @if (ideaObject.GetType() == typeof(Image))
+                        {
+                            var image = (Image) ideaObject;
                             <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                    }
-                    @if (ideaObject.GetType() == typeof(Video))
-                    {
-                        var video = (Video) ideaObject;
+                        }
+                        @if (ideaObject.GetType() == typeof(Video))
+                        {
+                            var video = (Video) ideaObject;
                             <iframe src="@video.Url" width="100%" height="300px"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                             </iframe>
-                    }
+                        }
                     </div>
                 }
             </div>
