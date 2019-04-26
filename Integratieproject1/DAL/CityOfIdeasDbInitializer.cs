@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity.Pages.Account;
+using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -388,6 +390,7 @@ namespace Integratieproject1.DAL
 
             // Herstel gedrag 'ChangTracker.QueryTrackingBehavior'
             ctx.ChangeTracker.QueryTrackingBehavior = previousBehaviour;
+            
         }
 
         public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -426,6 +429,7 @@ namespace Integratieproject1.DAL
             await userManager.AddToRoleAsync(modTest, "Mod");
             await userManager.AddToRoleAsync(organisationTest, "Organisation");
             await userManager.AddToRoleAsync(userTest, "User");
+            
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Integratieproject1.BL.Interfaces
         void CreateUser(IdentityUser identityUser);
         IEnumerable<VerificationRequest> GetVerificationRequests();
         void CreateVerificationRequest(VerificationRequest verificationRequest);
-        VerificationRequest CreateVerificationRequest(User user, string request);
+        VerificationRequest CreateVerificationRequest(IdentityUser user, string request);
+        void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted);
     }
 }

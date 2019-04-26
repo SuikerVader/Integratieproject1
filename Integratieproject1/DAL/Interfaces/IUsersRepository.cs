@@ -14,5 +14,6 @@ namespace Integratieproject1.DAL.Interfaces
         void CreateUser(IdentityUser identityUser);
         IEnumerable<VerificationRequest> GetVerificationRequests();
         void CreateVerificationRequest(VerificationRequest verificationRequest);
+        void SetVerificationRequestHandled(VerificationRequest verificationRequest);
     }
 }

@@ -70,6 +70,12 @@ namespace Integratieproject1.DAL.Repositories
         {
             _ctx.VerificationRequests.Add(verificationRequest);
         }
+
+        public void SetVerificationRequestHandled(VerificationRequest verificationRequest)
+        {
+            verificationRequest.handled = true;
+            _ctx.VerificationRequests.Update(verificationRequest);
+        }
         
         #endregion
     }

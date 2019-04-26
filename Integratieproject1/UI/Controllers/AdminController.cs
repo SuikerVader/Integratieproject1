@@ -9,6 +9,7 @@ using Integratieproject1.Domain;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -68,10 +69,25 @@ namespace Integratieproject1.UI.Controllers{}
         }
         
         public IActionResult Users()
+                 {
+                     IList<IdentityUser> users = _usersManager.GetUsers("USER");
+                     return View("/UI/Views/Admin/Users.cshtml", users);
+                 }
+        
+        #region VerificationRequests
+        public IActionResult VerificationRequests()
         {
-            IList<IdentityUser> users = _usersManager.GetUsers("USER");
-            return View("/UI/Views/Admin/Users.cshtml", users);
+            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
         }
+
+        public IActionResult HandleVerificationRequest(VerificationRequest request, bool acc)
+        {
+            _usersManager.HandleVerificationRequest(request, acc);
+            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
+        }
+        #endregion
 
         #region Project
 

@@ -75,12 +75,22 @@ namespace Integratieproject1.BL.Managers
             _usersRepository.CreateVerificationRequest(verificationRequest);
         }
 
-        public VerificationRequest CreateVerificationRequest(User user, string request)
+        public VerificationRequest CreateVerificationRequest(IdentityUser user, string request)
         {
             VerificationRequest verificationRequest = new VerificationRequest();
             verificationRequest.user = user;
             verificationRequest.request = request;
+            verificationRequest.handled = false;
             return verificationRequest;
+        }
+
+        public void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted)
+        {
+            if (accepted)
+            {
+                GiveRole(verificationRequest.user.Id, "ORGANISATION");
+            }
+            _usersRepository.SetVerificationRequestHandled(verificationRequest);
         }
         #endregion
     }
