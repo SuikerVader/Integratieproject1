@@ -1,3 +1,4 @@
+@using System.Linq
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
@@ -18,7 +19,7 @@
 
     <div class="form-group">
         <label for="description">Description</label>
-        <textarea class="form-control" asp-for="Text" name="text" id="description" rows="5"></textarea>
+        <textarea class="form-control" name="text" id="description" rows="5"></textarea>
     </div>
 
     <div class="form-group" id="imagesUpload">
@@ -45,7 +46,7 @@
 
     <div class="form-group">
         <label for="uploadedVideo">Video</label>
-        <input class="form-control" asp-for="Video" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
+        <input class="form-control" type="url" name="video" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
 
         <iframe id="previewVideo" width="560" height="315" src=""
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
