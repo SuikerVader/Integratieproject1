@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.BL.Managers
@@ -61,6 +62,37 @@ namespace Integratieproject1.BL.Managers
         {
             _usersRepository.CreateUser(identityUser);
         }
+        
+        #region VerificationRequest
+
+        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        {
+            return _usersRepository.GetVerificationRequests();
+        }
+
+        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        {
+            _usersRepository.CreateVerificationRequest(verificationRequest);
+        }
+
+        public VerificationRequest CreateVerificationRequest(IdentityUser user, string request)
+        {
+            VerificationRequest verificationRequest = new VerificationRequest();
+            verificationRequest.user = user;
+            verificationRequest.request = request;
+            verificationRequest.handled = false;
+            return verificationRequest;
+        }
+
+        public void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted)
+        {
+            if (accepted)
+            {
+                GiveRole(verificationRequest.user.Id, "ORGANISATION");
+            }
+            _usersRepository.SetVerificationRequestHandled(verificationRequest);
+        }
+        #endregion
 
         public void BlockUser(string userId, int days)
         {

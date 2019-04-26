@@ -1,0 +1,35 @@
+@using Integratieproject1.Domain.Users
+@model IList<VerificationRequest>
+
+@{
+    ViewBag.Title = "AdminPage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+            <h3>Verification Requests</h3>
+            <div class="d-flex flex-column justify-content-start" style="width: 100%">
+                <table class="table">
+                    <tr>
+                        <th>User</th>
+                        <th>Request</th>
+                    </tr>
+                    @foreach (VerificationRequest verificationRequest in @Model)
+                    {
+                        <tr>
+                            <td>@verificationRequest.user</td>
+                            <td>@verificationRequest.request</td>
+                            <td>
+                                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">Accept
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">Deny
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+        </div>
+    </div>
