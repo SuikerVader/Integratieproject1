@@ -64,18 +64,7 @@ namespace Integratieproject1.Domain.Ideations
             return videos;
         }
 
-        public bool CheckVote(string userName, VoteType voteType)
-        {
-            foreach (var vote in Votes)
-            {
-                if (vote.VoteType == voteType && vote.IdentityUser.Email == userName)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+        
 
     }
 }

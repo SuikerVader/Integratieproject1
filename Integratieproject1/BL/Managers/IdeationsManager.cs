@@ -605,6 +605,20 @@ namespace Integratieproject1.BL.Managers
                 _unitOfWorkManager.Save();
             }
         }
+        
+        public bool CheckVote(string userId, VoteType voteType, int ideaId)
+        {
+            Idea idea = GetIdea(ideaId);
+            foreach (var vote in idea.Votes)
+            {
+                if (vote.VoteType == voteType && vote.IdentityUser.Id.Equals(userId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         private void DeleteVote(int voteId)
         {

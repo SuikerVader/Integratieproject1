@@ -93,7 +93,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
-                .Include(v => v.Votes)
+                .Include(v => v.Votes).ThenInclude(v => v.IdentityUser)
                 .Include(i => i.IdeaObjects)
                 .Include(i => i.IdentityUser)
                 .Include(i=>i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
