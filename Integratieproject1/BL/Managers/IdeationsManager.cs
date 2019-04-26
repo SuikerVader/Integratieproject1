@@ -22,6 +22,7 @@ namespace Integratieproject1.BL.Managers
         private readonly UnitOfWorkManager _unitOfWorkManager;
         private readonly UsersManager _usersManager;
         private readonly DataTypeManager _dataTypeManager;
+        private SurveysManager surveysManager;
 
         public IdeationsManager()
         {
