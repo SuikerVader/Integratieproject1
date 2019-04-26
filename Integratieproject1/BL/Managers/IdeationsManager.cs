@@ -587,6 +587,7 @@ namespace Integratieproject1.BL.Managers
                     vote.IdentityUser = user;
                     vote.VoteType = voteType;
                     vote.Idea = idea;
+                    vote.Confirmed = true;
                     _ideationsRepository.CreateVote(vote);
                     _unitOfWorkManager.Save();
                 }

@@ -44,7 +44,7 @@ namespace Integratieproject1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -67,7 +67,7 @@ namespace Integratieproject1
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
+            await CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
 
 
         }
