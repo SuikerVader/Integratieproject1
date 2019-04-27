@@ -59,6 +59,13 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
+        public bool IsEmail(int id, int key)
+        {
+            Survey survey = _ctx.Surveys.Include(s => s.Questions).Single(s => s.SurveyId == id);
+            Question question = survey.Questions.Where(q => q.QuestionNr == key).Single();
+            return question.QuestionType == QuestionType.EMAIL;
+        }
+
         #endregion
         
         #region Question
