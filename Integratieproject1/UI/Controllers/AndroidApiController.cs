@@ -120,9 +120,7 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-        #region users
-
-        #endregion
+  
         
         
         
