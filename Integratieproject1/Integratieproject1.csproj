@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\Services\**" />
+    <Content Remove="Domain\Services\**" />
+    <EmbeddedResource Remove="Domain\Services\**" />
+    <None Remove="Domain\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
@@ -18,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="BL\" />
-    <Folder Include="Domain\Services\" />
   </ItemGroup>
 
   <ItemGroup>
