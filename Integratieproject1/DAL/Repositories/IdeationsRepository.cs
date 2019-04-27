@@ -32,6 +32,14 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Ideation> GetProjectsIdeations(int projectId)
+        {
+            return _ctx.Ideations
+                .Include(ph => ph.Phase)
+                .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
+                .AsEnumerable();
+        }
+
         public IEnumerable<Ideation> GetAllIdeations(int platformId)
         {
             return _ctx.Ideations

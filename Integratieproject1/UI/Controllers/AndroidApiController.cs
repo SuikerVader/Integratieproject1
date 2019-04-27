@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Mvc;
@@ -9,79 +10,87 @@ using Integratieproject1.DAL;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.UI.Controllers
 {
     [ApiController]
     public class AndroidApiController
     {
-        private CityOfIdeasDbContext entities;
+        private IdeationsManager _ideationsManager;
+        private SurveysManager _surveysManager;
+        private ProjectsManager _projectsManager;
+        private UsersManager _usersManager;
 
         public AndroidApiController()
         {
-            entities = new CityOfIdeasDbContext();
+            _ideationsManager = new IdeationsManager();
+            _surveysManager = new SurveysManager();
+            _projectsManager = new ProjectsManager();
+            _usersManager = new UsersManager();
         }
+
 
         #region Ideations
 
         [HttpGet]
-        [Route("Api/ideas")]
-        public IEnumerable<Idea> GetIdeas()
+        [Route("Api/ideas/{id}")]
+        public IEnumerable<Idea> GetIdeas(int id)
         {
-            return entities.Ideas.ToArray();
+            return _ideationsManager.GetAllIdeas(id);
         }
 
         [HttpGet]
-        [Route("Api/ideations")]
-        public IEnumerable<Ideation> GetIdeations()
+        [Route("Api/ideations/{id}")]
+        public IEnumerable<Ideation> GetIdeations(int id)
         {
-            return entities.Ideations.ToList();
+            return _ideationsManager.GetProjectIdeation(id);
         }
 
         [HttpGet]
-        [Route("Api/reactions")]
-        public IEnumerable<Reaction> GetReactions()
+        [Route("Api/reactions/{id}")]
+        public IEnumerable<Reaction> GetReactions(int id)
         {
-            return entities.Reactions.ToList();
+            return _ideationsManager.GetAllReactions(id);
         }
 
         [HttpGet]
-        [Route("Api/votes")]
-        public IEnumerable<Vote> GetVotes()
+        [Route("Api/votes/{id}")]
+        public IEnumerable<Vote> GetVotes(int id)
         {
-            return entities.Votes.ToList();
+            return null;
         }
 
         [HttpGet]
-        [Route("Api/like")]
-        public IEnumerable<Like> GetLikes()
+        [Route("Api/like/{id}")]
+        public IEnumerable<Like> GetLikes(int id)
         {
-            return entities.Likes.ToList();
+            return null;
         }
 
         #endregion
 
         #region Projects
-
+        
         [HttpGet]
         [Route("Api/projects")]
         public IEnumerable<Project> GetProjects()
         {
-            return entities.Projects.ToList();
+            return _projectsManager.GetAllProjects();
         }
 
         [HttpGet]
-        [Route("Api/phase")]
-        public IEnumerable<Phase> GetPhases()
+        [Route("Api/phases/{id}")]
+        public IEnumerable<Phase> GetPhases(int id)
         {
-            return entities.Phases.ToList();
+            return _projectsManager.GetPhases(id);
         }
 
         [HttpGet]
-        [Route("Api/platform")]
-        public IEnumerable<Platform> GetPlatform()
+        [Route("Api/platform/{id}")]
+        public Platform GetPlatform(int id)
         {
-            return entities.Platforms.ToList();
+            return _projectsManager.GetPlatform(id);
         }
 
         #endregion
@@ -89,24 +98,24 @@ namespace Integratieproject1.UI.Controllers
         #region surveys
 
         [HttpGet]
-        [Route("Api/surveys")]
-        public IEnumerable<Survey> GetSurveys()
+        [Route("Api/surveys/{id}")]
+        public IEnumerable<Survey> GetSurveys(int id)
         {
-            return entities.Surveys.ToList();
+            return _surveysManager.GetSurveys(id);
         }
 
         [HttpGet]
-        [Route("Api/Answer")]
+        [Route("Api/Answer/{id}")]
         public IEnumerable<Answer> GetAnswers()
         {
-            return entities.Answers.ToList();
+            return null;
         }
 
         [HttpGet]
-        [Route("Api/question")]
-        public IEnumerable<Question> GetQuestions()
+        [Route("Api/question/{id}")]
+        public Question GetQuestions(int id)
         {
-            return entities.Questions.ToList();
+            return _surveysManager.GetQuestion(id);
         }
 
         #endregion

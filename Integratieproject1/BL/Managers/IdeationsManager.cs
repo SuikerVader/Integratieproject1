@@ -104,6 +104,11 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetIdeation(ideationId);
         }
 
+        public IList<Ideation> GetProjectIdeation(int projectId)
+        {
+            return _ideationsRepository.GetProjectsIdeations(projectId).ToList();
+        }
+
         public IList<Ideation> GetIdeations(int phaseId)
         {
             return _ideationsRepository.GetIdeations(phaseId).ToList();
