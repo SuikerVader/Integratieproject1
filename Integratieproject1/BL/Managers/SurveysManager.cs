@@ -79,6 +79,11 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        public bool IsEmail(int id, int key)
+        {
+            return _surveysRepository.IsEmail(id, key);
+        }
+
         #endregion
 
         #region Question
