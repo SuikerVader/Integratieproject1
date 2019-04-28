@@ -1,0 +1,30 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Datatypes.Video
+
+@{
+    ViewBag.Title = "AddQuestionPage";
+}
+
+<div>
+    <form class="" asp-controller="Project" asp-action="AddVideo" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+        <div class="form-row">
+            <div class="col-10 text-center">
+                <input required class="form-control" asp-for="Url" type="url" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
+            </div>
+            <div class="col-2 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Add Video">
+            </div>
+        </div>
+        <iframe id="previewVideo" width="100%" src=""
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
+    </form>
+</div>
+<script>
+    function PreviewVideo(url) {
+        var preview = document.getElementById('previewVideo');
+        url = url.replace("watch?v=", "embed/");
+        preview.src = url;
+        
+    }
+</script>

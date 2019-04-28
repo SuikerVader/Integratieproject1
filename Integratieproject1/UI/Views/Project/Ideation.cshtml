@@ -27,7 +27,10 @@
                     <h1 class="card-title">@Model.CentralQuestion</h1>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
                     {
-                        <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idea</button>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                           asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
+                            Post idea
+                        </a>
                     }
                     @if (Model.InputIdeation == false)
                     {
@@ -49,24 +52,32 @@
                 @foreach (var reaction in Model.Reactions)
                 {
                     <p>
-                        <small>
-                            <strong>@reaction.IdentityUser.Email</strong>
-                        </small>
                         <div class="d-flex flex-row justify-content-between">
+
                             <p>
+                                <small>
+                                    <strong>@reaction.IdentityUser.Email:</strong>
+                                </small>
                                 <small>@reaction.ReactionText</small>
                             </p>
                             <p>
-                                <small>
-                                    <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
                                 @if (User.Identity.IsAuthenticated)
                                 {
+                                    <small>
+                                        <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                            <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</a>
+                                    </small>
                                     <small>
                                         <a asp-area="" asp-controller="Project"
                                            asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
                                             <i class="fa fa-flag"></i>
                                         </a>
                                     </small>
+                                }
+                                else
+                                {
+                                    <small>
+                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
                                 }
                             </p>
 
@@ -76,20 +87,15 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
-                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">React</button>
+                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()"><i class="fa fa-comment"></i></button>
                         <div id="createReaction" style="display: none">
                             @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
                         </div>
                     </div>
                 }
-
-
             </div>
         </div>
         <div id="ideas">
-            <div id="idea" style="display: none">
-                @await Html.PartialAsync("_PostIdeaPartial.cshtml", new Idea())
-            </div>
             <div class="text-center" style="padding: 20px">
                 <h1><i class="fa fa-lightbulb-o"></i> Ideas <i class="fa fa-lightbulb-o"></i></h1>
             </div>
@@ -100,7 +106,11 @@
 
                         <div class="card-body">
                             <h5 class="card-title">@idea.Title</h5>
-                            <p class="card-text">@idea.Text</p>
+                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0 )
+                            {
+                                <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
+                            }
+                            
                             @if (Model.InputIdeation == true)
                             {
                                 <p>
@@ -108,20 +118,24 @@
                                 </p>
                             }
 
-                            @if (idea.Images != null && idea.Images.Count > 0)
+                            @if (idea.GetImages() != null && idea.GetImages().Count > 0)
                             {
-                                foreach (Image image in idea.Images)
+                                foreach (Image image in idea.GetImages())
                                 {
                                     <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
                                 }
                             }
                             <br/>
-                            @if (idea.Video != null && !idea.Video.Equals(""))
+                            @if (idea.GetVideos() != null && idea.GetVideos().Count > 0)
                             {
-                                <iframe src="@idea.Video" width="100%"
-                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                </iframe>
-                                <br/>
+                                    if (!idea.GetVideos().OrderBy(v => v.OrderNr).First().Url.Equals(""))
+                                    {
+                                       <iframe src="@idea.GetVideos().First().Url" width="100%"
+                                                                               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                                                       </iframe>
+                                                                       <br/> 
+                                    }
+                                
                             }
                             <a asp-area="" asp-controller="Project"
                                asp-action="Idea" asp-route-ideaId="@idea.IdeaId">

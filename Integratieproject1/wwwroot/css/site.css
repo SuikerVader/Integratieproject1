@@ -74,6 +74,9 @@ body {
     .surveys {
         width: 50%;
     } 
+    #searchForm{
+        width: 50%;
+    }
 }
 
 .infoCard{
@@ -145,18 +148,18 @@ body {
 }
 
 #ideationGrid {
-    padding-top: 20px;
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr ;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-            "ideation"
-            "ideationInfo"
-            "ideas"
-    
-}
+     padding-top: 20px;
+     height: 100%;
+     width: 100%;
+     display: grid;
+     grid-template-columns: 1fr ;
+     grid-template-rows: auto auto auto;
+     grid-template-areas:
+             "ideation"
+             "ideationInfo"
+             "ideas"
+
+ }
 #ideationInfo{
     grid-area: ideationInfo;
 }
@@ -182,6 +185,84 @@ body {
         width: 48%;
     }
 }
+
+#ideaGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "ideaTitle"
+            "ideaObjects"
+            "ideaInfo"
+
+}
+#ideaInfo{
+    grid-area: ideaInfo;
+}
+#ideaTitle{
+    grid-area: ideaTitle;
+}
+#ideaObjects {
+    grid-area: ideaObjects;
+}
+.voteBtn{
+    width: 45px;
+    height: 45px;
+}
+.ideaObject{
+    padding:20px;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px){
+    #ideaGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "ideaTitle ideaTitle ideaInfo"
+                "ideaObjects ideaObjects ideaObjects"
+    }
+    .ideaObject{
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
+#editIdeaGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "editIdeaTitle"
+            "editIdeaObjects"
+            "editIdeaInfo"
+
+}
+#editIdeaInfo{
+    grid-area: editIdeaInfo;
+}
+#editIdeaTitle{
+    grid-area: editIdeaTitle;
+}
+#editIdeaObjects {
+    grid-area: editIdeaObjects;
+}
+
+@media screen and (min-width: 768px){
+    #editIdeaGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "editIdeaTitle editIdeaTitle editIdeaInfo"
+                "editIdeaObjects editIdeaObjects editIdeaObjects"
+    }
+}
+
 #surveyGrid{
     padding-top: 20px;
     height: 100%;

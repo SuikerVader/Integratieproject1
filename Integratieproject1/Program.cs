@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using Integratieproject1.BL.Managers;
+using Integratieproject1.DAL;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Integratieproject1

@@ -4,6 +4,7 @@ using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.UI.Controllers
@@ -24,6 +25,11 @@ namespace Integratieproject1.UI.Controllers
             _surveysManager = new SurveysManager();
         }
 
+
+        public IActionResult Index(IdentityUser user)
+        {
+            return View("/UI/Views/Moderator/Index.cshtml", user);
+        }
 
         public IActionResult Projects()
         {
@@ -52,5 +58,21 @@ namespace Integratieproject1.UI.Controllers
                         Project project = _projectsManager.GetProject(projectId);
                         return View("/UI/Views/Moderator/Posts.cshtml", project);
         }
+
+        public IActionResult Users()
+        {
+            UsersManager usersManager = new UsersManager();
+            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            return View("/UI/Views/Moderator/Users.cshtml", users);
+        }
+
+        public IActionResult BlockAccount(string userId, int days)
+        {
+            UsersManager usersManager = new UsersManager();
+            usersManager.BlockUser(userId, days);
+            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            return View("/UI/Views/Moderator/Users.cshtml", users);
+        }
+
     }
 }
