@@ -1,0 +1,61 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Datatypes.Position
+
+@{
+    ViewBag.Title = "AddLocationPage";
+}
+
+<div>
+    <form class="" asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+        <div class="form-row">
+            <div class="col-3 text-center">
+                <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
+            </div>
+            <div class="col-3 text-center">
+                <input class="form-control" required asp-for="Lat" id="lat"/>
+            </div>
+            <div class="col-3 text-center">
+                <input class="form-control" required asp-for="Lng" id="lng"/>
+            </div>
+            <div class="col-3 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Add location">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    /*
+ 
+    function inputAutocomplete(){
+        var prefix = 'Antwerpen, ';
+        var str = event.target.value;
+        if(str.indexOf(prefix) == 0) {
+            // string already started with prefix
+            return;
+        } else {
+            if (prefix.indexOf(str) >= 0) {
+                // string is part of prefix
+                event.target.value = prefix;
+            } else {
+                event.target.value = prefix+str;
+            }
+        }
+    };  */
+    function initAutocomplete() {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+        autocomplete.setComponentRestrictions({'country': 'be'});
+        google.maps.event.addListener(autocomplete,
+            'place_changed',
+            function() {
+                var place = autocomplete.getPlace();
+                var lat = place.geometry.location.lat();
+                var lng = place.geometry.location.lng();
+                document.getElementById('lat').value = lat;
+                document.getElementById('lng').value = lng;
+            });
+        
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initAutocomplete"></script>
+

@@ -6,7 +6,7 @@ namespace Integratieproject1.Domain.Datatypes
     {   
     [Key]
         public int PostionId { get; set; }
-        public double Longitude { get; set; }
-        public double Altitude { get; set; }
+        public string Lng { get; set; }
+        public string Lat { get; set; }
     }
 }

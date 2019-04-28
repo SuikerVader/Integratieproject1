@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = "IdeaPage";
     ViewBag.IdeaId = Model.IdeaId;
+    ViewBag.Position = Model.Position;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -53,7 +54,19 @@
                         Delete idea
                     </a>
                 }
+                
             </form>
+            @if (Model.Position != null)
+            {
+                <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+            }
+            else
+            {
+                <button class="dropdown-item" onclick="showHide('addLocation')" type="button">Add location</button>
+                <div id="addLocation" style="display: none">
+                    @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+                </div>
+            }
         </div>
         <div id="editIdeaObjects">
             @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)

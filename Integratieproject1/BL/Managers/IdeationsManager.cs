@@ -273,9 +273,19 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.RemoveIdea(idea);
             _unitOfWorkManager.Save();
         }
+        
+        public void AddPosition(Position position, int ideaId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            Position createPosition = dataTypeManager.CreatePosition(position);
+            Idea idea = GetIdea(ideaId);
+            idea.Position = createPosition;
+            _ideationsRepository.UpdateIdea(idea);
+            _unitOfWorkManager.Save();
+        }
 
+            
         #endregion
-
 
         #region IdeaObject
 
@@ -638,5 +648,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+        
     }
 }
