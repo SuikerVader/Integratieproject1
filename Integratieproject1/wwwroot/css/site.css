@@ -23,6 +23,21 @@ body {
     width: 100%;
 }
 
+/* Make default file-input hidden */
+.input-default-js {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Remove margin between input and input-group-append */
+.input-group-append > .btn {
+    margin: 0 !important;
+}
+
 /* QR code generator */
 #qrCode {
     margin: 15px;
@@ -59,6 +74,9 @@ body {
     .surveys {
         width: 50%;
     } 
+    #searchForm{
+        width: 50%;
+    }
 }
 
 .infoCard{
@@ -74,8 +92,7 @@ body {
         border-bottom: none ;
     }
 }
-
-#ideationGrid {
+.adminGrid {
     padding-top: 20px;
     height: 100%;
     width: 100%;
@@ -83,11 +100,66 @@ body {
     grid-template-columns: 1fr ;
     grid-template-rows: auto auto auto;
     grid-template-areas:
-            "ideation"
-            "ideationInfo"
-            "ideas"
-    
+            "adminTitle"
+            "adminMain"
+            "adminInfo"
+
 }
+.adminInfo{
+    grid-area: adminInfo;
+}
+.adminMain {
+    grid-area: adminMain;
+}
+.adminTitle {
+    grid-area: adminTitle;
+    padding: 20px;
+}
+
+@media screen and (min-width: 768px){
+    .adminGrid {
+        grid-template-columns: 1fr 1fr 1fr ;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "adminTitle adminTitle adminTitle"
+                "adminMain adminMain adminInfo"
+    }
+}
+#moderatorGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "reportedPosts reportedPosts reportedPosts reportedPosts reportedPosts"
+            "moderatorNav posts posts posts posts"
+
+}
+#reportedPosts{
+    grid-area: reportedPosts;
+}
+#moderatorNav {
+    grid-area: moderatorNav;
+}
+#posts {
+    grid-area: posts;
+}
+
+#ideationGrid {
+     padding-top: 20px;
+     height: 100%;
+     width: 100%;
+     display: grid;
+     grid-template-columns: 1fr ;
+     grid-template-rows: auto auto auto;
+     grid-template-areas:
+             "ideation"
+             "ideationInfo"
+             "ideas"
+
+ }
 #ideationInfo{
     grid-area: ideationInfo;
 }
@@ -113,6 +185,84 @@ body {
         width: 48%;
     }
 }
+
+#ideaGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "ideaTitle"
+            "ideaObjects"
+            "ideaInfo"
+
+}
+#ideaInfo{
+    grid-area: ideaInfo;
+}
+#ideaTitle{
+    grid-area: ideaTitle;
+}
+#ideaObjects {
+    grid-area: ideaObjects;
+}
+.voteBtn{
+    width: 45px;
+    height: 45px;
+}
+.ideaObject{
+    padding:20px;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px){
+    #ideaGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "ideaTitle ideaTitle ideaInfo"
+                "ideaObjects ideaObjects ideaObjects"
+    }
+    .ideaObject{
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
+#editIdeaGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "editIdeaTitle"
+            "editIdeaObjects"
+            "editIdeaInfo"
+
+}
+#editIdeaInfo{
+    grid-area: editIdeaInfo;
+}
+#editIdeaTitle{
+    grid-area: editIdeaTitle;
+}
+#editIdeaObjects {
+    grid-area: editIdeaObjects;
+}
+
+@media screen and (min-width: 768px){
+    #editIdeaGrid {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "editIdeaTitle editIdeaTitle editIdeaInfo"
+                "editIdeaObjects editIdeaObjects editIdeaObjects"
+    }
+}
+
 #surveyGrid{
     padding-top: 20px;
     height: 100%;

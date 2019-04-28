@@ -37,6 +37,7 @@ namespace Integratieproject1.BL.Managers
         {
             return _surveysRepository.GetSurvey(surveyId);
         }
+
         public IList<Survey> GetSurveys(int phaseId)
         {
             return _surveysRepository.GetSurveys(phaseId).ToList();
@@ -47,6 +48,7 @@ namespace Integratieproject1.BL.Managers
             _surveysRepository.CreateSurvey(survey);
             _unitOfWorkManager.Save();
         }
+
         public void CreateNewSurvey(int phaseId)
         {
             ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
@@ -54,6 +56,7 @@ namespace Integratieproject1.BL.Managers
             _surveysRepository.CreateSurvey(survey);
             _unitOfWorkManager.Save();
         }
+
         public void EditSurvey(Survey survey, int surveyId)
         {
             survey.SurveyId = surveyId;
@@ -76,22 +79,61 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        public bool IsEmail(int id, int key)
+        {
+            return _surveysRepository.IsEmail(id, key);
+        }
+
         #endregion
 
         #region Question
 
         public void CreateQuestion(Question question, int surveyId)
         {
+            IEnumerable<Question> questions = _surveysRepository.GetQuestions(surveyId);
+            question.QuestionNr = questions.Count()+1;
             question.Survey = GetSurvey(surveyId);
             _surveysRepository.CreateQuestion(question);
             _unitOfWorkManager.Save();
         }
-        
+
         public void EditQuestion(Question question, int questionId, int surveyId)
         {
             question.QuestionId = questionId;
             question.Survey = _surveysRepository.GetOnlySurvey(surveyId);
             _surveysRepository.EditQuestion(question);
+            _unitOfWorkManager.Save();
+        }
+
+        public void QuestionNrChange(int questionId, string changer, int surveyId)
+        {
+            Question question = _surveysRepository.GetQuestion(questionId);
+            IEnumerable<Question> questions = _surveysRepository.GetQuestions(surveyId);
+            if (changer.Equals("up"))
+            {
+                foreach (var listQuestion in questions)
+                {
+                    if (listQuestion.QuestionNr == question.QuestionNr - 1)
+                    {
+                        listQuestion.QuestionNr = listQuestion.QuestionNr + 1;
+                        question.QuestionNr = question.QuestionNr - 1;
+                        _surveysRepository.EditQuestion(question);
+                        _surveysRepository.EditQuestion(listQuestion);
+                    }
+                }
+            } else if (changer.Equals("down"))
+            {
+                foreach (var listQuestion in questions)
+                {
+                    if (listQuestion.QuestionNr == question.QuestionNr + 1)
+                    {
+                        listQuestion.QuestionNr = listQuestion.QuestionNr - 1;
+                        question.QuestionNr = question.QuestionNr + 1;
+                        _surveysRepository.EditQuestion(question);
+                        _surveysRepository.EditQuestion(listQuestion);
+                    }
+                } 
+            }
             _unitOfWorkManager.Save();
         }
 
@@ -136,7 +178,7 @@ namespace Integratieproject1.BL.Managers
         {
             return _surveysRepository.GetAnswer(answerId);
         }
-        
+
         public void EditAnswer(Answer answer, int answerId, int questionId)
         {
             answer.AnswerId = answerId;
@@ -191,7 +233,7 @@ namespace Integratieproject1.BL.Managers
         //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
         public void UpdateSingleAnswer(Question question, int response)
         {
-            foreach ( Answer answer in question.Answers)
+            foreach (Answer answer in question.Answers)
             {
                 if (answer.AnswerId == response)
                 {
@@ -199,7 +241,7 @@ namespace Integratieproject1.BL.Managers
                 }
             }
         }
-        
-        #endregion   
+
+        #endregion
     }
 }

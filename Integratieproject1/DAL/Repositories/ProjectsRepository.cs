@@ -43,6 +43,18 @@ namespace Integratieproject1.DAL.Repositories
             return platform;
         }
 
+        public void RemovePlatform(Platform platform)
+        {
+            _ctx.Platforms.Remove(platform);
+            _ctx.SaveChanges();
+        }
+        
+        public void EditPlatform(Platform platform)
+        {
+            _ctx.Platforms.Update(platform);
+            _ctx.SaveChanges();
+        }
+
         #endregion
 
         #region Project
@@ -81,11 +93,13 @@ namespace Integratieproject1.DAL.Repositories
         public Project GetProject(int projectId)
         {
             return _ctx.Projects
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(id => id.Ideas)
-                .Include(p => p.Phases).ThenInclude(s => s.Surveys)
-                .Include(l => l.Location).ThenInclude(a => a.Address)
-                .Include(pl => pl.Platform)
-                .Single(pr => pr.ProjectId == projectId);
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(i => i.IdentityUser)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Surveys)
+                .Include(p => p.Location).ThenInclude(l => l.Address)
+                .Include(p => p.Platform)
+                .Single(p => p.ProjectId == projectId);
         }
 
         public Project CreateProject(Project project)

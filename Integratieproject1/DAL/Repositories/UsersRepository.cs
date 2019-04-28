@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,8 +28,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public IdentityUser GetUser(string id)
         {
-            IdentityUser identityUser = _userStore.FindByIdAsync(id).Result;
-            return identityUser;
+            return _userStore.FindByIdAsync(id).Result;
         }
         
         public async void DeleteUser(IdentityUser identityUser)
@@ -56,6 +56,33 @@ namespace Integratieproject1.DAL.Repositories
         {
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.CreateAsync(identityUser);
+        }
+        
+        
+        #region VerificationRequest
+
+        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        {
+            return _ctx.VerificationRequests.AsEnumerable();
+        }
+
+        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        {
+            _ctx.VerificationRequests.Add(verificationRequest);
+        }
+
+        public void SetVerificationRequestHandled(VerificationRequest verificationRequest)
+        {
+            verificationRequest.handled = true;
+            _ctx.VerificationRequests.Update(verificationRequest);
+        }
+        
+        #endregion
+
+        public async void BlockUser(IdentityUser identityUser, int days)
+        {
+            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore, null, null, null, null, null, null, null, null);
+            await userManager.SetLockoutEndDateAsync(identityUser, DateTime.Now.AddDays(days));
         }
     }
 }

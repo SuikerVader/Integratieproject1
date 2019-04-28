@@ -8,56 +8,122 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Survey</h2>
-    <div>
-        <form asp-controller="Admin" asp-action="EditSurvey" asp-route-surveyId="@Model.SurveyId" method="post">
-            <label asp-for="Title"></label>
-        <input required asp-for="Title" value="@Model.Title" class="form-control"/>
-        <input type="submit" value="Save Survey">
-        </form>
-            <h2>Questions:</h2>
-            @foreach (var question in Model.Questions)
-            {
-                <h3>@question.QuestionText</h3>
-                <p>@question.QuestionType</p>
-                                         
-                <button onclick="showHide('@question.QuestionId.ToString()question')">Edit Question</button><br />
-                <div id="@question.QuestionId.ToString()question" style="display: none">
-                    @await Html.PartialAsync("_EditQuestionPartial.cshtml", question )
-                </div><br />
-                      
-                if (question.QuestionType != QuestionType.OPEN && question.QuestionType != QuestionType.EMAIL)
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Edit Survey</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="Admin" asp-action="EditSurvey" asp-route-surveyId="@Model.SurveyId" method="post">
+                    <label asp-for="Title"></label>
+                    <input required asp-for="Title" value="@Model.Title" class="form-control"/>
+                    <input class="btn btn-primary btn-sm" type="submit" value="Save Survey">
+                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Admin"
+                       asp-action="DeleteSurvey" asp-route-surveyId="@Model.SurveyId">
+                        Delete survey
+                    </a>
+                </form>
+                <div class="d-flex flex-row justify-content-between">
+                    <h4>Questions:</h4>
+                </div>
+                @foreach (var question in Model.Questions.OrderBy(q => q.QuestionNr))
                 {
-                    <h4>Answers:</h4>
-                    foreach (var answer in question.Answers)
-                    {
-                        <p>@answer.AnswerText</p>
-                        
-                        <button onclick="showHide('@answer.AnswerId.ToString()answer')">Edit Answer</button><br />
-                        <div id="@answer.AnswerId.ToString()answer" style="display: none">
-                            @await Html.PartialAsync("_EditAnswerPartial.cshtml", answer)
-                        </div><br />
-                    }
-                    
-                    
-                    <button onclick="showHide('@question.QuestionId.ToString()newAnswer')">Add Answer</button><br />
-                    <div id="@question.QuestionId.ToString()newAnswer" style="display: none">
-                        @await Html.PartialAsync("_CreateAnswerPartial.cshtml", new Answer{Question = question})
-                    </div><br />
+                    <div class="d-flex flex-row justify-content-start">
+                        <div class="d-flex flex-column justify-content-start align-items-center" style="width: 3%; padding-top: 10px">
+                            @if (question.QuestionNr > 1)
+                            {
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="QuestionNrUp" asp-route-questionId="@question.QuestionId" asp-route-surveyId="@Model.SurveyId">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            }
+                            @if (question.QuestionNr != Model.Questions.Count)
+                            {
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="QuestionNrDown" asp-route-questionId="@question.QuestionId" asp-route-surveyId="@Model.SurveyId">
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                            }
+    
+                        </div>
+                        <div class="card" style="padding: 10px; width: 97%;">
+                            <div class="d-flex flex-row justify-content-between">
+                                <h5>
+                                    <strong>@question.QuestionText </strong>
+                                </h5>
+                                <p>
+                                    <strong>type: </strong> @question.QuestionType</p>
+                                <button class="btn btn-secondary btn-sm" onclick="showHide('@question.QuestionId.ToString()question')">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
+                            <div id="@question.QuestionId.ToString()question" style="display: none">
+                                @await Html.PartialAsync("_EditQuestionPartial.cshtml", question)
+                            </div>
+                            <br/>
+
+                            @if (question.QuestionType != QuestionType.OPEN && question.QuestionType != QuestionType.EMAIL)
+                            {
+                                <div class="d-flex flex-row justify-content-between" style="margin-left: 20px">
+                                    <h5>
+                                        <strong>Answers:</strong>
+                                    </h5>
+                                </div>
+
+                                foreach (var answer in question.Answers)
+                                {
+                                    <div class="d-flex flex-row justify-content-between" style="margin-left: 20px; border-bottom: 1px solid lightgray">
+                                        <p>@answer.AnswerText</p>
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="showHide('@answer.AnswerId.ToString()answer')">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <div id="@answer.AnswerId.ToString()answer" style="display: none">
+                                            @await Html.PartialAsync("_EditAnswerPartial.cshtml", answer)
+                                        </div>
+                                    </div>
+                                }
+                                <div class="d-flex flex-row justify-content-end">
+                                    <button class="btn btn-primary btn-sm" onclick="showHide('@question.QuestionId.ToString()newAnswer')">
+                                        <i class="fa fa-plus"></i>
+                                    </button><br/>
+                                    <div id="@question.QuestionId.ToString()newAnswer" style="display: none">
+                                        @await Html.PartialAsync("_CreateAnswerPartial.cshtml", new Answer {Question = question})
+                                    </div>
+                                </div>
+                            }
+                            <br/>
+                        </div>
+                    </div>
                 }
-                
-                
-            }  
-            
-            <button onclick="showHide('newQuestion')">Add Question</button><br />
-            <div id="newQuestion" style="display: none">
-                @await Html.PartialAsync("_CreateQuestionPartial.cshtml", new Question())
-            </div><br />
-            
-        <a asp-area="" asp-controller="Admin"
-           asp-action="DeleteSurvey" asp-route-surveyId="@Model.SurveyId"><button>Delete survey</button>
-        </a>
+                <div class="d-flex flex-row justify-content-end">
+                    <button class="btn btn-primary btn-sm" onclick="showHide('newQuestion')">
+                        <i class="fa fa-plus"></i>
+                    </button><br/>
+                    <div id="newQuestion" style="display: none">
+                        @await Html.PartialAsync("_CreateQuestionPartial.cshtml", new Question())
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5>
+                        <strong>Info:</strong>
+                    </h5>
+                    <strong>Project:</strong> @Model.Phase.Project.ProjectName<br/>
+                    <strong>Phase:</strong> @Model.Phase.PhaseName<br/>
+                    <strong>Phase periode:</strong><br/>
+                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")<br/>
+                    <br/>
+                    <br/>
+                    <strong>Survey:</strong> @Model.Title
+                </div>
+            </div>
+        </div>
     </div>
+
+
 </div>
 
 <script>
