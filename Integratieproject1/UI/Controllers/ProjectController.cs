@@ -357,5 +357,13 @@ namespace Integratieproject1.UI.Controllers
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
+
+        public IActionResult AddPosition(Position position, int ideaId)
+        {
+            _ideationsManager.AddPosition(position, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
     }
 }

@@ -80,6 +80,15 @@ namespace Integratieproject1.BL.Managers
         
         #endregion
 
+        #region Position
         
+        public Position CreatePosition(Position position)
+        {
+           Position returnPosition = _dataTypeRepository.CreatePosition(position);
+            _unitOfWorkManager.Save();
+            return returnPosition;
+        }
+
+        #endregion
     }
 }

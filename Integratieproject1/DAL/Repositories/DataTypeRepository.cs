@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -41,8 +43,21 @@ namespace Integratieproject1.DAL.Repositories
 
         #endregion
 
-        
+        #region Position
 
+        public Position CreatePosition(Position position)
+        {
+            _ctx.Positions.Add(position);
+            _ctx.SaveChanges();
+            return position;
+        }
+
+        public Position GetPosition(int positionId)
+        {
+           return  _ctx.Positions.Find(positionId);
+        }
+
+        #endregion
         
     }
 }

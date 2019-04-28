@@ -42,7 +42,7 @@ namespace Integratieproject1.DAL
 
             Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
             Location location = new Location {Address = address, LocationName = "test1"};
-            Position position = new Position {Altitude = 0.0, Longitude = 0.0};
+            Position position = new Position {Lat = "0.0", Lng = "0.0"};
 
 
             Platform platform = new Platform
@@ -137,7 +137,7 @@ namespace Integratieproject1.DAL
             Idea idea2 = new Idea
             {
                 Title = "testIdea2",
-
+                Position = position,
                 Ideation = ideation,
                 IdentityUser = organisation
             };

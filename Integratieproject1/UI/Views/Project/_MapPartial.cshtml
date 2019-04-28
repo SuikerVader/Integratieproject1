@@ -1,0 +1,27 @@
+
+@{
+    ViewBag.Title = "MapPage";
+}
+<div id="map"></div>
+<style>
+    #map {
+        width: 100%;
+        height: 400px;
+        background-color: grey;
+    }
+</style>
+<script>
+    // Initialize and add the map
+    function initMap() {
+        // The location of Uluru
+        var position = {lat: @ViewBag.Position.Lat, lng: @ViewBag.Position.Lng};
+        // The map, centered at Uluru
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 16, center: position});
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({position: position, map: map});  
+    }
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMap">
+</script>
