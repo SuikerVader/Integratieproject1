@@ -104,6 +104,26 @@ namespace Integratieproject1.DAL
                 EndDate = project.EndDate,
                 Project = project
             };
+
+            Phase phase4 = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "phasetest1",
+                Description = "phasedescriptiontest1",
+                StartDate = project2.StartDate,
+                EndDate = project2.StartDate.AddMonths(4),
+                Project = project2
+            };
+
+            Phase phase5 = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "phasetest5",
+                Description = "phasedescriptiontest5",
+                StartDate = phase3.EndDate,
+                EndDate = project.EndDate,
+                Project = project2
+            };
             Ideation ideation = new Ideation
             {
                 CentralQuestion = "ideationtest1",
@@ -112,10 +132,35 @@ namespace Integratieproject1.DAL
             };
             Ideation ideation2 = new Ideation
             {
-                CentralQuestion = "ideationTest2",
-                InputIdeation = false,
+                CentralQuestion = "ideationtest2",
+                InputIdeation = true,
                 Phase = phase
             };
+            Ideation ideation3 = new Ideation
+            {
+                CentralQuestion = "ideationtest3",
+                InputIdeation = true,
+                Phase = phase2
+            };
+            Ideation ideation4 = new Ideation
+            {
+                CentralQuestion = "ideationtest4",
+                InputIdeation = true,
+                Phase = phase3
+            };
+            Ideation ideation5 = new Ideation
+            {
+                CentralQuestion = "ideationtest5",
+                InputIdeation = true,
+                Phase = phase2
+            };
+            Ideation ideation6 = new Ideation
+            {
+                CentralQuestion = "ideationtest6",
+                InputIdeation = true,
+                Phase = phase4
+            };
+
 
             IdentityUser person = new IdentityUser
             {
@@ -129,7 +174,7 @@ namespace Integratieproject1.DAL
             {
                 Email = "testAdmin1@test.com"
             };
-            
+
             Idea idea = new Idea
             {
                 Title = "testIdea1",
@@ -396,8 +441,12 @@ namespace Integratieproject1.DAL
             ideation2.Reactions = new List<Reaction>(){reaction2};
             //ctx.Ideations.Add(ideation);
             phase.Ideations = new List<Ideation>() {ideation, ideation2};
+            phase2.Ideations = new List<Ideation>() {ideation3, ideation5};
+            phase3.Ideations = new List<Ideation>() {ideation4};
+            phase4.Ideations = new List<Ideation>() {ideation6};
             //ctx.Phases.Add(phase);
-            project.Phases = new List<Phase>() {phase, phase2, phase3};
+            project.Phases = new List<Phase>() {phase, phase2, phase3,phase5};
+            project2.Phases = new List<Phase>() {phase4};
             //ctx.Projects.AddRange(project,project2);
             platform.Projects = new List<Project>() {project, project2};
             ctx.Platforms.Add(platform);
@@ -412,7 +461,6 @@ namespace Integratieproject1.DAL
 
             // Herstel gedrag 'ChangTracker.QueryTrackingBehavior'
             ctx.ChangeTracker.QueryTrackingBehavior = previousBehaviour;
-            
         }
 
         public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -432,12 +480,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true};
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true};
+            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com"};
+            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com"};
+            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com"};
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true};
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true};
+                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com"};
+            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com"};
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");
@@ -451,7 +499,6 @@ namespace Integratieproject1.DAL
             await userManager.AddToRoleAsync(modTest, "Mod");
             await userManager.AddToRoleAsync(organisationTest, "Organisation");
             await userManager.AddToRoleAsync(userTest, "User");
-            
         }
     }
 }

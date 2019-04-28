@@ -12,6 +12,7 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class ProjectsRepository : IProjectsRepository
     {
+        
         private readonly CityOfIdeasDbContext _ctx;
 
         public ProjectsRepository(UnitOfWork unitOfWork)

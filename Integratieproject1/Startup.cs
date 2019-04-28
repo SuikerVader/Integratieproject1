@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using static Integratieproject1.DAL.MqttClient;
+using Newtonsoft.Json;
 
 namespace Integratieproject1
 {
@@ -36,7 +39,7 @@ namespace Integratieproject1
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.None; 
             }).Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
@@ -47,6 +50,15 @@ namespace Integratieproject1
             {
                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
+            
+            services.AddMvc(options =>
+            {
+            options.OutputFormatters.Clear();
+            options.OutputFormatters.Add(new JsonOutputFormatter(new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            }, ArrayPool<char>.Shared));
             });
 
             // requires
