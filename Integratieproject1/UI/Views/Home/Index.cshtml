@@ -1,20 +1,20 @@
 ﻿@model Integratieproject1.Domain.Projects.Platform
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 <div class="jumbotron jumbotron-fluid text-center">
     <h1 class="display-4">@Model.PlatformName</h1>
     <p>@Model.Description</p>
-    <a class="btn btn-primary btn-lg" href="#projects" role="button">Give your idea!</a>
+    <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
 </div>
 <div class="container">
 
 
     <div class="d-flex flex-row flex-wrap justify-content-center">
-        <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">active projects</button>
-        <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">future projects</button>
-        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">closed projects</button>
+        <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">actieve projecten</button>
+        <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">toekomstige projecten</button>
+        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projects</button>
     </div>
     <br/>
     <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
@@ -54,7 +54,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>

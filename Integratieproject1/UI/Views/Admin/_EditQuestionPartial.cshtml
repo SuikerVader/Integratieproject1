@@ -3,7 +3,7 @@
 @model Integratieproject1.Domain.Surveys.Question
 
 @{
-    ViewBag.Title = "EditQuestionPage";
+    ViewBag.Title = "Wijzig Vraag";
 }
 
 <div>
@@ -11,9 +11,9 @@
         <input required asp-for="QuestionText" value="@Model.QuestionText" class="form-control"/>
         <select class="form-control" asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionType>()">
         </select>
-        <input class="btn btn-primary btn-sm" type="submit" value="Edit Question">
+        <input class="btn btn-primary btn-sm" type="submit" value="Wijzig Antwoord">
         <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Admin"
-           asp-action="DeleteQuestion" asp-route-questionId="@Model.QuestionId" asp-route-surveyId="@ViewBag.SurveyId">Delete question
+           asp-action="DeleteQuestion" asp-route-questionId="@Model.QuestionId" asp-route-surveyId="@ViewBag.SurveyId">Verwijder Vraag
         </a>
     </form>
     

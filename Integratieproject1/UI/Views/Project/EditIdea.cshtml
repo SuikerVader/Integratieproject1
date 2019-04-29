@@ -5,14 +5,14 @@
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
-    ViewBag.Title = "IdeaPage";
+    ViewBag.Title = "Idee";
     ViewBag.IdeaId = Model.IdeaId;
     ViewBag.Position = Model.Position;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <div class="text-center" style="padding: 30px">
-        <h2>Edit Idea</h2>
+        <h2>Wijzig Idee</h2>
     </div>
     <div id="editIdeaGrid">
         <div id="editIdeaInfo">
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
-                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
                     @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
                     Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
                 </div>
@@ -29,7 +29,7 @@
         <div id="editIdeaTitle" class="text-center">
             <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
                 <label asp-for="Title">
-                    <h5>Title:</h5>
+                    <h5>Titel:</h5>
                 </label>
                 @if (Model.Title.Equals("_NewIdea_"))
                 {
@@ -44,14 +44,14 @@
                 {
                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                        asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
-                        Cancel new idea
+                        Annuleer Nieuw Idee
                     </a>
                 }
                 else
                 {
                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                        asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
-                        Delete idea
+                        Verwijder Idee
                     </a>
                 }
                 
@@ -62,7 +62,7 @@
             }
             else
             {
-                <button class="dropdown-item" onclick="showHide('addLocation')" type="button">Add location</button>
+                <button class="dropdown-item" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
                 <div id="addLocation" style="display: none">
                     @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
                 </div>
@@ -161,8 +161,8 @@
                             <i class="fa fa-plus"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">TextField</button>
-                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Image</button>
+                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
+                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
                             <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
                         </div>
                     </div>
