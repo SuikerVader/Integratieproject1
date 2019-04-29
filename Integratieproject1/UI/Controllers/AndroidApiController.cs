@@ -10,7 +10,10 @@ using Integratieproject1.DAL;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Platform = Integratieproject1.Domain.Projects.Platform;
+using Project = Integratieproject1.Domain.Projects.Project;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -48,6 +51,13 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
+        [Route("Api/ideation/{id}")]
+        public Ideation GetIdeation(int IdeationId)
+        {
+            return _ideationsManager.GetIdeation(IdeationId);
+        }
+
+        [HttpGet]
         [Route("Api/reactions/{id}")]
         public IEnumerable<Reaction> GetReactions(int id)
         {
@@ -73,10 +83,10 @@ namespace Integratieproject1.UI.Controllers
         #region Projects
         
         [HttpGet]
-        [Route("Api/projects")]
-        public IEnumerable<Project> GetProjects()
+        [Route("Api/projects/{id}")]
+        public IEnumerable<Project> GetProjects(int id)
         {
-            return _projectsManager.GetAllProjects();
+            return _projectsManager.GetProjects(id);
         }
 
         [HttpGet]

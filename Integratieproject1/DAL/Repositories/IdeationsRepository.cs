@@ -37,6 +37,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideations
                 .Include(ph => ph.Phase)
                 .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
+                .Include(i=>i.Ideas).ThenInclude(v=>v.Votes)
                 .AsEnumerable();
         }
 

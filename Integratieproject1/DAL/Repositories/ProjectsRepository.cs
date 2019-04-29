@@ -64,8 +64,10 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Projects
                 .Where(p => p.Platform.PlatformId == platformId)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
-                .Include(p => p.Phases).ThenInclude(s => s.Surveys)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(r=>r.Reactions).ThenInclude(l=>l.Likes)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Votes)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Reactions).ThenInclude(l=>l.Likes)
+                .Include(p => p.Phases).ThenInclude(s => s.Surveys).ThenInclude(q=>q.Questions).ThenInclude(a=>a.Answers)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
