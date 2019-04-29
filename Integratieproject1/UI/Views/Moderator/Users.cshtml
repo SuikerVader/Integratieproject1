@@ -1,0 +1,45 @@
+﻿@model IList<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@{
+    ViewBag.Title = "Moderator";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Gebruikers</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+            </tr>
+            @foreach (var user in Model)
+            {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                @if (user.LockoutEnd == null)
+                {
+                    <td>
+                        <a asp-area="" asp-controller="Moderator"
+                           asp-action="BlockAccount" asp-route-userId="@user.Id" asp-route-days="1">
+                            Blokkeer 1 dag
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-area="" asp-controller="Moderator"
+                           asp-action="BlockAccount" asp-route-userId="@user.Id" asp-route-days="7">
+                            Blokkeer 7 dagen
+                        </a>
+                    </td>
+                }else
+                {
+                    <td>Gebruiker geblokkeerd!</td>
+                }
+
+            </tr>
+            }
+        </table>
+    </div>
+</div>

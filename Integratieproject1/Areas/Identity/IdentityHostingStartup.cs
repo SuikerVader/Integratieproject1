@@ -18,7 +18,10 @@ namespace Integratieproject1.Areas.Identity
                 services.AddDbContext<CityOfIdeasDbContext>(options =>
                     options.UseSqlite("Data Source=CityOfIdeas.db"));
 
-                services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
+                services.AddDefaultIdentity<IdentityUser>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                }).AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<CityOfIdeasDbContext>();
                 
             });

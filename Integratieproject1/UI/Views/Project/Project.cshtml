@@ -1,7 +1,7 @@
 @model Integratieproject1.Domain.Projects.Project
 
 @{
-    ViewBag.Title = "ProjectPage";
+    ViewBag.Title = "Project";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="jumbotron jumbotron-fluid text-center">
@@ -80,7 +80,7 @@
                                             <a class="btn btn-primary" asp-area=""
                                                asp-controller="Project"
                                                asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
-                                                Give your idea! 
+                                                Geef je idee! 
                                             </a>
                                         }
                                         else
@@ -88,14 +88,14 @@
                                             <a class="btn btn-primary" asp-area=""
                                                asp-controller="Project"
                                                asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
-                                                Vote for your favorit! 
+                                                Stem voor je favoriet!
                                             </a> 
                                         }
                                         
                                     
                                     </div>
                                     <div class="card-footer">
-                                        <i class="fa fa-lightbulb"></i>    @ideation.Ideas.Count
+                                        <i class="fa fa-lightbulb-o"></i>    @ideation.Ideas.Count
                                     </div>
                                 </div>
                         }
@@ -110,7 +110,7 @@
                                         <a class="btn btn-primary" asp-area=""
                                            asp-controller="Project"
                                            asp-action="Survey" asp-route-surveyId="@survey.SurveyId">
-                                            Give your input!
+                                            Geef je input!
                                         </a>
                                     
                                     </div>
@@ -151,7 +151,7 @@
                                     <a class="btn btn-primary" asp-area=""
                                        asp-controller="Project"
                                        asp-action="Ideation" asp-route-projectId="@ideation.IdeationId">
-                                        Give your idea!
+                                        Geef je idee!
                                     </a>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                                     <a class="btn btn-primary" asp-area=""
                                        asp-controller="Project"
                                        asp-action="Survey" asp-route-projectId="@survey.SurveyId">
-                                        Give your input!
+                                        Geef je input!
                                     </a>
                                 </div>
                             </div>
@@ -176,7 +176,6 @@
             </div>
         }
     }
-
 </div>
 
 <script>

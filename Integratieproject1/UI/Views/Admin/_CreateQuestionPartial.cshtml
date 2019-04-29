@@ -3,16 +3,15 @@
 @model Integratieproject1.Domain.Surveys.Question
 
 @{
-    ViewBag.Title = "AddQuestionPage";
+    ViewBag.Title = "Voeg Vraag Toe";
 }
 
 <div>
-    <form asp-controller="Admin" asp-action="AddQuestion" asp-route-surveyId="@ViewBag.SurveyId" method="post">
-        <label asp-for="QuestionText"></label>
-        <input required asp-for="QuestionText" class="form-control"/>
-        <select asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionType>()">
+    <form class="form-inline" asp-controller="Admin" asp-action="AddQuestion" asp-route-surveyId="@ViewBag.SurveyId" method="post">
+        <input class="form-control" required asp-for="QuestionText" placeholder="Geef vraag hier..." class="form-control"/>
+        <select class="form-control" asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionType>()">
         </select>
-        <input type="submit" value="Add Question">
+        <input class="btn btn-primary btn-sm" type="submit" value="Vraag Toevoegen">
     </form>
     
 </div>

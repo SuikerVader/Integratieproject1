@@ -2,26 +2,49 @@
 @model Integratieproject1.Domain.Ideations.Ideation
 
 @{
-    ViewBag.Title = "PhasePage";
+    ViewBag.Title = "Fase";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Ideation</h2>
-    <div>
-        <form asp-controller="Admin" asp-action="EditIdeation" asp-route-ideationId="@Model.IdeationId" method="post">
-            <label asp-for="CentralQuestion"></label>
-            <input required asp-for="CentralQuestion" value="@Model.CentralQuestion" class="form-control"/>
-            <formgroup>
-                <label asp-for="InputIdeation"></label><br/>
-                <input asp-for="InputIdeation"  value="True" type="radio" >yes<br/>
-                <input asp-for="InputIdeation"  value="False" type="radio">no  <br/>          
-            </formgroup>
-            <input type="submit" value="Save Ideation">
-        </form>
-        <a asp-area="" asp-controller="Admin"
-           asp-action="DeleteIdeation" asp-route-ideationId="@Model.IdeationId"><button>Delete ideation</button>
-        </a>
-        
-        
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Wijzig Ideation</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="Admin" asp-action="EditIdeation" asp-route-ideationId="@Model.IdeationId" method="post">
+                    <label asp-for="CentralQuestion">Centrale vraag</label>
+                    <input required asp-for="CentralQuestion" value="@Model.CentralQuestion" class="form-control"/>
+                    <formgroup>
+                        <label asp-for="InputIdeation"></label><br/>
+                        <input asp-for="InputIdeation" value="True" type="radio">ja<br/>
+                        <input asp-for="InputIdeation" value="False" type="radio">nee<br/>
+                    </formgroup>
+                    <input class="btn btn-primary" type="submit" value="Ideation Opslaan">
+                </form>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin"
+                   asp-action="DeleteIdeation" asp-route-ideationId="@Model.IdeationId">
+                    Verwijder Ideation
+                </a>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5>
+                        <strong>Info:</strong>
+                    </h5>
+                    <strong>Project:</strong> @Model.Phase.Project.ProjectName<br/>
+                    <strong>Fase:</strong> @Model.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
+                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")<br/>
+                    <br/>
+                    <br/>
+                    <strong>Ideation:</strong> @Model.CentralQuestion
+                </div>
+            </div>
+        </div>
     </div>
+
+
 </div>

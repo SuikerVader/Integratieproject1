@@ -1,0 +1,23 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Datatypes.TextField
+
+@{
+    ViewBag.Title = "Voeg Vraag Toe";
+}
+
+<div>
+    <form class="" asp-controller="Project" asp-action="EditTextField" asp-route-textFieldId="@Model.IdeaObjectId" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+        <div class="form-row">
+            <div class="col-8 text-center">
+                <textarea rows="1" class="form-control" required asp-for="Text" value="@Model.Text" class="form-control"></textarea>
+            </div>
+            <div class="col-4 text-center">
+                <input class="btn btn-primary btn-sm" type="submit" value="Wijzig Tekstveld">
+                <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                   asp-action="DeleteTextField" asp-route-ideaId="@ViewBag.IdeaId" asp-route-textFieldId="@Model.IdeaObjectId">
+                    Verwijder textField
+                </a>
+            </div>
+        </div>
+    </form>
+</div>

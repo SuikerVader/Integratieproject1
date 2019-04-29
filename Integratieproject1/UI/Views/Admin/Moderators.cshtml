@@ -1,7 +1,7 @@
 @model IList<Microsoft.AspNetCore.Identity.IdentityUser>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -20,7 +20,7 @@
                     <td>@mod.Email</td>
                     <td>@mod.PhoneNumber</td>
                     <td><a asp-area="" asp-controller="Admin"
-                           asp-action="DeleteModRole" asp-route-modId="@mod.Id">Verwijder Moderator Rol
+                           asp-action="DeleteModRole" asp-route-modId="@mod.Id">Verwijder Moderatorrol
                     </a></td>
                     <td><a asp-area="" asp-controller="Admin"
                            asp-action="DeleteMod" asp-route-modId="@mod.Id">Verwijder Account
@@ -29,7 +29,7 @@
             }
         </table>
     </div>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="Users" >Geef Moderator rol aan gebruiker
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="Users" >Geef Moderatorrol aan gebruiker
     </a>
 </div>

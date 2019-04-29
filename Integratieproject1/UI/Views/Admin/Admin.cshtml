@@ -1,18 +1,22 @@
-
+@using Integratieproject1.Domain.Users
+@using Microsoft.AspNetCore.Identity
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
 <h2>Admin</h2>
 <div>
     
-    <a asp-area="" asp-controller="Admin"
-       asp-action="Projects"><button>My Projects</button>
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="Projects">Mijn Projecten
     </a>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="Moderators"><button>Manage Mods</button>
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="Moderators">Beheer Moderators
+    </a>
+    <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+       asp-action="VerificationRequests">Verificatieverzoeken
     </a>
 </div>
 </div>

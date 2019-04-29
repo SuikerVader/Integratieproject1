@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
@@ -31,6 +32,14 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Ideation> GetProjectsIdeations(int projectId)
+        {
+            return _ctx.Ideations
+                .Include(ph => ph.Phase)
+                .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
+                .AsEnumerable();
+        }
+
         public IEnumerable<Ideation> GetAllIdeations(int platformId)
         {
             return _ctx.Ideations
@@ -41,9 +50,13 @@ namespace Integratieproject1.DAL.Repositories
         public Ideation GetIdeation(int ideationId)
         {
             return _ctx.Ideations
-                .Include(i => i.Ideas)
-                .ThenInclude(r => r.Reactions)
-                .Include(i => i.Ideas).ThenInclude(im => im.Images)
+                .Include(i => i.Ideas).ThenInclude(r => r.Reactions)
+                .Include(i => i.Ideas).ThenInclude(v => v.Votes)
+                .Include(i => i.Ideas).ThenInclude(im => im.IdeaObjects)
+                .Include(i => i.Ideas).ThenInclude(u => u.IdentityUser)
+                .Include(p => p.Phase).ThenInclude(p => p.Project)
+                .Include(r => r.Reactions).ThenInclude(l => l.Likes)
+                .Include(r => r.Reactions).ThenInclude(u => u.IdentityUser)
                 .Single(id => id.IdeationId == ideationId);
         }
 
@@ -71,9 +84,9 @@ namespace Integratieproject1.DAL.Repositories
         #region Idea methods
 
         //Idea methods
-        public IEnumerable<Idea> GetIdeas(Ideation ideation)
+        public IEnumerable<Idea> GetIdeas(int ideationId)
         {
-            return _ctx.Ideas.Where(idea => idea.Ideation == ideation).AsEnumerable();
+            return _ctx.Ideas.Where(idea => idea.Ideation.IdeationId == ideationId).AsEnumerable();
         }
         
         public IEnumerable<Idea> GetAllIdeas(int platformId)
@@ -88,8 +101,22 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
-                .Include(v => v.Votes)
+                .Include(v => v.Votes).ThenInclude(v => v.IdentityUser)
+                .Include(i => i.IdeaObjects)
+                .Include(i => i.IdentityUser)
+                .Include(i =>i.Position)
+                .Include(i=>i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
                 .Single(i => i.IdeaId == ideaId);
+        }
+        
+        public IEnumerable<Idea> GetReportedIdeas(int projectId)
+        {
+            return _ctx.Ideas
+                .Where(i => i.Ideation.Phase.Project.ProjectId == projectId)
+                .Where(i => i.Reported == true)
+                .Include(i => i.Ideation)
+                .Include(i => i.IdentityUser)
+                .AsEnumerable();
         }
 
         public Idea CreateIdea(Idea idea)
@@ -101,16 +128,113 @@ namespace Integratieproject1.DAL.Repositories
 
         public void UpdateIdea(Idea idea)
         {
-            _ctx.Entry(idea).State = EntityState.Modified;
+            _ctx.Ideas.Update(idea);
             _ctx.SaveChanges();
         }
+
 
         public void RemoveIdea(Idea idea)
         {
             _ctx.Ideas.Remove(idea);
             _ctx.SaveChanges();
         }
+
         
+        #endregion
+
+        #region IdeaObject methods
+
+        public IEnumerable<IdeaObject> GetIdeaObjects(int ideaId)
+        {
+            return _ctx.IdeaObjects.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
+        }
+
+        public IdeaObject GetIdeaObject(int ideaObjectId)
+        {
+            return _ctx.IdeaObjects.Include(i => i.Idea).Single(i => i.IdeaObjectId == ideaObjectId);
+        }
+            
+        #region Images
+
+        public Image CreateImage(Image image)
+        {
+            _ctx.Images.Add(image);
+            _ctx.SaveChanges();
+            return image;
+        }
+
+        public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
+        {
+            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).Where(i => i.GetType() == typeof(Image)).AsEnumerable().Cast<Image>();
+        }
+        public Image GetImage(int imageId)
+        {
+            return _ctx.Images.Include(i => i.Idea).Single(i => i.IdeaObjectId == imageId);
+        }
+
+        public void RemoveImage(Image image)
+        {
+            _ctx.Images.Remove(image);
+            _ctx.SaveChanges();
+        }
+
+        public void EditImage(Image image)
+        {
+            _ctx.Images.Update(image);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+
+        #region Video
+
+        public Video GetVideo(int videoId)
+        {
+            return _ctx.Videos.Include(v => v.Idea).Single(v => v.IdeaObjectId == videoId);
+        }
+        public void AddVideo(Video video)
+        {
+            _ctx.Videos.Add(video);
+            _ctx.SaveChanges();
+        }
+        
+        public void EditVideo(Video video)
+        {
+            _ctx.Videos.Update(video);
+            _ctx.SaveChanges();
+        }
+        public void RemoveVideo(Video video)
+        {
+            _ctx.Videos.Remove(video);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+
+        #region TextField
+
+        public void EditTextField(TextField textField)
+        {
+            _ctx.TextFields.Update(textField);
+            _ctx.SaveChanges();
+        }
+        public void AddTextField(TextField textField)
+        {
+            _ctx.TextFields.Add(textField);
+            _ctx.SaveChanges();
+        }
+        public TextField GetTextField(int textFieldId)
+        {
+            return  _ctx.TextFields.Include(t => t.Idea).Single(t => t.IdeaObjectId == textFieldId);
+        }
+        public void RemoveTextField(TextField textField)
+        {
+            _ctx.TextFields.Remove(textField);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+
         #endregion
 
         #region Reaction methods
@@ -119,6 +243,18 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Reactions
                 .Where(r => r.Ideation.Phase.Project.Platform.PlatformId == platformId || r.Idea.Ideation.Phase.Project.Platform.PlatformId == platformId)
+                .AsEnumerable();
+        }
+        
+        public IEnumerable<Reaction> GetReportedReactions(int projectId)
+        {
+            return _ctx.Reactions
+                .Where(r => r.Idea.Ideation.Phase.Project.ProjectId == projectId ||
+                            r.Ideation.Phase.Project.ProjectId == projectId)
+                .Where(r => r.Reported == true)
+                .Include(r => r.Idea)
+                .Include(r => r.Ideation)
+                .Include(r => r.IdentityUser)
                 .AsEnumerable();
         }
         
@@ -134,7 +270,10 @@ namespace Integratieproject1.DAL.Repositories
 
         public Reaction GetReaction(int reactionId)
         {
-            return _ctx.Reactions.Find(reactionId);
+            return _ctx.Reactions
+                .Include(r => r.Idea)
+                .Include(r => r.Ideation)
+                .Single(r => r.ReactionId == reactionId);
         }
 
         public Reaction CreateReaction(Reaction reaction)
@@ -142,6 +281,12 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Reactions.Add(reaction);
             _ctx.SaveChanges();
             return reaction;
+        }
+        
+        public void UpdateReaction(Reaction reaction)
+        {
+            _ctx.Reactions.Update(reaction);
+            _ctx.SaveChanges();
         }
 
         public void RemoveReaction(Reaction reaction)
@@ -228,5 +373,8 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
         #endregion
+
+
+
     }
 }

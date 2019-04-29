@@ -3,32 +3,51 @@
 @model IList<Integratieproject1.Domain.Surveys.Survey>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Surveys</h2>
-    <div>
-        <table class="table">
-            <tr>
-                <th>title</th>
-            </tr>
-            @foreach (var survey in Model)
-            {
-                <tr>
-                    <td>@survey.Title</td>
-                    <td>
-                        <a asp-area="" asp-controller="Admin"
-                           asp-action="EditSurvey" asp-route-surveyId="@survey.SurveyId">
-                            Edit
-                        </a>
-                    </td>
-                </tr>
-            }
-        </table>
-        <a asp-area="" asp-controller="Admin"
-           asp-action="AddSurvey" asp-route-phaseId="@ViewData["PhaseId"]">
-            <button>Add Survey</button>
-        </a>
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+           <h2>Vragenlijsten</h2> 
+        </div>
+        <div class="adminMain">
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Titel</th>
+                    </tr>
+                    @foreach (var survey in Model)
+                    {
+                        <tr>
+                            <td>@survey.Title</td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="EditSurvey" asp-route-surveyId="@survey.SurveyId">
+                                    Wijzig
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                   asp-action="AddSurvey" asp-route-phaseId="@ViewBag.Phase.PhaseId">
+                    Maak Vragenlijst
+                </a>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5><strong>Info:</strong></h5>
+                    <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
+                    <strong>Fase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
+                    @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
     </div>
+    
+   
 </div>

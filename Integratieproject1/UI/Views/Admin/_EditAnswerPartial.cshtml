@@ -3,17 +3,17 @@
 @model Answer
 
 @{
-    ViewBag.Title = "EditAnswer";
+    ViewBag.Title = "Wijzig Antwoord";
 }
 
 <div>
-    <form asp-controller="Admin" asp-action="EditAnswer" asp-route-questionId="@Model.Question.QuestionId" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
-        <label asp-for="AnswerText"></label>
+    <form class="form-inline" asp-controller="Admin" asp-action="EditAnswer" asp-route-questionId="@Model.Question.QuestionId" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
         <input required asp-for="AnswerText" value="@Model.AnswerText" class="form-control"/>
-        <input type="submit" value="Edit Answer">
+        <input class="btn btn-outline-primary btn-sm" type="submit" value="Wijzig Antwoord">
+        <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="Admin"
+           asp-action="DeleteAnswer" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId">Verwijder Antwoord
+        </a>
     </form>
-    <a asp-area="" asp-controller="Admin"
-       asp-action="DeleteAnswer" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId"><button>Delete answer</button>
-    </a>
+    
 
 </div>

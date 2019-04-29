@@ -135,5 +135,54 @@ namespace Integratieproject1.UI.Controllers
             IList<Project> projects = projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
+
+        public IActionResult Platforms()
+        {
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+
+        public IActionResult DeletePlatform(int platformId)
+        {
+            projectsManager.DeletePlatform(platformId);
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+        
+        public IActionResult EditPlatform(int platformId)
+        {
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
+        }
+        
+        [HttpPost]
+        public IActionResult EditPlatform(int platformId, Platform platform)
+        {
+            if (ModelState.IsValid)
+            {
+                projectsManager.EditPlatform(platform, platformId);
+            }
+                
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+
+        public IActionResult CreatePlatform()
+        {
+            return View("/UI/Views/SuperAdmin/CreatePlatform.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult CreatePlatform(Platform platform)
+        {
+
+            if (ModelState.IsValid)
+            {
+                projectsManager.CreatePlatform(platform);
+            }
+
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
     }
 }

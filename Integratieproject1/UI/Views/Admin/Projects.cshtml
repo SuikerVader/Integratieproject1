@@ -2,19 +2,19 @@
 @model IList<Integratieproject1.Domain.Projects.Project>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>My Projects</h2>
+    <h2>Mijn Projecten</h2>
     <div>
         <table class="table">
             <tr>
-                <th>Projectnaam</th>
-                <th>Description</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>Location</th>
+                <th>Naam</th>
+                <th>Beschrijving</th>
+                <th>Startdatum</th>
+                <th>Einddatum</th>
+                <th>Locatie</th>
             </tr>
             @foreach (var project in Model)
             {
@@ -25,17 +25,17 @@
                     <td>@project.EndDate</td>
                     <td>@project.Location.LocationName</td>
                     <td><a asp-area="" asp-controller="Admin"
-                           asp-action="Phases" asp-route-projectId="@project.ProjectId">show phases
+                           asp-action="Phases" asp-route-projectId="@project.ProjectId">Bekijk Fases
                     </a></td>
                     <td><a asp-area="" asp-controller="Admin"
-                           asp-action="EditProject" asp-route-projectId="@project.ProjectId">Edit
+                           asp-action="EditProject" asp-route-projectId="@project.ProjectId">Wijzig
                     </a></td>
                     
                 </tr>
             }
         </table>
-        <a asp-area="" asp-controller="Admin"
-           asp-action="CreateProject" asp-route-userId="3"><button>Create Project</button>
+        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+           asp-action="CreateProject" asp-route-userId="3">Maak Project
         </a>
     </div>
 </div>

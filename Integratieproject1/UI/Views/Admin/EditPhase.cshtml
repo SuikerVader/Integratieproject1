@@ -2,48 +2,76 @@
 @model Integratieproject1.Domain.Projects.Phase
 
 @{
-    ViewBag.Title = "PhasePage";
+    ViewBag.Title = "Fase";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Phase</h2>
-    <div>
-        <form asp-controller="Admin" asp-action="EditPhase" asp-route-phaseId="@Model.PhaseId" method="post">
-            <label asp-for="PhaseName"></label>
-            <input required asp-for="PhaseName" value="@Model.PhaseName" class="form-control"/>
-    
-            @if (Model.PhaseNr == 1 && Model.Project.Phases.Count == 1)
-            {
-                <label asp-for="StartDate"></label>
-                <input required readonly="readonly" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-                <label asp-for="EndDate"></label>
-                <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-            } else if (Model.PhaseNr == 1 && Model.Project.Phases.Count > 1)
-            {
-                <label asp-for="StartDate"></label>
-                <input required readonly="readonly" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-                <label asp-for="EndDate"></label>
-                <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-          
-            }
-            else
-            {
-                <label asp-for="StartDate"></label>
-                <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-                <label asp-for="EndDate"></label>
-                <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-        
-            }
-            
-            <label asp-for="Description"></label>
-            <input asp-for="Description" class="form-control"/>
-            <input type="submit" value="Save Phase">
-        </form>
-        <a asp-area="" asp-controller="Admin"
-           asp-action="DeletePhase" asp-route-phaseId="@Model.PhaseId">
-            <button>Delete phase</button>
-        </a>
-    
-    
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Wijzig Fase</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="Admin" asp-action="EditPhase" asp-route-phaseId="@Model.PhaseId" method="post">
+                    <label asp-for="PhaseName">Naam</label>
+                    <input required asp-for="PhaseName" value="@Model.PhaseName" class="form-control"/>
+
+                    @if (Model.PhaseNr == 1 && Model.Project.Phases.Count == 1)
+                    {
+                        <label asp-for="StartDate">Startdatum</label>
+                        <input required readonly="readonly" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate">Einddatum</label>
+                        <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+                    else if (Model.PhaseNr == 1 && Model.Project.Phases.Count > 1)
+                    {
+                        <label asp-for="StartDate">Startdatum</label>
+                        <input required readonly="readonly" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate">Einddatum</label>
+                        <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+                    else if (Model.PhaseNr == Model.Project.Phases.Count)
+                    {
+                        <label asp-for="StartDate">Startdatum</label>
+                        <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate">Einddatum</label>
+                        <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+                    else
+                    {
+                        <label asp-for="StartDate">Startdatum</label>
+                        <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate">Einddatum</label>
+                        <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+
+                    <label asp-for="Description">Beschrijving</label>
+                    <input asp-for="Description" class="form-control"/>
+                    <input class="btn btn-primary" type="submit" value="Fase Opslaan">
+                </form>
+                <a class="btn btn-danger" asp-area="" asp-controller="Admin"
+                   asp-action="DeletePhase" asp-route-phaseId="@Model.PhaseId">
+                    Verwijder Fase
+                </a>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5><strong>Info:</strong></h5>
+                    <strong>Project:</strong> @Model.Project.ProjectName<br/>
+                    <strong>Projectperiode:</strong> <br/>
+                    @Model.Project.StartDate.ToString("d") - @Model.Project.EndDate.ToString("d")
+                    <br/>
+                    <br/>
+                    <strong>Fase:</strong> @Model.PhaseName<br/>
+                    <strong>Fasenummer:</strong> @Model.PhaseNr<br/>
+                    <strong>Faseperiode:</strong>  <br/>
+                    @Model.StartDate.ToString("d") - @Model.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
     </div>
+
+
 </div>

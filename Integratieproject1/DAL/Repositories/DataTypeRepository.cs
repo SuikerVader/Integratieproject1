@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -40,20 +43,21 @@ namespace Integratieproject1.DAL.Repositories
 
         #endregion
 
-        #region Images
+        #region Position
 
-        public Image CreateImage(Image image)
+        public Position CreatePosition(Position position)
         {
-            _ctx.Images.Add(image);
+            _ctx.Positions.Add(position);
             _ctx.SaveChanges();
-            return image;
+            return position;
         }
 
-        public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
+        public Position GetPosition(int positionId)
         {
-            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
+           return  _ctx.Positions.Find(positionId);
         }
 
         #endregion
+        
     }
 }

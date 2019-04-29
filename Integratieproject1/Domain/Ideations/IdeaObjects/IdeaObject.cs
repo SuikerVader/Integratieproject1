@@ -3,11 +3,11 @@ using Integratieproject1.Domain.Ideations;
 
 namespace Integratieproject1.Domain.Datatypes
 {
-    public class Image
+    public class IdeaObject
     {
-        [Key] public int ImageId { get; set; }
-        public string ImageName { get; set; }
-        public string ImagePath { get; set; }
+        [Key]
+        public int IdeaObjectId { get; set; }
+        public int OrderNr { get; set; }
         [Required] public Idea Idea { get; set; }
     }
 }

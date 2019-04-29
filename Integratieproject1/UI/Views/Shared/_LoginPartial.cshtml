@@ -4,20 +4,35 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li class="nav-item">
-                <button type="submit" class="btn btn-link navbar-btn nav-link">Logout</button>
-            </li>
-        </ul>
-    </form>
+    <ul class="nav navbar-nav navbar-right">
+                 <li class="nav-item dropdown">
+                     <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <i class="fa fa-user"></i>
+                     </a>
+                     <form class="dropdown-menu" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new {area = ""})" method="post" id="logoutForm" class="dropdown-menu p-4">
+                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
+                         <button type="submit" class="dropdown-item">Logout</button>
+                         <div class="dropdown-divider"></div>
+                         @if (User.IsInRole("Admin"))
+                         {
+                             <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Adminpagina's</a>
+                         }
+                         @if (User.IsInRole("Mod"))
+                         {
+                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderatorpagina's</a>
+                         }
+                         @if (User.IsInRole("SuperAdmin"))
+                         {
+                                 <a class="dropdown-item" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">Superadminpagina's</a>
+                         }
+                     </form>
+                     
+                 </li>
+             </ul>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav">
         <li class="nav-item"><a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
         <li class="nav-item"><a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>

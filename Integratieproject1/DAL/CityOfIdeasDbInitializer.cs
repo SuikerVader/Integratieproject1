@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity.Pages.Account;
+using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +44,7 @@ namespace Integratieproject1.DAL
 
             Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
             Location location = new Location {Address = address, LocationName = "test1"};
-            Position position = new Position {Altitude = 0.0, Longitude = 0.0};
+            Position position = new Position {Lat = "0.0", Lng = "0.0"};
 
 
             Platform platform = new Platform
@@ -102,11 +104,61 @@ namespace Integratieproject1.DAL
                 EndDate = project.EndDate,
                 Project = project
             };
+
+            Phase phase4 = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "phasetest1",
+                Description = "phasedescriptiontest1",
+                StartDate = project2.StartDate,
+                EndDate = project2.StartDate.AddMonths(4),
+                Project = project2
+            };
+
+            Phase phase5 = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "phasetest5",
+                Description = "phasedescriptiontest5",
+                StartDate = phase3.EndDate,
+                EndDate = project.EndDate,
+                Project = project2
+            };
             Ideation ideation = new Ideation
             {
                 CentralQuestion = "ideationtest1",
                 InputIdeation = true,
                 Phase = phase
+            };
+            Ideation ideation2 = new Ideation
+            {
+                CentralQuestion = "ideationtest2",
+                InputIdeation = true,
+                Phase = phase
+            };
+            Ideation ideation3 = new Ideation
+            {
+                CentralQuestion = "ideationtest3",
+                InputIdeation = true,
+                Phase = phase2
+            };
+            Ideation ideation4 = new Ideation
+            {
+                CentralQuestion = "ideationtest4",
+                InputIdeation = true,
+                Phase = phase3
+            };
+            Ideation ideation5 = new Ideation
+            {
+                CentralQuestion = "ideationtest5",
+                InputIdeation = true,
+                Phase = phase2
+            };
+            Ideation ideation6 = new Ideation
+            {
+                CentralQuestion = "ideationtest6",
+                InputIdeation = true,
+                Phase = phase4
             };
 
 
@@ -132,14 +184,65 @@ namespace Integratieproject1.DAL
             Idea idea2 = new Idea
             {
                 Title = "testIdea2",
+                Position = position,
                 Ideation = ideation,
                 IdentityUser = organisation
+            };
+            Idea idea3 = new Idea
+            {
+                Title = "testIdea3",
+              Ideation = ideation2,
+                IdentityUser = admin
+            };
+            Idea idea4 = new Idea
+                          {
+                              Title = "testIdea4",
+                                Ideation = ideation2,
+                              IdentityUser = admin
+                          };
+            Idea idea5 = new Idea
+            {
+                Title = "testIdea5",
+                  Ideation = ideation2,
+                IdentityUser = admin
+            };
+            TextField textfield1 = new TextField
+            {
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                Idea = idea,
+                OrderNr = 2
+            };
+            TextField textfield2 = new TextField
+            {
+                Idea = idea,
+                OrderNr = 1,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
+                
+            };
+            TextField textfield3 = new TextField
+            {
+                OrderNr = 1,
+                Idea = idea2,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+            };
+            TextField textfield4 = new TextField
+            {
+                OrderNr = 1,
+                Idea = idea3,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
             };
             Reaction reaction = new Reaction
             {
                 Idea = idea,
                 ReactionText = "reactionTest1",
                 IdentityUser = person
+            };
+            
+            Reaction reaction2 = new Reaction
+            {
+                Ideation = ideation2,
+                ReactionText = "reactionTest2",
+                IdentityUser = admin,
             };
             Vote vote = new Vote
             {
@@ -316,8 +419,13 @@ namespace Integratieproject1.DAL
             reaction.Likes = new List<Like>() {like};
             idea.Reactions = new List<Reaction>() {reaction};
             idea.Votes = new List<Vote>() {vote};
+            idea.IdeaObjects = new List<IdeaObject>(){textfield1,textfield2};
+            idea2.IdeaObjects = new List<IdeaObject>(){textfield3};
+            idea3.IdeaObjects = new List<IdeaObject>(){textfield4};
+            idea4.IdeaObjects = new List<IdeaObject>(){};
+            idea5.IdeaObjects = new List<IdeaObject>(){};
             //ctx.Answers.Add(answer);
-            openQuestion.Answers = new List<Answer>() {open};
+            openQuestion.Answers = new List<Answer>() {};
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};
             checkQuestion.Answers = new List<Answer>() {check1, check2, check3, check4};
             dropQuestion.Answers = new List<Answer>() {drop1, drop2, drop3, drop4};
@@ -329,10 +437,16 @@ namespace Integratieproject1.DAL
             phase.Surveys = new List<Survey>() {survey};
             //ctx.Ideas.Add(idea);
             ideation.Ideas = new List<Idea>() {idea, idea2};
+            ideation2.Ideas = new List<Idea>(){idea3, idea4, idea5};
+            ideation2.Reactions = new List<Reaction>(){reaction2};
             //ctx.Ideations.Add(ideation);
-            phase.Ideations = new List<Ideation>() {ideation};
+            phase.Ideations = new List<Ideation>() {ideation, ideation2};
+            phase2.Ideations = new List<Ideation>() {ideation3, ideation5};
+            phase3.Ideations = new List<Ideation>() {ideation4};
+            phase4.Ideations = new List<Ideation>() {ideation6};
             //ctx.Phases.Add(phase);
-            project.Phases = new List<Phase>() {phase, phase2, phase3};
+            project.Phases = new List<Phase>() {phase, phase2, phase3,phase5};
+            project2.Phases = new List<Phase>() {phase4};
             //ctx.Projects.AddRange(project,project2);
             platform.Projects = new List<Project>() {project, project2};
             ctx.Platforms.Add(platform);
@@ -366,12 +480,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com"};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com"};
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com"};
+            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
+            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com"};
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com"};
+                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true };
+            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");

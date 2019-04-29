@@ -1,0 +1,256 @@
+@using Integratieproject1.Domain.Ideations
+@model Integratieproject1.Domain.Projects.Project
+
+@{
+    ViewBag.Title = "Moderator";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+<div id="moderatorGrid">
+<div id="reportedPosts">
+    <div class="d-flex flex-column justify-content-start align-items-center">
+        <h3>Geraporteerde berichten</h3>
+        <div class="d-flex flex-column justify-content-start" style="width: 100%">
+            <h5>Ideeën</h5>
+            <table class="table">
+                <tr>
+                    <th>Idee</th>
+                    <th>Ideation</th>
+                    <th>Gebruiker</th>
+                </tr>
+                @foreach (var idea in @ViewBag.ReportedIdeas)
+                {
+                    <tr>
+                        <td>@idea.Title</td>
+                        <td>@idea.Ideation.CentralQuestion</td>
+                        <td>@idea.IdentityUser.Email</td>
+                        <td>
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                                Bekijk Idee
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Moderator"
+                               asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@idea.IdeaId" asp-route-type="idea">
+                                <i class="fa fa-check"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Moderator"
+                               asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@idea.IdeaId" asp-route-type="idea">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-projectId="@idea.IdeaId">
+                                <i class="fa fa-paper-plane"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-projectId="@idea.IdeaId">
+                                <i class="fa fa-user-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <h5>Reacties</h5>
+            <table class="table">
+                <tr>
+                    <th>Reactie</th>
+                    <th>Op</th>
+                    <th>Gebruiker</th>
+                </tr>
+                @foreach (var reaction in @ViewBag.ReportedReactions)
+                {
+                    <tr>
+                        <td>@reaction.ReactionText</td>
+                        @if (reaction.Idea == null && reaction.Ideation != null)
+                        {
+                            <td>ideation: @reaction.Ideation.CentralQuestion</td>
+                        }
+                        else
+                        {
+                            <td>idee: @reaction.Idea.Title</td>
+                        }
+                        <td>@reaction.IdentityUser.Email</td>
+                        <td>
+                            <a asp-area="" asp-controller="Moderator"
+                               asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                <i class="fa fa-check"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Moderator"
+                               asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
+                                <i class="fa fa-paper-plane"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
+                                <i class="fa fa-user-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <h3 style="padding: 20px">Andere posts</h3>
+    </div>
+    
+</div>
+<div id="moderatorNav">
+    <ul class="nav flex-column">
+        @foreach (var phase in Model.Phases)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                    @phase.PhaseName
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    @foreach (var ideation in phase.Ideations)
+                    {
+                        <button id="@ideation.IdeationId.ToString()ideationNav" onclick="displayIdeation(@ideation.IdeationId.ToString()+'ideation')" class="dropdown-item"
+                                type="button"
+                                onclick="">
+                            @ideation.CentralQuestion
+                        </button>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<div id="posts">
+    
+    @foreach (var phase in Model.Phases)
+    {
+        foreach (var ideation in phase.Ideations)
+        {
+            <div id="@ideation.IdeationId.ToString()ideation" class="ideation" style="display: none">
+                <h5>Ideas</h5>
+                <table class="table">
+                    <tr>
+                        <th>Idee</th>
+                        <th>Ideation</th>
+                        <th>Gebruiker</th>
+                    </tr>
+                    @foreach (var idea in ideation.Ideas)
+                    {
+                        <tr>
+                            <td>@idea.Title</td>
+                            <td>@idea.Ideation.CentralQuestion</td>
+                            <td>@idea.IdentityUser.Email</td>
+                            <td>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                                    Bekijk Idee
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Moderator"
+                                   asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@idea.IdeaId" asp-route-type="idea">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Moderator"
+                                   asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@idea.IdeaId" asp-route-type="idea">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="Idea" asp-route-projectId="@idea.IdeaId">
+                                    <i class="fa fa-paper-plane"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="Idea" asp-route-projectId="@idea.IdeaId">
+                                    <i class="fa fa-user-times"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <h5>Reacties</h5>
+                <table class="table">
+                    <tr>
+                        <th>Reactie</th>
+                        <th>Op</th>
+                        <th>Gebruiker</th>
+                    </tr>
+                    @foreach (var idea in ideation.Ideas)
+                    {
+                        foreach (var reaction in idea.Reactions)
+                        {
+                            <tr>
+                                <td>@reaction.ReactionText</td>
+                                @if (reaction.Idea == null && reaction.Ideation != null)
+                                {
+                                    <td>ideation: @reaction.Ideation.CentralQuestion</td>
+                                }
+                                else
+                                {
+                                    <td>idee: @reaction.Idea.Title</td>
+                                }
+                                <td>@reaction.IdentityUser.Email</td>
+                                <td>
+                                    <a asp-area="" asp-controller="Moderator"
+                                       asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="Moderator"
+                                       asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="Project"
+                                       asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
+                                        <i class="fa fa-paper-plane"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="Project"
+                                       asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
+                                        <i class="fa fa-user-times"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+
+            </div>
+        }
+    }
+</div>
+</div>
+
+</div>
+
+<script>
+    function displayIdeation(id) {
+        var ideation = document.getElementById(id);
+        var ideations = document.getElementsByClassName("ideation");
+        var i;
+        for (i = 0; i < ideations.length; i++) {
+            ideations[i].style.display = "none";
+        }
+        ideation.style.display = "block";
+    }
+</script>
