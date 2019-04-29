@@ -1,11 +1,11 @@
 ﻿@model IList<Integratieproject1.Domain.Projects.Platform>
 
 @{
-    ViewBag.Title = "SuperAdminPage";
+    ViewBag.Title = "SuperAdminPagina";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>All Platforms</h2>
+    <h2>Alle Platformen</h2>
     <div>
         <table class="table">
             <tr>
@@ -26,13 +26,13 @@
                     <td>
                         <a asp-area="" asp-controller="SuperAdmin"
                            asp-action="EditPlatform" asp-route-platformId="@platform.PlatformId">
-                            Edit
+                            Wijzig
                         </a>
                     </td>
                     <td>
                         <a asp-area="" asp-controller="SuperAdmin"
                            asp-action="DeletePlatform" asp-route-platformId="@platform.PlatformId">
-                            Delete
+                            Verwijder
                         </a>
                     </td>
                 </tr>
@@ -40,7 +40,7 @@
         </table>
         <a asp-area="" asp-controller="SuperAdmin"
            asp-action="CreatePlatform">
-            <button>Create Platform</button>
+            <button>Nieuw Platform</button>
         </a>
     </div>
 </div>

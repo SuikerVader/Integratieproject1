@@ -3,13 +3,13 @@
 @model Answer
 
 @{
-    ViewBag.Title = "AddQuestionPage";
+    ViewBag.Title = "Voeg Vraag Toe";
 }
 
 <div>
     <form class="form-inline" asp-controller="Admin" asp-action="AddAnswer" asp-route-questionId="@Model.Question.QuestionId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
-        <input required asp-for="AnswerText" class="form-control" placeholder="Answer text ..."/>
-        <input class="btn btn-outline-primary btn-sm" type="submit" value="Add Answer">
+        <input required asp-for="AnswerText" class="form-control" placeholder="Geef antwoord hier..."/>
+        <input class="btn btn-outline-primary btn-sm" type="submit" value="Antwoord Toevoegen">
     </form>
     
 </div>

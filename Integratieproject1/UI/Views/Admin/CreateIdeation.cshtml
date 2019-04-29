@@ -2,25 +2,25 @@
 @model Integratieproject1.Domain.Ideations.Ideation
 
 @{
-    ViewBag.Title = "PhasePage";
+    ViewBag.Title = "Fase";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <div class="adminGrid">
         <div class="adminTitle text-center">
-            <h2>Create Ideation</h2>
+            <h2>Maak Ideation</h2>
         </div>
         <div class="adminMain">
             <div>
                 <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId" method="post">
-                    <label asp-for="CentralQuestion"></label>
+                    <label asp-for="CentralQuestion">Centrale Vraag</label>
                     <input required asp-for="CentralQuestion" class="form-control"/>
                     <formgroup>
                         <label asp-for="InputIdeation"></label><br/>
-                        <input asp-for="InputIdeation" value="True" type="radio">yes<br/>
-                        <input asp-for="InputIdeation" value="False" type="radio">no<br/>
+                        <input asp-for="InputIdeation" value="True" type="radio">Ja<br/>
+                        <input asp-for="InputIdeation" value="False" type="radio">Nee<br/>
                     </formgroup>
-                    <input class="btn btn-primary" type="submit" value="Add Ideation">
+                    <input class="btn btn-primary" type="submit" value="Ideation Toevoegen">
                 </form>
             </div>
         </div>
@@ -31,8 +31,8 @@
                         <strong>Info:</strong>
                     </h5>
                     <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
-                    <strong>Phase:</strong> @ViewBag.Phase.PhaseName<br/>
-                    <strong>Phase periode:</strong><br/>
+                    <strong>Fase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
                     @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")<br/>
                 </div>
             </div>

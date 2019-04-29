@@ -3,28 +3,28 @@
 @model Integratieproject1.Domain.Surveys.Survey
 
 @{
-    ViewBag.Title = "SurveyPage";
+    ViewBag.Title = "Vragenlijst";
     ViewBag.SurveyId = Model.SurveyId;
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <div class="adminGrid">
         <div class="adminTitle text-center">
-            <h2>Edit Survey</h2>
+            <h2>Wijzig Vragenlijst</h2>
         </div>
         <div class="adminMain">
             <div>
                 <form asp-controller="Admin" asp-action="EditSurvey" asp-route-surveyId="@Model.SurveyId" method="post">
-                    <label asp-for="Title"></label>
+                    <label asp-for="Title">Titel</label>
                     <input required asp-for="Title" value="@Model.Title" class="form-control"/>
-                    <input class="btn btn-primary btn-sm" type="submit" value="Save Survey">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Vragenlijst Opslaan">
                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Admin"
                        asp-action="DeleteSurvey" asp-route-surveyId="@Model.SurveyId">
-                        Delete survey
+                        Verwijder Vragenlijst
                     </a>
                 </form>
                 <div class="d-flex flex-row justify-content-between">
-                    <h4>Questions:</h4>
+                    <h4>Vragen:</h4>
                 </div>
                 @foreach (var question in Model.Questions.OrderBy(q => q.QuestionNr))
                 {
@@ -66,7 +66,7 @@
                             {
                                 <div class="d-flex flex-row justify-content-between" style="margin-left: 20px">
                                     <h5>
-                                        <strong>Answers:</strong>
+                                        <strong>Antwoorden:</strong>
                                     </h5>
                                 </div>
 
@@ -112,12 +112,12 @@
                         <strong>Info:</strong>
                     </h5>
                     <strong>Project:</strong> @Model.Phase.Project.ProjectName<br/>
-                    <strong>Phase:</strong> @Model.Phase.PhaseName<br/>
-                    <strong>Phase periode:</strong><br/>
+                    <strong>Fase:</strong> @Model.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")<br/>
                     <br/>
                     <br/>
-                    <strong>Survey:</strong> @Model.Title
+                    <strong>Vragenlijst:</strong> @Model.Title
                 </div>
             </div>
         </div>
