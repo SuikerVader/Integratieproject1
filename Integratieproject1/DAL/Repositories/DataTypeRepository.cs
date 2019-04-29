@@ -56,8 +56,14 @@ namespace Integratieproject1.DAL.Repositories
         {
            return  _ctx.Positions.Find(positionId);
         }
+        public void UpdatePosition(Position position)
+        {
+            _ctx.Positions.Update(position);
+            _ctx.SaveChanges();
+        }
 
         #endregion
-        
+
+       
     }
 }
