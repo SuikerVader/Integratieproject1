@@ -480,12 +480,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com"};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com"};
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com"};
+            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
+            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com"};
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com"};
+                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true };
+            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");

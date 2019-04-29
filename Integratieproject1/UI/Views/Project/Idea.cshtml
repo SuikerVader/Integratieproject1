@@ -4,7 +4,7 @@
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
-    ViewBag.Title = "ideaPage";
+    ViewBag.Title = "Idee";
     ViewBag.Id = Model.IdeaId;
     ViewBag.Element = "idea";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
-                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
                     @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
                     Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
                 </div>

@@ -2,16 +2,16 @@
 @model IList<VerificationRequest>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-            <h3>Verification Requests</h3>
+            <h3>Verificatieverzoeken</h3>
             <div class="d-flex flex-column justify-content-start" style="width: 100%">
                 <table class="table">
                     <tr>
-                        <th>User</th>
-                        <th>Request</th>
+                        <th>Gebruiker</th>
+                        <th>Verzoek</th>
                     </tr>
                     @foreach (VerificationRequest verificationRequest in @Model)
                     {
@@ -20,12 +20,12 @@
                             <td>@verificationRequest.request</td>
                             <td>
                                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">Accept
+                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">Accepteer
                                 </a>
                             </td>
                             <td>
                                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">Deny
+                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">Weiger
                                 </a>
                             </td>
                         </tr>

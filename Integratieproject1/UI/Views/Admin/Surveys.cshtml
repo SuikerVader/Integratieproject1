@@ -3,19 +3,19 @@
 @model IList<Integratieproject1.Domain.Surveys.Survey>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <div class="adminGrid">
         <div class="adminTitle text-center">
-           <h2>Surveys</h2> 
+           <h2>Vragenlijsten</h2> 
         </div>
         <div class="adminMain">
             <div>
                 <table class="table">
                     <tr>
-                        <th>title</th>
+                        <th>Titel</th>
                     </tr>
                     @foreach (var survey in Model)
                     {
@@ -24,7 +24,7 @@
                             <td>
                                 <a asp-area="" asp-controller="Admin"
                                    asp-action="EditSurvey" asp-route-surveyId="@survey.SurveyId">
-                                    Edit
+                                    Wijzig
                                 </a>
                             </td>
                         </tr>
@@ -32,7 +32,7 @@
                 </table>
                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
                    asp-action="AddSurvey" asp-route-phaseId="@ViewBag.Phase.PhaseId">
-                    Add Survey
+                    Maak Vragenlijst
                 </a>
             </div>
         </div>
@@ -41,8 +41,8 @@
                 <div class="card-body">
                     <h5><strong>Info:</strong></h5>
                     <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
-                    <strong>Phase:</strong> @ViewBag.Phase.PhaseName<br/>
-                    <strong>Phase periode:</strong><br/>
+                    <strong>Fase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
                     @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")
                 </div>
             </div>
