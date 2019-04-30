@@ -9,7 +9,7 @@
 <div class="container">
     <div class="adminGrid">
         <div class="adminTitle text-center">
-            <h2>Ideeën</h2>
+            <h2>Idee&euml;n</h2>
         </div>
         <div class="adminMain">
             <div>
@@ -22,22 +22,26 @@
                         <tr>
                             <td>@idea.Title</td>
                             <td>
-                                <a>
+                             
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="EditIdea" asp-route-ideaId="@idea.IdeaId">
                                     Wijzig
                                 </a>
+                               
                             </td>
                             <td>
-                                <a>
-                                    Verwijder
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="DeleteIdea" asp-route-ideaId="@idea.IdeaId" asp-route-ideationId="@idea.Ideation.IdeationId">
+                                    Verwijder Idee
                                 </a>
                             </td>
                         </tr>
                     }
                 </table>
-                <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idee</button>
-                <div id="idea" style="display: none">
-                    @await Html.PartialAsync("/UI/Views/Project/_PostIdeaPartial.cshtml", new Idea())
-                </div>
+                <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                   asp-action="CreateIdea" asp-route-ideationId="@ViewBag.IdeationId">
+                    Add idea
+                </a>
             </div>
         </div>
         <div class="adminInfo">
