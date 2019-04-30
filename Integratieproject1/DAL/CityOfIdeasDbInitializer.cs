@@ -133,7 +133,7 @@ namespace Integratieproject1.DAL
             Ideation ideation2 = new Ideation
             {
                 CentralQuestion = "ideationtest2",
-                InputIdeation = true,
+                InputIdeation = false,
                 Phase = phase
             };
             Ideation ideation3 = new Ideation

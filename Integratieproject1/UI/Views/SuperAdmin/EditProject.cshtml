@@ -30,10 +30,10 @@
             <input required asp-for="Location.Address.ZipCode" value="@Model.Location.Address.ZipCode" class="form-control"/>
             <label asp-for="Location.LocationName">Locatienaam</label>
             <input required asp-for="Location.LocationName" value="@Model.Location.LocationName" class="form-control"/>
-            <input type="submit" value="Wijzig Project">
+            <input class="btn btn-primary" type="submit" value="Wijzig Project">
         </form>
-        <a asp-area="" asp-controller="SuperAdmin"
-           asp-action="DeleteProject" asp-route-projectId="@Model.ProjectId"><button>Verwijder Project</button>
+        <a class="btn btn-danger" asp-area="" asp-controller="SuperAdmin"
+           asp-action="DeleteProject" asp-route-projectId="@Model.ProjectId">Verwijder Project
         </a>
         
         

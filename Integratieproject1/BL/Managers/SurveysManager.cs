@@ -119,6 +119,7 @@ namespace Integratieproject1.BL.Managers
                         question.QuestionNr = question.QuestionNr - 1;
                         _surveysRepository.EditQuestion(question);
                         _surveysRepository.EditQuestion(listQuestion);
+                        break;
                     }
                 }
             } else if (changer.Equals("down"))
@@ -131,6 +132,7 @@ namespace Integratieproject1.BL.Managers
                         question.QuestionNr = question.QuestionNr + 1;
                         _surveysRepository.EditQuestion(question);
                         _surveysRepository.EditQuestion(listQuestion);
+                        break;
                     }
                 } 
             }

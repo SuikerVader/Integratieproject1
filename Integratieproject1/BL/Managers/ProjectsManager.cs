@@ -183,6 +183,19 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetAdminProject(adminProjectId);
         }
+        public void CreateAdminProject(int projectId, string adminId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IdentityUser identityUser = usersManager.GetUser(adminId);
+            Project project = _projectsRepository.GetProject(projectId);
+            AdminProject adminProject = new AdminProject
+            {
+                Project = project,
+                Admin = identityUser
+            };
+            _projectsRepository.CreateAdminProject(adminProject);
+            _unitOfWorkManager.Save();
+        }
 
         #endregion
 
@@ -337,5 +350,6 @@ namespace Integratieproject1.BL.Managers
 
         #endregion
 
+        
     }
 }

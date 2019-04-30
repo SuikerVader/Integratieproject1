@@ -24,6 +24,9 @@
                     <td>@project.EndDate</td>
                     <td>@project.Location.LocationName</td>
                     <td><a asp-area="" asp-controller="SuperAdmin"
+                       asp-action="AddAdminsToProject" asp-route-projectId="@project.ProjectId">Add admin
+                    </a></td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
                            asp-action="EditProject" asp-route-projectId="@project.ProjectId">Wijzig
                     </a></td>
                     <td><a asp-area="" asp-controller="SuperAdmin"
@@ -32,8 +35,8 @@
                 </tr>
             }
         </table>
-        <a asp-area="" asp-controller="SuperAdmin"
-           asp-action="CreateProject"><button>Nieuw Project</button>
+        <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
+           asp-action="CreateProject">Nieuw Project
         </a>
     </div>
 </div>
