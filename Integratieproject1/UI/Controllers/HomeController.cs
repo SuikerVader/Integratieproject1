@@ -93,12 +93,13 @@ namespace Integratieproject1.UI.Controllers
                 {
                     if (idea.Title.ToLower().Contains(searchString))
                         searchResults.Add(idea);
-
+                    
                     if (idea.IdeaObjects != null && idea.GetTextFields() != null)
                     {
                         foreach (var tf in idea.GetTextFields())
                         {
-                            if (!string.IsNullOrEmpty(tf.Text) && tf.Text.ToLower().Contains(searchString))
+                            if (!string.IsNullOrEmpty(tf.Text) 
+                                && tf.Text.ToLower().Contains(searchString))
                             {
                                 searchResults.Add(tf);
                             }
@@ -109,9 +110,7 @@ namespace Integratieproject1.UI.Controllers
                 searchResults.AddRange(reactions
                     .Where(r => r.ReactionText.ToLower().Contains(searchString))
                     .ToList()
-                );
-                
-                Response.WriteAsync(searchResults.Count.ToString());
+                );                
             }
 
             return View("/UI/Views/Shared/SearchResult.cshtml", new SearchResultModel

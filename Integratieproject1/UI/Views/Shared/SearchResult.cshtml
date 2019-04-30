@@ -46,7 +46,7 @@
     {
         <a asp-controller="Project"
            asp-action="Idea" asp-route-ideaId="@(((TextField) result).Idea.IdeaId)">
-            <h1>@(((TextField) result).Idea.Title)</h1>
+            @* <h1>@(((TextField) result).Idea.Title)</h1> *@
             <p>@(((TextField) result).Text)</p>
         </a>
     }
