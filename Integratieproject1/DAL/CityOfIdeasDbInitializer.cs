@@ -101,7 +101,7 @@ namespace Integratieproject1.DAL
                 PhaseName = "phasetest3",
                 Description = "phasedescriptiontest3",
                 StartDate = phase2.EndDate,
-                EndDate = project.EndDate,
+                EndDate = project.EndDate.AddMonths(-1),
                 Project = project
             };
 
