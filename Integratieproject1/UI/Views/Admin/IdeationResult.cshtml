@@ -1,0 +1,28 @@
+﻿@model Integratieproject1.Domain.Ideations.Ideation
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Ideation</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Idee</th>
+                <th>Aantal stemmen</th>
+                <th>Aantal reacties</th>
+                <th>Plaatser</th>
+            </tr>
+            @foreach (var idea in Model.Ideas)
+            {
+            <tr>
+                <td>@idea.Title</td>
+                <td>@idea.Votes.Count()</td>
+                <td>@idea.Reactions.Count()</td>
+                <td>@idea.IdentityUser.Email</td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -43,6 +43,11 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetSurveys(phaseId).ToList();
         }
 
+        public IList<Survey> GetAllSurveys()
+        {
+            return _surveysRepository.GetAllSurveys().ToList();
+        }
+
         public void CreateSurvey(Survey survey)
         {
             _surveysRepository.CreateSurvey(survey);
