@@ -1,19 +1,19 @@
 @model IList<Integratieproject1.Domain.Projects.Project>
 
 @{
-    ViewBag.Title = "ModeratorPage";
+    ViewBag.Title = "Moderator";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>All Projects</h2>
+    <h2>Alle Projecten</h2>
     <div>
         <table class="table">
             <tr>
-                <th>Projectnaam</th>
-                <th>Description</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>Location</th>
+                <th>Naam</th>
+                <th>Beschrijving</th>
+                <th>Startdatum</th>
+                <th>Einddatum</th>
+                <th>Locatie</th>
             </tr>
             @foreach (var project in Model)
             {
@@ -24,7 +24,7 @@
                     <td>@project.EndDate</td>
                     <td>@project.Location.LocationName</td>
                     <td><a asp-area="" asp-controller="Moderator"
-                           asp-action="Posts" asp-route-projectId="@project.ProjectId">show posts
+                           asp-action="Posts" asp-route-projectId="@project.ProjectId">Bekijk Posts
                     </a></td>
                 </tr>
             }

@@ -2,21 +2,21 @@
 @model Integratieproject1.Domain.Projects.Project
 
 @{
-    ViewBag.Title = "ModeratorPage";
+    ViewBag.Title = "Moderator";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
 <div id="moderatorGrid">
 <div id="reportedPosts">
     <div class="d-flex flex-column justify-content-start align-items-center">
-        <h3>Reported posts</h3>
+        <h3>Geraporteerde berichten</h3>
         <div class="d-flex flex-column justify-content-start" style="width: 100%">
-            <h5>Ideas</h5>
+            <h5>Ideeën</h5>
             <table class="table">
                 <tr>
-                    <th>Idea</th>
+                    <th>Idee</th>
                     <th>Ideation</th>
-                    <th>User</th>
+                    <th>Gebruiker</th>
                 </tr>
                 @foreach (var idea in @ViewBag.ReportedIdeas)
                 {
@@ -27,7 +27,7 @@
                         <td>
                             <a asp-area="" asp-controller="Project"
                                asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                                show Idea
+                                Bekijk Idee
                             </a>
                         </td>
                         <td>
@@ -57,12 +57,12 @@
                     </tr>
                 }
             </table>
-            <h5>Reactions</h5>
+            <h5>Reacties</h5>
             <table class="table">
                 <tr>
-                    <th>Reaction</th>
-                    <th>On</th>
-                    <th>User</th>
+                    <th>Reactie</th>
+                    <th>Op</th>
+                    <th>Gebruiker</th>
                 </tr>
                 @foreach (var reaction in @ViewBag.ReportedReactions)
                 {
@@ -74,7 +74,7 @@
                         }
                         else
                         {
-                            <td>idea: @reaction.Idea.Title</td>
+                            <td>idee: @reaction.Idea.Title</td>
                         }
                         <td>@reaction.IdentityUser.Email</td>
                         <td>
@@ -105,7 +105,7 @@
                 }
             </table>
         </div>
-        <h3 style="padding: 20px">Other posts</h3>
+        <h3 style="padding: 20px">Andere posts</h3>
     </div>
     
 </div>
@@ -141,9 +141,9 @@
                 <h5>Ideas</h5>
                 <table class="table">
                     <tr>
-                        <th>Idea</th>
+                        <th>Idee</th>
                         <th>Ideation</th>
-                        <th>User</th>
+                        <th>Gebruiker</th>
                     </tr>
                     @foreach (var idea in ideation.Ideas)
                     {
@@ -154,7 +154,7 @@
                             <td>
                                 <a asp-area="" asp-controller="Project"
                                    asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                                    show Idea
+                                    Bekijk Idee
                                 </a>
                             </td>
                             <td>
@@ -184,12 +184,12 @@
                         </tr>
                     }
                 </table>
-                <h5>Reactions</h5>
+                <h5>Reacties</h5>
                 <table class="table">
                     <tr>
-                        <th>Reaction</th>
-                        <th>On</th>
-                        <th>User</th>
+                        <th>Reactie</th>
+                        <th>Op</th>
+                        <th>Gebruiker</th>
                     </tr>
                     @foreach (var idea in ideation.Ideas)
                     {
@@ -203,7 +203,7 @@
                                 }
                                 else
                                 {
-                                    <td>idea: @reaction.Idea.Title</td>
+                                    <td>idee: @reaction.Idea.Title</td>
                                 }
                                 <td>@reaction.IdentityUser.Email</td>
                                 <td>

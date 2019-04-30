@@ -3,19 +3,19 @@
 @model IList<Integratieproject1.Domain.Ideations.Idea>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <div class="adminGrid">
         <div class="adminTitle text-center">
-            <h2>ideas</h2>
+            <h2>Ideeën</h2>
         </div>
         <div class="adminMain">
             <div>
                 <table class="table">
                     <tr>
-                        <th>Title</th>
+                        <th>Titel</th>
                     </tr>
                     @foreach (var idea in Model)
                     {
@@ -23,18 +23,18 @@
                             <td>@idea.Title</td>
                             <td>
                                 <a>
-                                    Edit
+                                    Wijzig
                                 </a>
                             </td>
                             <td>
                                 <a>
-                                    Delete
+                                    Verwijder
                                 </a>
                             </td>
                         </tr>
                     }
                 </table>
-                <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idea</button>
+                <button class="btn btn-primary" onclick="showHideCreateIdea()">Post idee</button>
                 <div id="idea" style="display: none">
                     @await Html.PartialAsync("/UI/Views/Project/_PostIdeaPartial.cshtml", new Idea())
                 </div>
@@ -47,7 +47,7 @@
                         <strong>Info:</strong>
                     </h5>
                     <strong>Project:</strong> @ViewBag.Ideation.Phase.Project.ProjectName<br/>
-                    <strong>Phase:</strong> @ViewBag.Ideation.Phase.PhaseName<br/>
+                    <strong>Fase:</strong> @ViewBag.Ideation.Phase.PhaseName<br/>
                     <strong>Ideation:</strong> @ViewBag.Ideation.CentralQuestion<br/>
                 </div>
             </div>

@@ -1,30 +1,28 @@
 ﻿@model Integratieproject1.Domain.Projects.Platform
 
 @{
-    ViewBag.Title = "SuperAdminPage";
+    ViewBag.Title = "SuperAdminPagina";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <h2>Platform</h2>
     <div>
         <form asp-controller="SuperAdmin" asp-action="EditPlatform" asp-route-platformId="@Model.PlatformId" method="post">
-            <label asp-for="PlatformName"></label>
+            <label asp-for="PlatformName">Naam</label>
             <input required asp-for="PlatformName" value="@Model.PlatformName" class="form-control" />
-            <label asp-for="Logo" value="Logo url">Logo</label>
+            <label asp-for="Logo" value="Logo url">Logo Url</label>
             <input asp-for="Logo" type="url" class="form-control" />
             <label asp-for="Header">Header</label>
             <input asp-for="Header" class="form-control" />
-            <label asp-for="Description">Description</label>
+            <label asp-for="Description">Beschrijving</label>
             <input asp-for="Description" class="form-control" />
-            <label asp-for="Phonenumber">Nummer</label>
+            <label asp-for="Phonenumber">Telefoonnummer</label>
             <input asp-for="Phonenumber" class="form-control" />
-            <input type="submit" value="Edit Platform">
+            <input type="submit" value="Wijzig Platform">
         </form>
         <a asp-area="" asp-controller="SuperAdmin"
            asp-action="DeletePlatform" asp-route-platformId="@Model.PlatformId">
-            <button>Delete Platform</button>
+            <button>Verwijder Platform</button>
         </a>
-
-
     </div>
 </div>
