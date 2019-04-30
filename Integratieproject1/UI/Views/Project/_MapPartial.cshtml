@@ -3,13 +3,6 @@
     ViewBag.Title = "Map";
 }
 <div id="map"></div>
-<style>
-    #map {
-        width: 100%;
-        height: 400px;
-        background-color: grey;
-    }
-</style>
 <script>
     // Initialize and add the map
     function initMap() {
@@ -21,7 +14,4 @@
         // The marker, positioned at Uluru
         var marker = new google.maps.Marker({position: position, map: map});  
     }
-</script>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMap">
 </script>

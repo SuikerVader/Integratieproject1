@@ -277,9 +277,10 @@ namespace Integratieproject1.BL.Managers
         public void AddPosition(Position position, int ideaId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
-            Position createPosition = dataTypeManager.CreatePosition(position);
+            dataTypeManager.CreatePosition(position);
+            
             Idea idea = GetIdea(ideaId);
-            idea.Position = createPosition;
+            idea.Position = position;
             _ideationsRepository.UpdateIdea(idea);
             _unitOfWorkManager.Save();
         }
@@ -648,6 +649,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
 
         
     }
