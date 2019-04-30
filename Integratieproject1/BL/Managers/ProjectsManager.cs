@@ -103,7 +103,7 @@ namespace Integratieproject1.BL.Managers
 
         public IList<Project> GetAdminProjects(string userId)
         {
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
+            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
             List<Project> projects = new List<Project>();
             foreach (AdminProject adminProject in adminProjects)
             {
@@ -115,7 +115,7 @@ namespace Integratieproject1.BL.Managers
 
         public IList<AdminProject> GetAllAdminProjects(string userId)
         {
-            return _projectsRepository.GetAdminProjects(userId).ToList();
+            return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
 
         public IdentityUser GetUser(string id)
@@ -248,7 +248,7 @@ namespace Integratieproject1.BL.Managers
             if (project.Phases != null && project.Phases.Count > 0)
             {
                 phase.PhaseNr = project.Phases.Last().PhaseNr + 1;
-                //phase.StartDate = project.Phases.Last().EndDate;
+                phase.StartDate = project.Phases.Last().EndDate;
             }
             else
             {
@@ -258,40 +258,6 @@ namespace Integratieproject1.BL.Managers
 
             phase.EndDate = project.EndDate;
             return phase;
-        }
-
-        private bool CheckPhase(Phase phase)
-        {
-            if (phase.StartDate >= phase.Project.StartDate)
-            {
-                return false;
-            }
-
-            if (phase.EndDate <= phase.Project.EndDate)
-            {
-                return false;
-            }
-
-            IList<Phase> phases = phase.Project.Phases.ToList();
-            foreach (var listPhase in phases)
-            {
-                if (phase.PhaseNr > listPhase.PhaseNr)
-                {
-                    if (phase.StartDate <= listPhase.EndDate)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (phase.EndDate <= listPhase.StartDate)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         public void DeletePhase(int phaseId)
@@ -332,12 +298,23 @@ namespace Integratieproject1.BL.Managers
                 if (listPhase.PhaseNr == originalPhase.PhaseNr + 1)
                 {
                     listPhase.StartDate = originalPhase.EndDate;
+                    if (listPhase.StartDate > listPhase.EndDate)
+                    {
+                        listPhase.EndDate = listPhase.StartDate;
+                        EditPhase(listPhase, listPhase.PhaseId);
+                    }
+
                     _projectsRepository.EditPhase(listPhase);
                 }
 
                 if (listPhase.PhaseNr == originalPhase.PhaseNr -1)
                 {
                     listPhase.EndDate = originalPhase.StartDate;
+                    if (listPhase.StartDate > listPhase.EndDate)
+                    {
+                        listPhase.StartDate = listPhase.EndDate;
+                        EditPhase(listPhase, listPhase.PhaseId);
+                    }
                     _projectsRepository.EditPhase(listPhase);
                 }
             }
@@ -350,6 +327,25 @@ namespace Integratieproject1.BL.Managers
 
         #endregion
 
-        
+
+        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
+            IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
+            for (int i = 0; i < allAdmins.Count; i++)
+            {
+                foreach (var adminProject in adminProjects)
+                {
+                    if (adminProject.Admin == allAdmins[i])
+                    {
+                        allAdmins.RemoveAt(i);
+                    }
+                }
+                
+            }
+
+            return allAdmins;
+        }
     }
 }

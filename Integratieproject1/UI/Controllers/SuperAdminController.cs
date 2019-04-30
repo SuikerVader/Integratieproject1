@@ -187,7 +187,7 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult AddAdminsToProject(int projectId)
         {
-            IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
+            IList<IdentityUser> admins = projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
@@ -195,7 +195,7 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult AddAdminProjects(int projectId, string adminId)
         {
             projectsManager.CreateAdminProject(projectId, adminId);
-            IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
+            IList<IdentityUser> admins = projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }

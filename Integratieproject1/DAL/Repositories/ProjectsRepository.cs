@@ -81,7 +81,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        public IEnumerable<AdminProject> GetAdminProjects(string userId)
+        public IEnumerable<AdminProject> GetAdminProjectsByUser(string userId)
         {
             UserStore<IdentityUser> userStore = new UserStore<IdentityUser>(_ctx);
             IdentityUser identityUser = userStore.FindByIdAsync(userId).Result;
@@ -89,6 +89,13 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(p => p.Admin == identityUser)
                 .Include(p => p.Project).ThenInclude(l => l.Location).ThenInclude(a => a.Address)
                 .Include(p => p.Project).ThenInclude(p => p.Platform)
+                .AsEnumerable();
+        }
+        public IEnumerable<AdminProject> GetAdminProjectsByProject(int projectId)
+        {
+            return _ctx.AdminProjects.Where(a => a.Project.ProjectId == projectId)
+                .Include(a => a.Project)
+                .Include(a => a.Admin)
                 .AsEnumerable();
         }
 
@@ -202,6 +209,8 @@ namespace Integratieproject1.DAL.Repositories
         }
 
 
-        #endregion     
+        #endregion
+
+        
     }
 }

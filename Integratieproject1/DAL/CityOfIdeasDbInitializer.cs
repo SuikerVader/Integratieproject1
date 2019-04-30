@@ -117,7 +117,7 @@ namespace Integratieproject1.DAL
 
             Phase phase5 = new Phase
             {
-                PhaseNr = 1,
+                PhaseNr = 4,
                 PhaseName = "phasetest5",
                 Description = "phasedescriptiontest5",
                 StartDate = phase3.EndDate,
