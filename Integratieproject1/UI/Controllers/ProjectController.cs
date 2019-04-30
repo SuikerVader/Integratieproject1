@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using Integratieproject1.Areas.Identity.Services;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
@@ -15,8 +14,6 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Primitives;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -151,27 +148,7 @@ namespace Integratieproject1.UI.Controllers
             ArrayList answers = new ArrayList();
             foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
-                try
-                {
-                    if (_surveysManager.IsEmail(surveyId, Convert.ToInt32(pair.Key)))
-                    {
-                        var apiKey = "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";
-                        var client = new SendGridClient(apiKey);
-                        var msg = new SendGridMessage()
-                        {
-                            From = new EmailAddress("CityOfIdeas@coi.com", "City Of Ideas"),
-                            Subject = "Register",
-                            PlainTextContent = "Hi!",
-                            HtmlContent = "<strong>Thanks for filling in our survey! If you're interested in future projects and would like to be up to date then you can register here: https://localhost:44305/Identity/Account/Register </strong>"
-                        };
-                        msg.AddTo(new EmailAddress(pair.Value));
-                        client.SendEmailAsync(msg);
-                    }
-                    answers.Add(pair.Value);
-                }catch
-                {
-
-                }
+                answers.Add(pair.Value);
             }
 
             _surveysManager.UpdateAnswers(answers, surveyId);
@@ -376,6 +353,22 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult DeleteTextField(int textFieldId, int ideaId)
         {
             _ideationsManager.DeleteTextField(textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult AddPosition(Position position, int ideaId)
+        {
+            _ideationsManager.AddPosition(position, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult EditPosition(Position position, int positionId, int ideaId)
+        {
+            _dataTypeManager.EditPosition(position,positionId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);

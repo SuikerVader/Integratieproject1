@@ -1,11 +1,11 @@
 ﻿@model IList<Microsoft.AspNetCore.Identity.IdentityUser>
 
 @{
-    ViewBag.Title = "ModPage";
+    ViewBag.Title = "Moderator";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Users</h2>
+    <h2>Gebruikers</h2>
     <div>
         <table class="table">
             <tr>
@@ -24,18 +24,18 @@
                     <td>
                         <a asp-area="" asp-controller="Moderator"
                            asp-action="BlockAccount" asp-route-userId="@user.Id" asp-route-days="1">
-                            Block Account 1 Day
+                            Blokkeer 1 dag
                         </a>
                     </td>
                     <td>
                         <a asp-area="" asp-controller="Moderator"
                            asp-action="BlockAccount" asp-route-userId="@user.Id" asp-route-days="7">
-                            Block Account 7  Days
+                            Blokkeer 7 dagen
                         </a>
                     </td>
                 }else
                 {
-                    <td>User Blocked!</td>
+                    <td>Gebruiker geblokkeerd!</td>
                 }
 
             </tr>

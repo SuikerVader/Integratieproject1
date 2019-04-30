@@ -44,7 +44,7 @@ namespace Integratieproject1.DAL
 
             Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
             Location location = new Location {Address = address, LocationName = "test1"};
-            Position position = new Position {Altitude = 0.0, Longitude = 0.0};
+            Position position = new Position {Lat = "0.0", Lng = "0.0"};
 
 
             Platform platform = new Platform
@@ -101,7 +101,7 @@ namespace Integratieproject1.DAL
                 PhaseName = "phasetest3",
                 Description = "phasedescriptiontest3",
                 StartDate = phase2.EndDate,
-                EndDate = project.EndDate,
+                EndDate = project.EndDate.AddMonths(-1),
                 Project = project
             };
 
@@ -184,6 +184,7 @@ namespace Integratieproject1.DAL
             Idea idea2 = new Idea
             {
                 Title = "testIdea2",
+                Position = position,
                 Ideation = ideation,
                 IdentityUser = organisation
             };
@@ -480,12 +481,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com"};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com"};
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com"};
+            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
+            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com"};
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com"};
+                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true };
+            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");

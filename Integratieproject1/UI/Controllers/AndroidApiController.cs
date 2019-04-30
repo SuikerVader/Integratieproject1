@@ -51,13 +51,6 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
-        [Route("Api/ideation/{id}")]
-        public Ideation GetIdeation(int IdeationId)
-        {
-            return _ideationsManager.GetIdeation(IdeationId);
-        }
-
-        [HttpGet]
         [Route("Api/reactions/{id}")]
         public IEnumerable<Reaction> GetReactions(int id)
         {

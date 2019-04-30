@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Projects;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.UI.Controllers
@@ -55,6 +58,8 @@ namespace Integratieproject1.UI.Controllers
         {
             const int platformId = 1;
 
+            searchString = searchString.ToLower();
+
             var projects = _projectsManager.GetProjects(platformId);
             var phases = _projectsManager.GetAllPhases(platformId);
             var ideations = _ideationsManager.GetAllIdeations(platformId);
@@ -67,34 +72,45 @@ namespace Integratieproject1.UI.Controllers
             {
                 searchResults.AddRange(projects
                     .Where(p => string.IsNullOrEmpty(p.Description)
-                        ? p.ProjectName.Contains(searchString)
-                        : p.ProjectName.Contains(searchString) || p.Description.Contains(searchString))
+                        ? p.ProjectName.ToLower().Contains(searchString)
+                        : p.ProjectName.ToLower().Contains(searchString) || p.Description.ToLower().Contains(searchString))
                     .ToList()
                 );
 
                 searchResults.AddRange(phases
                     .Where(p => string.IsNullOrEmpty(p.Description)
-                        ? p.PhaseName.Contains(searchString)
-                        : p.PhaseName.Contains(searchString) || p.Description.Contains(searchString))
+                        ? p.PhaseName.ToLower().Contains(searchString)
+                        : p.PhaseName.ToLower().Contains(searchString) || p.Description.ToLower().Contains(searchString))
                     .ToList()
                 );
 
                 searchResults.AddRange(ideations
-                    .Where(i => i.CentralQuestion.Contains(searchString))
+                    .Where(i => i.CentralQuestion.ToLower().Contains(searchString))
                     .ToList()
                 );
 
-                /*searchResults.AddRange(ideas
-                    .Where(i => string.IsNullOrEmpty(i.Text)
-                        ? i.Title.Contains(searchString)
-                        : i.Title.Contains(searchString) || i.Text.Contains(searchString))
-                    .ToList()
-                );*/
+                foreach (var idea in ideas)
+                {
+                    if (idea.Title.ToLower().Contains(searchString))
+                        searchResults.Add(idea);
+                    
+                    if (idea.IdeaObjects != null && idea.GetTextFields() != null)
+                    {
+                        foreach (var tf in idea.GetTextFields())
+                        {
+                            if (!string.IsNullOrEmpty(tf.Text) 
+                                && tf.Text.ToLower().Contains(searchString))
+                            {
+                                searchResults.Add(tf);
+                            }
+                        }
+                    }
+                }
 
                 searchResults.AddRange(reactions
-                    .Where(r => r.ReactionText.Contains(searchString))
+                    .Where(r => r.ReactionText.ToLower().Contains(searchString))
                     .ToList()
-                );
+                );                
             }
 
             return View("/UI/Views/Shared/SearchResult.cshtml", new SearchResultModel
