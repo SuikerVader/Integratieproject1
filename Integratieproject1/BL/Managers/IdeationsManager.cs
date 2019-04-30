@@ -130,11 +130,12 @@ namespace Integratieproject1.BL.Managers
 
         public Ideation EditIdeation(Ideation ideation, int ideationId)
         {
-            ideation.IdeationId = ideationId;
-            //ideation.Phase = GetIdeation(ideationId).Phase;
-            _ideationsRepository.EditIdeation(ideation);
+            Ideation originalIdeation = GetIdeation(ideationId);
+            originalIdeation.CentralQuestion = ideation.CentralQuestion;
+            originalIdeation.InputIdeation = ideation.InputIdeation;
+            Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
-            return ideation;
+            return returnIdeation;
         }
 
         public void DeleteIdeation(int ideationId)

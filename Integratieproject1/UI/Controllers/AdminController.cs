@@ -111,10 +111,14 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 _projectsManager.EditProject(project, projectId);
-                return RedirectToAction("Index", "Home");
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                return View("/UI/Views/Admin/Projects.cshtml", projects);
             }
 
-            return RedirectToAction("Index", "Home");
+            Project returnProject = _projectsManager.GetProject(projectId);
+            return View("/UI/Views/Admin/EditProject.cshtml", project);
         }
 
         public IActionResult CreateProject()
@@ -130,16 +134,20 @@ namespace Integratieproject1.UI.Controllers{}
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
                 _projectsManager.CreateProject(project, currentUserId, 1);
-                return RedirectToAction("Index", "Home");
+                IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                return View("/UI/Views/Admin/Projects.cshtml", projects);
             }
 
-            return RedirectToAction("Index", "Home");
+            return View("/UI/Views/Admin/CreateProject.cshtml");
         }
 
         public IActionResult DeleteProject(int projectId)
         {
             _projectsManager.DeleteProject(projectId);
-            return RedirectToAction("Index", "Home");
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+            return View("/UI/Views/Admin/Projects.cshtml", projects);
         }
 
         #endregion
@@ -165,11 +173,13 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Phase editedPhase = _projectsManager.EditPhase(phase, phaseId);
-
-                return RedirectToAction("Index", "Home");
+                ViewBag.Project = _projectsManager.GetProject(editedPhase.Project.ProjectId);
+                IList<Phase> phases = _projectsManager.GetPhases(editedPhase.Project.ProjectId);
+                return View("/UI/Views/Admin/Phases.cshtml", phases);
             }
 
-            return RedirectToAction("Index", "Home");
+            Phase returnPhase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/EditPhase.cshtml", returnPhase);
         }
 
         public IActionResult AddPhase(int projectId)
@@ -184,16 +194,23 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Phase createdPhase = _projectsManager.CreatePhase(phase, phaseNr, projectId);
-                return RedirectToAction("Index", "Home");
+                ViewBag.Project = _projectsManager.GetProject(createdPhase.Project.ProjectId);
+                IList<Phase> phases = _projectsManager.GetPhases(createdPhase.Project.ProjectId);
+                return View("/UI/Views/Admin/Phases.cshtml", phases);
             }
 
-            return RedirectToAction("Index", "Home");
+            Phase returnPhase = _projectsManager.GetNewPhase(projectId);
+            return View("/UI/Views/Admin/CreatePhase.cshtml", returnPhase);
         }
 
         public IActionResult DeletePhase(int phaseId)
         {
+            Phase phase = _projectsManager.GetPhase(phaseId);
+            int projectId = phase.Project.ProjectId;
             _projectsManager.DeletePhase(phaseId);
-            return RedirectToAction("Index", "Home");
+            ViewBag.Project = _projectsManager.GetProject(projectId);
+            IList<Phase> phases = _projectsManager.GetPhases(projectId);
+            return View("/UI/Views/Admin/Phases.cshtml", phases);
         }
 
         #endregion
@@ -219,10 +236,13 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Ideation editIdeation = _ideationsManager.EditIdeation(ideation, ideationId);
-                return RedirectToAction("Index", "Home");
+                IList<Ideation> ideations = _ideationsManager.GetIdeations(editIdeation.Phase.PhaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(editIdeation.Phase.PhaseId);
+                return View("/UI/Views/Admin/Ideations.cshtml", ideations);
             }
 
-            return RedirectToAction("Index", "Home");
+            Ideation returnIdeation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Admin/EditIdeation.cshtml", ideation);
         }
 
         public IActionResult AddIdeation(int phaseId)
@@ -237,16 +257,23 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 _ideationsManager.CreateIdeation(ideation, phaseId);
-                return RedirectToAction("Index", "Home");
+                IList<Ideation> ideations = _ideationsManager.GetIdeations(phaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+                return View("/UI/Views/Admin/Ideations.cshtml", ideations);
             }
 
-            return RedirectToAction("Index", "Home");
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/CreateIdeation.cshtml");
         }
 
         public IActionResult DeleteIdeation(int ideationId)
         {
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            int phaseId = ideation.Phase.PhaseId;
             _ideationsManager.DeleteIdeation(ideationId);
-            return RedirectToAction("Index", "Home");
+            IList<Ideation> ideations = _ideationsManager.GetIdeations(phaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/Ideations.cshtml", ideations);
         }
 
         public IActionResult Ideas(int ideationId)
@@ -287,23 +314,26 @@ namespace Integratieproject1.UI.Controllers{}
         {
             if (ModelState.IsValid)
             {
-                _surveysManager.EditSurvey(survey, surveyId);
-                return RedirectToAction("Index", "Home");
+                Survey editsurvey = _surveysManager.EditSurvey(survey, surveyId);
+                IList<Survey> surveys = _surveysManager.GetSurveys(editsurvey.Phase.PhaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(editsurvey.Phase.PhaseId);
+                return View("/UI/Views/Admin/Surveys.cshtml", surveys);
             }
 
-            return RedirectToAction("Index", "Home");
+            Survey returnSurvey = _surveysManager.GetSurvey(surveyId);
+            IList<Survey> returnSurveys = _surveysManager.GetSurveys(returnSurvey.Phase.PhaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(returnSurvey.Phase.PhaseId);
+            return View("/UI/Views/Admin/Surveys.cshtml", returnSurveys);
         }
 
         public IActionResult DeleteSurvey(int surveyId)
         {
+            Survey returnSurvey = _surveysManager.GetSurvey(surveyId);
+            IList<Survey> returnSurveys = _surveysManager.GetSurveys(returnSurvey.Phase.PhaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(returnSurvey.Phase.PhaseId);
             _surveysManager.DeleteSurvey(surveyId);
-            return RedirectToAction("Index", "Home");
+            return View("/UI/Views/Admin/Surveys.cshtml", returnSurveys);
         }
-
-        /*public IActionResult AddQuestion()
-        {
-            return PartialView("/UI/Views/Admin/_CreateQuestionPartial.cshtml");
-        }*/
 
         [HttpPost]
         public IActionResult AddQuestion(Question question, int surveyId)

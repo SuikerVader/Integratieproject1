@@ -57,11 +57,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void EditSurvey(Survey survey, int surveyId)
+        public Survey EditSurvey(Survey survey, int surveyId)
         {
-            survey.SurveyId = surveyId;
-            _surveysRepository.EditSurvey(survey);
+            Survey originalSurvey = GetSurvey(surveyId);
+            originalSurvey.Title = survey.Title;
+            Survey returnSurvey = _surveysRepository.EditSurvey(originalSurvey);
             _unitOfWorkManager.Save();
+            return returnSurvey;
         }
 
         public void DeleteSurvey(int surveyId)
