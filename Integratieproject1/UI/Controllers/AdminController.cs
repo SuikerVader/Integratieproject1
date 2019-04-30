@@ -256,11 +256,23 @@ namespace Integratieproject1.UI.Controllers{}
             ViewBag.IdeationId = ideationId;
             return View("/UI/Views/Admin/Ideas.cshtml", ideas);
         }
-        #endregion
 
-        #region Survey
+    public IActionResult IdeationResults()
+    {
+        IList<Ideation> ideations = _ideationsManager.GetAllIdeations(1);
+        return View("/UI/Views/Admin/IdeationResults.cshtml", ideations);
+    }
 
-        public IActionResult Surveys(int phaseId)
+    public IActionResult IdeationResult(int ideationId)
+    {
+        Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+        return View("/UI/Views/Admin/IdeationResult.cshtml", ideation);
+    }
+    #endregion
+
+    #region Survey
+
+    public IActionResult Surveys(int phaseId)
         {
             IList<Survey> surveys = _surveysManager.GetSurveys(phaseId);
             ViewBag.Phase = _projectsManager.GetPhase(phaseId);
@@ -364,6 +376,12 @@ namespace Integratieproject1.UI.Controllers{}
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
+
+        public IActionResult SurveyResults()
+    {
+        IList<Survey> surveys = _surveysManager.GetAllSurveys();
+        return View("/UI/Views/Admin/SurveyResults.cshtml", surveys);
+    }
 
         #endregion
 
