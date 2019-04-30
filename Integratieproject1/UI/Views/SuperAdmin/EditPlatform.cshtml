@@ -18,11 +18,11 @@
             <input asp-for="Description" class="form-control" />
             <label asp-for="Phonenumber">Telefoonnummer</label>
             <input asp-for="Phonenumber" class="form-control" />
-            <input type="submit" value="Wijzig Platform">
+            <input class="btn btn-primary" type="submit" value="Wijzig Platform">
         </form>
-        <a asp-area="" asp-controller="SuperAdmin"
+        <a class="btn btn-danger" asp-area="" asp-controller="SuperAdmin"
            asp-action="DeletePlatform" asp-route-platformId="@Model.PlatformId">
-            <button>Verwijder Platform</button>
+            Verwijder Platform
         </a>
     </div>
 </div>
