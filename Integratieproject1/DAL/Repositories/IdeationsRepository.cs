@@ -38,6 +38,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(ph => ph.Phase)
                 .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
                 .Include(i=>i.Ideas).ThenInclude(v=>v.Votes)
+                .Include(i=>i.Ideas).ThenInclude(r=>r.Reactions)
                 .AsEnumerable();
         }
 
