@@ -365,5 +365,13 @@ namespace Integratieproject1.UI.Controllers
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
+
+        public IActionResult EditPosition(Position position, int positionId, int ideaId)
+        {
+            _dataTypeManager.EditPosition(position,positionId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
     }
 }

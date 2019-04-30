@@ -142,54 +142,6 @@
         }
     </div>
 </div>
-<input id="autocomplete" oninput="inputAutocomplete()"/>
-<label id="lat"></label>
-<label id="long"></label>
-@*<partial name="/UI/Views/Project/_MapPartial.cshtml"/>*@
-
-@*<a src="https://maps.googleapis.com/maps/api/place/nearbysearch/json
-  ?location=-33.8670522,151.1957362
-  &radius=500
-  &types=food
-  &name=harbour
-  &key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w" ></a>*@
-
-<script>
-   /*
- 
-    function inputAutocomplete(){
-        var prefix = 'Antwerpen, ';
-        var str = event.target.value;
-        if(str.indexOf(prefix) == 0) {
-            // string already started with prefix
-            return;
-        } else {
-            if (prefix.indexOf(str) >= 0) {
-                // string is part of prefix
-                event.target.value = prefix;
-            } else {
-                event.target.value = prefix+str;
-            }
-        }
-    };*/
-    function initAutocomplete() {
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
-        autocomplete.setComponentRestrictions({'country': 'be'});
-        google.maps.event.addListener(autocomplete,
-            'place_changed',
-            function() {
-                var place = autocomplete.getPlace();
-                var lat = "lat: " + place.geometry.location.lat();
-                var long = "long: " + place.geometry.location.lng();
-                document.getElementById('lat').innerHTML = lat;
-                document.getElementById('long').innerHTML = long;
-            });
-        
-    }
-</script>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initAutocomplete"></script>
-
 <script>
     function displayActiveProjects() {
         var active = document.getElementsByClassName("activeProject");
