@@ -16,6 +16,7 @@ namespace Integratieproject1.Domain.Projects
         public string Description { get; set; }
         [Required] public Location Location { get; set; }
         public string Status { get; set; }
+        public string BackgroundImage { get; set; }
 
         //[Required] 
         public Platform Platform { get; set; }

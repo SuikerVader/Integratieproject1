@@ -3,13 +3,23 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="jumbotron jumbotron-fluid text-center">
-    <h1 class="display-4">@Model.PlatformName</h1>
-    <p>@Model.Description</p>
-    <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
+<div class="jumbotron jumbotron-fluid text-center"
+     @if (Model.BackgroundImage != null)
+     {
+         <text>style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;"</text>
+     }>
+    <div
+        @if (Model.BackgroundImage != null)
+        {
+            <text>class="jumbotronBackground" </text>
+        }
+    >
+        <h1 class="display-4">@Model.PlatformName</h1>
+        <p>@Model.Description</p>
+        <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
+    </div>
 </div>
 <div class="container">
-
 
     <div class="d-flex flex-row flex-wrap justify-content-center">
         <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">actieve projecten</button>
@@ -22,7 +32,6 @@
         {
             if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
             {
-                
                 <div class="card text-center activeProject">
                     <div class="card-body">
                         <h5 class="card-title">@project.ProjectName</h5>
@@ -58,11 +67,9 @@
                         </a>
                     </div>
                 </div>
-                
             }
             else if (DateTime.Now > project.EndDate)
             {
-                
                 <div class="card text-center closedProject">
                     <div class="card-body">
                         <h5 class="card-title">@project.ProjectName</h5>
@@ -101,7 +108,6 @@
             }
             else if (DateTime.Now < project.StartDate)
             {
-                
                 <div class="card text-center futureProject">
                     <div class="card-body">
                         <h5 class="card-title">@project.ProjectName</h5>
@@ -137,7 +143,6 @@
                         </a>
                     </div>
                 </div>
-                                    
             }
         }
     </div>
@@ -215,5 +220,5 @@
         document.getElementById("btnFutureProject").classList.add("btn-secondary");
         document.getElementById("btnFutureProject").classList.remove("btn-primary");
     }
-   
+
 </script>
