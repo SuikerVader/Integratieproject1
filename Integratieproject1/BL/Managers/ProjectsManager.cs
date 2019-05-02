@@ -145,6 +145,17 @@ namespace Integratieproject1.BL.Managers
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             project.ProjectId = projectId;
+            if (project.BackgroundImage == null)
+            {
+                project.BackgroundImage = GetProject(projectId).BackgroundImage;
+            }
+            _projectsRepository.EditProject(project);
+            _unitOfWorkManager.Save();
+        }
+        public void DeleteBackgroundImage(int projectId)
+        {
+            Project project = GetProject(projectId);
+            project.BackgroundImage = null;
             _projectsRepository.EditProject(project);
             _unitOfWorkManager.Save();
         }
@@ -195,6 +206,25 @@ namespace Integratieproject1.BL.Managers
             };
             _projectsRepository.CreateAdminProject(adminProject);
             _unitOfWorkManager.Save();
+        }
+        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
+            IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
+            for (int i = 0; i < allAdmins.Count; i++)
+            {
+                foreach (var adminProject in adminProjects)
+                {
+                    if (adminProject.Admin == allAdmins[i])
+                    {
+                        allAdmins.RemoveAt(i);
+                    }
+                }
+                
+            }
+
+            return allAdmins;
         }
 
         #endregion
@@ -328,24 +358,6 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
-        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
-        {
-            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
-            IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
-            for (int i = 0; i < allAdmins.Count; i++)
-            {
-                foreach (var adminProject in adminProjects)
-                {
-                    if (adminProject.Admin == allAdmins[i])
-                    {
-                        allAdmins.RemoveAt(i);
-                    }
-                }
-                
-            }
-
-            return allAdmins;
-        }
+       
     }
 }
