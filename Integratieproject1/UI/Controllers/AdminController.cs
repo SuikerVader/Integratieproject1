@@ -133,7 +133,7 @@ public class AdminController : Controller
     }
     public IActionResult DeleteBackgroundImage(int projectId)
     {
-           _projectsManager.DeleteBackgroundImage(projectId);
+           _projectsManager.DeleteBackgroundImageProject(projectId);
            Project returnProject = _projectsManager.GetProject(projectId);
            return View("/UI/Views/Admin/EditProject.cshtml", returnProject);
     }

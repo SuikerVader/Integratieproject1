@@ -166,9 +166,9 @@ namespace Integratieproject1.UI.Controllers
 
             return null;
         }
-        public IActionResult DeleteBackgroundImage(int projectId)
+        public IActionResult DeleteBackgroundImageProject(int projectId)
         {
-            projectsManager.DeleteBackgroundImage(projectId);
+            projectsManager.DeleteBackgroundImageProject(projectId);
             Project returnProject = projectsManager.GetProject(projectId);
             return View("/UI/Views/SuperAdmin/EditProject.cshtml", returnProject);
         }
@@ -193,15 +193,22 @@ namespace Integratieproject1.UI.Controllers
         }
         
         [HttpPost]
-        public IActionResult EditPlatform(int platformId, Platform platform)
+        public IActionResult EditPlatform(int platformId, Platform platform,IFormFile formFile)
         {
             if (ModelState.IsValid)
             {
+                platform.BackgroundImage = GetImagePath(formFile);
                 projectsManager.EditPlatform(platform, platformId);
             }
                 
             IList<Platform> platforms = projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+        public IActionResult DeleteBackgroundImagePlatform(int platformId)
+        {
+            projectsManager.DeleteBackgroundImagePlatform(platformId);
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
 
         public IActionResult CreatePlatform()
@@ -236,5 +243,7 @@ namespace Integratieproject1.UI.Controllers
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
+
+        
     }
 }
