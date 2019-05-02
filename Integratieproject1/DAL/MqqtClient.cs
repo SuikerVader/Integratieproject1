@@ -62,7 +62,7 @@ namespace Integratieproject1.DAL
                 Console.WriteLine("### CONNECTED WITH SERVER ###");
 
                 // Subscribe to a topic
-                await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("ms16").Build());
+                await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("ms32").Build());
 
                 Console.WriteLine("### SUBSCRIBED ###");
             };

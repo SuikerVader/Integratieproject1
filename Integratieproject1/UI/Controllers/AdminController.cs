@@ -32,7 +32,7 @@ namespace Integratieproject1.UI.Controllers{}
             _surveysManager = new SurveysManager();
         }
 
-        public IActionResult Admin()
+        public IActionResult Admin(string platformName)
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -127,15 +127,24 @@ namespace Integratieproject1.UI.Controllers{}
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project)
+        public IActionResult CreateProject(Project project, string platformName)
         {
             if (ModelState.IsValid)
             {
+            try
+            {
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _projectsManager.CreateProject(project, currentUserId, 1);
+                Platform platform = _projectsManager.GetPlatformByName(platformName);
+                _projectsManager.CreateProject(project, currentUserId, platform.PlatformId);
                 IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
                 return View("/UI/Views/Admin/Projects.cshtml", projects);
+            }
+            catch
+            {
+                return NotFound();
+            }
+                
             }
 
             return View("/UI/Views/Admin/CreateProject.cshtml");

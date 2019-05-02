@@ -90,7 +90,7 @@ namespace Integratieproject1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{platformName=Antwerpen}/{controller=Home}/{action=Index}/{id?}");
             });
             CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
 
