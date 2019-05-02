@@ -41,6 +41,11 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetPlatform(platformId);
         }
 
+        public Platform GetPlatformByName(string platformName)
+        {
+            return _projectsRepository.GetPlatformByName(platformName);
+        }
+
         public void CreatePlatform(Platform platform)
         {
             _projectsRepository.CreatePlatform(platform);

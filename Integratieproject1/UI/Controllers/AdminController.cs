@@ -44,12 +44,12 @@ public class AdminController : Controller
         IdentityUser user = _usersManager.GetUser(currentUserId);
         return View("/UI/Views/Admin/Admin.cshtml", user);
     }
-
-    public IActionResult Moderators()
-    {
-        IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
-        return View("/UI/Views/Admin/Moderators.cshtml", mods);
-    }
+        
+        public IActionResult Moderators()
+        {
+            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+        }
 
     public IActionResult DeleteModRole(string modId)
     {
@@ -144,7 +144,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateProject(Project project, IFormFile formFile)
+    public IActionResult CreateProject(Project project,  IFormFile formFile, string platformName)
     {
         if (ModelState.IsValid)
         {
@@ -152,6 +152,28 @@ public class AdminController : Controller
             {
                 project.BackgroundImage = GetImagePath(formFile); 
             }
+            try
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                Platform platform = _projectsManager.GetPlatformByName(platformName);
+                _projectsManager.CreateProject(project, currentUserId, platform.PlatformId);
+                IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                return View("/UI/Views/Admin/Projects.cshtml", projects);
+            }
+            catch
+            {
+                return NotFound();
+            }
+                
+            }
+
+            return View("/UI/Views/Admin/CreateProject.cshtml");
+        }
+
+        public IActionResult DeleteProject(int projectId)
+        {
+            _projectsManager.DeleteProject(projectId);
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             _projectsManager.CreateProject(project, currentUserId, 1);

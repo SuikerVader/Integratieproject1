@@ -22,10 +22,17 @@ namespace Integratieproject1.UI.Controllers
             _ideationsManager = new IdeationsManager();
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string platformName)
         {
-            Platform platform = _projectsManager.GetPlatform(1);
-            return View("/UI/Views/Home/Index.cshtml", platform);
+            try{
+                Platform platform = _projectsManager.GetPlatformByName(platformName);
+                return View("/UI/Views/Home/Index.cshtml", platform);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            
         }
 
         public IActionResult About()

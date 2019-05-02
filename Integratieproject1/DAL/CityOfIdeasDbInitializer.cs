@@ -49,7 +49,7 @@ namespace Integratieproject1.DAL
 
             Platform platform = new Platform
             {
-                PlatformName = "CityOfIdeas",
+                PlatformName = "Antwerpen",
                 Description =
                     "Help building projects inside your city! Give your ideas and input on projects that inspire you.",
                 Address = address
