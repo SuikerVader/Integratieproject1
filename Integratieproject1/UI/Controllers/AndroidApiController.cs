@@ -10,6 +10,7 @@ using Integratieproject1.DAL;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Platform = Integratieproject1.Domain.Projects.Platform;
@@ -20,19 +21,20 @@ namespace Integratieproject1.UI.Controllers
     [ApiController]
     public class AndroidApiController
     {
-        private IdeationsManager _ideationsManager;
-        private SurveysManager _surveysManager;
-        private ProjectsManager _projectsManager;
-        private UsersManager _usersManager;
+        private readonly IdeationsManager _ideationsManager;
+        private readonly SurveysManager _surveysManager;
+        private readonly ProjectsManager _projectsManager;
+        private readonly UsersManager _usersManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AndroidApiController()
+        public AndroidApiController(SignInManager<IdentityUser> signInManager)
         {
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _projectsManager = new ProjectsManager();
             _usersManager = new UsersManager();
+            _signInManager = signInManager;
         }
-
 
         #region Ideations
 
@@ -98,7 +100,7 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-        #region surveys
+        #region Surveys
 
         [HttpGet]
         [Route("Api/surveys/{id}")]
@@ -123,9 +125,17 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-  
-        
-        
-        
+        #region Users
+
+        [HttpGet]
+        [Route("Api/users/{email}/{password}")]
+        public async Task<IdentityUser> GetUser(string email, string password)
+        {
+            var result = await _signInManager.PasswordSignInAsync(email, password, true, true);
+
+            return result.Succeeded ? _usersManager.GetUserByEmail(email) : null;
+        }
+
+        #endregion
     }
 }
