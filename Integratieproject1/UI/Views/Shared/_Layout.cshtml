@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Integratieproject1.Domain.Projects
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -10,8 +11,7 @@
     <link rel="stylesheet" href="~/dist/site.css">
     <link rel="stylesheet" href="~/css/site.css"/>
 
-    @* staat in site.js *@
-    @* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> *@
+    
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -26,7 +26,7 @@
         @*     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Integratieproject1</a> *@
         @* </div> *@
         
-        <a class="navbar-brand" asp-controller="Home" asp-action="Index">CityOfIdeas</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">@Html.PartialAsync("_LogoPartial.cshtml",new Platform(),ViewBag.PlatformName)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

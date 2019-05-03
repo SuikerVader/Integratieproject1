@@ -9,7 +9,6 @@ namespace Integratieproject1.Domain.Projects
     {
         [Key] public int ProjectId { get; set; }
         [Required] public string ProjectName { get; set; }
-        public string Logo { get; set; }
         [Required] public DateTime StartDate { get; set; }
         [Required] public DateTime EndDate { get; set; }
         public string Objective { get; set; }

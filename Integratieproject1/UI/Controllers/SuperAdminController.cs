@@ -197,8 +197,12 @@ namespace Integratieproject1.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                platform.BackgroundImage = GetImagePath(formFile);
-                projectsManager.EditPlatform(platform, platformId);
+                if (formFile != null)
+                {
+                    platform.BackgroundImage = GetImagePath(formFile);
+                                    
+                }
+               projectsManager.EditPlatform(platform, platformId);
             }
                 
             IList<Platform> platforms = projectsManager.GetAllPlatforms();
@@ -217,11 +221,16 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatePlatform(Platform platform)
+        public IActionResult CreatePlatform(Platform platform, IFormFile formFile)
         {
 
             if (ModelState.IsValid)
             {
+                if (formFile != null)
+                {
+                    platform.BackgroundImage = GetImagePath(formFile);
+                                    
+                }
                 projectsManager.CreatePlatform(platform);
             }
 

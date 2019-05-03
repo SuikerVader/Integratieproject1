@@ -127,5 +127,14 @@ namespace Integratieproject1.UI.Controllers
                 }
             );
         }
+
+        public PartialViewResult _LogoPartial(string platformName)
+        {
+           
+                Platform platform = _projectsManager.GetPlatformByName(platformName);
+                ViewBag.Logo = platform.Logo;
+                return PartialView("/UI/Views/Shared/_LogoPartial.cshtml");
+            
+        }
     }
 }
