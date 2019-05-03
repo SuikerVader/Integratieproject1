@@ -1,0 +1,46 @@
+﻿@model IList<Integratieproject1.Domain.Projects.Platform>
+
+@{
+    ViewBag.Title = "SuperAdminPagina";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Alle Platformen</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Naam</th>
+                <th>Nummer</th>
+                <th>Header</th>
+                <th>Logo</th>
+            </tr>
+            @foreach (var platform in Model)
+            {
+                <tr>
+                    <td>@platform.PlatformId</td>
+                    <td>@platform.PlatformName</td>
+                    <td>@platform.Phonenumber</td>
+                    <td>@platform.Header</td>
+                    <td>@platform.Logo</td>
+                    <td>
+                        <a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="EditPlatform" asp-route-platformId="@platform.PlatformId">
+                            Wijzig
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="DeletePlatform" asp-route-platformId="@platform.PlatformId">
+                            Verwijder
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
+           asp-action="CreatePlatform">
+            Nieuw Platform
+        </a>
+    </div>
+</div>

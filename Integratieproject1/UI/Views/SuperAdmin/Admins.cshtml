@@ -1,11 +1,11 @@
 @model IList<Microsoft.AspNetCore.Identity.IdentityUser>
 
 @{
-    ViewBag.Title = "SuperAdminPage";
+    ViewBag.Title = "SuperAdminPagina";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>My Admins</h2>
+    <h2>Mijn Admins</h2>
     <div>
         <table class="table">
             <tr>
@@ -20,7 +20,7 @@
                     <td>@admin.Email</td>
                     <td>@admin.PhoneNumber</td>
                     <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">Verwijder Admin Rol
+                           asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">Verwijder Adminrol
                     </a></td>
                     <td><a asp-area="" asp-controller="SuperAdmin"
                            asp-action="DeleteAdmin" asp-route-adminId="@admin.Id">Verwijder Account
@@ -32,7 +32,7 @@
             }
         </table>
     </div>
-    <a asp-area="" asp-controller="SuperAdmin"
+    <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
        asp-action="Users" >Geef Adminrol aan gebruiker
     </a>
 </div>

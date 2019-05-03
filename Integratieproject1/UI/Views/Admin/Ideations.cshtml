@@ -2,7 +2,7 @@
 @model IList<Integratieproject1.Domain.Ideations.Ideation>
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -14,7 +14,7 @@
             <div>
                 <table class="table">
                     <tr>
-                        <th>CentralQuestion</th>
+                        <th>Centrale Vraag</th>
                         <th>InputIdeation</th>
                     </tr>
                     @foreach (var ideation in Model)
@@ -25,7 +25,7 @@
                             <td>
                                 <a asp-area="" asp-controller="Admin"
                                    asp-action="EditIdeation" asp-route-ideationId="@ideation.IdeationId">
-                                    Edit
+                                    Wijzig
                                 </a>
 
                             </td>
@@ -34,7 +34,7 @@
                                 <td>
                                     <a asp-area="" asp-controller="Admin"
                                        asp-action="Ideas" asp-route-ideationId="@ideation.IdeationId">
-                                        show ideas
+                                        Idee&euml;n Bekijken
                                     </a>
                                 </td>
                             }
@@ -44,7 +44,7 @@
                 </table>
                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
                    asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId">
-                    Add Ideation
+                    Ideation Toevoegen
                 </a>
             </div>
         </div>
@@ -53,8 +53,8 @@
                 <div class="card-body">
                     <h5><strong>Info:</strong></h5>
                     <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
-                    <strong>Phase:</strong> @ViewBag.Phase.PhaseName<br/>
-                    <strong>Phase periode:</strong><br/>
+                    <strong>Fase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Faseperiode:</strong><br/>
                     @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")
                 </div>
             </div>

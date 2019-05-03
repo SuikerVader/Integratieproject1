@@ -1,16 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@using Integratieproject1.Domain.Projects
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - Integratieproject1</title>
+    <meta name="google-site-verification" content="CIYO5SWRNrTqz7NScM_jxfBQMXuf4ESBGR7sCkrihhc" />
+    <title>@ViewData["Title"] - City Of Ideas</title>
 
     <script type="module" src="~/dist/site.entry.js" defer></script>
     <link rel="stylesheet" href="~/dist/site.css">
     <link rel="stylesheet" href="~/css/site.css"/>
 
-    @* staat in site.js *@
-    @* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> *@
+    
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,13 +26,13 @@
         @*     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Integratieproject1</a> *@
         @* </div> *@
         
-        <a class="navbar-brand" asp-controller="Home" asp-action="Index">Integratieproject</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">@Html.PartialAsync("_LogoPartial.cshtml",new Platform(),ViewBag.PlatformName)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                @*<li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li class="nav-item">
@@ -39,25 +40,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                </li>
-                @if (User.IsInRole("Admin"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Admin">Admin</a>
-                    </li>
-                }
-                @if (User.IsInRole("Mod"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Moderator" asp-action="Index">Moderator</a>
-                    </li>
-                }
-                @if (User.IsInRole("SuperAdmin"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">SuperAdmin</a>
-                    </li>
-                }
+                </li>*@
             </ul>
             <partial name="/UI/Views/Shared/_SearchPartial.cshtml"/>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>

@@ -3,7 +3,7 @@
 @model Integratieproject1.Domain.Surveys.Survey
 
 @{
-    ViewBag.Title = "SurveyPage";
+    ViewBag.Title = "Vragenlijst";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5>Info:</h5>
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
-                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
                 </div>
             </div>
@@ -22,9 +22,6 @@
             <div class="card text-center" style="border: none;">
                 <div class="card-body">
                     <h1 class="card-title">@Model.Title</h1>
-                    <a class="btn btn-primary" asp-area="" asp-controller="Project"
-                       asp-action="SurveyResults" asp-route-surveyId="@Model.SurveyId">Results
-                    </a>  
                 </div>
             </div>
         </div>
@@ -72,13 +69,11 @@
                     </div>
                 }
                 <div class="text-center">
-                    <input class="btn btn-primary" type="submit" value="Submit">
+                    <input class="btn btn-primary" type="submit" value="Bevestig">
                 </div>
                 
             </form>
             </div>
         </div>
-        
-
     </div>
 </div>

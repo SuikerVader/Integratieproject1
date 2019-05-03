@@ -1,15 +1,21 @@
 @{
-    ViewBag.Title = "SuperAdminPage";
+    ViewBag.Title = "SuperAdminPagina";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <h2>SuperAdmin</h2>
     <div>
-        <a asp-area="" asp-controller="SuperAdmin"
-           asp-action="Admins"><button>Manage Admins</button>
+        <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
+           asp-action="Admins">
+            Beheer Admins
         </a>
-        <a asp-area="" asp-controller="SuperAdmin"
-           asp-action="Projects"><button>Manage Projects</button>
+        <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
+           asp-action="Projects">
+            Beheer Projecten
+        </a>
+        <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
+           asp-action="Platforms">
+            Beheer Platformen
         </a>
     </div>
 </div>

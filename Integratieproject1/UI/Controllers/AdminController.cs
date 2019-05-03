@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Integratieproject1.BL.Managers;
@@ -11,12 +12,14 @@ using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Integratieproject1.UI.Controllers{}
-
-    [Authorize(Roles="Admin")]
+namespace Integratieproject1.UI.Controllers
+{
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ProjectsManager _projectsManager;
@@ -39,35 +42,35 @@ namespace Integratieproject1.UI.Controllers{}
             IdentityUser user = _usersManager.GetUser(currentUserId);
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
-        
+
         public IActionResult Moderators()
         {
             IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
-        
+
         public IActionResult DeleteModRole(string modId)
         {
-            _usersManager.DeleteRole(modId,"MOD");
-            _usersManager.GiveRole(modId,"USER");
+            _usersManager.DeleteRole(modId, "MOD");
+            _usersManager.GiveRole(modId, "USER");
             IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
-        
+
         public IActionResult GiveModRole(string userId)
         {
-            _usersManager.GiveRole(userId,"MOD");
+            _usersManager.GiveRole(userId, "MOD");
             IList<IdentityUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/Admin/Users.cshtml", users);
         }
-        
+
         public IActionResult DeleteMod(string modId)
         {
             _usersManager.DeleteUser(modId);
             IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
-        
+
         public IActionResult Users()
                  {
                      IList<IdentityUser> users = _usersManager.GetUsers("USER");
@@ -107,15 +110,29 @@ namespace Integratieproject1.UI.Controllers{}
         }
 
         [HttpPost]
-        public IActionResult EditProject(int projectId, Project project)
+        public IActionResult EditProject(int projectId, Project project, IFormFile formFile)
         {
             if (ModelState.IsValid)
             {
+                if (formFile != null)
+                {
+                    project.BackgroundImage = GetImagePath(formFile);
+                }
                 _projectsManager.EditProject(project, projectId);
-                return RedirectToAction("Index", "Home");
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                return View("/UI/Views/Admin/Projects.cshtml", projects);
             }
 
-            return RedirectToAction("Index", "Home");
+            Project returnProject = _projectsManager.GetProject(projectId);
+            return View("/UI/Views/Admin/EditProject.cshtml", returnProject);
+        }
+        public IActionResult DeleteBackgroundImage(int projectId)
+        {
+            _projectsManager.DeleteBackgroundImageProject(projectId);
+            Project returnProject = _projectsManager.GetProject(projectId);
+            return View("/UI/Views/Admin/EditProject.cshtml", returnProject);
         }
 
         public IActionResult CreateProject()
@@ -124,23 +141,61 @@ namespace Integratieproject1.UI.Controllers{}
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project project)
+        public IActionResult CreateProject(Project project, IFormFile formFile, string platformName)
         {
             if (ModelState.IsValid)
             {
-                ClaimsPrincipal currentUser = User;
-                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _projectsManager.CreateProject(project, currentUserId, 1);
-                return RedirectToAction("Index", "Home");
+                if (formFile != null)
+                {
+                    project.BackgroundImage = GetImagePath(formFile);
+                }
+                try
+                {
+                    ClaimsPrincipal currentUser = User;
+                    string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    Platform platform = _projectsManager.GetPlatformByName(platformName);
+                    _projectsManager.CreateProject(project, currentUserId, platform.PlatformId);
+                    IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                    return View("/UI/Views/Admin/Projects.cshtml", projects);
+                }
+                catch
+                {
+                    return NotFound();
+                }
+
             }
 
-            return RedirectToAction("Index", "Home");
+            return View("/UI/Views/Admin/CreateProject.cshtml");
         }
 
         public IActionResult DeleteProject(int projectId)
         {
             _projectsManager.DeleteProject(projectId);
-            return RedirectToAction("Index", "Home");
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+            return View("/UI/Views/Admin/Projects.cshtml", projects);
+        }
+
+        private string GetImagePath(IFormFile file)
+        {
+            string wwwroot = "wwwroot/";
+            string uploads = "/images/uploads/";
+            string path = wwwroot + uploads;
+
+            if (file.Length > 0)
+            {
+                string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                return Path.Combine(uploads, imagePath);
+            }
+
+            return null;
         }
 
         #endregion
@@ -166,11 +221,13 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Phase editedPhase = _projectsManager.EditPhase(phase, phaseId);
-
-                return RedirectToAction("Index", "Home");
+                ViewBag.Project = _projectsManager.GetProject(editedPhase.Project.ProjectId);
+                IList<Phase> phases = _projectsManager.GetPhases(editedPhase.Project.ProjectId);
+                return View("/UI/Views/Admin/Phases.cshtml", phases);
             }
 
-            return RedirectToAction("Index", "Home");
+            Phase returnPhase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/EditPhase.cshtml", returnPhase);
         }
 
         public IActionResult AddPhase(int projectId)
@@ -185,16 +242,23 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Phase createdPhase = _projectsManager.CreatePhase(phase, phaseNr, projectId);
-                return RedirectToAction("Index", "Home");
+                ViewBag.Project = _projectsManager.GetProject(createdPhase.Project.ProjectId);
+                IList<Phase> phases = _projectsManager.GetPhases(createdPhase.Project.ProjectId);
+                return View("/UI/Views/Admin/Phases.cshtml", phases);
             }
 
-            return RedirectToAction("Index", "Home");
+            Phase returnPhase = _projectsManager.GetNewPhase(projectId);
+            return View("/UI/Views/Admin/CreatePhase.cshtml", returnPhase);
         }
 
         public IActionResult DeletePhase(int phaseId)
         {
+            Phase phase = _projectsManager.GetPhase(phaseId);
+            int projectId = phase.Project.ProjectId;
             _projectsManager.DeletePhase(phaseId);
-            return RedirectToAction("Index", "Home");
+            ViewBag.Project = _projectsManager.GetProject(projectId);
+            IList<Phase> phases = _projectsManager.GetPhases(projectId);
+            return View("/UI/Views/Admin/Phases.cshtml", phases);
         }
 
         #endregion
@@ -220,10 +284,13 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 Ideation editIdeation = _ideationsManager.EditIdeation(ideation, ideationId);
-                return RedirectToAction("Index", "Home");
+                IList<Ideation> ideations = _ideationsManager.GetIdeations(editIdeation.Phase.PhaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(editIdeation.Phase.PhaseId);
+                return View("/UI/Views/Admin/Ideations.cshtml", ideations);
             }
 
-            return RedirectToAction("Index", "Home");
+            Ideation returnIdeation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Admin/EditIdeation.cshtml", ideation);
         }
 
         public IActionResult AddIdeation(int phaseId)
@@ -238,16 +305,23 @@ namespace Integratieproject1.UI.Controllers{}
             if (ModelState.IsValid)
             {
                 _ideationsManager.CreateIdeation(ideation, phaseId);
-                return RedirectToAction("Index", "Home");
+                IList<Ideation> ideations = _ideationsManager.GetIdeations(phaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+                return View("/UI/Views/Admin/Ideations.cshtml", ideations);
             }
 
-            return RedirectToAction("Index", "Home");
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/CreateIdeation.cshtml");
         }
 
         public IActionResult DeleteIdeation(int ideationId)
         {
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            int phaseId = ideation.Phase.PhaseId;
             _ideationsManager.DeleteIdeation(ideationId);
-            return RedirectToAction("Index", "Home");
+            IList<Ideation> ideations = _ideationsManager.GetIdeations(phaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(phaseId);
+            return View("/UI/Views/Admin/Ideations.cshtml", ideations);
         }
 
         public IActionResult Ideas(int ideationId)
@@ -257,6 +331,19 @@ namespace Integratieproject1.UI.Controllers{}
             ViewBag.IdeationId = ideationId;
             return View("/UI/Views/Admin/Ideas.cshtml", ideas);
         }
+
+        public IActionResult IdeationResults()
+        {
+            IList<Ideation> ideations = _ideationsManager.GetAllIdeations(1);
+            return View("/UI/Views/Admin/IdeationResults.cshtml", ideations);
+        }
+
+        public IActionResult IdeationResult(int ideationId)
+        {
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Admin/IdeationResult.cshtml", ideation);
+        }
+
         #endregion
 
         #region Survey
@@ -288,23 +375,26 @@ namespace Integratieproject1.UI.Controllers{}
         {
             if (ModelState.IsValid)
             {
-                _surveysManager.EditSurvey(survey, surveyId);
-                return RedirectToAction("Index", "Home");
+                Survey editsurvey = _surveysManager.EditSurvey(survey, surveyId);
+                IList<Survey> surveys = _surveysManager.GetSurveys(editsurvey.Phase.PhaseId);
+                ViewBag.Phase = _projectsManager.GetPhase(editsurvey.Phase.PhaseId);
+                return View("/UI/Views/Admin/Surveys.cshtml", surveys);
             }
 
-            return RedirectToAction("Index", "Home");
+            Survey returnSurvey = _surveysManager.GetSurvey(surveyId);
+            IList<Survey> returnSurveys = _surveysManager.GetSurveys(returnSurvey.Phase.PhaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(returnSurvey.Phase.PhaseId);
+            return View("/UI/Views/Admin/Surveys.cshtml", returnSurveys);
         }
 
         public IActionResult DeleteSurvey(int surveyId)
         {
+            Survey returnSurvey = _surveysManager.GetSurvey(surveyId);
+            IList<Survey> returnSurveys = _surveysManager.GetSurveys(returnSurvey.Phase.PhaseId);
+            ViewBag.Phase = _projectsManager.GetPhase(returnSurvey.Phase.PhaseId);
             _surveysManager.DeleteSurvey(surveyId);
-            return RedirectToAction("Index", "Home");
+            return View("/UI/Views/Admin/Surveys.cshtml", returnSurveys);
         }
-
-        /*public IActionResult AddQuestion()
-        {
-            return PartialView("/UI/Views/Admin/_CreateQuestionPartial.cshtml");
-        }*/
 
         [HttpPost]
         public IActionResult AddQuestion(Question question, int surveyId)
@@ -313,6 +403,7 @@ namespace Integratieproject1.UI.Controllers{}
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
+
         [HttpPost]
         public IActionResult EditQuestion(Question question, int questionId, int surveyId)
         {
@@ -320,36 +411,36 @@ namespace Integratieproject1.UI.Controllers{}
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
-        
+
         public IActionResult QuestionNrUp(int questionId, int surveyId)
         {
             _surveysManager.QuestionNrChange(questionId, "up", surveyId);
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
-        
+
         public IActionResult QuestionNrDown(int questionId, int surveyId)
         {
             _surveysManager.QuestionNrChange(questionId, "down", surveyId);
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
-        
+
         public IActionResult DeleteQuestion(int questionId, int surveyId)
         {
-           _surveysManager.DeleteQuestion(questionId); 
-           Survey survey = _surveysManager.GetSurvey(surveyId);
-           return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            _surveysManager.DeleteQuestion(questionId);
+            Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
-        
+
         [HttpPost]
         public IActionResult EditAnswer(Answer answer, int answerId, int questionId, int surveyId)
         {
             _surveysManager.EditAnswer(answer, answerId, questionId);
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
-            
         }
+
         [HttpPost]
         public IActionResult AddAnswer(Answer answer, int questionId, int surveyId)
         {
@@ -358,7 +449,7 @@ namespace Integratieproject1.UI.Controllers{}
             Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
-        
+
         public IActionResult DeleteAnswer(int answerId, int surveyId)
         {
             _surveysManager.DeleteAnswer(answerId);
@@ -366,8 +457,12 @@ namespace Integratieproject1.UI.Controllers{}
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
 
+        public IActionResult SurveyResults()
+        {
+            IList<Survey> surveys = _surveysManager.GetAllSurveys();
+            return View("/UI/Views/Admin/SurveyResults.cshtml", surveys);
+        }
+
         #endregion
-
-
-        
     }
+ }

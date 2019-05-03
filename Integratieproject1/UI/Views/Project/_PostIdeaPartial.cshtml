@@ -2,7 +2,7 @@
 @model Integratieproject1.Domain.Ideations.Idea
 
 @{
-    ViewBag.Title = "ideationPage";
+    ViewBag.Title = "Ideation";
 }
 
 <form asp-controller="Project"
@@ -13,24 +13,24 @@
       method="post">
 
     <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title">Titel</label>
         <input class="form-control" asp-for="Title" type="text" name="title" id="title">
     </div>
 
     <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description">Beschrijving</label>
         <textarea class="form-control" name="text" id="description" rows="5"></textarea>
     </div>
 
     <div class="form-group" id="imagesUpload">
         <label for="uploadedImages">
-            Images
+            Afbeeldingen
             <div class="input-group">
                 <span class="form-control" id="chosenImages">
-                    Choose images...
+                    Kies Afbeeldingen...
                 </span>
                 <div class="input-group-append">
-                    <span class="input-group-text btn btn-outline-secondary">Browse</span>
+                    <span class="input-group-text btn btn-outline-secondary">Kies</span>
                 </div>
             </div>
         </label>

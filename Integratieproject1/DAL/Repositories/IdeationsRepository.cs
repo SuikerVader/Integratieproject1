@@ -32,6 +32,17 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Ideation> GetProjectsIdeations(int projectId)
+        {
+            return _ctx.Ideations
+                .Include(ph => ph.Phase)
+                .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
+                .Include(i=>i.Ideas).ThenInclude(v=>v.Votes)
+                .Include(i=>i.Ideas).ThenInclude(r=>r.Reactions)
+
+                .AsEnumerable();
+        }
+
         public IEnumerable<Ideation> GetAllIdeations(int platformId)
         {
             return _ctx.Ideations
@@ -85,6 +96,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Ideas
                 .Where(i => i.Ideation.Phase.Project.Platform.PlatformId == platformId)
+                .Include(i => i.IdeaObjects)
                 .AsEnumerable();
         }
 
@@ -93,9 +105,10 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Include(r => r.Reactions).ThenInclude(l => l.IdentityUser)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
-                .Include(v => v.Votes)
+                .Include(v => v.Votes).ThenInclude(v => v.IdentityUser)
                 .Include(i => i.IdeaObjects)
                 .Include(i => i.IdentityUser)
+                .Include(i =>i.Position)
                 .Include(i=>i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
                 .Single(i => i.IdeaId == ideaId);
         }
@@ -119,7 +132,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public void UpdateIdea(Idea idea)
         {
-            _ctx.Entry(idea).State = EntityState.Modified;
+            _ctx.Ideas.Update(idea);
             _ctx.SaveChanges();
         }
 

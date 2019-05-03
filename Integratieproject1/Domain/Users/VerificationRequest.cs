@@ -9,6 +9,6 @@ namespace Integratieproject1.Domain.Users
         [Key] public int verificationRequestId { get; set; }
         [Required] public IdentityUser user { get; set; }
         [Required] public string request { get; set; }
-        public bool? handled { get; set; }
+        public bool handled { get; set; }
     }
 }

@@ -1,0 +1,29 @@
+@model IList<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@{
+    ViewBag.Title = "SuperAdminPagina";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Admins</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Gebruikersnaam</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+            </tr>
+            @foreach (var admin in Model)
+            {
+                <tr>
+                    <td>@admin.UserName</td>
+                    <td>@admin.Email</td>
+                    <td>@admin.PhoneNumber</td>
+                    <td><a asp-area="" asp-controller="SuperAdmin"
+                           asp-action="AddAdminProjects" asp-route-adminId="@admin.Id" asp-route-projectId="@ViewBag.ProjectId">Voeg toe aan project
+                    </a></td> 
+                </tr>
+            }
+        </table>
+    </div>
+</div>

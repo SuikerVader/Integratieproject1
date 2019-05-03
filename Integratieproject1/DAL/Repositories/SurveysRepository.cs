@@ -30,6 +30,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
                 .AsEnumerable();
         }
+
+        public IEnumerable<Survey> GetAllSurveys()
+        {
+            return _ctx.Surveys
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .AsEnumerable();
+        }
+
         public Survey GetOnlySurvey(int surveyId)
         {
             return _ctx.Surveys.Find(surveyId);
@@ -57,6 +65,13 @@ namespace Integratieproject1.DAL.Repositories
         {
             _ctx.Surveys.Remove(survey);
             _ctx.SaveChanges();
+        }
+
+        public bool IsEmail(int id, int key)
+        {
+            Survey survey = _ctx.Surveys.Include(s => s.Questions).Single(s => s.SurveyId == id);
+            Question question = survey.Questions.Where(q => q.QuestionNr == key).Single();
+            return question.QuestionType == QuestionType.EMAIL;
         }
 
         #endregion

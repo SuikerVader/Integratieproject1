@@ -2,41 +2,93 @@
 @model Integratieproject1.Domain.Projects.Project
 
 @{
-    ViewBag.Title = "AdminPage";
+    ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
     <h2>Project</h2>
     <div>
-        <form asp-controller="Admin" asp-action="EditProject" asp-route-projectId="@Model.ProjectId" method="post">
-            <label asp-for="ProjectName"></label>
+        <form asp-controller="Admin" asp-action="EditProject" asp-route-projectId="@Model.ProjectId" method="post" enctype="multipart/form-data">
+            <label asp-for="ProjectName">Naam</label>
             <input required asp-for="ProjectName" value="@Model.ProjectName" class="form-control"/>
-            <label asp-for="StartDate"></label>
+            <label asp-for="StartDate">Startdatum</label>
             <input required id="startDateInput" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
-            <label asp-for="EndDate"></label>
+            <label asp-for="EndDate">Einddatum</label>
             <input required asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
-            <label asp-for="Logo" value="Logo url"></label>
-            <input asp-for="Logo" type="url" class="form-control"/>
-            <label asp-for="Objective"></label>
+            <label asp-for="Objective">Doel</label>
             <input asp-for="Objective" class="form-control"/>
-            <label asp-for="Description"></label>
+            <label asp-for="Description">Beschrijving</label>
             <input asp-for="Description" class="form-control"/>
-            <label asp-for="Location.Address.City">City</label>
+            <label asp-for="Location.Address.City">Stad</label>
             <input required asp-for="Location.Address.City" value="@Model.Location.Address.City" class="form-control"/>
-            <label asp-for="Location.Address.Street" >Street</label>
+            <label asp-for="Location.Address.Street" >Straat</label>
             <input required asp-for="Location.Address.Street" value="@Model.Location.Address.Street" class="form-control"/>
-            <label asp-for="Location.Address.HouseNr">House nr</label>
+            <label asp-for="Location.Address.HouseNr">Huisnummer</label>
             <input required asp-for="Location.Address.HouseNr" value="@Model.Location.Address.HouseNr" type="number" class="form-control"/>
-            <label asp-for="Location.Address.ZipCode">zipcode</label>
+            <label asp-for="Location.Address.ZipCode">Postcode</label>
             <input required asp-for="Location.Address.ZipCode" value="@Model.Location.Address.ZipCode" class="form-control"/>
-            <label asp-for="Location.LocationName">location name</label>
+            <label asp-for="Location.LocationName">Locatienaam</label>
             <input required asp-for="Location.LocationName" value="@Model.Location.LocationName" class="form-control"/>
-            <input class="btn btn-primary" type="submit" value="Edit Project">
+            <label>Achtergrondafbeelding</label>
+            <div class="form-group" id="imagesUpload" >
+                <label for="uploadedImages" style="width: 100%">
+                    <div class="input-group" >
+                        <span class="form-control" id="chosenImages">
+                            Kies afbeelding...
+                        </span>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-outline-secondary">Kies</span>
+                        </div>
+                    </div>
+                </label>
+                <input class="input-default-js"
+                       name="formFile"
+                       type="file"
+                       id="uploadedImages"
+                       accept="image/x-png,image/gif,image/jpeg"
+                       onchange="PreviewImage(this)">
+                @if (Model.BackgroundImage != null)
+                {
+                  <img id="image" src="@Model.BackgroundImage" style="width: 100px; height: 100px;"/> 
+                    <a class="btn btn-danger" asp-area="" asp-controller="Admin"
+                       asp-action="DeleteBackgroundImage" asp-route-projectId="@Model.ProjectId">Verwijder Achtergrondafbeelding
+                    </a>                                                  
+                }
+                else
+                {
+                   <img id="image" style="width: 100px; height: 100px;display: none"/> 
+                }
+                
+            </div>
+            <input class="btn btn-primary" type="submit" value="Wijzig Project">
         </form>
         <a class="btn btn-danger" asp-area="" asp-controller="Admin"
-           asp-action="DeleteProject" asp-route-projectId="@Model.ProjectId">Delete Project
+           asp-action="DeleteProject" asp-route-projectId="@Model.ProjectId">Verwijder Project
         </a>
-        
-        
+   
     </div>
 </div>
+<script>
+    function PreviewImage(fileInput) {
+        var files = fileInput.files;
+        var imagesUpload = document.getElementById('imagesUpload');
+        var chosenImages = document.getElementById('chosenImages');
+
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onloadend = function(event) {
+                var preview = document.getElementById('image');
+                preview.setAttribute('src', event.target.result);
+                preview.setAttribute('alt', 'Image preview...');
+                preview.style.display = 'block';
+            }
+
+            if (files[i]) {
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        chosenImages.innerHTML = files.length + fileInput.getAttribute('data-multiple-target');
+    }
+</script>

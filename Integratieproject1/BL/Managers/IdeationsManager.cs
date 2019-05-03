@@ -104,6 +104,11 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetIdeation(ideationId);
         }
 
+        public IList<Ideation> GetProjectIdeation(int projectId)
+        {
+            return _ideationsRepository.GetProjectsIdeations(projectId).ToList();
+        }
+
         public IList<Ideation> GetIdeations(int phaseId)
         {
             return _ideationsRepository.GetIdeations(phaseId).ToList();
@@ -125,11 +130,12 @@ namespace Integratieproject1.BL.Managers
 
         public Ideation EditIdeation(Ideation ideation, int ideationId)
         {
-            ideation.IdeationId = ideationId;
-            //ideation.Phase = GetIdeation(ideationId).Phase;
-            _ideationsRepository.EditIdeation(ideation);
+            Ideation originalIdeation = GetIdeation(ideationId);
+            originalIdeation.CentralQuestion = ideation.CentralQuestion;
+            originalIdeation.InputIdeation = ideation.InputIdeation;
+            Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
-            return ideation;
+            return returnIdeation;
         }
 
         public void DeleteIdeation(int ideationId)
@@ -268,9 +274,20 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.RemoveIdea(idea);
             _unitOfWorkManager.Save();
         }
+        
+        public void AddPosition(Position position, int ideaId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            dataTypeManager.CreatePosition(position);
+            
+            Idea idea = GetIdea(ideaId);
+            idea.Position = position;
+            _ideationsRepository.UpdateIdea(idea);
+            _unitOfWorkManager.Save();
+        }
 
+            
         #endregion
-
 
         #region IdeaObject
 
@@ -588,6 +605,7 @@ namespace Integratieproject1.BL.Managers
                     vote.IdentityUser = user;
                     vote.VoteType = voteType;
                     vote.Idea = idea;
+                    vote.Confirmed = true;
                     _ideationsRepository.CreateVote(vote);
                     _unitOfWorkManager.Save();
                 }
@@ -604,6 +622,20 @@ namespace Integratieproject1.BL.Managers
                 _unitOfWorkManager.Save();
             }
         }
+        
+        public bool CheckVote(string userId, VoteType voteType, int ideaId)
+        {
+            Idea idea = GetIdea(ideaId);
+            foreach (var vote in idea.Votes)
+            {
+                if (vote.VoteType == voteType && vote.IdentityUser.Id.Equals(userId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         private void DeleteVote(int voteId)
         {
@@ -618,5 +650,8 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+
+        
     }
 }

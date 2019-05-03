@@ -43,6 +43,11 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetSurveys(phaseId).ToList();
         }
 
+        public IList<Survey> GetAllSurveys()
+        {
+            return _surveysRepository.GetAllSurveys().ToList();
+        }
+
         public void CreateSurvey(Survey survey)
         {
             _surveysRepository.CreateSurvey(survey);
@@ -57,11 +62,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void EditSurvey(Survey survey, int surveyId)
+        public Survey EditSurvey(Survey survey, int surveyId)
         {
-            survey.SurveyId = surveyId;
-            _surveysRepository.EditSurvey(survey);
+            Survey originalSurvey = GetSurvey(surveyId);
+            originalSurvey.Title = survey.Title;
+            Survey returnSurvey = _surveysRepository.EditSurvey(originalSurvey);
             _unitOfWorkManager.Save();
+            return returnSurvey;
         }
 
         public void DeleteSurvey(int surveyId)
@@ -77,6 +84,11 @@ namespace Integratieproject1.BL.Managers
 
             _surveysRepository.RemoveSurvey(survey);
             _unitOfWorkManager.Save();
+        }
+
+        public bool IsEmail(int id, int key)
+        {
+            return _surveysRepository.IsEmail(id, key);
         }
 
         #endregion
@@ -114,6 +126,7 @@ namespace Integratieproject1.BL.Managers
                         question.QuestionNr = question.QuestionNr - 1;
                         _surveysRepository.EditQuestion(question);
                         _surveysRepository.EditQuestion(listQuestion);
+                        break;
                     }
                 }
             } else if (changer.Equals("down"))
@@ -126,6 +139,7 @@ namespace Integratieproject1.BL.Managers
                         question.QuestionNr = question.QuestionNr + 1;
                         _surveysRepository.EditQuestion(question);
                         _surveysRepository.EditQuestion(listQuestion);
+                        break;
                     }
                 } 
             }
