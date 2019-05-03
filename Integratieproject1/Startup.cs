@@ -69,7 +69,7 @@ namespace Integratieproject1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -90,9 +90,9 @@ namespace Integratieproject1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{platformName=Antwerpen}/{controller=Home}/{action=Index}/{id?}");
             });
-            await CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
+            CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
 
 
         }

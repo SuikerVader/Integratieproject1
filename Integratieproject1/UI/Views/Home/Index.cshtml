@@ -3,18 +3,28 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="jumbotron jumbotron-fluid text-center">
-    <h1 class="display-4">@Model.PlatformName</h1>
-    <p>@Model.Description</p>
-    <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
+<div class="jumbotron jumbotron-fluid text-center"
+     @if (Model.BackgroundImage != null)
+     {
+         <text>style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;"</text>
+     }>
+    <div
+        @if (Model.BackgroundImage != null)
+        {
+            <text>class="jumbotronBackground" </text>
+        }
+    >
+        <h1 class="display-4">@Model.PlatformName</h1>
+        <h5>@Model.Description</h5>
+        <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
+    </div>
 </div>
 <div class="container">
-
 
     <div class="d-flex flex-row flex-wrap justify-content-center">
         <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">actieve projecten</button>
         <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">toekomstige projecten</button>
-        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projects</button>
+        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projecten</button>
     </div>
     <br/>
     <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
@@ -22,11 +32,18 @@
         {
             if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
             {
-                
                 <div class="card text-center activeProject">
-                    <div class="card-body">
-                        <h5 class="card-title">@project.ProjectName</h5>
-                        <p class="card-text">@project.Description</p>
+                    <div class="card-body"
+                         @if (project.BackgroundImage != null)
+                            {
+                                <text>style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;"</text>
+                            }>
+                        <div @if (Model.BackgroundImage != null)
+        {
+            <text>class="jumbotronBackground" </text>
+        }>
+                        <h3 class="card-title">@project.ProjectName</h3>
+                        <h5 class="card-text">@project.Description</h5>
                         <div class="progress" style="height: 30px;">
                             @foreach (var phase in project.Phases)
                             {
@@ -50,7 +67,7 @@
                             <p>@project.EndDate.ToString("d")</p>
 
                         </div>
-
+                            </div>
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
@@ -58,138 +75,91 @@
                         </a>
                     </div>
                 </div>
-                
             }
             else if (DateTime.Now > project.EndDate)
             {
-                
                 <div class="card text-center closedProject">
-                    <div class="card-body">
-                        <h5 class="card-title">@project.ProjectName</h5>
-                        <p class="card-text">@project.Description</p>
-                        <div class="progress" style="height: 30px">
-                            @foreach (var phase in project.Phases)
-                            {
-                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                    <div class="card-body"
+                         @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
+                        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+                            <h3 class="card-title">@project.ProjectName</h3>
+                            <h5 class="card-text">@project.Description</h5>
+                            <div class="progress" style="height: 30px">
+                                @foreach (var phase in project.Phases)
                                 {
-                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                        <strong>@phase.PhaseName</strong>
-                                    </div>
+                                    var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                    if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                    {
+                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                            <strong>@phase.PhaseName</strong>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                            @phase.PhaseName
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                        @phase.PhaseName
-                                    </div>
-                                }
-                            }
-                        </div>
-                        <div class="d-flex flex-row justify-content-between">
-                            <p>@project.StartDate.ToString("d")</p>
-                            <p>@project.EndDate.ToString("d")</p>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <p>@project.StartDate.ToString("d")</p>
+                                <p>@project.EndDate.ToString("d")</p>
 
-                        </div>
+                            </div>
+                            </div>
 
-                        <a class="btn btn-primary" asp-area=""
-                           asp-controller="Project"
-                           asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            Bekijk Project
-                        </a>
+                            <a class="btn btn-primary" asp-area=""
+                               asp-controller="Project"
+                               asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                Bekijk Project
+                            </a>
+                        </div>
                     </div>
-                </div>
             }
             else if (DateTime.Now < project.StartDate)
             {
-                
                 <div class="card text-center futureProject">
-                    <div class="card-body">
-                        <h5 class="card-title">@project.ProjectName</h5>
-                        <p class="card-text">@project.Description</p>
-                        <div class="progress" style="height: 30px">
-                            @foreach (var phase in project.Phases)
-                            {
-                                var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                    <div class="card-body"
+                         @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
+                        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+                            <h3 class="card-title">@project.ProjectName</h3>
+                            <h5 class="card-text">@project.Description</h5>
+                            <div class="progress" style="height: 30px">
+                                @foreach (var phase in project.Phases)
                                 {
-                                    <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                        <strong>@phase.PhaseName</strong>
-                                    </div>
+                                    var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                    if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                    {
+                                        <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                            <strong>@phase.PhaseName</strong>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                            @phase.PhaseName
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                        @phase.PhaseName
-                                    </div>
-                                }
-                            }
-                        </div>
-                        <div class="d-flex flex-row justify-content-between">
-                            <p>@project.StartDate.ToString("d")</p>
-                            <p>@project.EndDate.ToString("d")</p>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <p>@project.StartDate.ToString("d")</p>
+                                <p>@project.EndDate.ToString("d")</p>
 
+                            </div>
+                            </div>
+                            <a class="btn btn-primary" asp-area=""
+                               asp-controller="Project"
+                               asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                Bekijk Project
+                            </a>
                         </div>
-
-                        <a class="btn btn-primary" asp-area=""
-                           asp-controller="Project"
-                           asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            Bekijk Project
-                        </a>
                     </div>
-                </div>
-                                    
             }
         }
     </div>
 </div>
-<input id="autocomplete" oninput="inputAutocomplete()"/>
-<label id="lat"></label>
-<label id="long"></label>
-@*<partial name="/UI/Views/Project/_MapPartial.cshtml"/>*@
-
-@*<a src="https://maps.googleapis.com/maps/api/place/nearbysearch/json
-  ?location=-33.8670522,151.1957362
-  &radius=500
-  &types=food
-  &name=harbour
-  &key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w" ></a>*@
-
-<script>
-   /*
- 
-    function inputAutocomplete(){
-        var prefix = 'Antwerpen, ';
-        var str = event.target.value;
-        if(str.indexOf(prefix) == 0) {
-            // string already started with prefix
-            return;
-        } else {
-            if (prefix.indexOf(str) >= 0) {
-                // string is part of prefix
-                event.target.value = prefix;
-            } else {
-                event.target.value = prefix+str;
-            }
-        }
-    };*/
-    function initAutocomplete() {
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
-        autocomplete.setComponentRestrictions({'country': 'be'});
-        google.maps.event.addListener(autocomplete,
-            'place_changed',
-            function() {
-                var place = autocomplete.getPlace();
-                var lat = "lat: " + place.geometry.location.lat();
-                var long = "long: " + place.geometry.location.lng();
-                document.getElementById('lat').innerHTML = lat;
-                document.getElementById('long').innerHTML = long;
-            });
-        
-    }
-</script>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initAutocomplete"></script>
-
 <script>
     function displayActiveProjects() {
         var active = document.getElementsByClassName("activeProject");
@@ -263,5 +233,5 @@
         document.getElementById("btnFutureProject").classList.add("btn-secondary");
         document.getElementById("btnFutureProject").classList.remove("btn-primary");
     }
-   
+
 </script>

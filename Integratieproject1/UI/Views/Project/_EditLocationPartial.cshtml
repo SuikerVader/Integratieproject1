@@ -2,23 +2,23 @@
 @model Integratieproject1.Domain.Datatypes.Position
 
 @{
-    ViewBag.Title = "Voeg Locatie Toe";
+    ViewBag.Title = "Wijzig Locatie";
 }
 
 <div>
-    <form class="" asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId" method="post">
+    <form class="" asp-controller="Project" asp-action="EditPosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId" method="post">
         <div class="form-row">
             <div class="col-3 text-center">
                 <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
             </div>
             <div class="col-3 text-center">
-                <input class="form-control" required asp-for="Lat" id="lat"/>
+                <input class="form-control" required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
             </div>
             <div class="col-3 text-center">
-                <input class="form-control" required asp-for="Lng" id="lng"/>
+                <input class="form-control" required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
             </div>
             <div class="col-3 text-center">
-                <input class="btn btn-primary btn-sm" type="submit" value="Locatie Toevoegen">
+                <input class="btn btn-primary btn-sm" type="submit" value="Locatie wijzigen">
             </div>
         </div>
     </form>
@@ -56,6 +56,7 @@
         
     }
 </script>
+
 
 
 

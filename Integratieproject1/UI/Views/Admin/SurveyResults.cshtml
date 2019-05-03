@@ -1,0 +1,28 @@
+﻿@model IList<Integratieproject1.Domain.Surveys.Survey>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Vragenlijsten</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Titel</th>
+            </tr>
+            @foreach (var survey in Model)
+            {
+                <tr>
+                    <td>@survey.Title</td>
+                    <td>
+                        <a asp-area="" asp-controller="Project"
+                           asp-action="SurveyResults" asp-route-surveyId="@survey.SurveyId">
+                            Bekijk Resultaten
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

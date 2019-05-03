@@ -12,10 +12,10 @@ namespace Integratieproject1.Domain.Projects
     [Required]
         public string PlatformName { get; set; }
         public string Logo { get; set; }
-        public string Header { get; set; }
         public Address Address { get; set; }
         public string Phonenumber { get; set; }
         public string Description { get; set; }
+        public string BackgroundImage { get; set; }
         public ICollection<Project> Projects { get; set; }
         public ICollection<IdentityUser> Users { get; set; }
     }

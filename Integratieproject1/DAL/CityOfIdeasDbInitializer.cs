@@ -42,126 +42,211 @@ namespace Integratieproject1.DAL
             // Stel gedrag 'tracked-entities' in
             ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
-            Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
-            Location location = new Location {Address = address, LocationName = "test1"};
+            Address addressAntwerp = new Address {City = "Antwerpen", Street = "Groenplaats", HouseNr = "1", ZipCode = "2000"};
+            Address addressGent = new Address { City = "Gent", Street = "Jan van Gentstraat", HouseNr = "1", ZipCode = "9000" };
+            Address addressOssenmarkt = new Address { City = "Antwerpen", Street = "Ossenmarkt", HouseNr = "1", ZipCode = "2000" };
+            Address addressVrijdagmarkt = new Address { City = "Antwerpen", Street = "Vrijdagmarkt", HouseNr = "4", ZipCode = "2000" };
+            Address addressZwembad = new Address { City = "Antwerpen", Street = "Veldstraat", HouseNr = "83", ZipCode = "2000" };
+            Location locationOssenmarkt = new Location {Address = addressOssenmarkt, LocationName = "Ossenmarkt"};
+            Location locationVrijdagmarkt = new Location { Address = addressVrijdagmarkt, LocationName = "Vrijdagmarkt" };
+            Location locationAntwerp = new Location { Address = addressAntwerp, LocationName = "Skatepark" };
+            Location locationZwembad = new Location { Address = addressZwembad, LocationName = "Zwembad Veldstraat" };
             Position position = new Position {Lat = "0.0", Lng = "0.0"};
 
-
-            Platform platform = new Platform
+            #region Platforms
+            Platform platformAntwerp = new Platform
             {
-                PlatformName = "CityOfIdeas",
+                PlatformName = "Antwerpen",
                 Description =
-                    "Help building projects inside your city! Give your ideas and input on projects that inspire you.",
-                Address = address
+                    "Bent u Antwerpenaar in hart en nieren? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
+                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                Address = addressAntwerp,
+                Phonenumber = "0488643152",
+                BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
+                Logo = "/images/uploads/LogoAntwerp.png"
             };
 
-            Project project = new Project
+            Platform platformGent = new Platform
             {
-                ProjectName = "test1",
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddYears(1),
-                Platform = platform,
-                Objective = "test1",
-                Description = "test1",
+                PlatformName = "Gent",
+                Description =
+                    "Bent u van Gent? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
+                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                Address = addressGent,
+                Phonenumber = "0488644400",
+                BackgroundImage = "/images/uploads/BgImgGent.jpg",
+                Logo = "/images/uploads/LogoGent.png"
+            };
+
+            #endregion
+            #region Projects
+            Project projectOssenmarkt = new Project
+            {
+                ProjectName = "Ossenmarkt",
+                StartDate = new DateTime(2017, 3, 1, 7, 0, 0),
+                EndDate = new DateTime(2019, 6, 16, 12, 0, 0),
+                Platform = platformAntwerp,
+                Description = "Dit is dé plek waar de studenten 's middags een broodje komen eten" +
+                " of een pintje komen pakken. Daarom zoeken we een idee voor een project om dit plein nog" +
+                " aantrekkelijker te maken voor jongeren.",
+                Status = "Phase3",
+                Location = locationOssenmarkt,
+                BackgroundImage = "/images/uploads/BgImgOssenmarkt.jpg"
+            };
+            Project projectVrijdagmarkt = new Project
+            {
+                ProjectName = "Vrijdagmarkt",
+                StartDate = new DateTime(2019, 1, 15, 22, 30, 0),
+                EndDate = new DateTime(2021, 5, 25, 14, 0, 0),
+                Platform = platformAntwerp,
+                Description = " Op vrijdagvoormiddag kan je hier begrijpelijkerwijs over de koppen lopen," +
+                " maar op elk ander moment is de Vrijdagmarkt een oase van rust in de modebuurt van Antwerpen." +
+                " Daarom willen wij hier een nieuw project opstarten om het nog aantrekkelijker te maken." +
+                " Help jij ons mee?",
                 Status = "Phase1",
-                Location = location
+                Location = locationVrijdagmarkt,
+                BackgroundImage = "/images/uploads/BgImgVrijdagmarkt.jpg"
             };
-            Project project2 = new Project
+
+            Project projectSkatepark = new Project
             {
-                ProjectName = "test2",
-                StartDate = DateTime.Today.AddMonths(1),
-                EndDate = DateTime.Today.AddMonths(1).AddYears(1),
-                Platform = platform,
-                Objective = "test2",
-                Description = "test2",
-                Status = "Phase2",
-                Location = location
+                ProjectName = "Skatepark",
+                StartDate = new DateTime(2017, 1, 15, 22, 30, 0),
+                EndDate = new DateTime(2019, 3, 6, 17, 0, 0),
+                Platform = platformAntwerp,
+                Description = "In het centrum van Antwerpen zouden we graag een nieuw skatepark plaatsen. We zoeken jouw hulp!",
+                Status = "Phase3",
+                Location = locationAntwerp,
+                BackgroundImage = "/images/uploads/BgImgSkatepark.png"
             };
-            Phase phase = new Phase
+
+            Project projectZwembad = new Project
+            {
+                ProjectName = "Zwembad Veldstraat",
+                StartDate = new DateTime(2020, 1, 1, 0, 0, 0),
+                EndDate = new DateTime(2021, 1, 1, 0, 0, 0),
+                Platform = platformAntwerp,
+                Description = "We hebben goed niews voor alle waterratten onder jullie! De stad Antwerpen heeft namelijk besloten om het zwembad te renoveren!",
+                Status = "Startfase",
+                Location = locationZwembad,
+                BackgroundImage = "/images/uploads/BgImgZwembad.jpg"
+            };
+
+            #endregion
+            #region Phases
+            Phase phaseOssenmarkt1 = new Phase
             {
                 PhaseNr = 1,
-                PhaseName = "phasetest1",
-                Description = "phasedescriptiontest1",
-                StartDate = project.StartDate,
-                EndDate = project.StartDate.AddMonths(4),
-                Project = project
+                PhaseName = "Startfase",
+                Description = "In de allereerste fase van dit project zouden we graag algemene ideeën krijgen " +
+                "van jullie om de Ossenmarkt aantrekkelijker te maken voor jongeren.",
+                StartDate = projectOssenmarkt.StartDate,
+                EndDate = new DateTime(2018, 11, 17, 22, 30, 0),
+                Project = projectOssenmarkt
             };
-            Phase phase2 = new Phase
+            Phase phaseOssenmarkt2 = new Phase
             {
                 PhaseNr = 2,
-                PhaseName = "phasetest2",
-                Description = "phasedescriptiontest2",
-                StartDate = phase.EndDate,
-                EndDate = phase.EndDate.AddMonths(4),
-                Project = project
+                PhaseName = "Fase Sport",
+                Description = "Na de eerste fase zijn we tot de conclusie gekomen om het project op de Ossenmarkt " +
+                "in verband met sport te maken.",
+                StartDate = phaseOssenmarkt1.EndDate,
+                EndDate = new DateTime(2019, 4, 2, 22, 30, 0),
+                Project = projectOssenmarkt
             };
-            Phase phase3 = new Phase
+            Phase phaseOssenmarkt3 = new Phase
             {
                 PhaseNr = 3,
-                PhaseName = "phasetest3",
-                Description = "phasedescriptiontest3",
-                StartDate = phase2.EndDate,
-                EndDate = project.EndDate,
-                Project = project
+                PhaseName = "Fase Fitness",
+                Description = "Na de vorige fase was het populairste idee om een fitness buiten te plaatsen op de Ossenmarkt.",
+                StartDate = phaseOssenmarkt2.EndDate,
+                EndDate = projectOssenmarkt.EndDate,
+                Project = projectOssenmarkt
             };
 
-            Phase phase4 = new Phase
+            Phase phaseVrijdagmarkt1 = new Phase
             {
                 PhaseNr = 1,
-                PhaseName = "phasetest1",
-                Description = "phasedescriptiontest1",
-                StartDate = project2.StartDate,
-                EndDate = project2.StartDate.AddMonths(4),
-                Project = project2
+                PhaseName = "Startfase",
+                Description = "Bij deze fase zoeken we algemene ideeën om de vrijdagmarkt op te fleuren en aantrekkelijker te maken.",
+                StartDate = projectVrijdagmarkt.StartDate,
+                EndDate = new DateTime(2019, 6, 21, 5, 0, 0),
+                Project = projectVrijdagmarkt
+            };
+            Phase phaseVrijdagmarkt2 = new Phase
+            {
+                PhaseNr = 2,
+                PhaseName = "Eindfase",
+                Description = "Fase nog niet begonnen.",
+                StartDate = phaseVrijdagmarkt1.EndDate,
+                EndDate = projectVrijdagmarkt.EndDate,
+                Project = projectVrijdagmarkt
             };
 
-            Phase phase5 = new Phase
+            Phase phaseSkatepark1 = new Phase
             {
                 PhaseNr = 1,
-                PhaseName = "phasetest5",
-                Description = "phasedescriptiontest5",
-                StartDate = phase3.EndDate,
-                EndDate = project.EndDate,
-                Project = project2
-            };
-            Ideation ideation = new Ideation
-            {
-                CentralQuestion = "ideationtest1",
-                InputIdeation = true,
-                Phase = phase
-            };
-            Ideation ideation2 = new Ideation
-            {
-                CentralQuestion = "ideationtest2",
-                InputIdeation = true,
-                Phase = phase
-            };
-            Ideation ideation3 = new Ideation
-            {
-                CentralQuestion = "ideationtest3",
-                InputIdeation = true,
-                Phase = phase2
-            };
-            Ideation ideation4 = new Ideation
-            {
-                CentralQuestion = "ideationtest4",
-                InputIdeation = true,
-                Phase = phase3
-            };
-            Ideation ideation5 = new Ideation
-            {
-                CentralQuestion = "ideationtest5",
-                InputIdeation = true,
-                Phase = phase2
-            };
-            Ideation ideation6 = new Ideation
-            {
-                CentralQuestion = "ideationtest6",
-                InputIdeation = true,
-                Phase = phase4
+                PhaseName = "Startfase",
+                Description = "Om onze lokale skaters meer plaats te geven om hun coole tricks te showen zijn ze" +
+                " van plan om een nieuw skatepark te bouwen.",
+                StartDate = projectSkatepark.StartDate,
+                EndDate = new DateTime(2017, 12, 21, 5, 0, 0),
+                Project = projectVrijdagmarkt
             };
 
+            Phase phaseSkatepark2 = new Phase
+            {
+                PhaseNr = 2,
+                PhaseName = "Fase Locatie",
+                Description = "Na de eerste fase hebben we al een mooie locatie gevonden: Het Stadspark!",
+                StartDate = phaseSkatepark1.EndDate,
+                EndDate = new DateTime(2018, 10, 7, 5, 0, 0),
+                Project = projectVrijdagmarkt
+            };
 
+            Phase phaseSkatepark3 = new Phase
+            {
+                PhaseNr = 3,
+                PhaseName = "Fase Ontwerp",
+                Description = "Nu we het ontwerp van het skatepark kennen hebben we nog enkele kleine details van jullie nodig.",
+                StartDate = phaseSkatepark2.EndDate,
+                EndDate = projectSkatepark.EndDate,
+                Project = projectVrijdagmarkt
+            };
+
+            Phase phaseZwembad1 = new Phase
+            {
+                PhaseNr = 1,
+                PhaseName = "Startfase",
+                Description = "Deze fase is nog steeds in verwerking!",
+                StartDate = projectZwembad.StartDate,
+                EndDate = projectZwembad.EndDate,
+                Project = projectVrijdagmarkt
+            };
+
+            #endregion
+            #region Ideations
+            Ideation ideationOssenmarktThema = new Ideation
+            {
+                CentralQuestion = "Rond welk thema zouden jullie het project willen laten draaien?",
+                InputIdeation = true,
+                Phase = phaseOssenmarkt1
+            };
+            Ideation ideationOssenmarktSport = new Ideation
+            {
+                CentralQuestion = "Welke sport zouden jullie graag op de Ossenmarkt beoefenen?",
+                InputIdeation = true,
+                Phase = phaseOssenmarkt2
+            };
+            Ideation ideationOssenmarktFitness = new Ideation
+            {
+                CentralQuestion = "Welke fitnesstoestellen zouden jullie graag willen plaatsen op het plein?",
+                InputIdeation = true,
+                Phase = phaseOssenmarkt3
+            };
+
+            #endregion
+            #region Persons
             IdentityUser person = new IdentityUser
             {
                 Email = "testPerson1@test.com"
@@ -175,94 +260,133 @@ namespace Integratieproject1.DAL
                 Email = "testAdmin1@test.com"
             };
 
-            Idea idea = new Idea
+            #endregion
+            #region Ideas
+            Idea ideaThema1 = new Idea
             {
-                Title = "testIdea1",
-                Ideation = ideation,
-                IdentityUser = person
-            };
-            Idea idea2 = new Idea
-            {
-                Title = "testIdea2",
-                Position = position,
-                Ideation = ideation,
-                IdentityUser = organisation
-            };
-            Idea idea3 = new Idea
-            {
-                Title = "testIdea3",
-              Ideation = ideation2,
+                Title = "Sport",
+                Ideation = ideationOssenmarktThema,
                 IdentityUser = admin
             };
-            Idea idea4 = new Idea
-                          {
-                              Title = "testIdea4",
-                                Ideation = ideation2,
-                              IdentityUser = admin
-                          };
-            Idea idea5 = new Idea
+            Idea ideaThema2 = new Idea
             {
-                Title = "testIdea5",
-                  Ideation = ideation2,
+                Title = "School",
+                Ideation = ideationOssenmarktThema,
                 IdentityUser = admin
             };
-            TextField textfield1 = new TextField
+            Idea ideaThema3 = new Idea
             {
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                Idea = idea,
-                OrderNr = 2
+                Title = "Liefde",
+                Ideation = ideationOssenmarktThema,
+                IdentityUser = admin
             };
-            TextField textfield2 = new TextField
+            Idea ideaSport1 = new Idea
             {
-                Idea = idea,
-                OrderNr = 1,
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
-                
+                Title = "Ping Pong",
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = admin
             };
-            TextField textfield3 = new TextField
+            Idea ideaSport2 = new Idea
             {
-                OrderNr = 1,
-                Idea = idea2,
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                Title = "Fitness",
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = admin
             };
-            TextField textfield4 = new TextField
+            Idea ideaSport3 = new Idea
             {
-                OrderNr = 1,
-                Idea = idea3,
-                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus quis varius quam quisque."
+                Title = "Voetbal",
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = admin
             };
-            Reaction reaction = new Reaction
+            Idea ideaSport4 = new Idea
             {
-                Idea = idea,
-                ReactionText = "reactionTest1",
-                IdentityUser = person
+                Title = "Tennis",
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = admin
             };
-            
-            Reaction reaction2 = new Reaction
+            Idea ideaSport5 = new Idea
             {
-                Ideation = ideation2,
-                ReactionText = "reactionTest2",
-                IdentityUser = admin,
+                Title = "Armworstelen",
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = admin
             };
-            Vote vote = new Vote
+            Idea ideaFitness1 = new Idea
             {
-                VoteType = VoteType.VOTE,
-                IdentityUser = person,
-                Confirmed = true,
-                Idea = idea
+                Title = "Pull Up Station",
+                Ideation = ideationOssenmarktFitness,
+                IdentityUser = admin
             };
-            Like like = new Like
+            Idea ideaFitness2 = new Idea
             {
-                Reaction = reaction,
-                IdentityUser = person
+                Title = "Squat Rack",
+                Ideation = ideationOssenmarktFitness,
+                IdentityUser = admin
+            };
+            Idea ideaFitness3 = new Idea
+            {
+                Title = "Losse Gewichten",
+                Ideation = ideationOssenmarktFitness,
+                IdentityUser = admin
             };
 
+            #endregion
+            #region TextFields
+            TextField textfieldSport = new TextField
+            {
+                Text = "Jongeren laten sporten brengt alleen maar voordelen met zich mee.",
+                Idea = ideaThema1,
+                OrderNr = 1
+            };
+            TextField textfieldSchool = new TextField
+            {
+                Text = "School verderzetten na de schooluren! Daar staat elke student op te wachten.",
+                Idea = ideaThema2,
+                OrderNr = 1
+            };
+
+            TextField textfieldLiefde = new TextField
+            {
+                Text = "Liefde overwint alles en liefde als thema gaat meer mensen aantrekken naar het plein!",
+                Idea = ideaThema3,
+                OrderNr = 1
+            };
+            TextField textPullup = new TextField
+            {
+                Text = "Pullups is de ideale oefening om buiten in het zonnetje te doen!",
+                Idea = ideaFitness1,
+                OrderNr = 3
+            };
+            #endregion
+            #region Videos
+            Video videoPullup = new Video
+            {
+                Url = "https://www.youtube.com/embed/0aWOgrQeaHE",
+                Idea = ideaFitness1,
+                OrderNr = 1
+            };
+            #endregion
+            #region Images
+            Image imagePullup = new Image
+            {
+                ImageName = "Pull Up Station",
+                ImagePath = "/images/uploads/ImgPullup.jpg",
+                Idea = ideaFitness1,
+                OrderNr = 2
+            };
+            Image imageSquat = new Image
+            {
+                ImageName = "Squat Rack",
+                ImagePath = "/images/uploads/ImgSquat.jpg",
+                Idea = ideaFitness2,
+                OrderNr = 1
+            };
+            #endregion
             #region Survey
 
             Survey survey = new Survey
             {
-                Title = "SurveyTest",
-                Phase = phase
+                Title = "Vragenlijst Ossenmarkt",
+                Phase = phaseOssenmarkt1
             };
             Question openQuestion = new Question
             {
@@ -403,29 +527,28 @@ namespace Integratieproject1.DAL
             };
 
             #endregion
-
+            #region AdminProjects
             AdminProject adminProject = new AdminProject
             {
                 Admin = admin,
-                Project = project
+                Project = projectOssenmarkt
             };
             AdminProject adminProject2 = new AdminProject
             {
                 Admin = admin,
-                Project = project2
+                Project = projectVrijdagmarkt
             };
-            project.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
-            platform.Users = new List<IdentityUser> {person, organisation, admin};
-            reaction.Likes = new List<Like>() {like};
-            idea.Reactions = new List<Reaction>() {reaction};
-            idea.Votes = new List<Vote>() {vote};
-            idea.IdeaObjects = new List<IdeaObject>(){textfield1,textfield2};
-            idea2.IdeaObjects = new List<IdeaObject>(){textfield3};
-            idea3.IdeaObjects = new List<IdeaObject>(){textfield4};
-            idea4.IdeaObjects = new List<IdeaObject>(){};
-            idea5.IdeaObjects = new List<IdeaObject>(){};
+
+            #endregion
+
+            projectOssenmarkt.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
+            platformAntwerp.Users = new List<IdentityUser> {person, organisation, admin};
+            ideaThema1.IdeaObjects = new List<IdeaObject>() {textfieldSport};
+            ideaThema2.IdeaObjects = new List<IdeaObject>() {textfieldSchool};
+            ideaThema3.IdeaObjects = new List<IdeaObject>() {textfieldLiefde};
+            ideaFitness1.IdeaObjects = new List<IdeaObject>() { videoPullup, imagePullup, textPullup };
             //ctx.Answers.Add(answer);
-            openQuestion.Answers = new List<Answer>() {};
+            openQuestion.Answers = new List<Answer>() { };
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};
             checkQuestion.Answers = new List<Answer>() {check1, check2, check3, check4};
             dropQuestion.Answers = new List<Answer>() {drop1, drop2, drop3, drop4};
@@ -434,22 +557,23 @@ namespace Integratieproject1.DAL
             survey.Questions = new List<Question>()
                 {openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
             //ctx.Surveys.Add(survey);
-            phase.Surveys = new List<Survey>() {survey};
+            phaseOssenmarkt1.Surveys = new List<Survey>() {survey};
             //ctx.Ideas.Add(idea);
-            ideation.Ideas = new List<Idea>() {idea, idea2};
-            ideation2.Ideas = new List<Idea>(){idea3, idea4, idea5};
-            ideation2.Reactions = new List<Reaction>(){reaction2};
+            ideationOssenmarktThema.Ideas = new List<Idea>() {ideaThema1, ideaThema2, ideaThema3};
+            ideationOssenmarktSport.Ideas = new List<Idea>() {ideaSport1, ideaSport2, ideaSport3, ideaSport4, ideaSport5};
+            ideationOssenmarktFitness.Ideas = new List<Idea>() {ideaFitness1, ideaFitness2, ideaFitness3};
             //ctx.Ideations.Add(ideation);
-            phase.Ideations = new List<Ideation>() {ideation, ideation2};
-            phase2.Ideations = new List<Ideation>() {ideation3, ideation5};
-            phase3.Ideations = new List<Ideation>() {ideation4};
-            phase4.Ideations = new List<Ideation>() {ideation6};
+            phaseOssenmarkt1.Ideations = new List<Ideation>() {ideationOssenmarktThema};
+            phaseOssenmarkt2.Ideations = new List<Ideation>() {ideationOssenmarktSport};
+            phaseOssenmarkt3.Ideations = new List<Ideation>() {ideationOssenmarktFitness};
             //ctx.Phases.Add(phase);
-            project.Phases = new List<Phase>() {phase, phase2, phase3,phase5};
-            project2.Phases = new List<Phase>() {phase4};
-            //ctx.Projects.AddRange(project,project2);
-            platform.Projects = new List<Project>() {project, project2};
-            ctx.Platforms.Add(platform);
+            projectOssenmarkt.Phases = new List<Phase>() {phaseOssenmarkt1, phaseOssenmarkt2, phaseOssenmarkt3};
+            projectVrijdagmarkt.Phases = new List<Phase>() {phaseVrijdagmarkt1, phaseVrijdagmarkt2};
+            projectSkatepark.Phases = new List<Phase>() { phaseSkatepark1, phaseSkatepark2, phaseSkatepark3 };
+            projectZwembad.Phases = new List<Phase>() { phaseZwembad1 };
+                //ctx.Projects.AddRange(project,project2);
+            platformAntwerp.Projects = new List<Project>() {projectOssenmarkt, projectVrijdagmarkt, projectSkatepark, projectZwembad};
+            ctx.Platforms.AddRange(platformAntwerp, platformGent);
 
             //platform.Projects.Add(project2);    
 

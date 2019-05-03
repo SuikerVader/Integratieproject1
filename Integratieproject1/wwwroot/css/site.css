@@ -51,6 +51,17 @@ body {
     }
 }
 /* own classes */
+#map {
+    width: 100%;
+    height: 200px;
+    background-color: grey;
+
+}
+.jumbotronBackground {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 3px;
+}
 .activeProject{
     display: inline-block;
 }
@@ -76,6 +87,11 @@ body {
     } 
     #searchForm{
         width: 50%;
+    }
+    .jumbotronBackground {
+        padding: 20px;
+        padding-left: 50px;
+        padding-right: 50px;
     }
 }
 
@@ -192,9 +208,10 @@ body {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr ;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto auto auto;
     grid-template-areas:
             "ideaTitle"
+            "ideaLocation"
             "ideaObjects"
             "ideaInfo"
 
@@ -204,6 +221,9 @@ body {
 }
 #ideaTitle{
     grid-area: ideaTitle;
+}
+#ideaLocation{
+    grid-area: ideaLocation;
 }
 #ideaObjects {
     grid-area: ideaObjects;
@@ -220,9 +240,10 @@ body {
 @media screen and (min-width: 768px){
     #ideaGrid {
         grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: auto auto;
+        grid-template-rows: auto auto auto;
         grid-template-areas:
                 "ideaTitle ideaTitle ideaInfo"
+                "ideaLocation ideaLocation ideaLocation"
                 "ideaObjects ideaObjects ideaObjects"
     }
     .ideaObject{
