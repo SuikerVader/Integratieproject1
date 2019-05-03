@@ -37,6 +37,13 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(pl => pl.PlatformId == platformId);
         }
 
+        public Platform GetPlatformByName(string platformName)
+        {
+            return _ctx.Platforms
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Single(pl => pl.PlatformName == platformName);
+        }
+
         public Platform CreatePlatform(Platform platform)
         {
             _ctx.Platforms.Add(platform);
@@ -64,8 +71,10 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Projects
                 .Where(p => p.Platform.PlatformId == platformId)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations)
-                .Include(p => p.Phases).ThenInclude(s => s.Surveys)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(r=>r.Reactions).ThenInclude(l=>l.Likes)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Votes)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Reactions).ThenInclude(l=>l.Likes)
+                .Include(p => p.Phases).ThenInclude(s => s.Surveys).ThenInclude(q=>q.Questions).ThenInclude(a=>a.Answers)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
@@ -79,7 +88,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        public IEnumerable<AdminProject> GetAdminProjects(string userId)
+        public IEnumerable<AdminProject> GetAdminProjectsByUser(string userId)
         {
             UserStore<IdentityUser> userStore = new UserStore<IdentityUser>(_ctx);
             IdentityUser identityUser = userStore.FindByIdAsync(userId).Result;
@@ -87,6 +96,13 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(p => p.Admin == identityUser)
                 .Include(p => p.Project).ThenInclude(l => l.Location).ThenInclude(a => a.Address)
                 .Include(p => p.Project).ThenInclude(p => p.Platform)
+                .AsEnumerable();
+        }
+        public IEnumerable<AdminProject> GetAdminProjectsByProject(int projectId)
+        {
+            return _ctx.AdminProjects.Where(a => a.Project.ProjectId == projectId)
+                .Include(a => a.Project)
+                .Include(a => a.Admin)
                 .AsEnumerable();
         }
 
@@ -200,6 +216,8 @@ namespace Integratieproject1.DAL.Repositories
         }
 
 
-        #endregion     
+        #endregion
+
+        
     }
 }

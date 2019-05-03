@@ -58,12 +58,19 @@
             </form>
             @if (Model.Position != null)
             {
-                <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+                <div class="card">
+                    <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+                </div>
+                <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+                <div class="text-center" id="editLocation" style="display: none">
+                    @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
+                </div>
+                
             }
             else
             {
-                <button class="dropdown-item" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
-                <div id="addLocation" style="display: none">
+                <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
+                <div class="text-center" id="addLocation" style="display: none">
                     @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
                 </div>
             }
@@ -185,4 +192,13 @@
             x.style.display = 'none';
         }
     }
+
+    function initMapsApi() {
+        initAutocomplete();
+        initMap();
+        
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
 </script>

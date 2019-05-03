@@ -41,6 +41,11 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetPlatform(platformId);
         }
 
+        public Platform GetPlatformByName(string platformName)
+        {
+            return _projectsRepository.GetPlatformByName(platformName);
+        }
+
         public void CreatePlatform(Platform platform)
         {
             _projectsRepository.CreatePlatform(platform);
@@ -78,6 +83,17 @@ namespace Integratieproject1.BL.Managers
         public void EditPlatform(Platform platform, int platformId)
         {
             platform.PlatformId = platformId;
+            if (platform.BackgroundImage == null)
+            {
+                platform.BackgroundImage = GetProject(platformId).BackgroundImage;
+            }
+            _projectsRepository.EditPlatform(platform);
+            _unitOfWorkManager.Save();
+        }
+        public void DeleteBackgroundImagePlatform(int platformId)
+        {
+            Platform platform = GetPlatform(platformId);
+            platform.BackgroundImage = null;
             _projectsRepository.EditPlatform(platform);
             _unitOfWorkManager.Save();
         }
@@ -103,7 +119,7 @@ namespace Integratieproject1.BL.Managers
 
         public IList<Project> GetAdminProjects(string userId)
         {
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjects(userId).ToList();
+            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
             List<Project> projects = new List<Project>();
             foreach (AdminProject adminProject in adminProjects)
             {
@@ -115,7 +131,7 @@ namespace Integratieproject1.BL.Managers
 
         public IList<AdminProject> GetAllAdminProjects(string userId)
         {
-            return _projectsRepository.GetAdminProjects(userId).ToList();
+            return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
 
         public IdentityUser GetUser(string id)
@@ -145,6 +161,17 @@ namespace Integratieproject1.BL.Managers
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
             project.ProjectId = projectId;
+            if (project.BackgroundImage == null)
+            {
+                project.BackgroundImage = GetProject(projectId).BackgroundImage;
+            }
+            _projectsRepository.EditProject(project);
+            _unitOfWorkManager.Save();
+        }
+        public void DeleteBackgroundImageProject(int projectId)
+        {
+            Project project = GetProject(projectId);
+            project.BackgroundImage = null;
             _projectsRepository.EditProject(project);
             _unitOfWorkManager.Save();
         }
@@ -182,6 +209,38 @@ namespace Integratieproject1.BL.Managers
         public AdminProject GetAdminProject(int adminProjectId)
         {
             return _projectsRepository.GetAdminProject(adminProjectId);
+        }
+        public void CreateAdminProject(int projectId, string adminId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IdentityUser identityUser = usersManager.GetUser(adminId);
+            Project project = _projectsRepository.GetProject(projectId);
+            AdminProject adminProject = new AdminProject
+            {
+                Project = project,
+                Admin = identityUser
+            };
+            _projectsRepository.CreateAdminProject(adminProject);
+            _unitOfWorkManager.Save();
+        }
+        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
+        {
+            UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
+            IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
+            for (int i = 0; i < allAdmins.Count; i++)
+            {
+                foreach (var adminProject in adminProjects)
+                {
+                    if (adminProject.Admin == allAdmins[i])
+                    {
+                        allAdmins.RemoveAt(i);
+                    }
+                }
+                
+            }
+
+            return allAdmins;
         }
 
         #endregion
@@ -235,7 +294,7 @@ namespace Integratieproject1.BL.Managers
             if (project.Phases != null && project.Phases.Count > 0)
             {
                 phase.PhaseNr = project.Phases.Last().PhaseNr + 1;
-                //phase.StartDate = project.Phases.Last().EndDate;
+                phase.StartDate = project.Phases.Last().EndDate;
             }
             else
             {
@@ -245,40 +304,6 @@ namespace Integratieproject1.BL.Managers
 
             phase.EndDate = project.EndDate;
             return phase;
-        }
-
-        private bool CheckPhase(Phase phase)
-        {
-            if (phase.StartDate >= phase.Project.StartDate)
-            {
-                return false;
-            }
-
-            if (phase.EndDate <= phase.Project.EndDate)
-            {
-                return false;
-            }
-
-            IList<Phase> phases = phase.Project.Phases.ToList();
-            foreach (var listPhase in phases)
-            {
-                if (phase.PhaseNr > listPhase.PhaseNr)
-                {
-                    if (phase.StartDate <= listPhase.EndDate)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (phase.EndDate <= listPhase.StartDate)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         public void DeletePhase(int phaseId)
@@ -319,12 +344,23 @@ namespace Integratieproject1.BL.Managers
                 if (listPhase.PhaseNr == originalPhase.PhaseNr + 1)
                 {
                     listPhase.StartDate = originalPhase.EndDate;
+                    if (listPhase.StartDate > listPhase.EndDate)
+                    {
+                        listPhase.EndDate = listPhase.StartDate;
+                        EditPhase(listPhase, listPhase.PhaseId);
+                    }
+
                     _projectsRepository.EditPhase(listPhase);
                 }
 
                 if (listPhase.PhaseNr == originalPhase.PhaseNr -1)
                 {
                     listPhase.EndDate = originalPhase.StartDate;
+                    if (listPhase.StartDate > listPhase.EndDate)
+                    {
+                        listPhase.StartDate = listPhase.EndDate;
+                        EditPhase(listPhase, listPhase.PhaseId);
+                    }
                     _projectsRepository.EditPhase(listPhase);
                 }
             }
@@ -337,5 +373,7 @@ namespace Integratieproject1.BL.Managers
 
         #endregion
 
+
+     
     }
 }

@@ -1,4 +1,5 @@
-﻿@using Integratieproject1.Domain.Ideations
+﻿@using Integratieproject1.Domain.Datatypes
+@using Integratieproject1.Domain.Ideations
 @using Integratieproject1.Domain.Projects
 @model Integratieproject1.Domain.SearchResultModel
 @{
@@ -38,7 +39,15 @@
         <a asp-controller="Project"
            asp-action="Idea" asp-route-ideaId="@(((Idea) result).IdeaId)">
             <h1>@(((Idea) result).Title)</h1>
-            <p>@(((Idea) result).IdeaObjects.First())</p>
+            @* <p>@(((Idea) result).GetTextFields().First())</p> *@
+        </a>
+    }
+    else if (result.GetType() == typeof(TextField))
+    {
+        <a asp-controller="Project"
+           asp-action="Idea" asp-route-ideaId="@(((TextField) result).Idea.IdeaId)">
+            @* <h1>@(((TextField) result).Idea.Title)</h1> *@
+            <p>@(((TextField) result).Text)</p>
         </a>
     }
     else if (result.GetType() == typeof(Reaction))
@@ -46,7 +55,7 @@
         if (((Reaction) result).Ideation != null)
         {
             <a asp-controller="Project"
-               asp-action="Ideation" 
+               asp-action="Ideation"
                asp-route-ideaId="@(((Reaction) result).Ideation.IdeationId)">
                 <h1>@(((Reaction) result).ReactionText)</h1>
             </a>
