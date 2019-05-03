@@ -35,10 +35,26 @@ namespace Integratieproject1.UI.Controllers
             _dataTypeManager = new DataTypeManager();
         }
 
-        public IActionResult Project(int projectId)
+        public IActionResult Project(int projectId, string platformName)
         {
-            Project project = _projectsManager.GetProject(projectId);
-            return View("/UI/Views/Project/Project.cshtml", project);
+            try
+            {
+                Project project = _projectsManager.GetProject(projectId);
+                if (_projectsManager.GetPlatformByName(platformName) == project.Platform)
+                {
+                    return View("/UI/Views/Project/Project.cshtml", project);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return NotFound();
+            }
+            
+                
         }
 
         public IActionResult Ideation(int ideationId)
