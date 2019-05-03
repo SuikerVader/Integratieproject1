@@ -15,7 +15,7 @@
         }
     >
         <h1 class="display-4">@Model.PlatformName</h1>
-        <p>@Model.Description</p>
+        <h5>@Model.Description</h5>
         <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
     </div>
 </div>
@@ -24,7 +24,7 @@
     <div class="d-flex flex-row flex-wrap justify-content-center">
         <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">actieve projecten</button>
         <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">toekomstige projecten</button>
-        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projects</button>
+        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projecten</button>
     </div>
     <br/>
     <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
