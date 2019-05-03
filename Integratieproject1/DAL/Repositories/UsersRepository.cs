@@ -41,7 +41,7 @@ namespace Integratieproject1.DAL.Repositories
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.RemoveFromRoleAsync(identityUser, role);
         }
-        
+
         public IEnumerable<IdentityUser> GetUsers(string role)
         {
             return _userStore.GetUsersInRoleAsync(role).Result;
