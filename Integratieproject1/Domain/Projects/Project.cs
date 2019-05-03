@@ -16,6 +16,7 @@ namespace Integratieproject1.Domain.Projects
         public string Description { get; set; }
         [Required] public Location Location { get; set; }
         public string Status { get; set; }
+        public string BackgroundImage { get; set; }
 
         //[Required] 
         public Platform Platform { get; set; }
@@ -26,7 +27,7 @@ namespace Integratieproject1.Domain.Projects
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> errors = new List<ValidationResult>();
-            if (EndDate <= StartDate || StartDate < DateTime.Now)
+            if (EndDate <= StartDate)
             {
                 errors.Add(new ValidationResult(
                     "EndDate cant be before startdate and the startdate cant be in the past",

@@ -5,7 +5,7 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h2>Mijn Admins</h2>
+    <h2>Admins</h2>
     <div>
         <table class="table">
             <tr>
@@ -20,19 +20,10 @@
                     <td>@admin.Email</td>
                     <td>@admin.PhoneNumber</td>
                     <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">Verwijder Adminrol
-                    </a></td>
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="DeleteAdmin" asp-route-adminId="@admin.Id">Verwijder Account
-                    </a></td>      
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="AdminProjects" asp-route-adminId="@admin.Id">Projecten
+                           asp-action="AddAdminProjects" asp-route-adminId="@admin.Id" asp-route-projectId="@ViewBag.ProjectId">Voeg toe aan project
                     </a></td> 
                 </tr>
             }
         </table>
     </div>
-    <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
-       asp-action="Users" >Geef Adminrol aan gebruiker
-    </a>
 </div>

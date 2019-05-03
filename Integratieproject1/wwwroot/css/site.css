@@ -57,6 +57,11 @@ body {
     background-color: grey;
 
 }
+.jumbotronBackground {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 3px;
+}
 .activeProject{
     display: inline-block;
 }
@@ -82,6 +87,11 @@ body {
     } 
     #searchForm{
         width: 50%;
+    }
+    .jumbotronBackground {
+        padding: 20px;
+        padding-left: 50px;
+        padding-right: 50px;
     }
 }
 

@@ -8,7 +8,7 @@
 <div class="container">
     <h2>Nieuw Platform</h2>
     <div>
-        <form asp-controller="SuperAdmin" asp-action="CreatePlatform" method="post">
+        <form asp-controller="SuperAdmin" asp-action="CreatePlatform" method="post" enctype="multipart/form-data">
             <label asp-for="PlatformName">Naam</label>
             <input required asp-for="PlatformName" class="form-control" />
             <label asp-for="Logo" value="Logo url">Logo url</label>
@@ -19,8 +19,53 @@
             <input asp-for="Description" class="form-control" />
             <label asp-for="Phonenumber">Telefoonnummer</label>
             <input asp-for="Phonenumber" class="form-control" />
-            <input type="submit" value="Create Platform">
+            <label>Achtergrondafbeelding</label>
+            <div class="form-group" id="imagesUpload" >
+                <label for="uploadedImages" style="width: 100%">
+                    <div class="input-group" >
+                        <span class="form-control" id="chosenImages">
+                            Kies afbeelding...
+                        </span>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-outline-secondary">Kies</span>
+                        </div>
+                    </div>
+                </label>
+                <input class="input-default-js"
+                       name="formFile"
+                       type="file"
+                       id="uploadedImages"
+                       accept="image/x-png,image/gif,image/jpeg"
+                       onchange="PreviewImage(this)">
+                <img id="image" style="width: 100px; height: 100px;display: none"/> 
+                
+            </div>
+            <input class="btn btn-primary" type="submit" value="Create Platform">
         </form>
 
     </div>
 </div>
+<script>
+    function PreviewImage(fileInput) {
+        var files = fileInput.files;
+        var imagesUpload = document.getElementById('imagesUpload');
+        var chosenImages = document.getElementById('chosenImages');
+
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onloadend = function(event) {
+                var preview = document.getElementById('image');
+                preview.setAttribute('src', event.target.result);
+                preview.setAttribute('alt', 'Image preview...');
+                preview.style.display = 'block';
+            }
+
+            if (files[i]) {
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        chosenImages.innerHTML = files.length + fileInput.getAttribute('data-multiple-target');
+    }
+</script>

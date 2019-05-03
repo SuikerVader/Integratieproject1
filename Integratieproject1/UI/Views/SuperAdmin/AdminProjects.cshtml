@@ -4,13 +4,14 @@
     ViewBag.Title = "SuperAdminPagina";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
 @if (Model.Count == 0)
 {
     <h2>Geen projecten gevonden voor deze admin!</h2>
 }
 else
 {
-    <div class="container">
+    
         <h2>Admin: @Model.First().Admin.Email </h2>
         <div>
             <table class="table">
@@ -36,5 +37,6 @@ else
                 }
             </table>
         </div>
-    </div>
+    
 }
+</div>

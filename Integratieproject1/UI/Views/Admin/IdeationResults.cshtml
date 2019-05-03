@@ -1,0 +1,28 @@
+﻿@model IList<Integratieproject1.Domain.Ideations.Ideation>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Ideations</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Titel</th>
+            </tr>
+            @foreach (var ideation in Model)
+            {
+                <tr>
+                    <td>@ideation.CentralQuestion</td>
+                    <td>
+                        <a asp-area="" asp-controller="Admin"
+                           asp-action="IdeationResult" asp-route-ideationId="@ideation.IdeationId">
+                            Bekijk Resultaten
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -30,6 +30,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
                 .AsEnumerable();
         }
+
+        public IEnumerable<Survey> GetAllSurveys()
+        {
+            return _ctx.Surveys
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .AsEnumerable();
+        }
+
         public Survey GetOnlySurvey(int surveyId)
         {
             return _ctx.Surveys.Find(surveyId);

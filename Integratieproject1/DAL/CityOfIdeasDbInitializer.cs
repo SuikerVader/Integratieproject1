@@ -49,7 +49,7 @@ namespace Integratieproject1.DAL
 
             Platform platform = new Platform
             {
-                PlatformName = "CityOfIdeas",
+                PlatformName = "Antwerpen",
                 Description =
                     "Help building projects inside your city! Give your ideas and input on projects that inspire you.",
                 Address = address
@@ -117,7 +117,7 @@ namespace Integratieproject1.DAL
 
             Phase phase5 = new Phase
             {
-                PhaseNr = 1,
+                PhaseNr = 4,
                 PhaseName = "phasetest5",
                 Description = "phasedescriptiontest5",
                 StartDate = phase3.EndDate,
@@ -133,7 +133,7 @@ namespace Integratieproject1.DAL
             Ideation ideation2 = new Ideation
             {
                 CentralQuestion = "ideationtest2",
-                InputIdeation = true,
+                InputIdeation = false,
                 Phase = phase
             };
             Ideation ideation3 = new Ideation
