@@ -70,6 +70,11 @@ namespace Integratieproject1.BL.Managers
             return _usersRepository.GetVerificationRequests();
         }
 
+        public IEnumerable<VerificationRequest> GetUnhandledVerificationRequests()
+        {
+            return _usersRepository.
+        }
+
         public void CreateVerificationRequest(VerificationRequest verificationRequest)
         {
             _usersRepository.CreateVerificationRequest(verificationRequest);
@@ -86,11 +91,18 @@ namespace Integratieproject1.BL.Managers
 
         public void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted)
         {
-            if (accepted)
+            Console.WriteLine("handling");
+            Console.WriteLine(accepted);
+            Console.WriteLine(verificationRequest.handled);
+            if (false)
             {
+                Console.WriteLine("accepted");
                 GiveRole(verificationRequest.user.Id, "ORGANISATION");
+                Console.WriteLine(verificationRequest.handled);
             }
             _usersRepository.SetVerificationRequestHandled(verificationRequest);
+            Console.WriteLine("handled");
+            Console.WriteLine(verificationRequest.handled);
         }
         #endregion
 

@@ -31,9 +31,7 @@ namespace Integratieproject1.DAL
 
             mqttClient.ApplicationMessageReceived += (s, e) =>
             {
-                Console.WriteLine("********************Received");
                 string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                Console.WriteLine(payload);
                 if (e.ApplicationMessage.Topic.Equals("ms16"))
                 {
                     if (Int32.TryParse(payload, out int i))

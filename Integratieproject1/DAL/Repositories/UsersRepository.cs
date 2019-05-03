@@ -66,6 +66,11 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.VerificationRequests.AsEnumerable();
         }
 
+        public IEnumerable<VerificationRequest> GetUnhandledVerificationRequests()
+        {
+            var result = _ctx.VerificationRequests.Where(v->v.handled).AsEnumerable();
+        }
+
         public void CreateVerificationRequest(VerificationRequest verificationRequest)
         {
             _ctx.VerificationRequests.Add(verificationRequest);

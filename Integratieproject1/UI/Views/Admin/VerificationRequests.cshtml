@@ -20,12 +20,12 @@
                             <td>@verificationRequest.request</td>
                             <td>
                                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">Accept
+                                   asp-action="HandleVerificationRequest" asp-route-verificationRequest="@verificationRequest" asp-route-accepted="@true">Accept
                                 </a>
                             </td>
                             <td>
                                 <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">Deny
+                                   asp-action="HandleVerificationRequest" asp-route-verificationRequest="@verificationRequest" asp-route-accepted="@false">Deny
                                 </a>
                             </td>
                         </tr>
