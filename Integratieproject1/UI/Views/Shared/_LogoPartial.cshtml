@@ -1,20 +1,2 @@
-<form id="searchForm" class="form-inline mx-auto my-2 my-lg-0" asp-controller="Home" asp-action="Search" asp-route-searchString="@ViewData["searchString"]" method="get">
-        @* <div class="input-group-btn search-panel"> *@
-        @*     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> *@
-        @*         <span id="search_concept">Filter by</span> <span class="caret"></span> *@
-        @*     </button> *@
-        @*     <ul class="dropdown-menu" role="menu"> *@
-        @*         <li><a href="#contains">Contains</a></li> *@
-        @*         <li><a href="#its_equal">It's equal</a></li> *@
-        @*         <li><a href="#greather_than">Greather than ></a></li> *@
-        @*         <li><a href="#less_than">Less than < </a></li> *@
-        @*         <li class="divider"></li> *@
-        @*         <li><a href="#all">Anything</a></li> *@
-        @*     </ul> *@
-        @* </div> *@
-        <input type="text" class="form-control mr-sm-2" style="width:84%" name="searchString" placeholder="Zoeken...">
-            
-            <button class="btn btn-primary my-2 my-sm-0 " type="submit">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </button>
-</form>
+@using Microsoft.CodeAnalysis
+<img src="@ViewBag.Logo"/>

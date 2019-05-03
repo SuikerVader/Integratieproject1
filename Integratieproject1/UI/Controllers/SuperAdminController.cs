@@ -215,13 +215,20 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
 
+        public IActionResult DeleteLogoPlatform(int platformId)
+        {
+            projectsManager.DeleteLogoPlatform(platformId);
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
+        }
+
         public IActionResult CreatePlatform()
         {
             return View("/UI/Views/SuperAdmin/CreatePlatform.cshtml");
         }
 
         [HttpPost]
-        public IActionResult CreatePlatform(Platform platform, IFormFile formFile)
+        public IActionResult CreatePlatform(Platform platform, IFormFile formFile, IFormFile logoFile)
         {
 
             if (ModelState.IsValid)
@@ -229,6 +236,11 @@ namespace Integratieproject1.UI.Controllers
                 if (formFile != null)
                 {
                     platform.BackgroundImage = GetImagePath(formFile);
+                                    
+                }
+                if (logoFile != null)
+                {
+                    platform.Logo = GetImagePath(logoFile);
                                     
                 }
                 projectsManager.CreatePlatform(platform);
@@ -253,6 +265,7 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
-        
+
+       
     }
 }
