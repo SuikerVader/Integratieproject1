@@ -12,7 +12,6 @@
                 <th>Id</th>
                 <th>Naam</th>
                 <th>Nummer</th>
-                <th>Header</th>
                 <th>Logo</th>
             </tr>
             @foreach (var platform in Model)
@@ -21,7 +20,6 @@
                     <td>@platform.PlatformId</td>
                     <td>@platform.PlatformName</td>
                     <td>@platform.Phonenumber</td>
-                    <td>@platform.Header</td>
                     <td>@platform.Logo</td>
                     <td>
                         <a asp-area="" asp-controller="SuperAdmin"
