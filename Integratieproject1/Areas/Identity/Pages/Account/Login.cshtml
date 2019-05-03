@@ -10,7 +10,7 @@
         <div class="col-md-4">
             <section>
                 <form method="post">
-                    <h4>Use a local account to log in.</h4>
+                    <h4>Gebruik een lokaal account om in te loggen.</h4>
                     <hr />
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
@@ -19,7 +19,7 @@
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Input.Password"></label>
+                        <label asp-for="Input.Password">Wachtwoord</label>
                         <input asp-for="Input.Password" class="form-control" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
@@ -36,10 +36,10 @@
                     </div>
                     <div class="form-group">
                         <p>
-                            <a asp-page="./ForgotPassword">Forgot your password?</a>
+                            <a asp-page="./ForgotPassword">Wachtwoord vergeten?</a>
                         </p>
                         <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registreer als een nieuwe gebruiker.</a>
                         </p>
                     </div>
                 </form>
@@ -47,7 +47,7 @@
         </div>
         <div class="col-md-6 col-md-offset-2">
             <section>
-                <h4>Use another service to log in.</h4>
+                <h4>Gebruik een andere service om in te loggen.</h4>
                 <hr />
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) == 0)

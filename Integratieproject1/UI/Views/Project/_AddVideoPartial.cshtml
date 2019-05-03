@@ -2,7 +2,7 @@
 @model Integratieproject1.Domain.Datatypes.Video
 
 @{
-    ViewBag.Title = "AddQuestionPage";
+    ViewBag.Title = "Voeg Vraag Toe";
 }
 
 <div>
@@ -12,7 +12,7 @@
                 <input required class="form-control" asp-for="Url" type="url" onchange="PreviewVideo(value)" id="uploadedVideo" placeholder="Paste YouTube URL..."/>
             </div>
             <div class="col-2 text-center">
-                <input class="btn btn-primary btn-sm" type="submit" value="Add Video">
+                <input class="btn btn-primary btn-sm" type="submit" value="Video Toevoegen">
             </div>
         </div>
         <iframe id="previewVideo" width="100%" src=""

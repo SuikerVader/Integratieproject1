@@ -1,19 +1,20 @@
 ﻿@model Integratieproject1.Domain.Projects.Platform
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
+
 <div class="jumbotron jumbotron-fluid text-center">
     <h1 class="display-4">@Model.PlatformName</h1>
     <p>@Model.Description</p>
-    <a class="btn btn-primary btn-lg" href="#projects" role="button">Give your idea!</a>
+    <a class="btn btn-primary btn-lg" href="#projects" role="button">Geef je idee!</a>
 </div>
 <div class="container">
 
 
     <div class="d-flex flex-row flex-wrap justify-content-center">
-        <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">active projects</button>
-        <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">future projects</button>
-        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">closed projects</button>
+        <button id="btnActiveProject" onclick="displayActiveProjects()" class="btn btn-primary">actieve projecten</button>
+        <button id="btnFutureProject" onclick="displayFutureProjects()" class="btn btn-secondary">toekomstige projecten</button>
+        <button id="btnClosedProject" onclick="displayClosedProjects()" class="btn btn-secondary">gesloten projects</button>
     </div>
     <br/>
     <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
@@ -53,7 +54,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>
@@ -132,7 +133,7 @@
                         <a class="btn btn-primary" asp-area=""
                            asp-controller="Project"
                            asp-action="Project" asp-route-projectId="@project.ProjectId">
-                            See Project
+                            Bekijk Project
                         </a>
                     </div>
                 </div>
@@ -141,6 +142,54 @@
         }
     </div>
 </div>
+<input id="autocomplete" oninput="inputAutocomplete()"/>
+<label id="lat"></label>
+<label id="long"></label>
+@*<partial name="/UI/Views/Project/_MapPartial.cshtml"/>*@
+
+@*<a src="https://maps.googleapis.com/maps/api/place/nearbysearch/json
+  ?location=-33.8670522,151.1957362
+  &radius=500
+  &types=food
+  &name=harbour
+  &key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w" ></a>*@
+
+<script>
+   /*
+ 
+    function inputAutocomplete(){
+        var prefix = 'Antwerpen, ';
+        var str = event.target.value;
+        if(str.indexOf(prefix) == 0) {
+            // string already started with prefix
+            return;
+        } else {
+            if (prefix.indexOf(str) >= 0) {
+                // string is part of prefix
+                event.target.value = prefix;
+            } else {
+                event.target.value = prefix+str;
+            }
+        }
+    };*/
+    function initAutocomplete() {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+        autocomplete.setComponentRestrictions({'country': 'be'});
+        google.maps.event.addListener(autocomplete,
+            'place_changed',
+            function() {
+                var place = autocomplete.getPlace();
+                var lat = "lat: " + place.geometry.location.lat();
+                var long = "long: " + place.geometry.location.lng();
+                document.getElementById('lat').innerHTML = lat;
+                document.getElementById('long').innerHTML = long;
+            });
+        
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initAutocomplete"></script>
+
 <script>
     function displayActiveProjects() {
         var active = document.getElementsByClassName("activeProject");

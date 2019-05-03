@@ -104,6 +104,11 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetIdeation(ideationId);
         }
 
+        public IList<Ideation> GetProjectIdeation(int projectId)
+        {
+            return _ideationsRepository.GetProjectsIdeations(projectId).ToList();
+        }
+
         public IList<Ideation> GetIdeations(int phaseId)
         {
             return _ideationsRepository.GetIdeations(phaseId).ToList();
@@ -268,9 +273,19 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.RemoveIdea(idea);
             _unitOfWorkManager.Save();
         }
+        
+        public void AddPosition(Position position, int ideaId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            Position createPosition = dataTypeManager.CreatePosition(position);
+            Idea idea = GetIdea(ideaId);
+            idea.Position = createPosition;
+            _ideationsRepository.UpdateIdea(idea);
+            _unitOfWorkManager.Save();
+        }
 
+            
         #endregion
-
 
         #region IdeaObject
 
@@ -633,5 +648,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
+
+        
     }
 }

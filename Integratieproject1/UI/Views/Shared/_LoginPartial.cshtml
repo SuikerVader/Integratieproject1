@@ -15,15 +15,15 @@
                          <div class="dropdown-divider"></div>
                          @if (User.IsInRole("Admin"))
                          {
-                             <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Admin Pages</a>
+                             <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Adminpagina's</a>
                          }
                          @if (User.IsInRole("Mod"))
                          {
-                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderator Pages</a>
+                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderatorpagina's</a>
                          }
                          @if (User.IsInRole("SuperAdmin"))
                          {
-                                 <a class="dropdown-item" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">SuperAdmin Pages</a>
+                                 <a class="dropdown-item" asp-area="" asp-controller="SuperAdmin" asp-action="SuperAdmin">Superadminpagina's</a>
                          }
                      </form>
                      
