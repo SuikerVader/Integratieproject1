@@ -42,17 +42,34 @@ namespace Integratieproject1.DAL
             // Stel gedrag 'tracked-entities' in
             ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
-            Address address = new Address {City = "testCity", Street = "testStreet", HouseNr = "1", ZipCode = "0000"};
-            Location location = new Location {Address = address, LocationName = "test1"};
+            Address addressAntwerp = new Address {City = "Antwerpen", Street = "Groenplaats", HouseNr = "1", ZipCode = "2000"};
+            Address addressGent = new Address { City = "Gent", Street = "Jan van Gentstraat", HouseNr = "1", ZipCode = "9000" };
+            Location location = new Location {Address = addressAntwerp, LocationName = "test1"};
             Position position = new Position {Lat = "0.0", Lng = "0.0"};
 
 
-            Platform platform = new Platform
+            Platform platformAntwerp = new Platform
             {
                 PlatformName = "Antwerpen",
                 Description =
-                    "Help building projects inside your city! Give your ideas and input on projects that inspire you.",
-                Address = address
+                    "Bent u Antwerpenaar in hart en nieren? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
+                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                Address = addressAntwerp,
+                Phonenumber = "0488643152",
+                BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
+                Logo = "/images/uploads/LogoAntwerp.png"
+            };
+
+            Platform platformBrussels = new Platform
+            {
+                PlatformName = "Gent",
+                Description =
+                    "Bent u van Gent? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
+                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                Address = addressGent,
+                Phonenumber = "0488644400",
+                BackgroundImage = "/images/uploads/BgImgGent.jpg",
+                Logo = "/images/uploads/LogoGent.png"
             };
 
             Project project = new Project
@@ -60,7 +77,7 @@ namespace Integratieproject1.DAL
                 ProjectName = "test1",
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Today.AddYears(1),
-                Platform = platform,
+                Platform = platformAntwerp,
                 Objective = "test1",
                 Description = "test1",
                 Status = "Phase1",
@@ -71,7 +88,7 @@ namespace Integratieproject1.DAL
                 ProjectName = "test2",
                 StartDate = DateTime.Today.AddMonths(1),
                 EndDate = DateTime.Today.AddMonths(1).AddYears(1),
-                Platform = platform,
+                Platform = platformAntwerp,
                 Objective = "test2",
                 Description = "test2",
                 Status = "Phase2",
@@ -416,7 +433,7 @@ namespace Integratieproject1.DAL
                 Project = project2
             };
             project.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
-            platform.Users = new List<IdentityUser> {person, organisation, admin};
+            platformAntwerp.Users = new List<IdentityUser> {person, organisation, admin};
             reaction.Likes = new List<Like>() {like};
             idea.Reactions = new List<Reaction>() {reaction};
             idea.Votes = new List<Vote>() {vote};
@@ -449,8 +466,8 @@ namespace Integratieproject1.DAL
             project.Phases = new List<Phase>() {phase, phase2, phase3, phase5};
             project2.Phases = new List<Phase>() {phase4};
             //ctx.Projects.AddRange(project,project2);
-            platform.Projects = new List<Project>() {project, project2};
-            ctx.Platforms.Add(platform);
+            platformAntwerp.Projects = new List<Project>() {project, project2};
+            ctx.Platforms.AddRange(platformAntwerp, platformBrussels);
 
             //platform.Projects.Add(project2);    
 
