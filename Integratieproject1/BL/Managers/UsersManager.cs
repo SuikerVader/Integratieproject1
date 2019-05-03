@@ -72,7 +72,7 @@ namespace Integratieproject1.BL.Managers
 
         public IEnumerable<VerificationRequest> GetUnhandledVerificationRequests()
         {
-            return _usersRepository.
+            return _usersRepository.GetUnhandledVerificationRequests();
         }
 
         public void CreateVerificationRequest(VerificationRequest verificationRequest)

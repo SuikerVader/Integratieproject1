@@ -77,14 +77,15 @@ namespace Integratieproject1.UI.Controllers{}
         #region VerificationRequests
         public IActionResult VerificationRequests()
         {
-            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests()
+            IList<VerificationRequest> requests = _usersManager.GetUnhandledVerificationRequests().ToList();
             return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
         }
 
         public IActionResult HandleVerificationRequest(VerificationRequest request, bool accepted)
         {
+            Console.WriteLine("handling request "+request.verificationRequestId+" by user "+request.user.UserName);
             _usersManager.HandleVerificationRequest(request, accepted);
-            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
+            IList<VerificationRequest> requests = _usersManager.GetUnhandledVerificationRequests().ToList();
             return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
         }
         #endregion
