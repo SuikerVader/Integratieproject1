@@ -117,26 +117,6 @@
                                     <small>Ingezonden door: @idea.IdentityUser.Email</small>
                                 </p>
                             }
-
-                            @if (idea.GetImages() != null && idea.GetImages().Count > 0)
-                            {
-                                foreach (Image image in idea.GetImages())
-                                {
-                                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                                }
-                            }
-                            <br/>
-                            @if (idea.GetVideos() != null && idea.GetVideos().Count > 0)
-                            {
-                                    if (!idea.GetVideos().OrderBy(v => v.OrderNr).First().Url.Equals(""))
-                                    {
-                                       <iframe src="@idea.GetVideos().First().Url" width="100%"
-                                                                               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                                                       </iframe>
-                                                                       <br/> 
-                                    }
-                                
-                            }
                             <a class="btn btn-primary" asp-area="" asp-controller="Project"
                                asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
                                 Bekijk Idee
