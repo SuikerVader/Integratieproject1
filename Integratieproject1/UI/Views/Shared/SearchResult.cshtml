@@ -38,7 +38,7 @@
                     if (result.GetType() == typeof(Phase))
                     {
                         <a style="text-decoration: none;" asp-controller="Project"
-                           asp-action="Project" asp-route-projectId="@(((Phase) result).PhaseName)">
+                           asp-action="Project" asp-route-projectId="@(((Phase) result).Project.ProjectId)">
                             <div class="searchResult">
                                 <h5>@(((Phase) result).PhaseName): </h5>
                                 <p>@(((Phase) result).Description)</p>
