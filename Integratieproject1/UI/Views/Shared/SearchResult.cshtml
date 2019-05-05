@@ -6,67 +6,141 @@
     ViewBag.Title = "Zoekresultaten";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
+    <div id="searchGrid">
+        <div id="searchTitle" class="text-center">
+            <h5> Zoekresultaten van "@Model.SearchString"</h5>
+        </div>
+        <div id="searchProjects" class="card text-center">
+            <h4 class="card-header text-center">Projecten:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(Project))
+                    {
+                        <a style="text-decoration: none;" asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@(((Project) result).ProjectId)">
+                            <div class="searchResult">
+                                <h5>@(((Project) result).ProjectName): </h5>
+                                <p>@(((Project) result).Description)</p>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
 
-<p>Zoekresultaten van "@Model.SearchString"</p>
+        </div>
+        <div id="searchPhases" class="card text-center">
+            <h4 class="card-header">Fases:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(Phase))
+                    {
+                        <a style="text-decoration: none;" asp-controller="Project"
+                           asp-action="Project" asp-route-projectId="@(((Phase) result).PhaseName)">
+                            <div class="searchResult">
+                                <h5>@(((Phase) result).PhaseName): </h5>
+                                <p>@(((Phase) result).Description)</p>
+                                <p><small><strong>Project: </strong>@(((Phase) result).Project.ProjectName)</small></p>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div id="searchIdeations" class="card text-center">
+            <h4 class="card-header">Ideations:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(Ideation))
+                    {
+                        <a style="text-decoration: none" asp-controller="Project"
+                           asp-action="Ideation" asp-route-ideationId="@(((Ideation) result).IdeationId)">
+                            <div class="searchResult">
+                                <p>@(((Ideation) result).CentralQuestion)</p>
+                                <p><small><strong>Fase: </strong>@(((Ideation) result).Phase.PhaseName)</small></p>
+                                <p><small><strong>Project: </strong>@(((Ideation) result).Phase.Project.ProjectName)</small></p>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div id="searchIdeas" class="card text-center">
+            <h4 class="card-header">Idee&euml;n:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(Idea))
+                    {
+                        <a style="text-decoration: none" asp-controller="Project"
+                           asp-action="Idea" asp-route-ideaId="@(((Idea) result).IdeaId)">
+                            <div class="searchResult">
+                                <h4>@(((Idea) result).Title)</h4>
+                                <p><small><strong>Ideation: </strong>@(((Idea) result).Ideation.CentralQuestion)</small></p>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div id="searchTextFields" class="card text-center">
+            <h4 class="card-header">Tekst:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(TextField))
+                    {
+                        <a style="text-decoration: none" asp-controller="Project"
+                           asp-action="Idea" asp-route-ideaId="@(((TextField) result).Idea.IdeaId)">
+                            <div class="searchResult">
+                                <p>@(((TextField) result).Text)</p> 
+                                <p><small><strong>Idee: </strong>@(((TextField) result).Idea.Title)</small></p>
+                            </div>
+                            
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div id="searchReactions" class="card text-center">
+            <h4 class="card-header">Reacties:</h4>
+            <div class="card-text">
+                @foreach (var result in Model.SearchResults)
+                {
+                    if (result.GetType() == typeof(Reaction))
+                    {
+                        if (((Reaction) result).Ideation != null)
+                        {
+                            <a style="text-decoration: none" asp-controller="Project"
+                               asp-action="Ideation"
+                               asp-route-ideaId="@(((Reaction) result).Ideation.IdeationId)">
+                                <div class="searchResult">
+                                    <p>@(((Reaction) result).ReactionText)</p>
+                                    <p><small><strong>Ideation: </strong>@(((Reaction) result).Ideation.CentralQuestion)</small></p>
+                                </div>
+                            
+                            </a>
+                        }
+                        else if (((Reaction) result).Idea != null)
+                        {
+                            <a style="text-decoration: none" asp-controller="Project"
+                               asp-action="Idea"
+                               asp-route-ideaId="@(((Reaction) result).Idea.IdeaId)">
+                                <div class="searchResult">
+                                    <p>@(((Reaction) result).ReactionText)</p>
+                                    <p><small><strong>Idee: </strong>@(((Reaction) result).Idea.Title)</small></p>
+                                </div>
+                                
+                            </a>
+                        }
+                    }
+                }
+            </div>
+            
+        </div>
+    </div>
 
-@foreach (var result in Model.SearchResults)
-{
-    if (result.GetType() == typeof(Project))
-    {
-        <a asp-controller="Project"
-           asp-action="Project" asp-route-projectId="@(((Project) result).ProjectId)">
-            <h1>@(((Project) result).ProjectName)</h1>
-            <p>@(((Project) result).Description)</p>
-        </a>
-    }
-    else if (result.GetType() == typeof(Phase))
-    {
-        <a asp-controller="Project"
-           asp-action="Project" asp-route-projectId="@(((Phase) result).Project.ProjectId)">
-            <h1>@(((Phase) result).PhaseName)</h1>
-            <p>@(((Phase) result).Description)</p>
-        </a>
-    }
-    else if (result.GetType() == typeof(Ideation))
-    {
-        <a asp-controller="Project"
-           asp-action="Ideation" asp-route-ideationId="@(((Ideation) result).IdeationId)">
-            <h1>@(((Ideation) result).CentralQuestion)</h1>
-        </a>
-    }
-    else if (result.GetType() == typeof(Idea))
-    {
-        <a asp-controller="Project"
-           asp-action="Idea" asp-route-ideaId="@(((Idea) result).IdeaId)">
-            <h1>@(((Idea) result).Title)</h1>
-            @* <p>@(((Idea) result).GetTextFields().First())</p> *@
-        </a>
-    }
-    else if (result.GetType() == typeof(TextField))
-    {
-        <a asp-controller="Project"
-           asp-action="Idea" asp-route-ideaId="@(((TextField) result).Idea.IdeaId)">
-            @* <h1>@(((TextField) result).Idea.Title)</h1> *@
-            <p>@(((TextField) result).Text)</p>
-        </a>
-    }
-    else if (result.GetType() == typeof(Reaction))
-    {
-        if (((Reaction) result).Ideation != null)
-        {
-            <a asp-controller="Project"
-               asp-action="Ideation"
-               asp-route-ideaId="@(((Reaction) result).Ideation.IdeationId)">
-                <h1>@(((Reaction) result).ReactionText)</h1>
-            </a>
-        }
-        else if (((Reaction) result).Idea != null)
-        {
-            <a asp-controller="Project"
-               asp-action="Idea"
-               asp-route-ideaId="@(((Reaction) result).Idea.IdeaId)">
-                <h1>@(((Reaction) result).ReactionText)</h1>
-            </a>
-        }
-    }
-}
+</div>

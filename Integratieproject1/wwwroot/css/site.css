@@ -78,6 +78,7 @@ body {
 .surveys {
     width: 100%;
 }
+
 @media screen and (min-width: 768px){
     .ideations {
         width: 50%;
@@ -85,13 +86,76 @@ body {
     .surveys {
         width: 50%;
     } 
-    #searchForm{
-        width: 50%;
-    }
+    
     .jumbotronBackground {
         padding: 20px;
         padding-left: 50px;
         padding-right: 50px;
+    }
+}
+#searchForm{
+    margin-top: 2px;
+}
+#searchGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto auto auto auto auto auto;
+    grid-template-areas:
+            "searchTitle"
+            "searchProjects"
+            "searchPhases"
+            "searchIdeations"
+            "searchIdeas"
+            "searchTextFields"
+            "searchReactions"
+}
+#searchTitle{
+    grid-area: searchTitle;
+}
+#searchProjects {
+    grid-area: searchProjects;
+}
+#searchPhases {
+    grid-area: searchPhases;
+}
+#searchIdeations {
+    grid-area: searchIdeations;
+}
+#searchIdeas {
+    grid-area: searchIdeas;
+}
+#searchTextFields {
+    grid-area: searchTextFields;
+}
+#searchReactions {
+    grid-area: searchReactions;
+}
+.searchResult{
+    color: black; 
+    border-bottom: solid 1px lightgray;
+    padding: 5px;
+    
+}
+.searchResult:hover{
+    background-color: lightgray;
+}
+
+@media screen and (min-width: 768px){
+    #searchGrid {
+        grid-template-columns: 1fr 1fr 1fr ;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+                "searchTitle searchTitle searchTitle"
+                "searchProjects searchPhases searchIdeations"
+                "searchIdeas searchTextFields searchReactions"
+    }
+}
+@media screen and (min-width: 992px) {
+    #searchForm{
+        width: 50%;
     }
 }
 
@@ -397,7 +461,6 @@ body {
 .jumbotron-fluid{
     padding-left: 100px;
     padding-right: 100px;
-    
 }
 }
 .container{
