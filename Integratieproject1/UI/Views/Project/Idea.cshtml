@@ -11,219 +11,235 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <div id="ideaGrid">
-        <div id="ideaInfo">
-            <div class="card text-center infoCard">
-                <div class="card-body">
-                    <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
-                    @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
-                    Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
-                </div>
-            </div>
+<div id="ideaGrid">
+<div id="ideaInfo">
+    <div class="card text-center infoCard">
+        <div class="card-body">
+            <h5>Info:</h5>
+            Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
+            Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+            @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
+            Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
         </div>
-    <div id="ideaTitle">
-        <div class="card text-center" style="border: none;">
-            <div class="card-body">
-                <div class="d-flex flex-row justify-content-end">
-                    @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.Email || User.IsInRole("Admin") || User.IsInRole("Mod")))
-                    {
-                        <a style="padding: 5px" asp-area="" asp-controller="Project"
-                           asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                    }
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a style="padding: 5px" asp-area="" asp-controller="Project"
-                           asp-action="ReportPost" asp-route-id="@Model.IdeaId" asp-route-type="idea">
-                            <i class="fa fa-flag"></i>
-                        </a>
-                    }
-
-                </div>
-                <h1 class="card-title">@Model.Title</h1><br>
+    </div>
+</div>
+<div id="ideaTitle">
+    <div class="card text-center" style="border: none;">
+        <div class="card-body">
+            <div class="d-flex flex-row justify-content-end">
+                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.Email || User.IsInRole("Admin") || User.IsInRole("Mod")))
+                {
+                    <a style="padding: 5px" asp-area="" asp-controller="Project"
+                       asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                }
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <div class="d-flex flex-row justify-content-center">
-                        @if (ViewBag.voteCheck == true)
-                        {
-                            <div>
-                                <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
-                                    <button class="btn btn-primary voteBtn" type="submit">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-                                <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
-                                    <button disabled class="btn btn-secondary voteBtn" type="submit">
-                                        <i class="fa fa-heart"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        }
-                        @if (ViewBag.sharefbCheck == true)
-                        {
-                            <div>
-                                <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="facebook"
-                                         data-href="https://developers.facebook.com/docs/plugins/"
-                                         data-layout="button">
-                                        <button class="btn btn-primary voteBtn "
-
-                                                type="submit"
-                                                onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
-                                            <i class="fa fa-facebook"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-                                <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="facebook"
-                                         data-href="https://developers.facebook.com/docs/plugins/"
-                                         data-layout="button">
-                                        <button disabled class="btn btn-secondary voteBtn "
-
-                                                type="submit"
-                                                onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
-                                            <i class="fa fa-facebook"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        }
-                        @if (ViewBag.sharetwCheck == true)
-                        {
-                            <div>
-                                <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="twitter">
-                                        <button type="submit"
-                                                onclick="share_tw()"
-                                                class="btn btn-primary voteBtn">
-                                            <i class="fa fa-twitter"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>  
-                        }
-                        else
-                        {
-                            <div>
-                                <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
-                                    <div class="twitter">
-                                        <button disabled type="submit"
-                                                onclick="share_tw()"
-                                                class="btn btn-secondary voteBtn">
-                                            <i class="fa fa-twitter"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div> 
-                        }
-                            
-                    </div>
-                    <br/>
+                    <a style="padding: 5px" asp-area="" asp-controller="Project"
+                       asp-action="ReportPost" asp-route-id="@Model.IdeaId" asp-route-type="idea">
+                        <i class="fa fa-flag"></i>
+                    </a>
                 }
-                <div class="card-footer d-flex flex-row justify-content-around" style="background-color: transparent">
-                    <div>
-                        <i class="fa fa-heart"></i> @Model.Votes.Count</div>
-                    <div onclick="showHideReaction()">
-                        <i class="fa fa-comment"></i> @Model.Reactions.Count</div>
+
+            </div>
+            <h1 class="card-title">@Model.Title</h1><br>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="d-flex flex-row justify-content-center">
+                    @if (ViewBag.voteCheck == true)
+                    {
+                        <div>
+                            <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
+                                <button class="btn btn-primary voteBtn" type="submit">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <form asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.VOTE" asp-route-ideaId="@Model.IdeaId">
+                                <button disabled class="btn btn-secondary voteBtn" type="submit">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    @if (ViewBag.sharefbCheck == true)
+                    {
+                        <div>
+                            <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
+                                <div class="facebook"
+                                     data-href="https://developers.facebook.com/docs/plugins/"
+                                     data-layout="button">
+                                    <button class="btn btn-primary voteBtn "
+
+                                            type="submit"
+                                            onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+                                        <i class="fa fa-facebook"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <form class="facebookShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_FB" asp-route-ideaId="@Model.IdeaId">
+                                <div class="facebook"
+                                     data-href="https://developers.facebook.com/docs/plugins/"
+                                     data-layout="button">
+                                    <button disabled class="btn btn-secondary voteBtn "
+
+                                            type="submit"
+                                            onclick="share_fb('https://developers.facebook.com/docs/plugins/')">
+                                        <i class="fa fa-facebook"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    @if (ViewBag.sharetwCheck == true)
+                    {
+                        <div>
+                            <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
+                                <div class="twitter">
+                                    <button type="submit"
+                                            onclick="share_tw()"
+                                            class="btn btn-primary voteBtn">
+                                        <i class="fa fa-twitter"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <form class="TwitterShare" asp-controller="Project" asp-action="CreateVote" asp-route-voteType="@VoteType.SHARE_TW" asp-route-ideaId="@Model.IdeaId">
+                                <div class="twitter">
+                                    <button disabled type="submit"
+                                            onclick="share_tw()"
+                                            class="btn btn-secondary voteBtn">
+                                        <i class="fa fa-twitter"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+
                 </div>
+                <br/>
+            }
+            <div class="card-footer d-flex flex-row justify-content-around" style="background-color: transparent">
+                <div>
+                    <i class="fa fa-heart"></i> @Model.Votes.Count</div>
+                <div onclick="showHideReaction()">
+                    <i class="fa fa-comment"></i> @Model.Reactions.Count</div>
             </div>
         </div>
-        <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
-            @foreach (var reaction in Model.Reactions)
-            {
-                <p>
-                    <div class="d-flex flex-row justify-content-between">
+    </div>
+    <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
+        @foreach (var reaction in Model.Reactions)
+        {
+            <p>
+                <div class="d-flex flex-row justify-content-between">
 
-                        <p>
-                            <small>
-                                <strong>@reaction.IdentityUser.Email:</strong>
-                            </small>
-                            <small>@reaction.ReactionText</small>
-                        </p>
-                        <p>
-                            @if (User.Identity.IsAuthenticated)
+                    <p>
+                        <small>
+                            <strong>@reaction.IdentityUser.Email:</strong>
+                        </small>
+                        <small>@reaction.ReactionText</small>
+                    </p>
+                    <p>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userVoted = false;
+                            
+                            foreach (var like in reaction.Likes)
                             {
-                                <small>
-                                    <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="idea" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</a>
-                                </small>
-                                <small>
-                                    <a asp-area="" asp-controller="Project"
-                                       asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                        <i class="fa fa-flag"></i>
-                                    </a>
-                                </small>
+                                if (User.Identity.Name == like.IdentityUser.Email)
+                                {
+                                    userVoted = true;
+                                    break;
+                                }
+                            }
+                            if (userVoted == true)
+                            {
+                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
                             }
                             else
                             {
-                                <small>
-                                    <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
+                                <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
+                                    <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                </a>
                             }
-                        </p>
+                            <small>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                    <i class="fa fa-flag"></i>
+                                </a>
+                            </small>
+                        }
+                        else
+                        {
+                            <small>
+                                <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
+                        }
+                    </p>
 
-                    </div>
-                </p>
-            }
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="d-flex flex-row justify-content-end">
-                    <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
-                        <i class="fa fa-comment"></i>
-                    </button>
-                    <div id="createReaction" style="display: none">
-                        @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
-                    </div>
                 </div>
-            }
-        </div>
+            </p>
+        }
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="d-flex flex-row justify-content-end">
+                <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
+                    <i class="fa fa-comment"></i>
+                </button>
+                <div id="createReaction" style="display: none">
+                    @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
+                </div>
+            </div>
+        }
     </div>
-    @if (Model.Position != null)
-    {
-      <div id="ideaLocation" class="card">
-              <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
-          </div>  
-    }
-    
-        <div id="ideaObjects" class="card">
-            <div class="d-flex flex-column justify-content-start align-items-center">
-                @foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
+</div>
+@if (Model.Position != null)
+{
+    <div id="ideaLocation" class="card">
+        <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+    </div>
+}
+
+<div id="ideaObjects" class="card">
+    <div class="d-flex flex-column justify-content-start align-items-center">
+        @foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
+        {
+            <div class="ideaObject text-center">
+                @if (ideaObject.GetType() == typeof(TextField))
                 {
-                    <div class="ideaObject text-center">
-                        @if (ideaObject.GetType() == typeof(TextField))
-                        {
-                            var textField = (TextField) ideaObject;
-                            <p>@textField.Text</p>
-                        }
-                        @if (ideaObject.GetType() == typeof(Image))
-                        {
-                            var image = (Image) ideaObject;
-                            <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                        }
-                        @if (ideaObject.GetType() == typeof(Video))
-                        {
-                            var video = (Video) ideaObject;
-                            <iframe src="@video.Url" width="100%" height="300px"
-                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                            </iframe>
-                        }
-                    </div>
+                    var textField = (TextField) ideaObject;
+                    <p>@textField.Text</p>
+                }
+                @if (ideaObject.GetType() == typeof(Image))
+                {
+                    var image = (Image) ideaObject;
+                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
+                }
+                @if (ideaObject.GetType() == typeof(Video))
+                {
+                    var video = (Video) ideaObject;
+                    <iframe src="@video.Url" width="100%" height="300px"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
                 }
             </div>
-        </div>
+        }
     </div>
+</div>
+</div>
 </div>
 @*
 <div class="bd-example">

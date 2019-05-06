@@ -128,7 +128,8 @@ namespace Integratieproject1.UI.Controllers
             );
         }
 
-        public PartialViewResult _LogoPartial(string platformName)
+        [HttpGet]
+        public IActionResult LogoPartial(string platformName)
         {
            
                 Platform platform = _projectsManager.GetPlatformByName(platformName);

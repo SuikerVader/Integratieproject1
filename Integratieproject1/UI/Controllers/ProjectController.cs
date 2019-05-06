@@ -36,10 +36,26 @@ namespace Integratieproject1.UI.Controllers
             _dataTypeManager = new DataTypeManager();
         }
 
-        public IActionResult Project(int projectId)
+        public IActionResult Project(int projectId, string platformName)
         {
-            Project project = _projectsManager.GetProject(projectId);
-            return View("/UI/Views/Project/Project.cshtml", project);
+            try
+            {
+                Project project = _projectsManager.GetProject(projectId);
+                if (_projectsManager.GetPlatformByName(platformName) == project.Platform)
+                {
+                    return View("/UI/Views/Project/Project.cshtml", project);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return NotFound();
+            }
+            
+                
         }
 
         public IActionResult Ideation(int ideationId)
@@ -223,7 +239,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
+        /*public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
         {
             ArrayList parameters = new ArrayList();
 
@@ -251,29 +267,27 @@ namespace Integratieproject1.UI.Controllers
             {
                 throw new Exception("fout createIdea");
             }
-        }
+        }*/
 
-        private void UploadImages(List<IFormFile> formFiles, int ideaId)
+        private void UploadImage(IFormFile formFile, int ideaId)
         {
             string wwwroot = "wwwroot/";
             string uploads = "/images/uploads/";
             string path = wwwroot + uploads;
 
-            foreach (var file in formFiles)
-            {
-                if (file.Length > 0)
+            
+                if (formFile.Length > 0)
                 {
-                    string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    string imagePath = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
 
                     using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
                     {
-                        file.CopyTo(fileStream);
+                        formFile.CopyTo(fileStream);
                     }
 
-                    _ideationsManager.CreateImage(Path.GetFileName(file.FileName), Path.Combine(uploads, imagePath),
+                    _ideationsManager.CreateImage(Path.GetFileName(formFile.FileName), Path.Combine(uploads, imagePath),
                         ideaId);
                 }
-            }
         }
 
 
@@ -352,9 +366,9 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
-        public IActionResult AddImage(List<IFormFile> formFiles, int ideaId)
+        public IActionResult AddImage(IFormFile formFile, int ideaId)
         {
-            UploadImages(formFiles, ideaId);
+            UploadImage(formFile, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);

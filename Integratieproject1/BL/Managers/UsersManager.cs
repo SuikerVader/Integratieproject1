@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Users;
@@ -112,6 +113,11 @@ namespace Integratieproject1.BL.Managers
         {
             IdentityUser identityUser = GetUser(userId);
             _usersRepository.BlockUser(identityUser, days);
+        }
+
+        public IdentityUser GetUserByEmail(string email)
+        {
+            return _usersRepository.GetUserByEmail(email);
         }
     }
 }

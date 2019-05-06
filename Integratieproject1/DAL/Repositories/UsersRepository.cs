@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.EntityFrameworkCore;
 
 namespace Integratieproject1.DAL.Repositories
@@ -41,7 +43,7 @@ namespace Integratieproject1.DAL.Repositories
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.RemoveFromRoleAsync(identityUser, role);
         }
-        
+
         public IEnumerable<IdentityUser> GetUsers(string role)
         {
             return _userStore.GetUsersInRoleAsync(role).Result;
@@ -88,6 +90,11 @@ namespace Integratieproject1.DAL.Repositories
         {
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore, null, null, null, null, null, null, null, null);
             await userManager.SetLockoutEndDateAsync(identityUser, DateTime.Now.AddDays(days));
+        }
+
+        public IdentityUser GetUserByEmail(string email)
+        {            
+            return _userStore.FindByNameAsync(email.ToUpper()).Result;
         }
     }
 }
