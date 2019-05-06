@@ -171,7 +171,7 @@ namespace Integratieproject1.UI.Controllers
                 {
                     if (_surveysManager.IsEmail(surveyId, Convert.ToInt32(pair.Key)))
                     {
-                        var apiKey = "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";
+                        var apiKey = "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";
                         var client = new SendGridClient(apiKey);
                         var msg = new SendGridMessage()
                         {
