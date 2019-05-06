@@ -97,6 +97,13 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.EditPlatform(platform);
             _unitOfWorkManager.Save();
         }
+        public void DeleteLogoPlatform(int platformId)
+        {
+            Platform platform = GetPlatform(platformId);
+            platform.Logo = null;
+            _projectsRepository.EditPlatform(platform);
+            _unitOfWorkManager.Save();
+        }
 
         #endregion
 
@@ -374,6 +381,6 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
-     
+
     }
 }
