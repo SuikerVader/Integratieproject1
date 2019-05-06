@@ -502,6 +502,21 @@ namespace Integratieproject1.DAL
             await userManager.AddToRoleAsync(organisationTest, "Organisation");
             await userManager.AddToRoleAsync(userTest, "User");
             
+            
+            #region Quinten: temp verificationRequests
+            
+            UsersManager manager = new UsersManager();
+            var req1 = new VerificationRequest();
+            req1.user = userTest;
+            req1.handled = false;
+            req1.request = "notice me";
+            manager.CreateVerificationRequest(req1);
+            Console.WriteLine(req1.user);
+            Console.WriteLine(req1.request);
+            Console.WriteLine(req1.handled);
+
+            #endregion
+
         }
     }
 }

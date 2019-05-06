@@ -36,7 +36,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
         
-        public void CreateIoT(Position position, Idea idea, Question question)
+        public void CreateIoT(Position position, Idea idea, Question question = null)
         {
             IoTSetup setup = new IoTSetup
             {

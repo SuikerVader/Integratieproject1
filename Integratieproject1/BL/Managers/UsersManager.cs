@@ -78,6 +78,7 @@ namespace Integratieproject1.BL.Managers
         public void CreateVerificationRequest(VerificationRequest verificationRequest)
         {
             _usersRepository.CreateVerificationRequest(verificationRequest);
+            Console.WriteLine("@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@#");
         }
 
         public VerificationRequest CreateVerificationRequest(IdentityUser user, string request)
@@ -86,6 +87,7 @@ namespace Integratieproject1.BL.Managers
             verificationRequest.user = user;
             verificationRequest.request = request;
             verificationRequest.handled = false;
+            CreateVerificationRequest(verificationRequest);
             return verificationRequest;
         }
 
