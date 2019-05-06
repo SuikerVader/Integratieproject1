@@ -6,7 +6,7 @@
 }
 
 <form asp-controller="Project"
-      asp-action="PostIdea"
+      @*asp-action="PostIdea"*@
       asp-route-ideationId="@ViewBag.IdeationId"
       asp-route-formFiles="@ViewData["formFiles"]"
       enctype="multipart/form-data"

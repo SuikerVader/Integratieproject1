@@ -10,8 +10,38 @@
         <form asp-controller="SuperAdmin" asp-action="EditPlatform" asp-route-platformId="@Model.PlatformId" method="post" enctype="multipart/form-data">
             <label asp-for="PlatformName">Naam</label>
             <input required asp-for="PlatformName" value="@Model.PlatformName" class="form-control" />
-            <label asp-for="Logo" value="Logo url">Logo Url</label>
-            <input asp-for="Logo" type="url" class="form-control" />
+            <label>Logo Url</label>
+            <label>Logo</label>
+            <div class="form-group" id="logosUpload" >
+                <label for="uploadedLogo" style="width: 100%">
+                    <div class="input-group" >
+                        <span class="form-control" id="chosenLogo">
+                            Kies afbeelding...
+                        </span>
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-outline-secondary">Kies</span>
+                        </div>
+                    </div>
+                </label>
+                <input class="input-default-js"
+                       name="logoFile"
+                       type="file"
+                       id="uploadedLogo"
+                       accept="image/x-png,image/gif,image/jpeg"
+                       onchange="PreviewLogo(this)">
+                @if (Model.BackgroundImage != null)
+                {
+                    <img id="logo" src="@Model.BackgroundImage" style="width: 100px; height: 100px;"/> 
+                    <a class="btn btn-danger" asp-area="" asp-controller="SuperAdmin"
+                       asp-action="DeleteLogoPlatform" asp-route-platformId="@Model.PlatformId">Verwijder Logo
+                    </a>                                                  
+                }
+                else
+                {
+                    <img id="logo" style="width: 100px; height: 100px;display: none"/> 
+                }
+                
+            </div>
             <label asp-for="Description">Beschrijving</label>
             <input asp-for="Description" class="form-control" />
             <label asp-for="Phonenumber">Telefoonnummer</label>
@@ -66,6 +96,28 @@
 
             reader.onloadend = function(event) {
                 var preview = document.getElementById('image');
+                preview.setAttribute('src', event.target.result);
+                preview.setAttribute('alt', 'Image preview...');
+                preview.style.display = 'block';
+            }
+
+            if (files[i]) {
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        chosenImages.innerHTML = files.length + fileInput.getAttribute('data-multiple-target');
+    }
+    function PreviewLogo(fileInput) {
+        var files = fileInput.files;
+        var imagesUpload = document.getElementById('imagesLogo');
+        var chosenImages = document.getElementById('chosenLogo');
+
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onloadend = function(event) {
+                var preview = document.getElementById('logo');
                 preview.setAttribute('src', event.target.result);
                 preview.setAttribute('alt', 'Image preview...');
                 preview.style.display = 'block';

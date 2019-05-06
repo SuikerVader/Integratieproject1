@@ -42,19 +42,24 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [StringLength(25, ErrorMessage = "De {0} moet minstens {2} en max {1} karakters lang zijn.", MinimumLength = 1)]
+            [Display(Name = "Gebruikersnaam")]
+            public string Username { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "De {0} moet minstens {2} en max {1} karakters lang zijn.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Het wachtwoord en de bevestiging komen niet overeen.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -68,13 +73,13 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email};
+                var user = new IdentityUser { UserName = Input.Username, Email = Input.Email};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 UsersManager usersManager = new UsersManager();
                 usersManager.GiveRole(user.Id,"USER");
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Gebruiker heeft nieuw account met wachtwoord gemaakt.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(

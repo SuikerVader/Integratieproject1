@@ -171,7 +171,7 @@ namespace Integratieproject1.UI.Controllers
                 {
                     if (_surveysManager.IsEmail(surveyId, Convert.ToInt32(pair.Key)))
                     {
-                        var apiKey = "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";
+                        var apiKey = "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";
                         var client = new SendGridClient(apiKey);
                         var msg = new SendGridMessage()
                         {
@@ -238,7 +238,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
+        /*public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
         {
             ArrayList parameters = new ArrayList();
 
@@ -266,29 +266,27 @@ namespace Integratieproject1.UI.Controllers
             {
                 throw new Exception("fout createIdea");
             }
-        }
+        }*/
 
-        private void UploadImages(List<IFormFile> formFiles, int ideaId)
+        private void UploadImage(IFormFile formFile, int ideaId)
         {
             string wwwroot = "wwwroot/";
             string uploads = "/images/uploads/";
             string path = wwwroot + uploads;
 
-            foreach (var file in formFiles)
-            {
-                if (file.Length > 0)
+            
+                if (formFile.Length > 0)
                 {
-                    string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    string imagePath = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
 
                     using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
                     {
-                        file.CopyTo(fileStream);
+                        formFile.CopyTo(fileStream);
                     }
 
-                    _ideationsManager.CreateImage(Path.GetFileName(file.FileName), Path.Combine(uploads, imagePath),
+                    _ideationsManager.CreateImage(Path.GetFileName(formFile.FileName), Path.Combine(uploads, imagePath),
                         ideaId);
                 }
-            }
         }
 
 
@@ -367,9 +365,9 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
-        public IActionResult AddImage(List<IFormFile> formFiles, int ideaId)
+        public IActionResult AddImage(IFormFile formFile, int ideaId)
         {
-            UploadImages(formFiles, ideaId);
+            UploadImage(formFile, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
