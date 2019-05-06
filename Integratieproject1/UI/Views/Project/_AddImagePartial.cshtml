@@ -12,7 +12,7 @@
                     <label for="uploadedImages" style="width: 100%">
                         <div class="input-group" >
                             <span class="form-control" id="chosenImages">
-                                Kies afbeeldingen...
+                                Kies afbeelding...
                             </span>
                             <div class="input-group-append">
                                 <span class="input-group-text btn btn-outline-secondary">Kies</span>
@@ -20,11 +20,9 @@
                         </div>
                     </label>
                     <input class="input-default-js"
-                           name="formFiles"
+                           name="formFile"
                            type="file"
-                           multiple
                            required
-                           data-multiple-target=" files selected"
                            id="uploadedImages"
                            accept="image/x-png,image/gif,image/jpeg"
                            onchange="PreviewImage(this)">

@@ -47,6 +47,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Ideations
                 .Where(i => i.Phase.Project.Platform.PlatformId == platformId)
+                .Include(i => i.Phase).ThenInclude(p => p.Project)
                 .AsEnumerable();
         }
 
