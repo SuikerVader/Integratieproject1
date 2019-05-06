@@ -147,14 +147,14 @@
             <p>
                 <div class="d-flex flex-row justify-content-between">
 
-                    <p>
-                        <small>
-                            <strong>@reaction.IdentityUser.Email:</strong>
-                        </small>
-                        <small>@reaction.ReactionText</small>
-                    </p>
-                    <p>
-                        @if (User.Identity.IsAuthenticated)
+                        <p>
+                            <small>
+                                <strong>@reaction.IdentityUser.UserName:</strong>
+                            </small>
+                            <small>@reaction.ReactionText</small>
+                        </p>
+                        <p>
+                            @if (User.Identity.IsAuthenticated)
                         {
                             var userVoted = false;
                             
