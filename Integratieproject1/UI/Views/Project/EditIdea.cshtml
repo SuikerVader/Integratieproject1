@@ -183,6 +183,19 @@
 
 
 </div>
+<div class="dropdown">
+    
+    <input type="text" placeholder="Search.." id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()">
+    <div id="ideaDropdown" class="dropdown-content">
+        <a href="#about">About</a>
+        <a href="#base">Base</a>
+        <a href="#blog">Blog</a>
+        <a href="#contact">Contact</a>
+        <a href="#custom">Custom</a>
+        <a href="#support">Support</a>
+        <a href="#tools">Tools</a>
+    </div>
+</div>
 <script>
     function showHide(id) {
         var x = document.getElementById(id);
@@ -199,6 +212,54 @@
         
     }
 </script>
+<script>
+    function showIdeaResults() {
+        document.getElementById("ideaDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("ideaInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("ideaDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
 </script>
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        overflow: auto;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown a:hover {background-color: #ddd;}
+
+    .show {display: block;}
+</style>

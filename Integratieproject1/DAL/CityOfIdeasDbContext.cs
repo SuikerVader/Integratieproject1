@@ -59,6 +59,7 @@ namespace Integratieproject1.DAL
     {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source=CityOfIdeas.db");
+            //optionsBuilder.UseSqlServer("Server=146.148.126.19;Database=db1;User=root;Password=KdG241Rk");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(
                 providers: new[]
                 {
