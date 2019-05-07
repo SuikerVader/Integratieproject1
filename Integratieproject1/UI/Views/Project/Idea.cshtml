@@ -27,7 +27,7 @@
     <div class="card text-center" style="border: none;">
         <div class="card-body">
             <div class="d-flex flex-row justify-content-end">
-                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.Email || User.IsInRole("Admin") || User.IsInRole("Mod")))
+                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.UserName || User.IsInRole("Admin") || User.IsInRole("Mod")))
                 {
                     <a style="padding: 5px" asp-area="" asp-controller="Project"
                        asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
@@ -160,7 +160,7 @@
                             
                             foreach (var like in reaction.Likes)
                             {
-                                if (User.Identity.Name == like.IdentityUser.Email)
+                                if (User.Identity.Name == like.IdentityUser.UserName)
                                 {
                                     userVoted = true;
                                     break;
@@ -172,7 +172,7 @@
                             }
                             else
                             {
-                                <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
+                                <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="idea" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
                                     <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
                                 </a>
                             }

@@ -72,7 +72,7 @@
                                         }
                                         @foreach (var like in reaction.Likes)
                                         {
-                                            if (User.Identity.Name == like.IdentityUser.Email)
+                                            if (User.Identity.Name == like.IdentityUser.UserName)
                                             {
                                                 userVoted = true;
                                                 break;
@@ -84,7 +84,7 @@
                                         }
                                         else
                                         {
-                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="idea" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
                                                 <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
                                             </a>
                                         }
