@@ -1,0 +1,175 @@
+@using Integratieproject1.Domain.Datatypes
+@using Integratieproject1.Domain.Ideations
+@using Integratieproject1.Domain.Projects
+@using Integratieproject1.Domain.Surveys
+@model Integratieproject1.Domain.Ideations.Idea
+
+@{
+    ViewBag.Title = "IdeaPage";
+    ViewBag.IdeaId = Model.IdeaId;
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="text-center" style="padding: 30px">
+        <h2>Edit Idea</h2>
+    </div>
+    <div id="editIdeaGrid">
+        <div id="editIdeaInfo">
+            <div class="card text-center infoCard">
+                <div class="card-body">
+                    <h5>Info:</h5>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
+                    Phase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+                    @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
+                    Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
+                </div>
+            </div>
+        </div>
+        <div id="editIdeaTitle" class="text-center">
+            <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
+                <label asp-for="Title">
+                    <h5>Title:</h5>
+                </label>
+                @if (Model.Title.Equals("_NewIdea_"))
+                {
+                    <input required asp-for="Title" value="" class="form-control"/>
+                }
+                else
+                {
+                    <input required asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
+                }
+                <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
+                @if (Model.Title.Equals("_NewIdea_"))
+                {
+                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                       asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
+                        Cancel new idea
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                       asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
+                        Delete idea
+                    </a>
+                }
+            </form>
+        </div>
+        <div id="editIdeaObjects">
+            @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
+            {
+                foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
+                {
+                    <div class="d-flex flex-row justify-content-start">
+                        <div class="d-flex flex-column justify-content-start align-items-center" style="width: 3%; padding-top: 10px">
+                            @if (ideaObject.OrderNr > 1)
+                            {
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="OrderNrUp" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            }
+                            @if (ideaObject.OrderNr < Model.IdeaObjects.Count)
+                            {
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="OrderNrDown" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                            }
+                        </div>
+                        <div class="card" style="padding: 10px; width: 97%;">
+
+                            @if (ideaObject.GetType() == typeof(TextField))
+                            {
+                                var textField = (TextField) ideaObject;
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <p>@textField.Text</p>
+                                    <div>
+                                        <button class="btn btn-primary" onclick="showHide('@textField.IdeaObjectId.ToString()editTextField')">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
+                                    @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
+                                </div>
+                            }
+                            @if (ideaObject.GetType() == typeof(Image))
+                            {
+                                var image = (Image) ideaObject;
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
+                                    <div>
+                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                           asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            }
+                            @if (ideaObject.GetType() == typeof(Video))
+                            {
+                                var video = (Video) ideaObject;
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <iframe src="@video.Url" width="100%"
+                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                    </iframe>
+                                    <br/>
+                                    <div>
+                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                           asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            
+            <div id="newTextField" style="display: none">
+                @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
+            </div>
+            <div id="newImage" style="display: none">
+                @await Html.PartialAsync("_AddImagePartial.cshtml")
+            </div>
+            <div id="newVideo" style="display: none">
+                @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
+            </div>
+            @if (!Model.Title.Equals("_NewIdea_"))
+            {
+                <div class="d-flex flex-row justify-content-end">
+                    <div class="dropdown">
+                        <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">TextField</button>
+                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Image</button>
+                            <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+
+
+</div>
+<script>
+    function showHide(id) {
+        var x = document.getElementById(id);
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+</script>

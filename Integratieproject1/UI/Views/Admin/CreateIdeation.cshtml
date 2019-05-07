@@ -1,0 +1,44 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Ideations.Ideation
+
+@{
+    ViewBag.Title = "PhasePage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Create Ideation</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId" method="post">
+                    <label asp-for="CentralQuestion"></label>
+                    <input required asp-for="CentralQuestion" class="form-control"/>
+                    <formgroup>
+                        <label asp-for="InputIdeation"></label><br/>
+                        <input asp-for="InputIdeation" value="True" type="radio">yes<br/>
+                        <input asp-for="InputIdeation" value="False" type="radio">no<br/>
+                    </formgroup>
+                    <input class="btn btn-primary" type="submit" value="Add Ideation">
+                </form>
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5>
+                        <strong>Info:</strong>
+                    </h5>
+                    <strong>Project:</strong> @ViewBag.Phase.Project.ProjectName<br/>
+                    <strong>Phase:</strong> @ViewBag.Phase.PhaseName<br/>
+                    <strong>Phase periode:</strong><br/>
+                    @ViewBag.Phase.StartDate.ToString("d") - @ViewBag.Phase.EndDate.ToString("d")<br/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,19 @@
+@using Integratieproject1.Domain.Projects
+@using Integratieproject1.Domain.Surveys
+@model Answer
+
+@{
+    ViewBag.Title = "EditAnswer";
+}
+
+<div>
+    <form class="form-inline" asp-controller="Admin" asp-action="EditAnswer" asp-route-questionId="@Model.Question.QuestionId" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId" method="post">
+        <input required asp-for="AnswerText" value="@Model.AnswerText" class="form-control"/>
+        <input class="btn btn-outline-primary btn-sm" type="submit" value="Edit Answer">
+        <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="Admin"
+           asp-action="DeleteAnswer" asp-route-answerId="@Model.AnswerId" asp-route-surveyId="@ViewBag.SurveyId">Delete answer
+        </a>
+    </form>
+    
+
+</div>

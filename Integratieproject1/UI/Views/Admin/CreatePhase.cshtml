@@ -1,0 +1,58 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Projects.Phase
+
+@{
+    ViewBag.Title = "PhasePage";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Create Phase</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="Admin" asp-action="AddPhase" asp-route-phaseNr="@Model.PhaseNr" asp-route-projectId="@Model.Project.ProjectId" method="post">
+                    <label asp-for="PhaseName"></label>
+                    <input required asp-for="PhaseName" class="form-control"/>
+                    <label asp-for="StartDate"></label>
+                    @if (Model.PhaseNr == 1)
+                    {
+                        <input required readonly="readonly" asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate"></label>
+                        <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+                    else
+                    {
+                        <input required asp-for="StartDate" value="@Model.StartDate" type="datetime" class="form-control"/>
+                        <label asp-for="EndDate"></label>
+                        <input required readonly="readonly" asp-for="EndDate" value="@Model.EndDate" type="datetime" class="form-control"/>
+                    }
+
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" class="form-control"/>
+                    <input class="btn btn-primary" type="submit" value="Add Phase">
+                </form>
+
+            </div>
+        </div>
+        <div class="adminInfo">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h5><strong>Info:</strong></h5>
+                    <strong>Project:</strong> @Model.Project.ProjectName<br/>
+                    <strong>Project periode:</strong> <br/>
+                    @Model.Project.StartDate.ToString("d") - @Model.Project.EndDate.ToString("d")
+                    <br/>
+                    <br/>
+                    <strong>Phase:</strong> @Model.PhaseName<br/>
+                    <strong>PhaseNr:</strong> @Model.PhaseNr<br/>
+                    <strong>Phase periode:</strong>  <br/>
+                    @Model.StartDate.ToString("d") - @Model.EndDate.ToString("d")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

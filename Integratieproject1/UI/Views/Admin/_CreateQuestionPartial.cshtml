@@ -1,0 +1,17 @@
+@using Integratieproject1.Domain.Projects
+@using Integratieproject1.Domain.Surveys
+@model Integratieproject1.Domain.Surveys.Question
+
+@{
+    ViewBag.Title = "AddQuestionPage";
+}
+
+<div>
+    <form class="form-inline" asp-controller="Admin" asp-action="AddQuestion" asp-route-surveyId="@ViewBag.SurveyId" method="post">
+        <input class="form-control" required asp-for="QuestionText" placeholder="Question text ..." class="form-control"/>
+        <select class="form-control" asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionType>()">
+        </select>
+        <input class="btn btn-primary btn-sm" type="submit" value="Add Question">
+    </form>
+    
+</div>

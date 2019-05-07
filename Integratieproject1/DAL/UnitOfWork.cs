@@ -6,21 +6,21 @@ namespace Integratieproject1.DAL
     {
         public UnitOfWork()
         {
-            ctx = new CityOfIdeasDbContext(true);
+            Ctx = new CityOfIdeasDbContext(true);
             /*Console.WriteLine("uow fixed!");
             CityOfIdeasDbInitializer.Initialize(ctx,true);*/
         }
 
         public UnitOfWork(CityOfIdeasDbContext ctx)
         {
-            this.ctx = ctx;
+            Ctx = ctx;
         }
-        internal CityOfIdeasDbContext ctx { get; }
+        
+        internal CityOfIdeasDbContext Ctx { get; }
 
         public void CommitChanges()
         {
-            ctx.CommitChanges();
+            Ctx.CommitChanges();
         }
-
     }
 }

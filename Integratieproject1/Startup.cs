@@ -2,21 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Integratieproject1.Areas.Identity;
+using Integratieproject1.Areas.Identity.Services;
+using Integratieproject1.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static Integratieproject1.DAL.MqttClient;
 
 namespace Integratieproject1
 {
     public class Startup
     {
+        private MqttClient mqttClient = new MqttClient();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
         }
 
         public IConfiguration Configuration { get; }
@@ -29,14 +37,27 @@ namespace Integratieproject1
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            }).Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            }).AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
 
-
+            // requires
+            // using Microsoft.AspNetCore.Identity.UI.Services;
+            // using WebPWrecover.Services;
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -50,6 +71,7 @@ namespace Integratieproject1
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
@@ -58,6 +80,9 @@ namespace Integratieproject1
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
+
+
         }
     }
 }

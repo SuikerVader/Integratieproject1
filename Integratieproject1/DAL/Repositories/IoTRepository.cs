@@ -9,27 +9,37 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class IoTRepository : IIoTRepository
     {
-        private readonly CityOfIdeasDbContext ctx = null;
+        private readonly CityOfIdeasDbContext _ctx;
         public IoTRepository( UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
+                throw new ArgumentNullException(nameof(unitOfWork));
 
-            ctx = unitOfWork.ctx;
+            _ctx = unitOfWork.Ctx;
         }
         public IEnumerable<IoTSetup> GetIoTSetups()
         {
-            return ctx.IoTSetups.AsEnumerable();
+            return _ctx.IoTSetups.AsEnumerable();
         }
         public IoTSetup GetIoTSetup(int ioTSetupId)
         {
-            return ctx.IoTSetups.Find(ioTSetupId);
+            return _ctx.IoTSetups.Find(ioTSetupId);
         }
         public IoTSetup CreateIoTSetup(IoTSetup ioTSetup)
         {
-            ctx.IoTSetups.Add(ioTSetup);
-            ctx.SaveChanges();
+            _ctx.IoTSetups.Add(ioTSetup);
+            _ctx.SaveChanges();
             return ioTSetup;
+        }
+
+        public void RemoveIoTSetup(IoTSetup ioTSetup)
+        {
+            _ctx.IoTSetups.Remove(ioTSetup);
+            _ctx.SaveChanges();
+        }
+        public IoTSetup GetIoTSetupByIdea(int id)
+        {
+            return _ctx.IoTSetups.First(ioTSetup => ioTSetup.Idea.IdeaId == id);
         }
     }
 }

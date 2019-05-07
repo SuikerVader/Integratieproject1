@@ -1,4 +1,5 @@
 using Integratieproject1.Domain.Projects;
+using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.BL.Interfaces
 {
@@ -7,8 +8,9 @@ namespace Integratieproject1.BL.Interfaces
         Platform GetPlatform(int platformId);
         void CreatePlatform(Platform platform);
         Project GetProject(int projectId);
-        void CreateProject(Project project);
+        void CreateProject(Project project, string id, int platformId);
+        IdentityUser GetUser(string id);
         Phase GetPhase(int phaseId);
-        void CreatePhase(Phase phase);
+        Phase CreatePhase(Phase phase, int phaseNr, int projectId);
     }
 }

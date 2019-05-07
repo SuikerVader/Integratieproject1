@@ -6,18 +6,14 @@ namespace Integratieproject1.Domain.Ideations
 {
     public class Ideation
     {
+        [Key] public int IdeationId { get; set; }
+        [Required] public string CentralQuestion { get; set; }
 
-    [Key]
-    public int IdeationId { get; set; }
-    [Required]
-    public string CentralQuestion { get; set; }
-    [Required]
-    public bool InputIdeation { get; set; }
-    [Required] public Phase Phase { get; set; }
-    public ICollection<Reaction> Reactions { get; set; }
-    public ICollection<Idea> Ideas { get; set; }
-    
-    /*[ForeignKey("Phase")]
-    public int PhaseFk { get; set; }*/
-  }
+        [Required] public bool InputIdeation { get; set; }
+
+        //[Required] 
+        public Phase Phase { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<Idea> Ideas { get; set; }
+    }
 }

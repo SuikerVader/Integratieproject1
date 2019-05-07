@@ -9,75 +9,134 @@ namespace Integratieproject1.DAL.Repositories
 {
     public class SurveysRepository : ISurveysRepository
     {
-        private readonly CityOfIdeasDbContext ctx = null;
+        private readonly CityOfIdeasDbContext _ctx;
 
         
         public SurveysRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
+                throw new ArgumentNullException(nameof(unitOfWork));
 
-            ctx = unitOfWork.ctx;
+            _ctx = unitOfWork.Ctx;
         }
-        
-        
+
+        #region Survey
+
         // Survey methods
-        public IEnumerable<Survey> GetSurveys()
+        public IEnumerable<Survey> GetSurveys(int phaseId)
         {
-            return ctx.Surveys.AsEnumerable();
+            return _ctx.Surveys
+                .Where(p => p.Phase.PhaseId == phaseId)
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .AsEnumerable();
+        }
+        public Survey GetOnlySurvey(int surveyId)
+        {
+            return _ctx.Surveys.Find(surveyId);
         }
         public Survey GetSurvey(int surveyId)
         {
-            return ctx.Surveys.Include(q => q.Questions).ThenInclude(a => a.Answers).Single(s => s.SurveyId == surveyId);;
+            return _ctx.Surveys
+                .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Include(p => p.Phase).ThenInclude(pr => pr.Project)
+                .Single(s => s.SurveyId == surveyId);
         }
         public Survey CreateSurvey(Survey survey)
         {
-            ctx.Surveys.Add(survey);
-            ctx.SaveChanges();
+            _ctx.Surveys.Add(survey);
+            _ctx.SaveChanges();
             return survey;
         }
-        
-        // Question methods
-        public IEnumerable<Question> GetQuestions()
+        public Survey EditSurvey(Survey survey)
         {
-            return ctx.Questions.AsEnumerable();
+            _ctx.Surveys.Update(survey);
+            _ctx.SaveChanges();
+            return survey;
         }
+        public void RemoveSurvey(Survey survey)
+        {
+            _ctx.Surveys.Remove(survey);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+        
+        #region Question
+
+        // Question methods
+        public IEnumerable<Question> GetQuestions(int surveyId)
+        {
+            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr).AsEnumerable();
+        }
+
         public Question GetQuestion(int questionId)
         {
-            return ctx.Questions.Find(questionId);
-        }
-        public Question CreateQuestion(Question question)
-        {
-            ctx.Questions.Add(question);
-            ctx.SaveChanges();
-            return question;
+            return _ctx.Questions.Find(questionId);
         }
         
+        public Question EditQuestion(Question question)
+        {
+            _ctx.Questions.Update(question);
+            _ctx.SaveChanges();
+            return question;
+        }
+
+        public Question CreateQuestion(Question question)
+        {
+            _ctx.Questions.Add(question);
+            _ctx.SaveChanges();
+            return question;
+        }
+        public void RemoveQuestion(Question question)
+        {
+            _ctx.Questions.Remove(question);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+
+        #region Answer
         // Answer methods
         public IEnumerable<Answer> GetAnswers()
         {
-            return ctx.Answers.AsEnumerable();
+            return _ctx.Answers.AsEnumerable();
         }
+
         public Answer GetAnswer(int answerId)
         {
-            return ctx.Answers.Find(answerId);
+            return _ctx.Answers.Find(answerId);
         }
+
         public Answer CreateAnswer(Answer answer)
         {
-            ctx.Answers.Add(answer);
-            ctx.SaveChanges();
+            _ctx.Answers.Add(answer);
+            _ctx.SaveChanges();
+            return answer;
+        }
+        public Answer EditAnswer(Answer answer)
+        {
+            _ctx.Answers.Update(answer);
+            _ctx.SaveChanges();
             return answer;
         }
 
         public Answer UpdateAnswer(Answer answer)
         {
             Console.WriteLine("repo update called!");
-            Answer answer1 = new Answer();
-            answer1 = ctx.Answers.Find(answer.AnswerId);
+            Answer answer1 = _ctx.Answers.Find(answer.AnswerId);
             answer1.TotalTimesChosen += 1;
-            ctx.Entry(answer1).State = EntityState.Modified;
-            ctx.SaveChanges();
+            _ctx.Entry(answer1).State = EntityState.Modified;
+            _ctx.SaveChanges();
             return answer;
         }
+
+        public void RemoveAnswer(Answer answer)
+        {
+            _ctx.Answers.Remove(answer);
+            _ctx.SaveChanges();
+        }
+        
+
+        #endregion
     }
 }

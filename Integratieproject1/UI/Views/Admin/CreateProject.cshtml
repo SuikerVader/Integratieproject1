@@ -5,9 +5,34 @@
     ViewBag.Title = "AdminPage";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-
-<h2>New Project</h2>
-<div>
-    
-    
+<div class="container">
+    <h2>New Project</h2>
+    <div>
+        <form asp-controller="Admin" asp-action="CreateProject" method="post">
+            <label asp-for="ProjectName"></label>
+            <input required asp-for="ProjectName" class="form-control"/>
+            <label asp-for="StartDate"></label>
+            <input required asp-for="StartDate" type="date" class="form-control"/>
+            <label asp-for="EndDate"></label>
+            <input required asp-for="EndDate" type="date" class="form-control"/>
+            <label asp-for="Logo" value="Logo url"></label>
+            <input asp-for="Logo" type="url" class="form-control"/>
+            <label asp-for="Objective"></label>
+            <input asp-for="Objective" class="form-control"/>
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control"/>
+            <label asp-for="Location.Address.City" value="City"></label>
+            <input required asp-for="Location.Address.City" class="form-control"/>
+            <label asp-for="Location.Address.Street" value="Street"></label>
+            <input required asp-for="Location.Address.Street" class="form-control"/>
+            <label asp-for="Location.Address.HouseNr" value="House nr"></label>
+            <input required asp-for="Location.Address.HouseNr" class="form-control"/>
+            <label asp-for="Location.Address.ZipCode" value="Zipcode"></label>
+            <input required asp-for="Location.Address.ZipCode" class="form-control"/>
+            <label asp-for="Location.LocationName" value="Location name"></label>
+            <input required asp-for="Location.LocationName" class="form-control"/>
+            <input class="btn btn-primary" type="submit" value="Create Project">
+        </form>
+        
+    </div>
 </div>

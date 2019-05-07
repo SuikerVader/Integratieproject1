@@ -8,5 +8,6 @@ namespace Integratieproject1.DAL.Interfaces
         IEnumerable<IoTSetup> GetIoTSetups();
         IoTSetup GetIoTSetup(int ioTSetupId);
         IoTSetup CreateIoTSetup(IoTSetup ioTSetup);
+        IoTSetup GetIoTSetupByIdea(int id);
     }
 }

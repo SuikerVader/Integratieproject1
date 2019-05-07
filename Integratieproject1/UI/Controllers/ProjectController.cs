@@ -1,124 +1,312 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using Integratieproject1.BL.Managers;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Primitives;
 
 namespace Integratieproject1.UI.Controllers
 {
     public class ProjectController : Controller
     {
-        private ProjectsManager projectsManager;
-        private IdeationsManager ideationsManager;
-        private SurveysManager surveysManager;
-
+        private readonly ProjectsManager _projectsManager;
+        private readonly IdeationsManager _ideationsManager;
+        private readonly SurveysManager _surveysManager;
+        private readonly DataTypeManager _dataTypeManager;
 
         public ProjectController()
         {
-            projectsManager = new ProjectsManager();
-            ideationsManager = new IdeationsManager();
-            surveysManager = new SurveysManager();
-            
+            _projectsManager = new ProjectsManager();
+            _ideationsManager = new IdeationsManager();
+            _surveysManager = new SurveysManager();
+            _dataTypeManager = new DataTypeManager();   
         }
 
         public IActionResult Project(int projectId)
         {
-            Project project = projectsManager.GetProject(projectId);
+            Project project = _projectsManager.GetProject(projectId);
             return View("/UI/Views/Project/Project.cshtml", project);
         }
 
         public IActionResult Ideation(int ideationId)
         {
-            Ideation ideation = ideationsManager.GetIdeation(ideationId);
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
             return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
 
         public IActionResult Survey(int surveyId)
         {
-            Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
+            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/Survey.cshtml", survey);
         }
 
         public IActionResult Idea(int ideaId)
         {
-            Domain.Ideations.Idea idea = ideationsManager.GetIdea(ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
-        [HttpPost]    
-        public IActionResult PostReaction(IFormCollection formCollection, int ideaId)
+        
+        public IActionResult ReportPost(int id, string type)
+        {
+            _ideationsManager.ReportPost( id, type);
+            if (type.Equals("reaction"))
+            {
+                Reaction reaction = _ideationsManager.GetReaction(id);
+                if (reaction.Idea == null && reaction.Ideation != null)
+                {
+                    Ideation ideation = _ideationsManager.GetIdeation(reaction.Ideation.IdeationId);
+                    return View("/UI/Views/Project/Ideation.cshtml", ideation);
+                }else
+                {
+                    Idea idea = _ideationsManager.GetIdea(reaction.Idea.IdeaId);
+                    return View("/UI/Views/Project/Idea.cshtml", idea);
+                }   
+            }else
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                return View("/UI/Views/Project/Idea.cshtml", idea);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult PostReaction(IFormCollection formCollection, int id, string element)
         {
             ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 parameters.Add(pair.Value);
             }
-            ideationsManager.PostReaction(parameters, ideaId);
-            Idea idea = ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
+            
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            _ideationsManager.PostReaction(parameters, id, currentUserId, element);
+            if (element.Equals("idea"))
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                            return View("/UI/Views/Project/Idea.cshtml", idea);
+            } else if(element.Equals("ideation"))
+
+            {
+                Domain.Ideations.Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            else
+            {
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            
         }
 
         [HttpPost]
         public IActionResult SaveSurveyFormData(IFormCollection formCollection, int surveyId)
         {
             ArrayList answers = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 answers.Add(pair.Value);
             }
-            surveysManager.UpdateAnswers(answers, surveyId);
-            Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
+
+            _surveysManager.UpdateAnswers(answers, surveyId);
+            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
 
         public IActionResult SurveyResults(int surveyId)
         {
-            Domain.Surveys.Survey survey = surveysManager.GetSurvey(surveyId);
+            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
             return View("/UI/Views/Project/SurveyResults.cshtml", survey);
         }
 
-        /*public IActionResult CreateVote(int ideaId, VoteType voteType)
+        public IActionResult CreateVote(int ideaId, VoteType voteType)
         {
-            ideationsManager.CreateVote(ideaId,voteType);
-            Idea idea = ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
-        }*/
-        public IActionResult CreateUserVote(int ideaId, VoteType voteType ,IFormCollection formCollection) 
-        {
-            ArrayList parameters = new ArrayList();
-           
-                foreach (KeyValuePair<string,StringValues> pair in formCollection)
-                {
-                    parameters.Add(pair.Value);
-                }
-
-                if (parameters.Count > 0)
-                {
-                    ideationsManager.CreateVote(ideaId, voteType, parameters[0].ToString());         
-                }
-                else
-                {
-                    throw new Exception("fout createVote");
-                }
-            Idea idea = ideationsManager.GetIdea(ideaId);
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            _ideationsManager.CreateVote(ideaId, voteType, currentUserId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
-        public IActionResult LikeReaction(int ideaId,int reactionId, IFormCollection formCollection)
+        public IActionResult LikeReaction(int id, string type, int reactionId)
+        {
+
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            _ideationsManager.LikeReaction(reactionId, currentUserId);
+            if (type.Equals("idea"))
+            {
+              Idea idea = _ideationsManager.GetIdea(id);
+                          return View("/UI/Views/Project/Idea.cshtml", idea);  
+            }
+            else
+            {
+                Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            
+        }
+
+        [HttpPost]
+        public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
         {
             ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string,StringValues> pair in formCollection)
+
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
             {
                 parameters.Add(pair.Value);
             }
-            ideationsManager.LikeReaction(reactionId, parameters[0].ToString());
-            Idea idea = ideationsManager.GetIdea(ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
 
+            if (parameters.Count > 0)
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+ 
+                Idea idea = _ideationsManager.PostIdea(parameters, ideationId, currentUserId);
+
+                if (formFiles.Count > 0)
+                {
+                    UploadImages(formFiles, idea.IdeaId);
+                }
+                
+                Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            else
+            {
+                throw new Exception("fout createIdea");
+            }
         }
+
+        private void UploadImages(List<IFormFile> formFiles, int ideaId)
+        {
+            string wwwroot = "wwwroot/";
+            string uploads = "/images/uploads/";
+            string path = wwwroot + uploads;
+
+            foreach (var file in formFiles)
+            {
+                if (file.Length > 0)
+                {
+                    string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+
+                    using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    _ideationsManager.CreateImage(Path.GetFileName(file.FileName), Path.Combine(uploads, imagePath), ideaId);
+                }
+            }
+        }
+
+
+        public IActionResult CreateIdea(int ideationId )
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult EditIdea(int ideaId)
+        {
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        [HttpPost]
+        public IActionResult EditIdea(Idea idea,int ideaId, int ideationId)
+        {
+            _ideationsManager.EditIdea(idea, ideaId);
+            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", returnIdea);
+        }
+        public IActionResult OrderNrUp(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult OrderNrDown(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult DeleteIdea(int ideaId, int ideationId)
+        {
+            _ideationsManager.DeleteIdea(ideaId);
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Project/Ideation.cshtml", ideation);
+        }
+        public IActionResult AddVideo(Video video, int ideaId)
+        {
+            _ideationsManager.AddVideo(video, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult AddTextField(TextField textField, int ideaId)
+        {
+            _ideationsManager.AddTextField(textField, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        public IActionResult EditTextField(TextField textField, int ideaId, int textFieldId)
+        {
+            _ideationsManager.EditTextField(textField, textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult AddImage(List<IFormFile> formFiles, int ideaId)
+        {
+            UploadImages(formFiles,ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult DeleteImage(int imageId, int ideaId)
+        {
+            _ideationsManager.DeleteImage(imageId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+        public IActionResult DeleteVideo(int videoId, int ideaId)
+        {
+            _ideationsManager.DeleteVideo(videoId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        public IActionResult DeleteTextField(int textFieldId, int ideaId)
+        {
+            _ideationsManager.DeleteTextField(textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);  
+        }
+
+        
     }
 }
