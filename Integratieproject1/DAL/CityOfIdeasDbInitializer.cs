@@ -249,14 +249,17 @@ namespace Integratieproject1.DAL
             #region Persons
             IdentityUser person = new IdentityUser
             {
+                UserName = "Albert",
                 Email = "testPerson1@test.com"
             };
             IdentityUser organisation = new IdentityUser
             {
+                UserName = "McDonalds",
                 Email = "testOrganisation1@test.com"
             };
             IdentityUser admin = new IdentityUser
             {
+                UserName = "TestAdmin",
                 Email = "testAdmin1@test.com"
             };
 
@@ -604,12 +607,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true };
+            var superAdminTest = new IdentityUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true};
+            var adminTest = new IdentityUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new IdentityUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true };
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true };
+                {UserName = "Organisation", Email = "organisation@gmail.com", EmailConfirmed = true };
+            var userTest = new IdentityUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");
