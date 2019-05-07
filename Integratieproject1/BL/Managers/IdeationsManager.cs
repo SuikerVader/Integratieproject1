@@ -277,12 +277,28 @@ namespace Integratieproject1.BL.Managers
         
         public void AddPosition(Position position, int ideaId)
         {
+            
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
             
+
             Idea idea = GetIdea(ideaId);
-            idea.Position = position;
-            _ideationsRepository.UpdateIdea(idea);
+            Idea editIdea = new Idea()
+            {
+                IdeaId = idea.IdeaId,
+                Reported = idea.Reported,
+                Title = idea.Title,
+                IdentityUser = idea.IdentityUser,
+                Ideation = idea.Ideation,
+                IdeaObjects = idea.IdeaObjects,
+                IoTSetups = idea.IoTSetups,
+                Votes = idea.Votes,
+                Reactions = idea.Reactions,
+                
+                Position = position,
+            };
+            _ideationsRepository.RemoveIdea(idea);
+            _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
 

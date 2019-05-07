@@ -182,7 +182,7 @@
 <script>
     function displayPhase(id) {
         var btn = document.getElementById(id);
-        var phase = document.getElementById("phase+" + id.charAt(id.length - 1));
+        var phase = document.getElementById("phase+" + id.substring(9));
         var buttons = document.getElementsByClassName("btnPhase");
         var phases = document.getElementsByClassName("phase");
         var i;
