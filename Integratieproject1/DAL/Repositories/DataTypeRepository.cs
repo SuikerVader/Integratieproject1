@@ -52,6 +52,12 @@ namespace Integratieproject1.DAL.Repositories
             return position;
         }
 
+        public void DeletePosition(Position position)
+        {
+            _ctx.Positions.Remove(position);
+            _ctx.SaveChanges();
+        }
+
         public Position GetPosition(int positionId)
         {
            return  _ctx.Positions.Find(positionId);
