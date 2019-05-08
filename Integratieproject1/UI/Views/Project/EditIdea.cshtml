@@ -70,23 +70,28 @@
                 }
 
             </form>
-            @if (Model.Position != null && Model.Title.Equals("_NewIdea_"))
+            @if (Model.Ideation.Map)
             {
-                <div class="card">
-                    <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
-                </div>
-                <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
-                <div class="text-center" id="editLocation" style="display: none">
-                    @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
-                </div>
+                @if (Model.Position != null && Model.Title.Equals("_NewIdea_"))
+                {
+                    <div class="card">
+                        <partial name="/UI/Views/Project/_MapPartial.cshtml" />
+                    </div>
+                    <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+                    <div class="text-center" id="editLocation" style="display: none">
+                        @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
+                    </div>
+
+                }
+                else
+                {
+                    <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
+                    <div class="text-center" id="addLocation" style="display: none">
+                        @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+                    </div>
+                }
             }
-            else
-            {
-                <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
-                <div class="text-center" id="addLocation" style="display: none">
-                    @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
-                </div>
-            }
+
         </div>
         <div id="editIdeaObjects">
             @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
@@ -134,12 +139,14 @@
                                 <div class="d-flex flex-row justify-content-between align-items-center">
                                     <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
                                     <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
                                     </div>
-
                                 </div>
                             }
                             @if (ideaObject.GetType() == typeof(Video))
@@ -151,10 +158,13 @@
                                     </iframe>
                                     <br/>
                                     <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
                                     </div>
 
                                 </div>
@@ -181,9 +191,18 @@
                             <i class="fa fa-plus"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
-                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
-                            <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                            @if (Model.Ideation.Text || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
+                            }
+                            @if (Model.Ideation.Image || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
+                            }
+                            @if (Model.Ideation.Video || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                            }
                         </div>
                     </div>
                 </div>
