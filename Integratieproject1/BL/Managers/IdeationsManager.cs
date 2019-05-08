@@ -174,6 +174,14 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
         }
+        
+        public IList<Idea> GetOtherIdeas(int ideationId)
+        {
+            Ideation ideation = GetIdeation(ideationId);
+            List<Idea> ideas = ideation.Ideas.ToList();
+
+            return ideas;
+        }
 
         public IList<Idea> GetReportedIdeas(int projectId)
         {

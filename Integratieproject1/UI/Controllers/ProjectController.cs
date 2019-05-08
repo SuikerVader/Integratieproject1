@@ -294,8 +294,9 @@ namespace Integratieproject1.UI.Controllers
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
+            
+            ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -401,7 +402,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddPosition(position, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -411,6 +412,21 @@ namespace Integratieproject1.UI.Controllers
             Idea idea = _ideationsManager.GetIdea(ideaId);
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult ViewOtherIdea(int newIdeaId, int otherIdeaId)
+        {
+            _ideationsManager.DeleteIdea(newIdeaId);
+            Idea idea = _ideationsManager.GetIdea(otherIdeaId);
+            if (User.Identity.IsAuthenticated)
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, otherIdeaId);
+                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, otherIdeaId);
+                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, otherIdeaId);
+            }
+            return View("/UI/Views/Project/Idea.cshtml", idea);
         }
     }
 }

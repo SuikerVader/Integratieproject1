@@ -33,12 +33,26 @@
                 </label>
                 @if (Model.Title.Equals("_NewIdea_"))
                 {
-                    <input required asp-for="Title" value="" class="form-control"/>
+                    <div class="dropdown">
+                        <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
+                        <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
+                            <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
+                            <div class="dropdown-divider"></div>
+                            @foreach (var idea in ViewBag.ideas)
+                            {
+                                if (idea.IdeaId != Model.IdeaId)
+                                {
+                                    <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
+                                }
+                            }
+                        </div>
+                    </div>
                 }
                 else
                 {
-                    <input required asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
+                    <input required id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
                 }
+
                 <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
                 @if (Model.Title.Equals("_NewIdea_"))
                 {
@@ -54,9 +68,9 @@
                         Verwijder Idee
                     </a>
                 }
-                
+
             </form>
-            @if (Model.Position != null)
+            @if (Model.Position != null && Model.Title.Equals("_NewIdea_"))
             {
                 <div class="card">
                     <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
@@ -65,7 +79,6 @@
                 <div class="text-center" id="editLocation" style="display: none">
                     @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
                 </div>
-                
             }
             else
             {
@@ -150,7 +163,7 @@
                     </div>
                 }
             }
-            
+
             <div id="newTextField" style="display: none">
                 @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
             </div>
@@ -184,17 +197,9 @@
 
 </div>
 <div class="dropdown">
-    
-    <input type="text" placeholder="Search.." id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()">
-    <div id="ideaDropdown" class="dropdown-content">
-        <a href="#about">About</a>
-        <a href="#base">Base</a>
-        <a href="#blog">Blog</a>
-        <a href="#contact">Contact</a>
-        <a href="#custom">Custom</a>
-        <a href="#support">Support</a>
-        <a href="#tools">Tools</a>
-    </div>
+
+    <input type="text" placeholder="Search..">
+
 </div>
 <script>
     function showHide(id) {
@@ -209,7 +214,7 @@
     function initMapsApi() {
         initAutocomplete();
         initMap();
-        
+
     }
 </script>
 <script>
@@ -236,7 +241,7 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
 </script>
-<style>
+@*<style>
     .dropdown {
         position: relative;
         display: inline-block;
@@ -262,4 +267,4 @@
     .dropdown a:hover {background-color: #ddd;}
 
     .show {display: block;}
-</style>
+</style>*@
