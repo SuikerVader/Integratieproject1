@@ -23,6 +23,7 @@ namespace Integratieproject1.Domain.Ideations
         public ICollection<IoTSetup> IoTSetups { get; set; }
         public ICollection<Vote> Votes { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<IdeaTag> IdeaTags { get; set; }
 
         public List<Image> GetImages()
         {

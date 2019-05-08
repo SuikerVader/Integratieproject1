@@ -11,194 +11,207 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <div class="text-center" style="padding: 30px">
-        <h2>Wijzig Idee</h2>
-    </div>
-    <div id="editIdeaGrid">
-        <div id="editIdeaInfo">
-            <div class="card text-center infoCard">
-                <div class="card-body">
-                    <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
-                    @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
-                    Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
-                </div>
+<div class="text-center" style="padding: 30px">
+    <h2>Wijzig Idee</h2>
+</div>
+<div id="editIdeaGrid">
+    <div id="editIdeaInfo">
+        <div class="card text-center infoCard">
+            <div class="card-body">
+                <h5>Info:</h5>
+                Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
+                Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+                @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
+                Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
             </div>
         </div>
-        <div id="editIdeaTitle" class="text-center">
-            <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
-                <label asp-for="Title">
-                    <h5>Titel:</h5>
-                </label>
-                @if (Model.Title.Equals("_NewIdea_"))
-                {
-                    <div class="dropdown">
-                        <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
-                        <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
-                            <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
-                            <div class="dropdown-divider"></div>
-                            @foreach (var idea in ViewBag.ideas)
-                            {
-                                if (idea.IdeaId != Model.IdeaId)
-                                {
-                                    <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
-                                }
-                            }
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <input required id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
-                }
-
-                <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
-                @if (Model.Title.Equals("_NewIdea_"))
-                {
-                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                       asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
-                        Annuleer Nieuw Idee
-                    </a>
-                }
-                else
-                {
-                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                       asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
-                        Verwijder Idee
-                    </a>
-                }
-
-            </form>
-            @if (Model.Position != null && Model.Title.Equals("_NewIdea_"))
+    </div>
+    <div id="editIdeaTitle" class="text-center">
+        <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
+            <label asp-for="Title">
+                <h5>Titel:</h5>
+            </label>
+            @if (Model.Title.Equals("_NewIdea_"))
             {
-                <div class="card">
-                    <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
-                </div>
-                <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
-                <div class="text-center" id="editLocation" style="display: none">
-                    @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
+                <div class="dropdown">
+                    <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
+                    <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
+                        <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
+                        <div class="dropdown-divider"></div>
+                        @foreach (var idea in ViewBag.ideas)
+                        {
+                            if (idea.IdeaId != Model.IdeaId)
+                            {
+                                <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
+                            }
+                        }
+                    </div>
                 </div>
             }
             else
             {
-                <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
-                <div class="text-center" id="addLocation" style="display: none">
-                    @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
-                </div>
+                <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
             }
-        </div>
-        <div id="editIdeaObjects">
-            @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
+
+            <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
+            @if (Model.Title.Equals("_NewIdea_"))
             {
-                foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
-                {
-                    <div class="d-flex flex-row justify-content-start">
-                        <div class="d-flex flex-column justify-content-start align-items-center" style="width: 3%; padding-top: 10px">
-                            @if (ideaObject.OrderNr > 1)
-                            {
-                                <a asp-area="" asp-controller="Project"
-                                   asp-action="OrderNrUp" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            }
-                            @if (ideaObject.OrderNr < Model.IdeaObjects.Count)
-                            {
-                                <a asp-area="" asp-controller="Project"
-                                   asp-action="OrderNrDown" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                    <i class="fa fa-chevron-down"></i>
-                                </a>
-                            }
-                        </div>
-                        <div class="card" style="padding: 10px; width: 97%;">
-
-                            @if (ideaObject.GetType() == typeof(TextField))
-                            {
-                                var textField = (TextField) ideaObject;
-                                <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <p>@textField.Text</p>
-                                    <div>
-                                        <button class="btn btn-primary" onclick="showHide('@textField.IdeaObjectId.ToString()editTextField')">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
-                                    @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
-                                </div>
-                            }
-                            @if (ideaObject.GetType() == typeof(Image))
-                            {
-                                var image = (Image) ideaObject;
-                                <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                                    <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            }
-                            @if (ideaObject.GetType() == typeof(Video))
-                            {
-                                var video = (Video) ideaObject;
-                                <div class="d-flex flex-row justify-content-between align-items-center">
-                                    <iframe src="@video.Url" width="100%"
-                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                    </iframe>
-                                    <br/>
-                                    <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
+                <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                   asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
+                    Annuleer Nieuw Idee
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                   asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId">
+                    Verwijder Idee
+                </a>
             }
 
-            <div id="newTextField" style="display: none">
-                @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
+        </form>
+        @if (Model.Position != null)
+        {
+            <div class="card">
+                <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
             </div>
-            <div id="newImage" style="display: none">
-                @await Html.PartialAsync("_AddImagePartial.cshtml")
+            <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+            <div class="text-center" id="editLocation" style="display: none">
+                @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
             </div>
-            <div id="newVideo" style="display: none">
-                @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
+        }
+        else if (!Model.Title.Equals("_NewIdea_"))
+        {
+            <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie toevoegen</button>
+            <div class="text-center" id="addLocation" style="display: none">
+                @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
             </div>
+        }
+        <div>
             @if (!Model.Title.Equals("_NewIdea_"))
             {
-                <div class="d-flex flex-row justify-content-center">
-                    <div class="dropdown">
-                        <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
-                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
-                            <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
-                        </div>
+                foreach (var tag in Model.IdeaTags)
+                {
+                    <small>
+                        <i class="fa fa-tag"></i>@tag.Tag.TagName<a style="text-decoration: none"  asp-controller="Project" asp-action="RemoveIdeaTag" asp-route-ideaId="@Model.IdeaId" asp-route-ideaTagId="@tag.IdeaTagId">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </small>
+                }
+                <button class="btn btn-primary" onclick="showHide('addTag')" type="button">Tag toevoegen</button>
+                <div class="text-center" id="addTag" style="display: none">
+                    @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
+                </div>
+            }
+        </div>
+
+    </div>
+    <div id="editIdeaObjects">
+        @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
+        {
+            foreach (IdeaObject ideaObject in Model.IdeaObjects.OrderBy(i => i.OrderNr))
+            {
+                <div class="d-flex flex-row justify-content-start">
+                    <div class="d-flex flex-column justify-content-start align-items-center" style="width: 3%; padding-top: 10px">
+                        @if (ideaObject.OrderNr > 1)
+                        {
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="OrderNrUp" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        }
+                        @if (ideaObject.OrderNr < Model.IdeaObjects.Count)
+                        {
+                            <a asp-area="" asp-controller="Project"
+                               asp-action="OrderNrDown" asp-route-ideaObjectId="@ideaObject.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        }
+                    </div>
+                    <div class="card" style="padding: 10px; width: 97%;">
+
+                        @if (ideaObject.GetType() == typeof(TextField))
+                        {
+                            var textField = (TextField) ideaObject;
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <p>@textField.Text</p>
+                                <div>
+                                    <button class="btn btn-primary" onclick="showHide('@textField.IdeaObjectId.ToString()editTextField')">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                            <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
+                                @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
+                            </div>
+                        }
+                        @if (ideaObject.GetType() == typeof(Image))
+                        {
+                            var image = (Image) ideaObject;
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
+                                <div>
+                                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                       asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        }
+                        @if (ideaObject.GetType() == typeof(Video))
+                        {
+                            var video = (Video) ideaObject;
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <iframe src="@video.Url" width="100%"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                </iframe>
+                                <br/>
+                                <div>
+                                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                       asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        }
                     </div>
                 </div>
             }
+        }
 
-
-
+        <div id="newTextField" style="display: none">
+            @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
         </div>
+        <div id="newImage" style="display: none">
+            @await Html.PartialAsync("_AddImagePartial.cshtml")
+        </div>
+        <div id="newVideo" style="display: none">
+            @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
+        </div>
+        @if (!Model.Title.Equals("_NewIdea_"))
+        {
+            <div class="d-flex flex-row justify-content-center">
+                <div class="dropdown">
+                    <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
+                        <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
+                        <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
     </div>
-
-
 </div>
-<div class="dropdown">
 
-    <input type="text" placeholder="Search..">
 
 </div>
 <script>
@@ -241,30 +254,3 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
 </script>
-@*<style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f6f6f6;
-        min-width: 230px;
-        overflow: auto;
-        border: 1px solid #ddd;
-        z-index: 1;
-    }
-
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-    .dropdown a:hover {background-color: #ddd;}
-
-    .show {display: block;}
-</style>*@

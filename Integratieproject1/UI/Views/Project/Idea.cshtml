@@ -26,21 +26,31 @@
 <div id="ideaTitle">
     <div class="card text-center" style="border: none;">
         <div class="card-body">
-            <div class="d-flex flex-row justify-content-end">
-                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.UserName || User.IsInRole("Admin") || User.IsInRole("Mod")))
-                {
-                    <a style="padding: 5px" asp-area="" asp-controller="Project"
-                       asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                }
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a style="padding: 5px" asp-area="" asp-controller="Project"
-                       asp-action="ReportPost" asp-route-id="@Model.IdeaId" asp-route-type="idea">
-                        <i class="fa fa-flag"></i>
-                    </a>
-                }
+            <div class="d-flex flex-row justify-content-between">
+                <div>
+                    @foreach (var tag in Model.IdeaTags)
+                    {
+                        <small><i class="fa fa-tag"></i>@tag.Tag.TagName</small> 
+                    }
+                </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.UserName || User.IsInRole("Admin") || User.IsInRole("Mod")))
+                    {
+                        <a style="text-decoration: none" asp-area="" asp-controller="Project"
+                           asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
+                            <i class="fa fa-edit"></i>
+                            </a>
+                        
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a style="text-decoration: none"  asp-area="" asp-controller="Project"
+                           asp-action="ReportPost" asp-route-id="@Model.IdeaId" asp-route-type="idea">
+                            <i class="fa fa-flag"></i>
+                        </a>
+                    }
+                </div>
+
 
             </div>
             <h1 class="card-title">@Model.Title</h1><br>

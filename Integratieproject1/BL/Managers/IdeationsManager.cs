@@ -309,8 +309,8 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
+        
 
-            
         #endregion
 
         #region IdeaObject
@@ -671,6 +671,63 @@ namespace Integratieproject1.BL.Managers
         private Vote GetVote(int voteId)
         {
             return _ideationsRepository.GetVote(voteId);
+        }
+
+        #endregion
+
+
+        #region Tag
+
+        private Tag GetTag(int tagId)
+        {
+           return  _ideationsRepository.GetTag(tagId);
+        }
+        public List<Tag> GetTags(int ideaId)
+        {
+            List<Tag> tags = GetAllTags();
+            Idea idea = GetIdea(ideaId);
+            foreach (var ideaTag in idea.IdeaTags)
+            {
+                foreach (var tag in tags)
+                {
+                    if (ideaTag.Tag.TagId == tag.TagId)
+                    {
+                        tags.Remove(tag);
+                        break;
+                    }
+                }
+            }
+
+            return tags;
+        }
+
+        private List<Tag> GetAllTags()
+        {
+            return _ideationsRepository.GetAllTags().ToList();
+        }
+
+        public void DeleteIdeaTag(int ideaTagId)
+        {
+            IdeaTag ideaTag = GetIdeaTag(ideaTagId);
+            _ideationsRepository.DeleteIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
+        
+        public void CreateIdeaTag(int ideaId, int tagId)
+        {
+            IdeaTag ideaTag = new IdeaTag()
+            {
+                Idea = GetIdea(ideaId),
+                Tag = GetTag(tagId)
+            };
+            _ideationsRepository.CreateIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
+
+
+        private IdeaTag GetIdeaTag(int ideaTagId)
+        {
+            return _ideationsRepository.GetIdeaTag(ideaTagId);
         }
 
         #endregion
