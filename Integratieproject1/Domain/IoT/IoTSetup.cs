@@ -13,9 +13,6 @@ namespace Integratieproject1.Domain.IoT
         public Position Position { get; set; }
         public Idea Idea { get; set; }
         public Question Question { get; set; }
-    /*[ForeignKey("Idea")]
-    public int IdeaFK { get; set; }
-    [ForeignKey("Question")]
-    public int QuestionFK { get; set; }*/
+    
   }
 }

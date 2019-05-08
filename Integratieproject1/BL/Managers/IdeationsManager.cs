@@ -242,6 +242,14 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
         }
+        
+        public IList<Idea> GetOtherIdeas(int ideationId)
+        {
+            Ideation ideation = GetIdeation(ideationId);
+            List<Idea> ideas = ideation.Ideas.ToList();
+
+            return ideas;
+        }
 
         public IList<Idea> GetReportedIdeas(int projectId)
         {
@@ -384,12 +392,28 @@ namespace Integratieproject1.BL.Managers
         
         public void AddPosition(Position position, int ideaId)
         {
+            
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
             
+
             Idea idea = GetIdea(ideaId);
-            idea.Position = position;
-            _ideationsRepository.UpdateIdea(idea);
+            Idea editIdea = new Idea()
+            {
+                IdeaId = idea.IdeaId,
+                Reported = idea.Reported,
+                Title = idea.Title,
+                IdentityUser = idea.IdentityUser,
+                Ideation = idea.Ideation,
+                IdeaObjects = idea.IdeaObjects,
+                IoTSetups = idea.IoTSetups,
+                Votes = idea.Votes,
+                Reactions = idea.Reactions,
+                
+                Position = position,
+            };
+            _ideationsRepository.RemoveIdea(idea);
+            _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
 
