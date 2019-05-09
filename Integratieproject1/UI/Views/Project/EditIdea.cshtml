@@ -141,71 +141,85 @@
                                     </button>
                                 </div>
 
-                            </div>
-                            <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
-                                @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
-                            </div>
-                        }
-                        @if (ideaObject.GetType() == typeof(Image))
-                        {
-                            var image = (Image) ideaObject;
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                                <div>
-                                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                       asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                        <i class="fa fa-times"></i>
-                                    </a>
                                 </div>
-
-                            </div>
-                        }
-                        @if (ideaObject.GetType() == typeof(Video))
-                        {
-                            var video = (Video) ideaObject;
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <iframe src="@video.Url" width="100%"
-                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                </iframe>
-                                <br/>
-                                <div>
-                                    <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                       asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                        <i class="fa fa-times"></i>
-                                    </a>
+                                <div id="@textField.IdeaObjectId.ToString()editTextField" style="display: none">
+                                    @await Html.PartialAsync("_EditTextFieldPartial.cshtml", textField)
                                 </div>
+                            }
+                            @if (ideaObject.GetType() == typeof(Image))
+                            {
+                                var image = (Image) ideaObject;
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
+                                    <div>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @if (ideaObject.GetType() == typeof(Video))
+                            {
+                                var video = (Video) ideaObject;
+                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                    <iframe src="@video.Url" width="100%"
+                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                    </iframe>
+                                    <br/>
+                                    <div>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
+                                    </div>
 
-                            </div>
-                        }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
+            <div id="newTextField" style="display: none">
+                @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
+            </div>
+            <div id="newImage" style="display: none">
+                @await Html.PartialAsync("_AddImagePartial.cshtml")
+            </div>
+            <div id="newVideo" style="display: none">
+                @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
+            </div>
+            @if (!Model.Title.Equals("_NewIdea_"))
+            {
+                <div class="d-flex flex-row justify-content-center">
+                    <div class="dropdown">
+                        <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @if (Model.Ideation.Text || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
+                            }
+                            @if (Model.Ideation.Image || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
+                            }
+                            @if (Model.Ideation.Video || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                            }
+                        </div>
                     </div>
                 </div>
             }
-        }
-
-        <div id="newTextField" style="display: none">
-            @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
-        </div>
-        <div id="newImage" style="display: none">
-            @await Html.PartialAsync("_AddImagePartial.cshtml")
-        </div>
-        <div id="newVideo" style="display: none">
-            @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
-        </div>
-        @if (!Model.Title.Equals("_NewIdea_"))
-        {
-            <div class="d-flex flex-row justify-content-center">
-                <div class="dropdown">
-                    <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
-                        <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
-                        <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
-                    </div>
-                </div>
-            </div>
-        }
 
 
 

@@ -10,6 +10,14 @@ namespace Integratieproject1.Domain.Ideations
         [Required] public string CentralQuestion { get; set; }
 
         [Required] public bool InputIdeation { get; set; }
+        public bool Text { get; set; } = true;
+        public bool Image { get; set; } = true;
+        public bool Video { get; set; } = true;
+        public bool Map { get; set; } = true;
+        public bool TextRequired { get; set; }
+        public bool ImageRequired { get; set; }
+        public bool VideoRequired { get; set; }
+        public bool MapRequired { get; set; }
         public string ExternalLink { get; set; }
 
         //[Required] 

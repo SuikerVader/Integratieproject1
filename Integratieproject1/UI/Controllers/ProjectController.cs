@@ -294,6 +294,7 @@ namespace Integratieproject1.UI.Controllers
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
             ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
