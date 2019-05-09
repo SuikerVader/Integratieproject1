@@ -133,6 +133,7 @@ namespace Integratieproject1.BL.Managers
             Ideation originalIdeation = GetIdeation(ideationId);
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
+            originalIdeation.ExternalLink = ideation.ExternalLink;
             Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
             return returnIdeation;
@@ -678,7 +679,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Tag
 
-        private Tag GetTag(int tagId)
+        public Tag GetTag(int tagId)
         {
            return  _ideationsRepository.GetTag(tagId);
         }
@@ -701,7 +702,7 @@ namespace Integratieproject1.BL.Managers
             return tags;
         }
 
-        private List<Tag> GetAllTags()
+        public List<Tag> GetAllTags()
         {
             return _ideationsRepository.GetAllTags().ToList();
         }
@@ -729,10 +730,29 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeaTag(ideaTagId);
         }
+        
+        public void EditTag(Tag tag, int tagId)
+        {
+            tag.TagId = tagId;
+            _ideationsRepository.EditTag(tag);
+            _unitOfWorkManager.Save();
+        }
 
+        public void DeleteTag(int tagId)
+        {
+            Tag tag = GetTag(tagId);
+            _ideationsRepository.DeleteTag(tag);
+            _unitOfWorkManager.Save();
+        }
+
+        public void AddTag(Tag tag)
+        {
+           _ideationsRepository.AddTag(tag);
+           _unitOfWorkManager.Save();
+        }
         #endregion
 
 
-        
+       
     }
 }

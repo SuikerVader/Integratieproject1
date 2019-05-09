@@ -423,7 +423,24 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.IdeaTags.Remove(ideaTag);
             _ctx.SaveChanges();
         }
+        
+        public void EditTag(Tag tag)
+        {
+            _ctx.Tags.Update(tag);
+            _ctx.SaveChanges();
+        }
 
+        public void AddTag(Tag tag)
+        {
+            _ctx.Tags.Add(tag);
+            _ctx.SaveChanges();
+        }
+
+        public void DeleteTag(Tag tag)
+        {
+            _ctx.Tags.Remove(tag);
+            _ctx.SaveChanges();
+        }
         #endregion
 
 

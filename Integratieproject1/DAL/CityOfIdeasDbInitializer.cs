@@ -242,7 +242,9 @@ namespace Integratieproject1.DAL
             {
                 CentralQuestion = "Welke fitnesstoestellen zouden jullie graag willen plaatsen op het plein?",
                 InputIdeation = true,
-                Phase = phaseOssenmarkt3
+                Phase = phaseOssenmarkt3,
+                ExternalLink = "https://www.antwerpen.be/nl/home"
+                
             };
 
             #endregion

@@ -20,6 +20,12 @@
                     Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
                     Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                    <br/><br/>
+                    @if (Model.ExternalLink != null || !Model.ExternalLink.Equals(""))
+                    {
+                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>  
+                    }
+                    
                 </div>
             </div>
         </div>
@@ -43,11 +49,12 @@
                                 <a class="btn btn-primary" href="#@idea.IdeaId">@idea.Title</a>
                             }
                         </div>
-                        <p class="card-text d-flex flex-row justify-content-end flex-wrap">
-                            <small onclick="showHideReaction()">
-                                <i class="fa fa-comment"></i> @Model.Reactions.Count</small>
-                        </p>
                     }
+                    
+                    <p class="card-text d-flex flex-row justify-content-end flex-wrap">
+                        <small onclick="showHideReaction()">
+                            <i class="fa fa-comment"></i> @Model.Reactions.Count</small>
+                    </p>
                 </div>
             </div>
             <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">

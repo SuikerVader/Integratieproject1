@@ -10,6 +10,7 @@ namespace Integratieproject1.Domain.Ideations
         [Required] public string CentralQuestion { get; set; }
 
         [Required] public bool InputIdeation { get; set; }
+        public string ExternalLink { get; set; }
 
         //[Required] 
         public Phase Phase { get; set; }

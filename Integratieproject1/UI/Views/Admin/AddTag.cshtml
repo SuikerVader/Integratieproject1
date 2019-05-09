@@ -1,0 +1,26 @@
+@using Integratieproject1.Domain.Projects
+@model Integratieproject1.Domain.Ideations.Tag
+
+@{
+    ViewBag.Title = "Fase";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div >
+        <div class="text-center">
+            <h2>Wijzig Tag</h2>
+        </div>
+        <div>
+            <div>
+                <form asp-controller="Admin" asp-action="AddTag" method="post">
+                    <label asp-for="TagName">Tag naam</label>
+                    <input required asp-for="TagName" class="form-control"/>
+                    <input class="btn btn-primary" type="submit" value="Tag Opslaan">
+                </form>
+            </div>
+        </div>
+       
+    </div>
+
+
+</div>

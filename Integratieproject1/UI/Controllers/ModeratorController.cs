@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.UI.Controllers
 {
-    [Authorize(Roles = "Mod")]
+    [Authorize(Roles = "Mod, Admin, SuperAdmin ")]
     public class ModeratorController : Controller
     {
         private readonly ProjectsManager _projectsManager;

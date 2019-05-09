@@ -20,6 +20,8 @@
                         <input asp-for="InputIdeation" value="True" type="radio">ja<br/>
                         <input asp-for="InputIdeation" value="False" type="radio">nee<br/>
                     </formgroup>
+                    <label asp-for="CentralQuestion">Externe link</label>
+                    <input asp-for="ExternalLink" value="@Model.ExternalLink" class="form-control" type="url"/>
                     <input class="btn btn-primary" type="submit" value="Ideation Opslaan">
                 </form>
                 <a class="btn btn-danger" asp-area="" asp-controller="Admin"
