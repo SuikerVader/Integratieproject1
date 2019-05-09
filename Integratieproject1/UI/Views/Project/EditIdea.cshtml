@@ -33,12 +33,26 @@
                 </label>
                 @if (Model.Title.Equals("_NewIdea_"))
                 {
-                    <input required asp-for="Title" value="" class="form-control"/>
+                    <div class="dropdown">
+                        <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
+                        <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
+                            <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
+                            <div class="dropdown-divider"></div>
+                            @foreach (var idea in ViewBag.ideas)
+                            {
+                                if (idea.IdeaId != Model.IdeaId)
+                                {
+                                    <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
+                                }
+                            }
+                        </div>
+                    </div>
                 }
                 else
                 {
-                    <input required asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
+                    <input required id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
                 }
+
                 <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
                 @if (Model.Title.Equals("_NewIdea_"))
                 {
@@ -54,26 +68,30 @@
                         Verwijder Idee
                     </a>
                 }
-                
+
             </form>
-            @if (Model.Position != null)
+            @if (Model.Ideation.Map)
             {
-                <div class="card">
-                    <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
-                </div>
-                <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
-                <div class="text-center" id="editLocation" style="display: none">
-                    @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
-                </div>
-                
+                @if (Model.Position != null && Model.Title.Equals("_NewIdea_"))
+                {
+                    <div class="card">
+                        <partial name="/UI/Views/Project/_MapPartial.cshtml" />
+                    </div>
+                    <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+                    <div class="text-center" id="editLocation" style="display: none">
+                        @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
+                    </div>
+
+                }
+                else
+                {
+                    <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
+                    <div class="text-center" id="addLocation" style="display: none">
+                        @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+                    </div>
+                }
             }
-            else
-            {
-                <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
-                <div class="text-center" id="addLocation" style="display: none">
-                    @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
-                </div>
-            }
+
         </div>
         <div id="editIdeaObjects">
             @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
@@ -121,12 +139,14 @@
                                 <div class="d-flex flex-row justify-content-between align-items-center">
                                     <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
                                     <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
                                     </div>
-
                                 </div>
                             }
                             @if (ideaObject.GetType() == typeof(Video))
@@ -138,10 +158,13 @@
                                     </iframe>
                                     <br/>
                                     <div>
-                                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
-                                           asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
-                                            <i class="fa fa-times"></i>
-                                        </a>
+                                        @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
+                                        {
+                                            <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                                               asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        }
                                     </div>
 
                                 </div>
@@ -150,7 +173,7 @@
                     </div>
                 }
             }
-            
+
             <div id="newTextField" style="display: none">
                 @await Html.PartialAsync("_AddTextFieldPartial.cshtml", new TextField())
             </div>
@@ -162,15 +185,24 @@
             </div>
             @if (!Model.Title.Equals("_NewIdea_"))
             {
-                <div class="d-flex flex-row justify-content-end">
+                <div class="d-flex flex-row justify-content-center">
                     <div class="dropdown">
                         <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-plus"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
-                            <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
-                            <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                            @if (Model.Ideation.Text || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
+                            }
+                            @if (Model.Ideation.Image || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
+                            }
+                            @if (Model.Ideation.Video || User.IsInRole("Admin"))
+                            {
+                                <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -181,6 +213,11 @@
         </div>
     </div>
 
+
+</div>
+<div class="dropdown">
+
+    <input type="text" placeholder="Search..">
 
 </div>
 <script>
@@ -196,9 +233,57 @@
     function initMapsApi() {
         initAutocomplete();
         initMap();
-        
+
+    }
+</script>
+<script>
+    function showIdeaResults() {
+        document.getElementById("ideaDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("ideaInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("ideaDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
     }
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
 </script>
+@*<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        overflow: auto;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown a:hover {background-color: #ddd;}
+
+    .show {display: block;}
+</style>*@

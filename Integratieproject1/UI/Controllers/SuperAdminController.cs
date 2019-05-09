@@ -197,8 +197,12 @@ namespace Integratieproject1.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                platform.BackgroundImage = GetImagePath(formFile);
-                projectsManager.EditPlatform(platform, platformId);
+                if (formFile != null)
+                {
+                    platform.BackgroundImage = GetImagePath(formFile);
+                                    
+                }
+               projectsManager.EditPlatform(platform, platformId);
             }
                 
             IList<Platform> platforms = projectsManager.GetAllPlatforms();
@@ -211,17 +215,34 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
 
+        public IActionResult DeleteLogoPlatform(int platformId)
+        {
+            projectsManager.DeleteLogoPlatform(platformId);
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
+        }
+
         public IActionResult CreatePlatform()
         {
             return View("/UI/Views/SuperAdmin/CreatePlatform.cshtml");
         }
 
         [HttpPost]
-        public IActionResult CreatePlatform(Platform platform)
+        public IActionResult CreatePlatform(Platform platform, IFormFile formFile, IFormFile logoFile)
         {
 
             if (ModelState.IsValid)
             {
+                if (formFile != null)
+                {
+                    platform.BackgroundImage = GetImagePath(formFile);
+                                    
+                }
+                if (logoFile != null)
+                {
+                    platform.Logo = GetImagePath(logoFile);
+                                    
+                }
                 projectsManager.CreatePlatform(platform);
             }
 
@@ -244,6 +265,7 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
-        
+
+       
     }
 }

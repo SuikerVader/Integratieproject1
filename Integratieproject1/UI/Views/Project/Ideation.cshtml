@@ -1,5 +1,7 @@
 @using Integratieproject1.Domain.Datatypes
 @using Integratieproject1.Domain.Ideations
+@using Microsoft.CodeAnalysis.CSharp.Syntax
+@using Location = Microsoft.CodeAnalysis.Location
 @model Integratieproject1.Domain.Ideations.Ideation
 
 @{
@@ -56,7 +58,7 @@
 
                             <p>
                                 <small>
-                                    <strong>@reaction.IdentityUser.Email:</strong>
+                                    <strong>@reaction.IdentityUser.UserName:</strong>
                                 </small>
                                 <small>@reaction.ReactionText</small>
                             </p>
@@ -64,8 +66,29 @@
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <small>
-                                        <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
-                                            <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</a>
+
+                                        @{
+                                            var userVoted = false;
+                                        }
+                                        @foreach (var like in reaction.Likes)
+                                        {
+                                            if (User.Identity.Name == like.IdentityUser.UserName)
+                                            {
+                                                userVoted = true;
+                                                break;
+                                            }
+                                        }
+                                        @if (userVoted == true)
+                                        {
+                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                        }
+                                        else
+                                        {
+                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                            </a>
+                                        }
+
                                     </small>
                                     <small>
                                         <a asp-area="" asp-controller="Project"
@@ -87,7 +110,9 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
-                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()"><i class="fa fa-comment"></i></button>
+                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
+                            <i class="fa fa-comment"></i>
+                        </button>
                         <div id="createReaction" style="display: none">
                             @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
                         </div>
@@ -106,15 +131,15 @@
 
                         <div class="card-body">
                             <h5 class="card-title">@idea.Title</h5>
-                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0 )
+                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0)
                             {
                                 <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
                             }
-                            
+
                             @if (Model.InputIdeation == true)
                             {
                                 <p>
-                                    <small>Ingezonden door: @idea.IdentityUser.Email</small>
+                                    <small>Ingezonden door: @idea.IdentityUser.UserName</small>
                                 </p>
                             }
                             <a class="btn btn-primary" asp-area="" asp-controller="Project"

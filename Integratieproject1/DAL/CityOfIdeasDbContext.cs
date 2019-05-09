@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Platform = Integratieproject1.Domain.Projects.Platform;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Integratieproject1.DAL
 {
@@ -59,6 +60,7 @@ namespace Integratieproject1.DAL
     {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source=CityOfIdeas.db");
+            //optionsBuilder.UseMySql("Server=146.148.126.19;Database=db1;Uid=root;Pwd=KdG241Rk");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(
                 providers: new[]
                 {

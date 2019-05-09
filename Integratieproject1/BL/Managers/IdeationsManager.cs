@@ -133,6 +133,74 @@ namespace Integratieproject1.BL.Managers
             Ideation originalIdeation = GetIdeation(ideationId);
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
+            originalIdeation.Text = ideation.Text;
+            originalIdeation.TextRequired = ideation.TextRequired;
+            originalIdeation.Image = ideation.Image;
+            originalIdeation.ImageRequired = ideation.ImageRequired;
+            originalIdeation.Video = ideation.Video;
+            originalIdeation.VideoRequired = ideation.VideoRequired;
+            originalIdeation.Map = ideation.Map;
+            originalIdeation.MapRequired = ideation.MapRequired;
+            foreach (Idea idea in originalIdeation.Ideas.ToList())
+            {
+                if (!originalIdeation.Map && idea.Position != null)
+                {
+                    _dataTypeManager.DeletePosition(idea.Position);
+                    idea.Position = null;
+                }
+                foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
+                {
+                    if (!originalIdeation.Text && ideaObject.GetType() == typeof(TextField))
+                    {
+                        DeleteTextField(ideaObject.IdeaObjectId);
+                    }
+                    if (!originalIdeation.Image && ideaObject.GetType() == typeof(Image))
+                    {
+                        DeleteImage(ideaObject.IdeaObjectId);
+                    }
+                    if (!originalIdeation.Video && ideaObject.GetType() == typeof(Video))
+                    {
+                        DeleteVideo(ideaObject.IdeaObjectId);
+                    }
+                }
+                if (originalIdeation.MapRequired)
+                {
+                    Position position = new Position()
+                    {
+                        Lng = "0",
+                        Lat = "0"
+                    };
+                    idea.Position = position;
+                }
+                if (originalIdeation.TextRequired && idea.GetTextFields().Count == 0)
+                {
+                    TextField textField = new TextField
+                    {
+                        Text = "Verplicht tekstveld",
+                        Idea = idea
+                    };
+                    AddTextField(textField, idea.IdeaId);
+                }
+                if (originalIdeation.ImageRequired && idea.GetImages().Count == 0)
+                {
+                    Image image = new Image
+                    {
+                        ImageName = "Verplichte afbeelding",
+                        ImagePath = idea.Ideation.Phase.Project.BackgroundImage,
+                        Idea = idea
+                    };
+                    CreateImage(image.ImageName, image.ImagePath, idea.IdeaId);
+                }
+                if (originalIdeation.VideoRequired && idea.GetVideos().Count == 0)
+                {
+                    Video video = new Video
+                    {
+                        Url = "https://www.youtube.com/embed/Ce7hJ24a8yM",
+                        Idea = idea
+                    };
+                    AddVideo(video, idea.IdeaId);
+                }
+            }
             Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
             return returnIdeation;
@@ -174,6 +242,14 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
         }
+        
+        public IList<Idea> GetOtherIdeas(int ideationId)
+        {
+            Ideation ideation = GetIdeation(ideationId);
+            List<Idea> ideas = ideation.Ideas.ToList();
+
+            return ideas;
+        }
 
         public IList<Idea> GetReportedIdeas(int projectId)
         {
@@ -184,12 +260,51 @@ namespace Integratieproject1.BL.Managers
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
             IdentityUser user = usersManager.GetUser(userId);
+            Ideation ideation = GetIdeation(ideationId);
             Idea idea = new Idea()
             {
-                Ideation = GetIdeation(ideationId),
+                Ideation = ideation,
                 Title = "_NewIdea_",
-                IdentityUser = user
+                IdentityUser = user,
+                IdeaObjects = new List<IdeaObject>()
             };
+            if (ideation.MapRequired)
+            {
+                Position position = new Position()
+                {
+                    Lng = "0",
+                    Lat = "0"
+                };
+                idea.Position = position;
+            }
+            if (ideation.TextRequired)
+            {
+                TextField textField = new TextField
+                {
+                    Text = "Verplicht tekstveld",
+                    Idea = idea
+                };
+                idea.IdeaObjects.Add(textField);
+            }
+            if (ideation.ImageRequired)
+            {
+                Image image = new Image
+                {
+                    ImageName = "Verplichte afbeelding",
+                    ImagePath = idea.Ideation.Phase.Project.BackgroundImage,
+                    Idea = idea
+                };
+                idea.IdeaObjects.Add(image);
+            }
+            if (ideation.VideoRequired)
+            {
+                Video video = new Video
+                {
+                    Url = "https://www.youtube.com/embed/Ce7hJ24a8yM",
+                    Idea = idea
+                };
+                idea.IdeaObjects.Add(video);
+            }
             Idea returnIdea = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return returnIdea;
@@ -277,12 +392,28 @@ namespace Integratieproject1.BL.Managers
         
         public void AddPosition(Position position, int ideaId)
         {
+            
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
             
+
             Idea idea = GetIdea(ideaId);
-            idea.Position = position;
-            _ideationsRepository.UpdateIdea(idea);
+            Idea editIdea = new Idea()
+            {
+                IdeaId = idea.IdeaId,
+                Reported = idea.Reported,
+                Title = idea.Title,
+                IdentityUser = idea.IdentityUser,
+                Ideation = idea.Ideation,
+                IdeaObjects = idea.IdeaObjects,
+                IoTSetups = idea.IoTSetups,
+                Votes = idea.Votes,
+                Reactions = idea.Reactions,
+                
+                Position = position,
+            };
+            _ideationsRepository.RemoveIdea(idea);
+            _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
 

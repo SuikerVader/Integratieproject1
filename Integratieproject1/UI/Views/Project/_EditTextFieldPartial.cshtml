@@ -2,7 +2,7 @@
 @model Integratieproject1.Domain.Datatypes.TextField
 
 @{
-    ViewBag.Title = "Voeg Vraag Toe";
+    ViewBag.Title = "Voeg Tekst Toe";
 }
 
 <div>
@@ -13,10 +13,13 @@
             </div>
             <div class="col-4 text-center">
                 <input class="btn btn-primary btn-sm" type="submit" value="Wijzig Tekstveld">
+                @if ((Model.Idea.GetTextFields().Count != 1 && Model.Idea.Ideation.TextRequired == true) || User.IsInRole("Admin"))
+                {
                 <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                    asp-action="DeleteTextField" asp-route-ideaId="@ViewBag.IdeaId" asp-route-textFieldId="@Model.IdeaObjectId">
                     Verwijder textField
                 </a>
+                }           
             </div>
         </div>
     </form>
