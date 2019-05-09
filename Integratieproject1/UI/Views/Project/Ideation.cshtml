@@ -21,7 +21,7 @@
                     Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
                     <br/><br/>
-                    @if (Model.ExternalLink != null || !Model.ExternalLink.Equals(""))
+                    @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
                     {
                         <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>  
                     }
