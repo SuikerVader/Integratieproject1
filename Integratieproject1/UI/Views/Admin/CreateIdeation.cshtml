@@ -14,11 +14,43 @@
             <div>
                 <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId" method="post">
                     <label asp-for="CentralQuestion">Centrale Vraag</label>
-                    <input required asp-for="CentralQuestion" class="form-control"/>
+                    <input required asp-for="CentralQuestion" class="form-control" />
                     <formgroup>
-                        <label asp-for="InputIdeation"></label><br/>
-                        <input asp-for="InputIdeation" value="True" type="radio">Ja<br/>
-                        <input asp-for="InputIdeation" value="False" type="radio">Nee<br/>
+                        <label asp-for="InputIdeation">Kunnen gebruikers idee&euml;n posten?</label><br />
+                        <input asp-for="InputIdeation" value="True" type="radio">Ja<br />
+                        <input asp-for="InputIdeation" value="False" type="radio">Nee<br />
+                    </formgroup>
+                    <formgroup>
+                        <label asp-for="Text">Tekst Toevoegen</label><br />
+                        <input asp-for="Text" value="True" type="radio">Ja<br />
+                        <input asp-for="Text" value="False" type="radio">Nee<br />
+                        <label asp-for="TextRequired">Tekst Verplicht</label><br />
+                        <input asp-for="TextRequired" value="True" type="radio">Ja<br />
+                        <input asp-for="TextRequired" value="False" type="radio">Nee<br />
+                    </formgroup>
+                    <formgroup>
+                        <label asp-for="Image">Afbeelding Toevoegen</label><br />
+                        <input asp-for="Image" value="True" type="radio">Ja<br />
+                        <input asp-for="Image" value="False" type="radio">Nee<br />
+                        <label asp-for="ImageRequired">Afbeelding Verplicht</label><br />
+                        <input asp-for="ImageRequired" value="True" type="radio">Ja<br />
+                        <input asp-for="ImageRequired" value="False" type="radio">Nee<br />
+                    </formgroup>
+                    <formgroup>
+                        <label asp-for="Video">Video Toevoegen</label><br />
+                        <input asp-for="Video" value="True" type="radio">Ja<br />
+                        <input asp-for="Video" value="False" type="radio">Nee<br />
+                        <label asp-for="VideoRequired">Video Verplicht</label><br />
+                        <input asp-for="VideoRequired" value="True" type="radio">Ja<br />
+                        <input asp-for="VideoRequired" value="False" type="radio">Nee<br />
+                    </formgroup>
+                    <formgroup>
+                        <label asp-for="Map">Kaart Toevoegen</label><br />
+                        <input asp-for="Map" value="True" type="radio">Ja<br />
+                        <input asp-for="Map" value="False" type="radio">Nee<br />
+                        <label asp-for="MapRequired">Kaart Verplicht</label><br />
+                        <input asp-for="MapRequired" value="True" type="radio">Ja<br />
+                        <input asp-for="MapRequired" value="False" type="radio">Nee<br />
                     </formgroup>
                     <input class="btn btn-primary" type="submit" value="Ideation Toevoegen">
                 </form>

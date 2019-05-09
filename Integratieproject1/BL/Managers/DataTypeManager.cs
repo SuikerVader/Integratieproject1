@@ -88,6 +88,11 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
             return returnPosition;
         }
+        public void DeletePosition(Position position)
+        {
+            _dataTypeRepository.DeletePosition(position);
+            _unitOfWorkManager.Save();
+        }
         public Position EditPosition(Position position, int positionId)
         {
             Position returnPosition = GetPosition(positionId);

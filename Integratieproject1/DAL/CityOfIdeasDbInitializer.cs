@@ -235,7 +235,7 @@ namespace Integratieproject1.DAL
             Ideation ideationOssenmarktSport = new Ideation
             {
                 CentralQuestion = "Welke sport zouden jullie graag op de Ossenmarkt beoefenen?",
-                InputIdeation = true,
+                InputIdeation = false,
                 Phase = phaseOssenmarkt2
             };
             Ideation ideationOssenmarktFitness = new Ideation
@@ -249,14 +249,17 @@ namespace Integratieproject1.DAL
             #region Persons
             IdentityUser person = new IdentityUser
             {
+                UserName = "Albert",
                 Email = "testPerson1@test.com"
             };
             IdentityUser organisation = new IdentityUser
             {
+                UserName = "McDonalds",
                 Email = "testOrganisation1@test.com"
             };
             IdentityUser admin = new IdentityUser
             {
+                UserName = "TestAdmin",
                 Email = "testAdmin1@test.com"
             };
 
@@ -540,6 +543,66 @@ namespace Integratieproject1.DAL
             };
 
             #endregion
+            #region
+            Reaction reactionPullup1 = new Reaction
+            {
+                Idea = ideaFitness1,
+                IdentityUser = admin,
+                ReactionText = "Mooi toestel om je rug mee te trainen!"
+            };
+            Reaction reactionPullup2 = new Reaction
+            {
+                Idea = ideaFitness1,
+                IdentityUser = person,
+                ReactionText = "Ja vind ik ook echt super!"
+            };
+
+            Reaction reactionPullup3 = new Reaction
+            {
+                Idea = ideaFitness1,
+                IdentityUser = organisation,
+                ReactionText = "Nee liever niet..."
+            };
+
+            Reaction reactionSquat1 = new Reaction
+            {
+                Idea = ideaFitness2,
+                IdentityUser = person,
+                ReactionText = "Never skip legday"
+            };
+
+            Reaction reactionSport = new Reaction
+            {
+                Ideation = ideationOssenmarktSport,
+                IdentityUser = person,
+                ReactionText = "Sporten is gezond! Dit is echt een goed idee."
+            };
+            #endregion
+            #region
+            Like likeReactionPullup1 = new Like
+            {
+                IdentityUser = person,
+                Reaction = reactionPullup1
+            };
+
+            Like likeReactionPullup2 = new Like
+            {
+                IdentityUser = organisation,
+                Reaction = reactionPullup1
+            };
+
+            Like likeReactionPullup3 = new Like
+            {
+                IdentityUser = admin,
+                Reaction = reactionPullup1
+            };
+
+            Like likeReactionPullup4 = new Like
+            {
+                IdentityUser = person,
+                Reaction = reactionPullup2
+            };
+            #endregion
 
             projectOssenmarkt.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
             platformAntwerp.Users = new List<IdentityUser> {person, organisation, admin};
@@ -558,6 +621,13 @@ namespace Integratieproject1.DAL
                 {openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
             //ctx.Surveys.Add(survey);
             phaseOssenmarkt1.Surveys = new List<Survey>() {survey};
+            //ctx.Likes.Add(like);
+            reactionPullup1.Likes = new List<Like>() { likeReactionPullup1, likeReactionPullup2, likeReactionPullup3 };
+            reactionPullup2.Likes = new List<Like>() { likeReactionPullup4 };
+            //ctx.Reactions.Add(reaction);
+            ideationOssenmarktSport.Reactions = new List<Reaction>() { reactionSport };
+            ideaFitness1.Reactions = new List<Reaction>() { reactionPullup1, reactionPullup2, reactionPullup3 };
+            ideaFitness2.Reactions = new List<Reaction>() { reactionSquat1 };
             //ctx.Ideas.Add(idea);
             ideationOssenmarktThema.Ideas = new List<Idea>() {ideaThema1, ideaThema2, ideaThema3};
             ideationOssenmarktSport.Ideas = new List<Idea>() {ideaSport1, ideaSport2, ideaSport3, ideaSport4, ideaSport5};
@@ -604,12 +674,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "superadmin@gmail.com", Email = "superadmin@gmail.com", EmailConfirmed=true};
-            var adminTest = new IdentityUser {UserName = "admin@gmail.com", Email = "admin@gmail.com", EmailConfirmed = true };
-            var modTest = new IdentityUser {UserName = "mod@gmail.com", Email = "mod@gmail.com", EmailConfirmed = true };
+            var superAdminTest = new IdentityUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true};
+            var adminTest = new IdentityUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new IdentityUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new IdentityUser
-                {UserName = "organisation@gmail.com", Email = "organisation@gmail.com", EmailConfirmed = true };
-            var userTest = new IdentityUser {UserName = "user@gmail.com", Email = "user@gmail.com", EmailConfirmed = true };
+                {UserName = "Organisation", Email = "organisation@gmail.com", EmailConfirmed = true };
+            var userTest = new IdentityUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");

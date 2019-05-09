@@ -27,7 +27,7 @@
     <div class="card text-center" style="border: none;">
         <div class="card-body">
             <div class="d-flex flex-row justify-content-end">
-                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.Email || User.IsInRole("Admin") || User.IsInRole("Mod")))
+                @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.UserName || User.IsInRole("Admin") || User.IsInRole("Mod")))
                 {
                     <a style="padding: 5px" asp-area="" asp-controller="Project"
                        asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
@@ -147,20 +147,20 @@
             <p>
                 <div class="d-flex flex-row justify-content-between">
 
-                    <p>
-                        <small>
-                            <strong>@reaction.IdentityUser.Email:</strong>
-                        </small>
-                        <small>@reaction.ReactionText</small>
-                    </p>
-                    <p>
-                        @if (User.Identity.IsAuthenticated)
+                        <p>
+                            <small>
+                                <strong>@reaction.IdentityUser.UserName:</strong>
+                            </small>
+                            <small>@reaction.ReactionText</small>
+                        </p>
+                        <p>
+                            @if (User.Identity.IsAuthenticated)
                         {
                             var userVoted = false;
                             
                             foreach (var like in reaction.Likes)
                             {
-                                if (User.Identity.Name == like.IdentityUser.Email)
+                                if (User.Identity.Name == like.IdentityUser.UserName)
                                 {
                                     userVoted = true;
                                     break;
@@ -172,7 +172,7 @@
                             }
                             else
                             {
-                                <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
+                                <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="idea" asp-route-id="@Model.IdeaId" asp-route-reactionId="@reaction.ReactionId">
                                     <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
                                 </a>
                             }
@@ -241,48 +241,6 @@
 </div>
 </div>
 </div>
-@*
-<div class="bd-example">
-    <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-            <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="/images/uploads/soccer-player logo .jpg" style="max-width: 100%" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>First slide label</h5>
-                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="/images/uploads/voetbal.jpg" style="max-width: 100%" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Second slide label</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="/images/uploads/profo.jpg" style="max-width: 100%" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Third slide label</h5>
-                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                </div>
-            </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-</div>
-*@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMap">
 </script>

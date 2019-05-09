@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -73,6 +74,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(p => p.Platform.PlatformId == platformId)
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(r=>r.Reactions).ThenInclude(l=>l.Likes)
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Votes)
+                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=> k.IdeaObjects)
                 .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Reactions).ThenInclude(l=>l.Likes)
                 .Include(p => p.Phases).ThenInclude(s => s.Surveys).ThenInclude(q=>q.Questions).ThenInclude(a=>a.Answers)
                 .Include(l => l.Location).ThenInclude(a => a.Address)
