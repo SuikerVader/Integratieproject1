@@ -70,7 +70,7 @@ namespace Integratieproject1.BL.Managers
 
             if (platform.Users != null)
             {
-                foreach (IdentityUser identityUser in platform.Users.ToList())
+                foreach (CustomUser identityUser in platform.Users.ToList())
                 {
                     _usersManager.DeleteUser(identityUser.Id);
                 }
@@ -125,13 +125,20 @@ namespace Integratieproject1.BL.Managers
         }
 
         public IList<Project> GetAdminProjects(string userId)
-        { 
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
+        {
             List<Project> projects = new List<Project>();
-            foreach (AdminProject adminProject in adminProjects)
+            if (_usersManager.IsInRole(userId, "Admin"))
             {
-                projects.Add(adminProject.Project);
+                List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
+                foreach (AdminProject adminProject in adminProjects)
+                {
+                    projects.Add(adminProject.Project);
+                }
+            }else
+            {
+                projects = _projectsRepository.GetAllProjects().ToList();
             }
+
 
             return projects;
         }
@@ -149,7 +156,7 @@ namespace Integratieproject1.BL.Managers
         
         public void CreateProject(Project project, string userId, int platformId)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = _usersManager.GetUser(userId);
             project.Platform = GetPlatform(platformId);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
@@ -220,7 +227,7 @@ namespace Integratieproject1.BL.Managers
         public void CreateAdminProject(int projectId, string adminId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IdentityUser identityUser = usersManager.GetUser(adminId);
+            CustomUser identityUser = usersManager.GetUser(adminId);
             Project project = _projectsRepository.GetProject(projectId);
             AdminProject adminProject = new AdminProject
             {
@@ -230,10 +237,10 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.CreateAdminProject(adminProject);
             _unitOfWorkManager.Save();
         }
-        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
+        public IList<CustomUser> GetNotProjectAdmins(int projectId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> allAdmins = usersManager.GetUsers("ADMIN");
             IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
             for (int i = 0; i < allAdmins.Count; i++)
             {
