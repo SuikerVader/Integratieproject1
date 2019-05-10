@@ -1,0 +1,46 @@
+@using Integratieproject1.Domain.Projects
+@model IList<Integratieproject1.Domain.Ideations.Tag>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div >
+        <div class=" text-center">
+            <h2>Tags</h2>
+        </div>
+        <div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Tag</th>
+                    </tr>
+                    @foreach (var tag in Model)
+                    {
+                        <tr>
+                            <td>@tag.TagName</td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="EditTag" asp-route-tagId="@tag.TagId">
+                                    Wijzig Tag
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Admin"
+                                   asp-action="DeleteTag" asp-route-tagId="@tag.TagId">
+                                    Verwijder Tag
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                   asp-action="AddTag">
+                    Tag Toevoegen
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>

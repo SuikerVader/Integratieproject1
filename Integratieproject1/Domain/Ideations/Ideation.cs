@@ -18,6 +18,8 @@ namespace Integratieproject1.Domain.Ideations
         public bool ImageRequired { get; set; }
         public bool VideoRequired { get; set; }
         public bool MapRequired { get; set; }
+        public string ExternalLink { get; set; }
+
         //[Required] 
         public Phase Phase { get; set; }
         public ICollection<Reaction> Reactions { get; set; }

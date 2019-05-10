@@ -13,11 +13,11 @@
                          <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
                          <button type="submit" class="dropdown-item">Uitloggen</button>
                          <div class="dropdown-divider"></div>
-                         @if (User.IsInRole("Admin"))
+                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                          {
                              <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Adminpagina's</a>
                          }
-                         @if (User.IsInRole("Mod"))
+                         @if (User.IsInRole("Mod") || User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                          {
                                  <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderatorpagina's</a>
                          }

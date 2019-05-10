@@ -133,6 +133,7 @@ namespace Integratieproject1.BL.Managers
             Ideation originalIdeation = GetIdeation(ideationId);
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
+            originalIdeation.ExternalLink = ideation.ExternalLink;
             originalIdeation.Text = ideation.Text;
             originalIdeation.TextRequired = ideation.TextRequired;
             originalIdeation.Image = ideation.Image;
@@ -416,8 +417,8 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
+        
 
-            
         #endregion
 
         #region IdeaObject
@@ -783,6 +784,82 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
+        #region Tag
+
+        public Tag GetTag(int tagId)
+        {
+           return  _ideationsRepository.GetTag(tagId);
+        }
+        public List<Tag> GetTags(int ideaId)
+        {
+            List<Tag> tags = GetAllTags();
+            Idea idea = GetIdea(ideaId);
+            foreach (var ideaTag in idea.IdeaTags)
+            {
+                foreach (var tag in tags)
+                {
+                    if (ideaTag.Tag.TagId == tag.TagId)
+                    {
+                        tags.Remove(tag);
+                        break;
+                    }
+                }
+            }
+
+            return tags;
+        }
+
+        public List<Tag> GetAllTags()
+        {
+            return _ideationsRepository.GetAllTags().ToList();
+        }
+
+        public void DeleteIdeaTag(int ideaTagId)
+        {
+            IdeaTag ideaTag = GetIdeaTag(ideaTagId);
+            _ideationsRepository.DeleteIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
         
+        public void CreateIdeaTag(int ideaId, int tagId)
+        {
+            IdeaTag ideaTag = new IdeaTag()
+            {
+                Idea = GetIdea(ideaId),
+                Tag = GetTag(tagId)
+            };
+            _ideationsRepository.CreateIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
+
+
+        private IdeaTag GetIdeaTag(int ideaTagId)
+        {
+            return _ideationsRepository.GetIdeaTag(ideaTagId);
+        }
+        
+        public void EditTag(Tag tag, int tagId)
+        {
+            tag.TagId = tagId;
+            _ideationsRepository.EditTag(tag);
+            _unitOfWorkManager.Save();
+        }
+
+        public void DeleteTag(int tagId)
+        {
+            Tag tag = GetTag(tagId);
+            _ideationsRepository.DeleteTag(tag);
+            _unitOfWorkManager.Save();
+        }
+
+        public void AddTag(Tag tag)
+        {
+           _ideationsRepository.AddTag(tag);
+           _unitOfWorkManager.Save();
+        }
+        #endregion
+
+
+       
     }
 }
