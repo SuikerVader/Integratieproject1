@@ -73,10 +73,21 @@ namespace Integratieproject1.UI.Controllers
             return null;
         }
 
+
+        [HttpPost]
+        [Route("/Api/vote/{id}")]
+        public void androidVote(int id)
+        {
+           
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
+        }
+
         #endregion
 
         #region Projects
-        
+
         [HttpGet]
         [Route("Api/projects/{id}")]
         public IEnumerable<Project> GetProjects(int id)
