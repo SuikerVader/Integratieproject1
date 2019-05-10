@@ -266,7 +266,23 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
+        public IActionResult EditLayout(int platformId)
+        {
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditLayout.cshtml", platform);
+        }
 
-       
+        [HttpPost]
+        public IActionResult EditLayout(int platformId, Platform platform)
+        {
+            if (ModelState.IsValid)
+            {
+                projectsManager.EditPlatform(platform, platformId);
+            }
+
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+
     }
 }
