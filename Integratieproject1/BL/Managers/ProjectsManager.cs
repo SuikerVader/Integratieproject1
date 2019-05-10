@@ -125,7 +125,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         public IList<Project> GetAdminProjects(string userId)
-        {
+        { 
             List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
             List<Project> projects = new List<Project>();
             foreach (AdminProject adminProject in adminProjects)

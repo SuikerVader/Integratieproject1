@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Integratieproject1.UI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class AdminController : Controller
     {
         private readonly ProjectsManager _projectsManager;
@@ -465,5 +465,51 @@ namespace Integratieproject1.UI.Controllers
         }
 
         #endregion
+
+        #region Tags
+        
+        public IActionResult Tags()
+        {
+           List<Tag> tags = _ideationsManager.GetAllTags();
+           return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+        public IActionResult EditTag(int tagId)
+        {
+            Tag tag = _ideationsManager.GetTag(tagId);
+            return View("/UI/Views/Admin/EditTag.cshtml", tag);
+        }
+        
+        [HttpPost]
+        public IActionResult EditTag(Tag tag, int tagId)
+        {
+            _ideationsManager.EditTag(tag, tagId);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+        public IActionResult DeleteTag(int tagId)
+        {
+            _ideationsManager.DeleteTag(tagId);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+        public IActionResult AddTag()
+        {
+            return View("/UI/Views/Admin/AddTag.cshtml");
+        }
+        [HttpPost]
+        public IActionResult AddTag(Tag tag)
+        {
+            _ideationsManager.AddTag(tag);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+
+        #endregion
+
+
+        
     }
  }

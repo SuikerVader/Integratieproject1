@@ -1,0 +1,45 @@
+@using Integratieproject1.Domain.Ideations
+@using Integratieproject1.Domain.Projects
+@model Tag
+
+@{
+    ViewBag.Title = "Voeg Vraag Toe";
+}
+
+<div>
+    <form asp-controller="Project" asp-action="AddTag" asp-route-ideaId="@ViewBag.IdeaId">
+        <div class="input-group">
+            <select asp-for="TagId" class="form-control">
+                @foreach (var tag in ViewBag.tags)
+                {
+                    <option value="@tag.TagId">@tag.TagName</option>
+                }
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Tag toevoegen</button>
+            </div>
+        </div>  
+    </form>
+    
+</div>
+@*<script>
+    function showTagResults() {
+        document.getElementById("tagDropdown").classList.toggle("show");
+    }
+
+    function filterTagsFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("tagInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("tagDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+</script>*@

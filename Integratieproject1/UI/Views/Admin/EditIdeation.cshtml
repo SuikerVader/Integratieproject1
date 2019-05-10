@@ -52,6 +52,8 @@
                         <input asp-for="MapRequired" value="True" type="radio">Ja<br />
                         <input asp-for="MapRequired" value="False" type="radio">Nee<br />
                     </formgroup>
+                    <label asp-for="CentralQuestion">Externe link</label>
+                    <input asp-for="ExternalLink" value="@Model.ExternalLink" class="form-control" type="url"/>
                     <input class="btn btn-primary" type="submit" value="Ideation Opslaan">
                 </form>
                 <a class="btn btn-danger" asp-area="" asp-controller="Admin"
