@@ -86,7 +86,9 @@ namespace Integratieproject1.DAL.Repositories
 
         public Question GetQuestion(int questionId)
         {
-            return _ctx.Questions.Find(questionId);
+            return _ctx.Questions
+                .Include(q => q.Survey)
+                .Single(q => q.QuestionId == questionId);
         }
         
         public Question EditQuestion(Question question)

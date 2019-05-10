@@ -7,7 +7,9 @@ using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.DAL;
 using Integratieproject1.Domain;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
@@ -16,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -26,6 +29,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly UsersManager _usersManager;
+        private readonly IoTManager _ioTManager;
 
         public AdminController()
         {
@@ -33,6 +37,8 @@ namespace Integratieproject1.UI.Controllers
             _usersManager = new UsersManager();
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
+            _ioTManager = new IoTManager();
+            
         }
 
         public IActionResult Admin()
@@ -75,6 +81,43 @@ namespace Integratieproject1.UI.Controllers
         {
             IList<IdentityUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/Admin/Users.cshtml", users);
+        }
+        public IActionResult AddIoT(int id, string type)
+        {
+            if (type.Equals("question"))
+            {
+                IoTSetup ioTSetup = new IoTSetup()
+                {
+                    Question = _surveysManager.GetQuestion(id),
+                    Position = new Position(){Lat = "0", Lng = "0"}
+                };
+                return View("/UI/Views/Admin/AddIoTSetupToQuestion.cshtml", ioTSetup);
+            }
+            else
+            {
+                IoTSetup ioTSetup = new IoTSetup()
+                {
+                    Idea = _ideationsManager.GetIdea(id),
+                    Position = new Position(){Lat = "0", Lng = "0"}
+                };
+                return View("/UI/Views/Admin/AddIoTSetupToIdea.cshtml", ioTSetup);
+            }  
+        }
+        [HttpPost]
+        public IActionResult AddIoT(IoTSetup ioTSetup,string type , int id )
+        {
+            _ioTManager.CreateIoTSetup(ioTSetup, id, type);
+            if (type.Equals("question"))
+            {
+                Survey survey = _surveysManager.GetSurvey(_surveysManager.GetQuestion(id).Survey.SurveyId);
+                return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            }
+            else
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
+                return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            }
         }
 
         #region VerificationRequests

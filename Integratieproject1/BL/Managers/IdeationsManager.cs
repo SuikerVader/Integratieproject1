@@ -361,7 +361,7 @@ namespace Integratieproject1.BL.Managers
 
         public void DeleteIdea(int ideaId)
         {
-            IoTManager ioTManager = new IoTManager(_unitOfWorkManager, new SurveysManager());
+            IoTManager ioTManager = new IoTManager(_unitOfWorkManager);
             Idea idea = GetIdea(ideaId);
             if (idea.IoTSetups != null)
             {
