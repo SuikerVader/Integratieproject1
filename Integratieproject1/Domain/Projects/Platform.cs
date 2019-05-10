@@ -17,6 +17,7 @@ namespace Integratieproject1.Domain.Projects
         public string Phonenumber { get; set; }
         public string Description { get; set; }
         public string BackgroundImage { get; set; }
+        public string BackgroundColor { get; set; }
         public ICollection<Project> Projects { get; set; }
         public ICollection<CustomUser> Users { get; set; }
     }
