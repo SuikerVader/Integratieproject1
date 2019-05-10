@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Integratieproject1.BL.Managers;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +15,13 @@ namespace Integratieproject1.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<CustomUser> _userManager;
+        private readonly SignInManager<CustomUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<CustomUser> userManager,
+            SignInManager<CustomUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -46,10 +48,26 @@ namespace Integratieproject1.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Voornaam")]
+            public string Surname { get; set; }
+
+            [Display(Name = "Achternaam")]
+            public string Name { get; set; }
+
+            [Display(Name = "Geslacht")]
+            public string Sex { get; set; }
+
+            [Display(Name = "Leeftijd")]
+            public int Age { get; set; }
+
+            [Display(Name = "Postcode")]
+            public string Zipcode { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
+            UsersManager usersManager = new UsersManager();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -59,13 +77,24 @@ namespace Integratieproject1.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var surname = usersManager.GetSurname(user);
+            var name = usersManager.GetName(user);
+            var sex = usersManager.GetSex(user);
+            var age = usersManager.GetAge(user);
+            var zipcode = usersManager.GetZipcode(user);
+
 
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Surname = surname,
+                Name = name,
+                Sex = sex,
+                Age = age,
+                Zipcode = zipcode
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -107,9 +136,44 @@ namespace Integratieproject1.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
+            UsersManager usersManager = new UsersManager();
+            var surname = usersManager.GetSurname(user);
+            if (Input.Surname != surname)
+            {
+                user.Surname = Input.Surname;
+                await _userManager.UpdateAsync(user);
+            }
+
+            var name = usersManager.GetName(user);
+            if (Input.Name != name)
+            {
+                user.Name = Input.Name;
+                await _userManager.UpdateAsync(user);
+            }
+
+            var age = usersManager.GetAge(user);
+            if (Input.Age != age)
+            {
+                user.Age = Input.Age;
+                await _userManager.UpdateAsync(user);
+            }
+
+            var sex = usersManager.GetSex(user);
+            if (Input.Sex != sex)
+            {
+                user.Sex = Input.Sex;
+                await _userManager.UpdateAsync(user);
+            }
+
+            var zipcode = usersManager.GetZipcode(user);
+            if (Input.Zipcode != zipcode)
+            {
+                user.Zipcode = Input.Zipcode;
+                await _userManager.UpdateAsync(user);
+            }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Je profiel is geupdate!";
             return RedirectToPage();
         }
 

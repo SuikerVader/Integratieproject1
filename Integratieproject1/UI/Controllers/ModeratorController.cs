@@ -3,6 +3,7 @@ using Integratieproject1.BL.Managers;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +63,7 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult Users()
         {
             UsersManager usersManager = new UsersManager();
-            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = usersManager.GetUsers("USER");
             return View("/UI/Views/Moderator/Users.cshtml", users);
         }
 
@@ -70,7 +71,7 @@ namespace Integratieproject1.UI.Controllers
         {
             UsersManager usersManager = new UsersManager();
             usersManager.BlockUser(userId, days);
-            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = usersManager.GetUsers("USER");
             return View("/UI/Views/Moderator/Users.cshtml", users);
         }
 

@@ -6,12 +6,12 @@ namespace Integratieproject1.DAL.Interfaces
 {
     public interface IUsersRepository
     {
-        IdentityUser GetUser(string id);
-        void DeleteUser(IdentityUser identityUser);
-        void DeleteRole(IdentityUser identityUser, string role);
-        IEnumerable<IdentityUser> GetUsers(string role);
-        void GiveRole(IdentityUser identityUser, string role);
-        void CreateUser(IdentityUser identityUser);
+        CustomUser GetUser(string id);
+        void DeleteUser(CustomUser identityUser);
+        void DeleteRole(CustomUser identityUser, string role);
+        IEnumerable<CustomUser> GetUsers(string role);
+        void GiveRole(CustomUser identityUser, string role);
+        void CreateUser(CustomUser identityUser);
         IEnumerable<VerificationRequest> GetVerificationRequests();
         void CreateVerificationRequest(VerificationRequest verificationRequest);
         void SetVerificationRequestHandled(VerificationRequest verificationRequest);

@@ -249,17 +249,17 @@ namespace Integratieproject1.DAL
 
             #endregion
             #region Persons
-            IdentityUser person = new IdentityUser
+            CustomUser person = new CustomUser
             {
                 UserName = "Albert",
                 Email = "testPerson1@test.com"
             };
-            IdentityUser organisation = new IdentityUser
+            CustomUser organisation = new CustomUser
             {
                 UserName = "McDonalds",
                 Email = "testOrganisation1@test.com"
             };
-            IdentityUser admin = new IdentityUser
+            CustomUser admin = new CustomUser
             {
                 UserName = "TestAdmin",
                 Email = "testAdmin1@test.com"
@@ -648,7 +648,7 @@ namespace Integratieproject1.DAL
             #endregion
 
             projectOssenmarkt.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
-            platformAntwerp.Users = new List<IdentityUser> {person, organisation, admin};
+            platformAntwerp.Users = new List<CustomUser> {person, organisation, admin};
             ideaThema1.IdeaObjects = new List<IdeaObject>() {textfieldSport};
             ideaThema2.IdeaObjects = new List<IdeaObject>() {textfieldSchool};
             ideaThema3.IdeaObjects = new List<IdeaObject>() {textfieldLiefde};
@@ -704,7 +704,7 @@ namespace Integratieproject1.DAL
             ctx.ChangeTracker.QueryTrackingBehavior = previousBehaviour;
         }
 
-        public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUsers(UserManager<CustomUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Rollen aanmaken
             var superAdminRole = new IdentityRole {NormalizedName = "SuperAdmin", Name = "SuperAdmin"};
@@ -721,12 +721,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true};
-            var adminTest = new IdentityUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
-            var modTest = new IdentityUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
-            var organisationTest = new IdentityUser
+            var superAdminTest = new CustomUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true, Name = "Super", Surname = "Admin", Sex = "Male", Age = 35, Zipcode = "2275"};
+            var adminTest = new CustomUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new CustomUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
+            var organisationTest = new CustomUser
                 {UserName = "Organisation", Email = "organisation@gmail.com", EmailConfirmed = true };
-            var userTest = new IdentityUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
+            var userTest = new CustomUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");

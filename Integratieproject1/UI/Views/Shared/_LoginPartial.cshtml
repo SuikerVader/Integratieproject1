@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using Integratieproject1.Domain.Users
+@inject SignInManager<CustomUser> SignInManager
+@inject UserManager<CustomUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

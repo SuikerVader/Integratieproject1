@@ -1,0 +1,21 @@
+﻿@model Integratieproject1.Domain.Projects.Platform
+
+@{
+    ViewBag.Title = "Layout wijzigen";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="adminGrid">
+        <div class="adminTitle text-center">
+            <h2>Wijzig Layout</h2>
+        </div>
+        <div class="adminMain">
+            <div>
+                <form asp-controller="SuperAdmin" asp-action="EditLayout" asp-route-platformId="@Model.PlatformId" method="post">
+                    <label asp-for="BackgroundColor">Kleur Achtergrond</label>
+                    <input required asp-for="BackgroundColor" value="@Model.BackgroundColor" class="form-control" />             
+                </form>        
+            </div>
+        </div>
+    </div>
+</div>
