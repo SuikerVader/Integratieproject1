@@ -162,7 +162,7 @@ namespace Integratieproject1.UI.Controllers
                 {
                     project.BackgroundImage = GetImagePath(formFile);
                 }
-                _projectsManager.EditProject(project, projectId);
+                Project newProject = _projectsManager.EditProject(project, projectId);
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
                 IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);

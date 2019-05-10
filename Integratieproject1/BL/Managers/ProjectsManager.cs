@@ -170,17 +170,25 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void EditProject(Project project, int projectId)
+        public Project EditProject(Project project, int projectId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            Project originalProject = GetProject(projectId);
+            originalProject.AdminProjects = project.AdminProjects;
+            originalProject.Description = project.Description;
+            originalProject.EndDate = project.EndDate;
+            originalProject.Objective = project.Objective;
+            originalProject.Phases = project.Phases;
+            originalProject.Platform = project.Platform;
+            originalProject.ProjectName = project.ProjectName;
+            originalProject.StartDate = project.StartDate;
+            originalProject.Status = project.Status;
             project.Location = dataTypeManager.CheckLocation(project.Location);
-            project.ProjectId = projectId;
-            if (project.BackgroundImage == null)
+            if (originalProject.BackgroundImage == null)
             {
-                project.BackgroundImage = GetProject(projectId).BackgroundImage;
+                originalProject.BackgroundImage = project.BackgroundImage;
             }
-            _projectsRepository.EditProject(project);
-            _unitOfWorkManager.Save();
+            return _projectsRepository.EditProject(originalProject);
         }
         public void DeleteBackgroundImageProject(int projectId)
         {
