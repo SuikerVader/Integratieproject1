@@ -36,6 +36,9 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Platforms
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Single(pl => pl.PlatformId == platformId);
         }
 
@@ -43,6 +46,9 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Platforms
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Single(pl => pl.PlatformName == platformName);
         }
 

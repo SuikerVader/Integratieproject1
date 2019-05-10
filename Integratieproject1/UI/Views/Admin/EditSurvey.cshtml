@@ -59,6 +59,10 @@
                             </div>
                             <div id="@question.QuestionId.ToString()question" style="display: none">
                                 @await Html.PartialAsync("_EditQuestionPartial.cshtml", question)
+                                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                                   asp-action="AddIoT" asp-route-id="@question.QuestionId" asp-route-type="question">
+                                    Voeg IoT toe
+                                </a>
                             </div>
                             <br/>
 

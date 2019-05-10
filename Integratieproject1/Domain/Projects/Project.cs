@@ -35,5 +35,63 @@ namespace Integratieproject1.Domain.Projects
 
             return errors;
         }
+
+        public int GetIdeaCount()
+        {
+            int ideaCount = 0;
+            foreach (var phase in Phases)
+            {
+                foreach (var ideation in phase.Ideations)
+                {
+                    foreach (var idea in ideation.Ideas)
+                    {
+                        ideaCount++;
+                    }
+                }
+            }
+            return ideaCount;
+        }
+
+        public int GetVoteCount()
+        {
+            int voteCount = 0;
+            foreach (var phase in Phases)
+                        {
+                            foreach (var ideation in phase.Ideations)
+                            {
+                                foreach (var idea in ideation.Ideas)
+                                {
+                                    foreach (var vote in idea.Votes)
+                                    {
+                                        voteCount++;
+                                    }
+                                }
+                            }
+                        }
+            return voteCount;
+        }
+
+        public int GetReactionCount()
+        {
+            int reactionCount = 0;
+            foreach (var phase in Phases)
+            {
+                foreach (var ideation in phase.Ideations)
+                {
+                    foreach (var reaction in ideation.Reactions)
+                    {
+                        reactionCount++;
+                    }
+                    foreach (var idea in ideation.Ideas)
+                    {
+                        foreach (var reaction in idea.Reactions)
+                        {
+                            reactionCount++;
+                        }
+                    }
+                }
+            }
+            return reactionCount;
+        }
     }
 }
