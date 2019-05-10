@@ -17,7 +17,7 @@ namespace Integratieproject1.DAL.Repositories
     public class UsersRepository : IUsersRepository
     {
         private readonly CityOfIdeasDbContext _ctx;
-        private UserStore<IdentityUser> _userStore;
+        private UserStore<CustomUser> _userStore;
         
         public UsersRepository(UnitOfWork unitOfWork)
         {
@@ -25,39 +25,44 @@ namespace Integratieproject1.DAL.Repositories
                 throw new ArgumentNullException(nameof(unitOfWork));
            
             _ctx = unitOfWork.Ctx;
-            _userStore = new UserStore<IdentityUser>(_ctx);
+            _userStore = new UserStore<CustomUser>(_ctx);
         }
 
-        public IdentityUser GetUser(string id)
+        public CustomUser GetUser(string id)
         {
             return _userStore.FindByIdAsync(id).Result;
         }
         
-        public async void DeleteUser(IdentityUser identityUser)
+        public async void DeleteUser(CustomUser identityUser)
         {
             await _userStore.DeleteAsync(identityUser);
         }
 
-        public async void DeleteRole(IdentityUser identityUser, string role)
+        public async void DeleteRole(CustomUser identityUser, string role)
         {
-            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.RemoveFromRoleAsync(identityUser, role);
         }
 
-        public IEnumerable<IdentityUser> GetUsers(string role)
+        public IEnumerable<CustomUser> GetUsers(string role)
         {
             return _userStore.GetUsersInRoleAsync(role).Result;
         }
-        public async void GiveRole(IdentityUser identityUser, string role)
+        public async void GiveRole(CustomUser identityUser, string role)
         {
-            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.AddToRoleAsync(identityUser, role);
         }
         
-        public async void CreateUser(IdentityUser identityUser)
+        public async void CreateUser(CustomUser identityUser)
         {
-            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore,null,null,null,null,null,null,null,null);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
             userManager.CreateAsync(identityUser);
+        }
+
+        public bool IsInRole(CustomUser user, string role)
+        {
+           return _userStore.IsInRoleAsync(user, role).Result;
         }
         
         
@@ -81,15 +86,40 @@ namespace Integratieproject1.DAL.Repositories
         
         #endregion
 
-        public async void BlockUser(IdentityUser identityUser, int days)
+        public async void BlockUser(CustomUser identityUser, int days)
         {
-            UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(_userStore, null, null, null, null, null, null, null, null);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
             await userManager.SetLockoutEndDateAsync(identityUser, DateTime.Now.AddDays(days));
         }
 
-        public IdentityUser GetUserByEmail(string email)
+        public CustomUser GetUserByEmail(string email)
         {            
             return _userStore.FindByNameAsync(email.ToUpper()).Result;
+        }
+
+        public string GetSurname(CustomUser customUser)
+        {
+            return _ctx.Users.Single(u => u.Id == customUser.Id).Surname;
+        }
+
+        public string GetName(CustomUser customUser)
+        {
+            return _ctx.Users.Single(u => u.Id == customUser.Id).Name;
+        }
+
+        public string GetSex(CustomUser customUser)
+        {
+            return _ctx.Users.Single(u => u.Id == customUser.Id).Sex;
+        }
+
+        public int GetAge(CustomUser customUser)
+        {
+            return _ctx.Users.Single(u => u.Id == customUser.Id).Age;
+        }
+
+        public string GetZipcode(CustomUser customUser)
+        {
+            return _ctx.Users.Single(u => u.Id == customUser.Id).Zipcode;
         }
     }
 }

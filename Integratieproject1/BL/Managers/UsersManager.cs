@@ -30,36 +30,42 @@ namespace Integratieproject1.BL.Managers
             _usersRepository = new UsersRepository(_unitOfWorkManager.UnitOfWork);
         }
 
-        public IdentityUser GetUser(string userId)
+        public CustomUser GetUser(string userId)
         {
             return _usersRepository.GetUser(userId);
         }
         
         public void DeleteUser(string userId)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = GetUser(userId);
             _usersRepository.DeleteUser(identityUser);
         }
 
         public void DeleteRole(string userId, string role)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = GetUser(userId);
             _usersRepository.DeleteRole(identityUser, role);
         }
         
-        public IList<IdentityUser> GetUsers(string role)
+        public IList<CustomUser> GetUsers(string role)
         {
             return _usersRepository.GetUsers(role).ToList();
         }
         
         public void GiveRole(string userId, string role)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = GetUser(userId);
             _usersRepository.DeleteRole(identityUser, "USER");
             _usersRepository.GiveRole(identityUser, role);
         }
         
-        public void CreateUser(IdentityUser identityUser)
+        public bool IsInRole(string userId, string role)
+        {
+            CustomUser identityUser = GetUser(userId);
+            return _usersRepository.IsInRole(identityUser, role);
+        }
+
+        public void CreateUser(CustomUser identityUser)
         {
             _usersRepository.CreateUser(identityUser);
         }
@@ -76,7 +82,7 @@ namespace Integratieproject1.BL.Managers
             _usersRepository.CreateVerificationRequest(verificationRequest);
         }
 
-        public VerificationRequest CreateVerificationRequest(IdentityUser user, string request)
+        public VerificationRequest CreateVerificationRequest(CustomUser user, string request)
         {
             VerificationRequest verificationRequest = new VerificationRequest();
             verificationRequest.user = user;
@@ -97,13 +103,38 @@ namespace Integratieproject1.BL.Managers
 
         public void BlockUser(string userId, int days)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = GetUser(userId);
             _usersRepository.BlockUser(identityUser, days);
         }
 
-        public IdentityUser GetUserByEmail(string email)
+        public CustomUser GetUserByEmail(string email)
         {
             return _usersRepository.GetUserByEmail(email);
+        }
+
+        public string GetSurname(CustomUser customUser)
+        {
+            return _usersRepository.GetSurname(customUser);
+        }
+
+        public string GetName(CustomUser customUser)
+        {
+            return _usersRepository.GetName(customUser);
+        }
+
+        public string GetSex(CustomUser customUser)
+        {
+            return _usersRepository.GetSex(customUser);
+        }
+
+        public int GetAge(CustomUser customUser)
+        {
+            return _usersRepository.GetAge(customUser);
+        }
+
+        public string GetZipcode(CustomUser customUser)
+        {
+            return _usersRepository.GetZipcode(customUser);
         }
     }
 }

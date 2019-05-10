@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -38,14 +39,14 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult Admins()
         {
 
-            IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
         public IActionResult DeleteAdmin(string adminId)
         {
             usersManager.DeleteUser(adminId);
-            IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
@@ -53,27 +54,27 @@ namespace Integratieproject1.UI.Controllers
         {
             usersManager.DeleteRole(adminId,"ADMIN");
             usersManager.GiveRole(adminId,"USER");
-            IList<IdentityUser> admins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
         public IActionResult Users()
         {
-            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
         public IActionResult DeleteUser(string userId)
         {
             usersManager.DeleteUser(userId);
-            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
         public IActionResult GiveAdminRole(string userId)
         {
             usersManager.GiveRole(userId,"ADMIN");
-            IList<IdentityUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
@@ -252,7 +253,7 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult AddAdminsToProject(int projectId)
         {
-            IList<IdentityUser> admins = projectsManager.GetNotProjectAdmins(projectId);
+            IList<CustomUser> admins = projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
@@ -260,12 +261,28 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult AddAdminProjects(int projectId, string adminId)
         {
             projectsManager.CreateAdminProject(projectId, adminId);
-            IList<IdentityUser> admins = projectsManager.GetNotProjectAdmins(projectId);
+            IList<CustomUser> admins = projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
+        public IActionResult EditLayout(int platformId)
+        {
+            Platform platform = projectsManager.GetPlatform(platformId);
+            return View("/UI/Views/SuperAdmin/EditLayout.cshtml", platform);
+        }
 
-       
+        [HttpPost]
+        public IActionResult EditLayout(int platformId, Platform platform)
+        {
+            if (ModelState.IsValid)
+            {
+                projectsManager.EditPlatform(platform, platformId);
+            }
+
+            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
+        }
+
     }
 }

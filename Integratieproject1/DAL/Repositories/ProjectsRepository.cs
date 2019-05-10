@@ -5,6 +5,7 @@ using System.Linq;
 using Integratieproject1.DAL.Interfaces;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,9 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Platforms
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Single(pl => pl.PlatformId == platformId);
         }
 
@@ -42,6 +46,9 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Platforms
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Single(pl => pl.PlatformName == platformName);
         }
 
@@ -92,7 +99,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public IEnumerable<AdminProject> GetAdminProjectsByUser(string userId)
         {
-            UserStore<IdentityUser> userStore = new UserStore<IdentityUser>(_ctx);
+            UserStore<CustomUser> userStore = new UserStore<CustomUser>(_ctx);
             IdentityUser identityUser = userStore.FindByIdAsync(userId).Result;
             return _ctx.AdminProjects
                 .Where(p => p.Admin == identityUser)

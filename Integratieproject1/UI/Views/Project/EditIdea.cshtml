@@ -102,6 +102,16 @@
                 <div class="text-center" id="addTag" style="display: none">
                     @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
                 </div>
+                if (User.IsInRole("Admin"))
+                {
+                    <div>
+                     <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                                            asp-action="AddIoT" asp-route-id="@Model.IdeaId" asp-route-type="idea">
+                                             Voeg IoT toe
+                                         </a>   
+                    </div>
+                    
+                }
             }
         </div>
 

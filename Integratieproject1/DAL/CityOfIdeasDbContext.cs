@@ -21,7 +21,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Integratieproject1.DAL
 {
-    public sealed class CityOfIdeasDbContext : IdentityDbContext<IdentityUser>
+    public sealed class CityOfIdeasDbContext : IdentityDbContext<CustomUser>
     {
         public CityOfIdeasDbContext()
         {
