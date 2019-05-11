@@ -18,17 +18,17 @@ namespace Integratieproject1.UI.Controllers
     [Authorize(Roles = "SuperAdmin")]
     public class SuperAdminController : Controller
     {
-        private ProjectsManager projectsManager;
-        private IdeationsManager ideationsManager;
-        private SurveysManager surveysManager;
-        private UsersManager usersManager;
+        private ProjectsManager _projectsManager;
+        private IdeationsManager _ideationsManager;
+        private SurveysManager _surveysManager;
+        private UsersManager _usersManager;
 
         public SuperAdminController()
         {
-            projectsManager = new ProjectsManager();
-            usersManager = new UsersManager();
-            ideationsManager = new IdeationsManager();
-            surveysManager = new SurveysManager();
+            _projectsManager = new ProjectsManager();
+            _usersManager = new UsersManager();
+            _ideationsManager = new IdeationsManager();
+            _surveysManager = new SurveysManager();
         }
 
         public IActionResult SuperAdmin(IdentityUser user)
@@ -39,66 +39,66 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult Admins()
         {
 
-            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> admins = _usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
         public IActionResult DeleteAdmin(string adminId)
         {
-            usersManager.DeleteUser(adminId);
-            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
+            _usersManager.DeleteUser(adminId);
+            IList<CustomUser> admins = _usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
         public IActionResult DeleteAdminRole(string adminId)
         {
-            usersManager.DeleteRole(adminId,"ADMIN");
-            usersManager.GiveRole(adminId,"USER");
-            IList<CustomUser> admins = usersManager.GetUsers("ADMIN");
+            _usersManager.DeleteRole(adminId,"ADMIN");
+            _usersManager.GiveRole(adminId,"USER");
+            IList<CustomUser> admins = _usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
         
         public IActionResult Users()
         {
-            IList<CustomUser> users = usersManager.GetUsers("USER");
+            IList<CustomUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
         public IActionResult DeleteUser(string userId)
         {
-            usersManager.DeleteUser(userId);
-            IList<CustomUser> users = usersManager.GetUsers("USER");
+            _usersManager.DeleteUser(userId);
+            IList<CustomUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
         public IActionResult GiveAdminRole(string userId)
         {
-            usersManager.GiveRole(userId,"ADMIN");
-            IList<CustomUser> users = usersManager.GetUsers("USER");
+            _usersManager.GiveRole(userId,"ADMIN");
+            IList<CustomUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
         public IActionResult AdminProjects(string adminId)
         {
-            IList<AdminProject> adminProjects = projectsManager.GetAllAdminProjects(adminId).ToList();
+            IList<AdminProject> adminProjects = _projectsManager.GetAllAdminProjects(adminId).ToList();
             return View("/UI/Views/SuperAdmin/AdminProjects.cshtml", adminProjects);
         }
         
         public IActionResult DeleteAdminProject(int adminProjectId)
         {
-            projectsManager.DeleteAdminProject(adminProjectId);
+            _projectsManager.DeleteAdminProject(adminProjectId);
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Projects()
         {
-            IList<Project> projects = projectsManager.GetAllProjects();
+            IList<Project> projects = _projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
         
         public IActionResult DeleteProject(int projectId)
         {
-            projectsManager.DeleteProject(projectId);
-            IList<Project> projects = projectsManager.GetAllProjects();
+            _projectsManager.DeleteProject(projectId);
+            IList<Project> projects = _projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
         
@@ -119,16 +119,16 @@ namespace Integratieproject1.UI.Controllers
                 }
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                projectsManager.CreateProject(project, currentUserId,platformId);
+                _projectsManager.CreateProject(project, currentUserId,platformId);
             }
 
-            IList<Project> projects = projectsManager.GetAllProjects();
+            IList<Project> projects = _projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
         
         public IActionResult EditProject(int projectId)
         {
-            Project project = projectsManager.GetProject(projectId);
+            Project project = _projectsManager.GetProject(projectId);
             return View("/UI/Views/SuperAdmin/EditProject.cshtml", project);
         }
         
@@ -141,10 +141,10 @@ namespace Integratieproject1.UI.Controllers
                 {
                     project.BackgroundImage = GetImagePath(formFile); 
                 }
-                projectsManager.EditProject(project, projectId);
+                _projectsManager.EditProject(project, projectId);
             }
                 
-            IList<Project> projects = projectsManager.GetAllProjects();
+            IList<Project> projects = _projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
         private string GetImagePath(IFormFile file)
@@ -169,27 +169,27 @@ namespace Integratieproject1.UI.Controllers
         }
         public IActionResult DeleteBackgroundImageProject(int projectId)
         {
-            projectsManager.DeleteBackgroundImageProject(projectId);
-            Project returnProject = projectsManager.GetProject(projectId);
+            _projectsManager.DeleteBackgroundImageProject(projectId);
+            Project returnProject = _projectsManager.GetProject(projectId);
             return View("/UI/Views/SuperAdmin/EditProject.cshtml", returnProject);
         }
 
         public IActionResult Platforms()
         {
-            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
 
         public IActionResult DeletePlatform(int platformId)
         {
-            projectsManager.DeletePlatform(platformId);
-            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            _projectsManager.DeletePlatform(platformId);
+            IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
         
         public IActionResult EditPlatform(int platformId)
         {
-            Platform platform = projectsManager.GetPlatform(platformId);
+            Platform platform = _projectsManager.GetPlatform(platformId);
             return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
         
@@ -203,23 +203,23 @@ namespace Integratieproject1.UI.Controllers
                     platform.BackgroundImage = GetImagePath(formFile);
                                     
                 }
-               projectsManager.EditPlatform(platform, platformId);
+               _projectsManager.EditPlatform(platform, platformId);
             }
                 
-            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
         public IActionResult DeleteBackgroundImagePlatform(int platformId)
         {
-            projectsManager.DeleteBackgroundImagePlatform(platformId);
-            Platform platform = projectsManager.GetPlatform(platformId);
+            _projectsManager.DeleteBackgroundImagePlatform(platformId);
+            Platform platform = _projectsManager.GetPlatform(platformId);
             return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
 
         public IActionResult DeleteLogoPlatform(int platformId)
         {
-            projectsManager.DeleteLogoPlatform(platformId);
-            Platform platform = projectsManager.GetPlatform(platformId);
+            _projectsManager.DeleteLogoPlatform(platformId);
+            Platform platform = _projectsManager.GetPlatform(platformId);
             return View("/UI/Views/SuperAdmin/EditPlatform.cshtml", platform);
         }
 
@@ -244,31 +244,31 @@ namespace Integratieproject1.UI.Controllers
                     platform.Logo = GetImagePath(logoFile);
                                     
                 }
-                projectsManager.CreatePlatform(platform);
+                _projectsManager.CreatePlatform(platform);
             }
 
-            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
 
         public IActionResult AddAdminsToProject(int projectId)
         {
-            IList<CustomUser> admins = projectsManager.GetNotProjectAdmins(projectId);
+            IList<CustomUser> admins = _projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
         public IActionResult AddAdminProjects(int projectId, string adminId)
         {
-            projectsManager.CreateAdminProject(projectId, adminId);
-            IList<CustomUser> admins = projectsManager.GetNotProjectAdmins(projectId);
+            _projectsManager.CreateAdminProject(projectId, adminId);
+            IList<CustomUser> admins = _projectsManager.GetNotProjectAdmins(projectId);
             ViewBag.ProjectId = projectId;
             return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
         }
 
         public IActionResult EditLayout(int platformId)
         {
-            Platform platform = projectsManager.GetPlatform(platformId);
+            Platform platform = _projectsManager.GetPlatform(platformId);
             return View("/UI/Views/SuperAdmin/EditLayout.cshtml", platform);
         }
 
@@ -277,10 +277,10 @@ namespace Integratieproject1.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                projectsManager.EditPlatform(platform, platformId);
+                _projectsManager.EditPlatform(platform, platformId);
             }
 
-            IList<Platform> platforms = projectsManager.GetAllPlatforms();
+            IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
 
