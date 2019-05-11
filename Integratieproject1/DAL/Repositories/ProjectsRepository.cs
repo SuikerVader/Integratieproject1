@@ -140,10 +140,11 @@ namespace Integratieproject1.DAL.Repositories
             return project;
         }
 
-        public void EditProject(Project project)
+        public Project EditProject(Project project)
         {
             _ctx.Projects.Update(project);
             _ctx.SaveChanges();
+            return _ctx.Projects.Find(project.ProjectId);
         }
 
         public AdminProject CreateAdminProject(AdminProject adminProject)
