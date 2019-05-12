@@ -11,193 +11,198 @@
     ViewBag.Element = "ideation";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-<div class="container">
-    <div id="ideationGrid">
-        <div id="ideationInfo">
-            <div class="card text-center infoCard">
-                <div class="card-body">
-                    <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
-                    @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
-                    <br/><br/>
-                    @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
-                    {
-                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>  
-                    }
-                    
-                </div>
-            </div>
-        </div>
-        <div id="ideation">
-            <div class="card text-center" style="border: none;">
-                <div class="card-body">
-                    <h1 class="card-title">@Model.CentralQuestion</h1>
-                    @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
-                    {
-                        <a class="btn btn-primary" asp-area="" asp-controller="Project"
-                           asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
-                            Idee Posten
-                        </a>
-                    }
-                    @if (Model.InputIdeation == false)
-                    {
-                        <p class="card-text"> opties:</p>
-                        <div class="d-flex flex-row justify-content-center flex-wrap">
-                            @foreach (var idea in Model.Ideas)
-                            {
-                                <a class="btn btn-primary" href="#@idea.IdeaId">@idea.Title</a>
-                            }
-                        </div>
-                    }
-                    
-                    <p class="card-text d-flex flex-row justify-content-end flex-wrap">
-                        <small onclick="showHideReaction()">
-                            <i class="fa fa-comment"></i> @Model.Reactions.Count</small>
-                    </p>
-                </div>
-            </div>
-            <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
-                @foreach (var reaction in Model.Reactions)
-                {
-                    <p>
-                        <div class="d-flex flex-row justify-content-between">
+<body style="background-color:@Model.Phase.Project.Platform.BackgroundColor;color:@Model.Phase.Project.Platform.TextColor">
+    <div class="container">
+        <div id="ideationGrid">
+            <div id="ideationInfo">
+                <div class="card text-center infoCard">
+                    <div class="card-body">
+                        <h5>Info:</h5>
+                        Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br />
+                        Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br />
+                        @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
+                        <br /><br />
+                        @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
+                        {
+                            <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
+                        }
 
-                            <p>
-                                <small>
-                                    <strong>@reaction.IdentityUser.UserName:</strong>
-                                </small>
-                                <small>@reaction.ReactionText</small>
-                            </p>
-                            <p>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <small>
-
-                                        @{
-                                            var userVoted = false;
-                                        }
-                                        @foreach (var like in reaction.Likes)
-                                        {
-                                            if (User.Identity.Name == like.IdentityUser.UserName)
-                                            {
-                                                userVoted = true;
-                                                break;
-                                            }
-                                        }
-                                        @if (userVoted == true)
-                                        {
-                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                        }
-                                        else
-                                        {
-                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
-                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                            </a>
-                                        }
-
-                                    </small>
-                                    <small>
-                                        <a asp-area="" asp-controller="Project"
-                                           asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                            <i class="fa fa-flag"></i>
-                                        </a>
-                                    </small>
-                                }
-                                else
-                                {
-                                    <small>
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
-                                }
-                            </p>
-
-                        </div>
-                    </p>
-                }
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="d-flex flex-row justify-content-end">
-                        <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
-                            <i class="fa fa-comment"></i>
-                        </button>
-                        <div id="createReaction" style="display: none">
-                            @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
-                        </div>
                     </div>
-                }
+                </div>
             </div>
-        </div>
-        <div id="ideas">
-            <div class="text-center" style="padding: 20px">
-                <h1><i class="fa fa-lightbulb-o"></i> Idee&euml;n <i class="fa fa-lightbulb-o"></i></h1>
-            </div>
-            <div class="d-flex flex-row justify-content-around flex-wrap">
-                @foreach (var idea in Model.Ideas)
-                {
-                    <div id="@idea.IdeaId" class="card text-center idea">
-
-                        <div class="card-body">
-                            <h5 class="card-title">@idea.Title</h5>
-                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0)
-                            {
-                                <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
-                            }
-
-                            @if (Model.InputIdeation == true)
-                            {
-                                <p>
-                                    <small>Ingezonden door: @idea.IdentityUser.UserName</small>
-                                </p>
-                            }
-                            <a class="btn btn-primary" asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                                Bekijk Idee
+            <div id="ideation">
+                <div class="card text-center" style="border: none;">
+                    <div class="card-body">
+                        <h1 class="card-title">@Model.CentralQuestion</h1>
+                        @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
+                        {
+                            <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
+                               asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
+                                Idee Posten
                             </a>
-                        </div>
-                        <div class="card-footer d-flex flex-row justify-content-around">
-                            <div>
-                                <i class="fa fa-heart"></i> @idea.Votes.Count</div>
-                            <div>
-                                <i class="fa fa-comment"></i> @idea.Reactions.Count</div>
-                        </div>
+                        }
+                        @if (Model.InputIdeation == false)
+                        {
+                            <p class="card-text"> opties:</p>
+                            <div class="d-flex flex-row justify-content-center flex-wrap">
+                                @foreach (var idea in Model.Ideas)
+                                {
+                                    <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
+                                }
+                            </div>
+                        }
+
+                        <p class="card-text d-flex flex-row justify-content-end flex-wrap">
+                            <small onclick="showHideReaction()">
+                                <i class="fa fa-comment"></i> @Model.Reactions.Count
+                            </small>
+                        </p>
                     </div>
+                </div>
+                <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
+                    @foreach (var reaction in Model.Reactions)
+                    {
+                        <p>
+                            <div class="d-flex flex-row justify-content-between">
+
+                        <p>
+                            <small>
+                                <strong>@reaction.IdentityUser.UserName:</strong>
+                            </small>
+                            <small>@reaction.ReactionText</small>
+                        </p>
+                        <p>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <small>
+
+                                    @{
+                                        var userVoted = false;
+                                    }
+                                    @foreach (var like in reaction.Likes)
+                                    {
+                                        if (User.Identity.Name == like.IdentityUser.UserName)
+                                        {
+                                            userVoted = true;
+                                            break;
+                                        }
+                                    }
+                                    @if (userVoted == true)
+                                    {
+                                        <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                    }
+                                    else
+                                    {
+                                        <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                        </a>
+                                    }
+
+                                </small>
+                                <small>
+                                    <a asp-area="" asp-controller="Project"
+                                       asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                        <i class="fa fa-flag"></i>
+                                    </a>
+                                </small>
+                            }
+                            else
+                            {
+                                <small>
+                                    <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
+                                </small>
+                            }
+                        </p>
+
+                    </div>
+                    </p>
                 }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="d-flex flex-row justify-content-end">
+                            <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
+                                <i class="fa fa-comment"></i>
+                            </button>
+                            <div id="createReaction" style="display: none">
+                                @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div id="ideas">
+                <div class="text-center" style="padding: 20px">
+                    <h1><i class="fa fa-lightbulb-o"></i> Idee&euml;n <i class="fa fa-lightbulb-o"></i></h1>
+                </div>
+                <div class="d-flex flex-row justify-content-around flex-wrap">
+                    @foreach (var idea in Model.Ideas)
+                    {
+                        <div id="@idea.IdeaId" class="card text-center idea">
+
+                            <div class="card-body">
+                                <h5 class="card-title">@idea.Title</h5>
+                                @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0)
+                                {
+                                    <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
+                                }
+
+                                @if (Model.InputIdeation == true)
+                                {
+                                    <p>
+                                        <small>Ingezonden door: @idea.IdentityUser.UserName</small>
+                                    </p>
+                                }
+                                <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
+                                   asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                                    Bekijk Idee
+                                </a>
+                            </div>
+                            <div class="card-footer d-flex flex-row justify-content-around">
+                                <div>
+                                    <i class="fa fa-heart"></i> @idea.Votes.Count
+                                </div>
+                                <div>
+                                    <i class="fa fa-comment"></i> @idea.Reactions.Count
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
             </div>
 
         </div>
+        </div>
+</body>
 
-    </div>
-</div>
+        @*************************@
+        @* refactor naar js file *@
+        <script>
+            function showHideCreateIdea() {
+                var x = document.getElementById('idea');
+                if (x.style.display === 'none') {
+                    x.style.display = 'inline-block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
 
+            function showHideReaction() {
+                var x = document.getElementById('reaction');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
 
-@*************************@
-@* refactor naar js file *@
-<script>
-    function showHideCreateIdea() {
-        var x = document.getElementById('idea');
-        if (x.style.display === 'none') {
-            x.style.display = 'inline-block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
-
-    function showHideReaction() {
-        var x = document.getElementById('reaction');
-        if (x.style.display === 'none') {
-            x.style.display = 'block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
-
-    function showHideCreateReaction() {
-        var x = document.getElementById('createReaction');
-        if (x.style.display === 'none') {
-            x.style.display = 'inline-block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
-</script>
-@*************************@
+            function showHideCreateReaction() {
+                var x = document.getElementById('createReaction');
+                if (x.style.display === 'none') {
+                    x.style.display = 'inline-block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+        @*************************@
