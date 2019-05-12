@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Integratieproject1.DAL.Interfaces;
@@ -37,9 +38,9 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideations
                 .Include(ph => ph.Phase)
                 .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
-                .Include(i=>i.Ideas).ThenInclude(v=>v.Votes)
-                .Include(i=>i.Ideas).ThenInclude(r=>r.Reactions)
-
+                .Include(i=>i.Ideas).ThenInclude(id =>id.IdeaObjects )
+                .Include(i => i.Ideas).ThenInclude(v => v.Votes)
+                .Include(i => i.Ideas).ThenInclude(r => r.Reactions)
                 .AsEnumerable();
         }
 
@@ -58,7 +59,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Ideas).ThenInclude(v => v.Votes)
                 .Include(i => i.Ideas).ThenInclude(im => im.IdeaObjects)
                 .Include(i => i.Ideas).ThenInclude(u => u.IdentityUser)
-                .Include(p => p.Phase).ThenInclude(p => p.Project)
+                .Include(p => p.Phase).ThenInclude(p => p.Project).ThenInclude(pl => pl.Platform)
                 .Include(r => r.Reactions).ThenInclude(l => l.Likes)
                 .Include(r => r.Reactions).ThenInclude(u => u.IdentityUser)
                 .Single(id => id.IdeationId == ideationId);
@@ -70,7 +71,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
             return ideation;
         }
-        
+
         public Ideation EditIdeation(Ideation ideation)
         {
             _ctx.Ideations.Update(ideation);
@@ -83,6 +84,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Ideations.Remove(ideation);
             _ctx.SaveChanges();
         }
+
         #endregion
 
         #region Idea methods
@@ -92,7 +94,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Ideas.Where(idea => idea.Ideation.IdeationId == ideationId).AsEnumerable();
         }
-        
+
         public IEnumerable<Idea> GetAllIdeas(int platformId)
         {
             return _ctx.Ideas
@@ -109,11 +111,12 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(v => v.Votes).ThenInclude(v => v.IdentityUser)
                 .Include(i => i.IdeaObjects)
                 .Include(i => i.IdentityUser)
-                .Include(i =>i.Position)
-                .Include(i=>i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
+                .Include(i => i.Position)
+                .Include(i => i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project).ThenInclude(pl => pl.Platform)
+                .Include(i => i.IdeaTags).ThenInclude(it => it.Tag)
                 .Single(i => i.IdeaId == ideaId);
         }
-        
+
         public IEnumerable<Idea> GetReportedIdeas(int projectId)
         {
             return _ctx.Ideas
@@ -144,7 +147,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
-        
+
         #endregion
 
         #region IdeaObject methods
@@ -158,7 +161,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.IdeaObjects.Include(i => i.Idea).Single(i => i.IdeaObjectId == ideaObjectId);
         }
-            
+
         #region Images
 
         public Image CreateImage(Image image)
@@ -170,8 +173,10 @@ namespace Integratieproject1.DAL.Repositories
 
         public IEnumerable<Image> ReadImagesOfIdea(int ideaId)
         {
-            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).Where(i => i.GetType() == typeof(Image)).AsEnumerable().Cast<Image>();
+            return _ctx.Images.Where(i => i.Idea.IdeaId == ideaId).Where(i => i.GetType() == typeof(Image))
+                .AsEnumerable().Cast<Image>();
         }
+
         public Image GetImage(int imageId)
         {
             return _ctx.Images.Include(i => i.Idea).Single(i => i.IdeaObjectId == imageId);
@@ -197,17 +202,19 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Videos.Include(v => v.Idea).Single(v => v.IdeaObjectId == videoId);
         }
+
         public void AddVideo(Video video)
         {
             _ctx.Videos.Add(video);
             _ctx.SaveChanges();
         }
-        
+
         public void EditVideo(Video video)
         {
             _ctx.Videos.Update(video);
             _ctx.SaveChanges();
         }
+
         public void RemoveVideo(Video video)
         {
             _ctx.Videos.Remove(video);
@@ -223,15 +230,18 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.TextFields.Update(textField);
             _ctx.SaveChanges();
         }
+
         public void AddTextField(TextField textField)
         {
             _ctx.TextFields.Add(textField);
             _ctx.SaveChanges();
         }
+
         public TextField GetTextField(int textFieldId)
         {
-            return  _ctx.TextFields.Include(t => t.Idea).Single(t => t.IdeaObjectId == textFieldId);
+            return _ctx.TextFields.Include(t => t.Idea).Single(t => t.IdeaObjectId == textFieldId);
         }
+
         public void RemoveTextField(TextField textField)
         {
             _ctx.TextFields.Remove(textField);
@@ -247,10 +257,11 @@ namespace Integratieproject1.DAL.Repositories
         public IEnumerable<Reaction> GetAllReactions(int platformId)
         {
             return _ctx.Reactions
-                .Where(r => r.Ideation.Phase.Project.Platform.PlatformId == platformId || r.Idea.Ideation.Phase.Project.Platform.PlatformId == platformId)
+                .Where(r => r.Ideation.Phase.Project.Platform.PlatformId == platformId ||
+                            r.Idea.Ideation.Phase.Project.Platform.PlatformId == platformId)
                 .AsEnumerable();
         }
-        
+
         public IEnumerable<Reaction> GetReportedReactions(int projectId)
         {
             return _ctx.Reactions
@@ -262,7 +273,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(r => r.IdentityUser)
                 .AsEnumerable();
         }
-        
+
         public IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation)
         {
             return _ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
@@ -287,7 +298,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
             return reaction;
         }
-        
+
         public void UpdateReaction(Reaction reaction)
         {
             _ctx.Reactions.Update(reaction);
@@ -299,6 +310,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Reactions.Remove(reaction);
             _ctx.SaveChanges();
         }
+
         #endregion
 
         #region Vote methods
@@ -326,7 +338,8 @@ namespace Integratieproject1.DAL.Repositories
 
         public bool CheckUserVote(IdentityUser user, VoteType voteType, Idea idea)
         {
-            if (_ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user).Where(v => v.VoteType == voteType)
+            if (_ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user)
+                .Where(v => v.VoteType == voteType)
                 .AsEnumerable().Any())
             {
                 return false;
@@ -377,9 +390,61 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Likes.Remove(like);
             _ctx.SaveChanges();
         }
+
         #endregion
 
 
+        #region Tag methods
+        
+        public Tag GetTag(int tagId)
+        {
+            return _ctx.Tags.Find(tagId);
+        }
+        public IEnumerable<Tag> GetAllTags()
+        {
+            return _ctx.Tags.AsEnumerable();
+        }
+        
+        public IdeaTag GetIdeaTag(int ideaTagId)
+        {
+            return _ctx.IdeaTags
+                .Include(i => i.Idea)
+                .Include(i => i.Tag)
+                .Single(i => i.IdeaTagId == ideaTagId);
+        }
+        
+        public void CreateIdeaTag(IdeaTag ideaTag)
+        {
+            _ctx.IdeaTags.Add(ideaTag);
+            _ctx.SaveChanges();
+        }
 
+        public void DeleteIdeaTag(IdeaTag ideaTag)
+        {
+            _ctx.IdeaTags.Remove(ideaTag);
+            _ctx.SaveChanges();
+        }
+        
+        public void EditTag(Tag tag)
+        {
+            _ctx.Tags.Update(tag);
+            _ctx.SaveChanges();
+        }
+
+        public void AddTag(Tag tag)
+        {
+            _ctx.Tags.Add(tag);
+            _ctx.SaveChanges();
+        }
+
+        public void DeleteTag(Tag tag)
+        {
+            _ctx.Tags.Remove(tag);
+            _ctx.SaveChanges();
+        }
+        #endregion
+
+
+        
     }
 }

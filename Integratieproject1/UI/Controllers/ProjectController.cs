@@ -294,8 +294,8 @@ namespace Integratieproject1.UI.Controllers
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
-            
             ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
@@ -303,6 +303,7 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult EditIdea(int ideaId)
         {
             Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -319,6 +320,7 @@ namespace Integratieproject1.UI.Controllers
                 ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, ideaId);
                 ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, ideaId);
             }
+            
             return View("/UI/Views/Project/Idea.cshtml", returnIdea);
         }
 
@@ -326,6 +328,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -333,6 +336,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -347,7 +351,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddVideo(video, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -355,7 +359,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddTextField(textField, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -363,6 +367,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.EditTextField(textField, textFieldId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -370,7 +375,7 @@ namespace Integratieproject1.UI.Controllers
         {
             UploadImage(formFile, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -378,7 +383,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteImage(imageId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -386,7 +391,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteVideo(videoId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -394,7 +399,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.DeleteTextField(textFieldId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -402,7 +407,7 @@ namespace Integratieproject1.UI.Controllers
         {
             _ideationsManager.AddPosition(position, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-            
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -410,7 +415,21 @@ namespace Integratieproject1.UI.Controllers
         {
             _dataTypeManager.EditPosition(position,positionId);
             Idea idea = _ideationsManager.GetIdea(ideaId);
-
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult AddTag(int ideaId, Tag tag)
+        {
+            _ideationsManager.CreateIdeaTag(ideaId, tag.TagId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult RemoveIdeaTag(int ideaTagId, int ideaId)
+        {
+            _ideationsManager.DeleteIdeaTag(ideaTagId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
@@ -428,5 +447,8 @@ namespace Integratieproject1.UI.Controllers
             }
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
+
+
+        
     }
 }

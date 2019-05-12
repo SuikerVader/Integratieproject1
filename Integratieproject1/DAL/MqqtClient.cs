@@ -12,7 +12,7 @@ namespace Integratieproject1.DAL
     {
         private static IdeationsManager ideationsManager = new IdeationsManager();
         private static SurveysManager surveysManager = new SurveysManager();
-        private static IoTManager ioTManager = new IoTManager(surveysManager);
+        private static IoTManager ioTManager = new IoTManager();
     
         //("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S3vDhi54u1", "client1")
         public static async Task MqttClientTask(string connection, int port, string username, string pwd,

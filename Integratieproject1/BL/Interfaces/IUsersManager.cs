@@ -7,15 +7,15 @@ namespace Integratieproject1.BL.Interfaces
 {
     public interface IUsersManager
     {
-        IdentityUser GetUser(string userId);
+        CustomUser GetUser(string userId);
         void DeleteUser(string userId);
         void DeleteRole(string userId, string role);
-        IList<IdentityUser> GetUsers(string role);
+        IList<CustomUser> GetUsers(string role);
         void GiveRole(string userId, string role);
-        void CreateUser(IdentityUser identityUser);
+        void CreateUser(CustomUser identityUser);
         IEnumerable<VerificationRequest> GetVerificationRequests();
         void CreateVerificationRequest(VerificationRequest verificationRequest);
-        VerificationRequest CreateVerificationRequest(IdentityUser user, string request);
+        VerificationRequest CreateVerificationRequest(CustomUser user, string request);
         void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted);
     }
 }

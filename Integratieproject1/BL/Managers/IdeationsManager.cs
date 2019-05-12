@@ -13,6 +13,7 @@ using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -133,6 +134,7 @@ namespace Integratieproject1.BL.Managers
             Ideation originalIdeation = GetIdeation(ideationId);
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
+            originalIdeation.ExternalLink = ideation.ExternalLink;
             originalIdeation.Text = ideation.Text;
             originalIdeation.TextRequired = ideation.TextRequired;
             originalIdeation.Image = ideation.Image;
@@ -259,7 +261,7 @@ namespace Integratieproject1.BL.Managers
         public Idea CreateNewIdea(int ideationId, string userId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IdentityUser user = usersManager.GetUser(userId);
+            CustomUser user = usersManager.GetUser(userId);
             Ideation ideation = GetIdeation(ideationId);
             Idea idea = new Idea()
             {
@@ -360,7 +362,7 @@ namespace Integratieproject1.BL.Managers
 
         public void DeleteIdea(int ideaId)
         {
-            IoTManager ioTManager = new IoTManager(_unitOfWorkManager, new SurveysManager());
+            IoTManager ioTManager = new IoTManager(_unitOfWorkManager);
             Idea idea = GetIdea(ideaId);
             if (idea.IoTSetups != null)
             {
@@ -416,8 +418,8 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
+        
 
-            
         #endregion
 
         #region IdeaObject
@@ -658,7 +660,7 @@ namespace Integratieproject1.BL.Managers
         public void PostReaction(ArrayList parameters, int id, string userId, string element)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IdentityUser identityUser = usersManager.GetUser(userId);
+            CustomUser identityUser = usersManager.GetUser(userId);
             Reaction reaction = new Reaction();
             reaction.IdentityUser = identityUser;
             reaction.ReactionText = parameters[0].ToString();
@@ -679,7 +681,7 @@ namespace Integratieproject1.BL.Managers
         public void LikeReaction(int reactionId, string userId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IdentityUser identityUser = usersManager.GetUser(userId);
+            CustomUser identityUser = usersManager.GetUser(userId);
             Reaction reaction = _ideationsRepository.GetReaction(reactionId);
 
             Like like = new Like
@@ -729,7 +731,7 @@ namespace Integratieproject1.BL.Managers
             if (userId != null)
             {
                 UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-                IdentityUser user = usersManager.GetUser(userId);
+                CustomUser user = usersManager.GetUser(userId);
 
                 if (_ideationsRepository.CheckUserVote(user, voteType, idea) == true)
                 {
@@ -783,6 +785,82 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
+        #region Tag
+
+        public Tag GetTag(int tagId)
+        {
+           return  _ideationsRepository.GetTag(tagId);
+        }
+        public List<Tag> GetTags(int ideaId)
+        {
+            List<Tag> tags = GetAllTags();
+            Idea idea = GetIdea(ideaId);
+            foreach (var ideaTag in idea.IdeaTags)
+            {
+                foreach (var tag in tags)
+                {
+                    if (ideaTag.Tag.TagId == tag.TagId)
+                    {
+                        tags.Remove(tag);
+                        break;
+                    }
+                }
+            }
+
+            return tags;
+        }
+
+        public List<Tag> GetAllTags()
+        {
+            return _ideationsRepository.GetAllTags().ToList();
+        }
+
+        public void DeleteIdeaTag(int ideaTagId)
+        {
+            IdeaTag ideaTag = GetIdeaTag(ideaTagId);
+            _ideationsRepository.DeleteIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
         
+        public void CreateIdeaTag(int ideaId, int tagId)
+        {
+            IdeaTag ideaTag = new IdeaTag()
+            {
+                Idea = GetIdea(ideaId),
+                Tag = GetTag(tagId)
+            };
+            _ideationsRepository.CreateIdeaTag(ideaTag);
+            _unitOfWorkManager.Save();
+        }
+
+
+        private IdeaTag GetIdeaTag(int ideaTagId)
+        {
+            return _ideationsRepository.GetIdeaTag(ideaTagId);
+        }
+        
+        public void EditTag(Tag tag, int tagId)
+        {
+            tag.TagId = tagId;
+            _ideationsRepository.EditTag(tag);
+            _unitOfWorkManager.Save();
+        }
+
+        public void DeleteTag(int tagId)
+        {
+            Tag tag = GetTag(tagId);
+            _ideationsRepository.DeleteTag(tag);
+            _unitOfWorkManager.Save();
+        }
+
+        public void AddTag(Tag tag)
+        {
+           _ideationsRepository.AddTag(tag);
+           _unitOfWorkManager.Save();
+        }
+        #endregion
+
+
+       
     }
 }

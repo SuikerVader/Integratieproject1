@@ -7,7 +7,9 @@ using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.DAL;
 using Integratieproject1.Domain;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
@@ -16,16 +18,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Integratieproject1.UI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class AdminController : Controller
     {
         private readonly ProjectsManager _projectsManager;
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly UsersManager _usersManager;
+        private readonly IoTManager _ioTManager;
 
         public AdminController()
         {
@@ -33,19 +37,21 @@ namespace Integratieproject1.UI.Controllers
             _usersManager = new UsersManager();
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
+            _ioTManager = new IoTManager();
+            
         }
 
         public IActionResult Admin()
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IdentityUser user = _usersManager.GetUser(currentUserId);
+            CustomUser user = _usersManager.GetUser(currentUserId);
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
 
         public IActionResult Moderators()
         {
-            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            IList<CustomUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
 
@@ -53,28 +59,65 @@ namespace Integratieproject1.UI.Controllers
         {
             _usersManager.DeleteRole(modId, "MOD");
             _usersManager.GiveRole(modId, "USER");
-            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            IList<CustomUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
 
         public IActionResult GiveModRole(string userId)
         {
             _usersManager.GiveRole(userId, "MOD");
-            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            IList<CustomUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/Admin/Users.cshtml", users);
         }
 
         public IActionResult DeleteMod(string modId)
         {
             _usersManager.DeleteUser(modId);
-            IList<IdentityUser> mods = _usersManager.GetUsers("MOD");
+            IList<CustomUser> mods = _usersManager.GetUsers("MOD");
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
 
         public IActionResult Users()
         {
-            IList<IdentityUser> users = _usersManager.GetUsers("USER");
+            IList<CustomUser> users = _usersManager.GetUsers("USER");
             return View("/UI/Views/Admin/Users.cshtml", users);
+        }
+        public IActionResult AddIoT(int id, string type)
+        {
+            if (type.Equals("question"))
+            {
+                IoTSetup ioTSetup = new IoTSetup()
+                {
+                    Question = _surveysManager.GetQuestion(id),
+                    Position = new Position(){Lat = "0", Lng = "0"}
+                };
+                return View("/UI/Views/Admin/AddIoTSetupToQuestion.cshtml", ioTSetup);
+            }
+            else
+            {
+                IoTSetup ioTSetup = new IoTSetup()
+                {
+                    Idea = _ideationsManager.GetIdea(id),
+                    Position = new Position(){Lat = "0", Lng = "0"}
+                };
+                return View("/UI/Views/Admin/AddIoTSetupToIdea.cshtml", ioTSetup);
+            }  
+        }
+        [HttpPost]
+        public IActionResult AddIoT(IoTSetup ioTSetup,string type , int id )
+        {
+            _ioTManager.CreateIoTSetup(ioTSetup, id, type);
+            if (type.Equals("question"))
+            {
+                Survey survey = _surveysManager.GetSurvey(_surveysManager.GetQuestion(id).Survey.SurveyId);
+                return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            }
+            else
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
+                return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            }
         }
 
         #region VerificationRequests
@@ -119,7 +162,7 @@ namespace Integratieproject1.UI.Controllers
                 {
                     project.BackgroundImage = GetImagePath(formFile);
                 }
-                _projectsManager.EditProject(project, projectId);
+                Project newProject = _projectsManager.EditProject(project, projectId);
                 ClaimsPrincipal currentUser = User;
                 string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
                 IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
@@ -465,5 +508,51 @@ namespace Integratieproject1.UI.Controllers
         }
 
         #endregion
+
+        #region Tags
+        
+        public IActionResult Tags()
+        {
+           List<Tag> tags = _ideationsManager.GetAllTags();
+           return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+        public IActionResult EditTag(int tagId)
+        {
+            Tag tag = _ideationsManager.GetTag(tagId);
+            return View("/UI/Views/Admin/EditTag.cshtml", tag);
+        }
+        
+        [HttpPost]
+        public IActionResult EditTag(Tag tag, int tagId)
+        {
+            _ideationsManager.EditTag(tag, tagId);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+        public IActionResult DeleteTag(int tagId)
+        {
+            _ideationsManager.DeleteTag(tagId);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+        public IActionResult AddTag()
+        {
+            return View("/UI/Views/Admin/AddTag.cshtml");
+        }
+        [HttpPost]
+        public IActionResult AddTag(Tag tag)
+        {
+            _ideationsManager.AddTag(tag);
+            List<Tag> tags = _ideationsManager.GetAllTags();
+            return View("/UI/Views/Admin/Tags.cshtml", tags);
+        }
+
+
+        #endregion
+
+
+        
     }
  }
