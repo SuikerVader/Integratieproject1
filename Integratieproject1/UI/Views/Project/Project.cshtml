@@ -6,8 +6,8 @@
 }
 <body style="background-color:@Model.Platform.BackgroundColor;color:@Model.Platform.TextColor">
     <div class="jumbotron jumbotron-fluid text-center"
-         @if (Model.BackgroundImage != null) { <text> style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+         @if (Model.BackgroundImage != null) { <text> style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text> }>
+        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text> }>
             <h1 class="display-4">@Model.ProjectName</h1>
             <p>@Model.Description</p>
             <div class="progress" style="height: 30px;">
@@ -196,7 +196,10 @@
             }
         }
     </div>
-    </body>
+    <footer>
+        <img src="@Model.Platform.Logo" alt="Logo" height="75" width="75" style="float:right" />
+    </footer>
+</body>
     <script>
         function displayPhase(id) {
             var btn = document.getElementById(id);
