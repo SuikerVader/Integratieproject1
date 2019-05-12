@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Integratieproject1.Domain.Ideations
@@ -10,6 +11,6 @@ namespace Integratieproject1.Domain.Ideations
         [Required]
         public Reaction Reaction { get; set; }
         [Required]
-        public IdentityUser IdentityUser { get; set; }
+        public CustomUser IdentityUser { get; set; }
     }
 }

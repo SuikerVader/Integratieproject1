@@ -28,7 +28,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public AndroidApiController(SignInManager<IdentityUser> signInManager)
-        {
+        { 
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _projectsManager = new ProjectsManager();
@@ -73,16 +73,20 @@ namespace Integratieproject1.UI.Controllers
             return null;
         }
 
+
+        [HttpPost]
+        [Route("/Api/vote/{id}")]
+        public void androidVote(int id)
+        {
+           
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
+        }
+
         #endregion
 
         #region Projects
-
-        [HttpGet]
-        [Route("Api/projects")]
-        public IEnumerable<Project> GetProjects()
-        {
-            return _projectsManager.GetAllProjects();
-        }
 
         [HttpGet]
         [Route("Api/projects/{id}")]

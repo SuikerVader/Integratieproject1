@@ -5,6 +5,7 @@ using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Surveys;
+using Integratieproject1.Domain.Users;
 
 namespace Integratieproject1.BL.Managers
 {
@@ -12,21 +13,20 @@ namespace Integratieproject1.BL.Managers
     {
         private readonly IoTRepository _ioTRepository;
         private readonly UnitOfWorkManager _unitOfWorkManager;
-        private readonly SurveysManager _surveysManager;
+    
 
-        public IoTManager(SurveysManager surveysManager)
+        public IoTManager()
         {
-            _surveysManager = surveysManager;
+            
             _unitOfWorkManager = new UnitOfWorkManager();
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
-        public IoTManager(UnitOfWorkManager unitOfWorkManager, SurveysManager surveysManager)
+        public IoTManager(UnitOfWorkManager unitOfWorkManager)
         {
             if (unitOfWorkManager == null)
                 throw new ArgumentNullException(nameof(unitOfWorkManager));
 
             _unitOfWorkManager = unitOfWorkManager;
-            _surveysManager = surveysManager;
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
 
@@ -55,8 +55,26 @@ namespace Integratieproject1.BL.Managers
         //in case of an IoTSetup that offers multiple options (buttons)
         public void RegisterComplexVote(int id, int supportLv)
         {
+            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
             IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
-            _surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+        }
+
+        public void CreateIoTSetup(IoTSetup ioTSetup, int id, string type)
+        {
+            
+            if (type.Equals("question"))
+            {
+                SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
+                ioTSetup.Question = surveysManager.GetQuestion(id);
+            }
+            else
+            {
+                IdeationsManager ideationsManager = new IdeationsManager(_unitOfWorkManager);
+                ioTSetup.Idea = ideationsManager.GetIdea(id);
+            }
+            _ioTRepository.CreateIoTSetup(ioTSetup);
+            _unitOfWorkManager.Save();
         }
     }
 }

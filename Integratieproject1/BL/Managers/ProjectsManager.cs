@@ -70,7 +70,7 @@ namespace Integratieproject1.BL.Managers
 
             if (platform.Users != null)
             {
-                foreach (IdentityUser identityUser in platform.Users.ToList())
+                foreach (CustomUser identityUser in platform.Users.ToList())
                 {
                     _usersManager.DeleteUser(identityUser.Id);
                 }
@@ -82,12 +82,26 @@ namespace Integratieproject1.BL.Managers
         
         public void EditPlatform(Platform platform, int platformId)
         {
-            platform.PlatformId = platformId;
-            if (platform.BackgroundImage == null)
-            {
-                platform.BackgroundImage = GetProject(platformId).BackgroundImage;
-            }
-            _projectsRepository.EditPlatform(platform);
+            Platform originalPlatform = GetPlatform(platformId);
+            originalPlatform.Address = platform.Address;
+            originalPlatform.BackgroundImage = platform.BackgroundImage;
+            originalPlatform.Description = platform.Description;
+            originalPlatform.Logo = platform.Logo;
+            originalPlatform.Phonenumber = platform.Phonenumber;
+            originalPlatform.PlatformName = platform.PlatformName;
+            originalPlatform.Projects = platform.Projects;
+            originalPlatform.Users = platform.Users;
+            _projectsRepository.EditPlatform(originalPlatform);
+            _unitOfWorkManager.Save();
+        }
+
+        public void EditPlatformLayout(Platform platform, int platformId)
+        {
+            Platform originalPlatform = GetPlatform(platformId);
+            originalPlatform.BackgroundColor = platform.BackgroundColor;
+            originalPlatform.ButtonColor = platform.ButtonColor;
+            originalPlatform.TextColor = platform.TextColor;
+            _projectsRepository.EditPlatform(originalPlatform);
             _unitOfWorkManager.Save();
         }
         public void DeleteBackgroundImagePlatform(int platformId)
@@ -126,12 +140,19 @@ namespace Integratieproject1.BL.Managers
 
         public IList<Project> GetAdminProjects(string userId)
         {
-            List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
             List<Project> projects = new List<Project>();
-            foreach (AdminProject adminProject in adminProjects)
+            if (_usersManager.IsInRole(userId, "Admin"))
             {
-                projects.Add(adminProject.Project);
+                List<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByUser(userId).ToList();
+                foreach (AdminProject adminProject in adminProjects)
+                {
+                    projects.Add(adminProject.Project);
+                }
+            }else
+            {
+                projects = _projectsRepository.GetAllProjects().ToList();
             }
+
 
             return projects;
         }
@@ -149,7 +170,7 @@ namespace Integratieproject1.BL.Managers
         
         public void CreateProject(Project project, string userId, int platformId)
         {
-            IdentityUser identityUser = GetUser(userId);
+            CustomUser identityUser = _usersManager.GetUser(userId);
             project.Platform = GetPlatform(platformId);
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             project.Location = dataTypeManager.CheckLocation(project.Location);
@@ -163,17 +184,26 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void EditProject(Project project, int projectId)
+        public Project EditProject(Project project, int projectId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            Project originalProject = GetProject(projectId);
+            originalProject.AdminProjects = project.AdminProjects;
+            originalProject.Description = project.Description;
+            originalProject.EndDate = project.EndDate;
+            originalProject.Objective = project.Objective;
+            originalProject.Phases = project.Phases;
+            originalProject.Platform = project.Platform;
+            originalProject.ProjectName = project.ProjectName;
+            originalProject.StartDate = project.StartDate;
+            originalProject.Status = project.Status;
             project.Location = dataTypeManager.CheckLocation(project.Location);
-            project.ProjectId = projectId;
-            if (project.BackgroundImage == null)
+            if (originalProject.BackgroundImage == null)
             {
-                project.BackgroundImage = GetProject(projectId).BackgroundImage;
+                originalProject.BackgroundImage = project.BackgroundImage;
             }
-            _projectsRepository.EditProject(project);
             _unitOfWorkManager.Save();
+            return _projectsRepository.EditProject(originalProject);
         }
         public void DeleteBackgroundImageProject(int projectId)
         {
@@ -220,7 +250,7 @@ namespace Integratieproject1.BL.Managers
         public void CreateAdminProject(int projectId, string adminId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IdentityUser identityUser = usersManager.GetUser(adminId);
+            CustomUser identityUser = usersManager.GetUser(adminId);
             Project project = _projectsRepository.GetProject(projectId);
             AdminProject adminProject = new AdminProject
             {
@@ -230,10 +260,10 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.CreateAdminProject(adminProject);
             _unitOfWorkManager.Save();
         }
-        public IList<IdentityUser> GetNotProjectAdmins(int projectId)
+        public IList<CustomUser> GetNotProjectAdmins(int projectId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
-            IList<IdentityUser> allAdmins = usersManager.GetUsers("ADMIN");
+            IList<CustomUser> allAdmins = usersManager.GetUsers("ADMIN");
             IList<AdminProject> adminProjects = _projectsRepository.GetAdminProjectsByProject(projectId).ToList();
             for (int i = 0; i < allAdmins.Count; i++)
             {

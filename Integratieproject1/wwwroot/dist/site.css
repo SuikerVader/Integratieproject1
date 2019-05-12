@@ -1482,6 +1482,10 @@ button.bg-light:focus {
   border: 1px solid #dee2e6 !important;
 }
 
+.border-top {
+  border-top: 1px solid #dee2e6 !important;
+}
+
 .border-right {
   border-right: 1px solid #dee2e6 !important;
 }
@@ -1696,6 +1700,9 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-flag:before {
   content: "\f024";
+}
+.fa-tag:before {
+  content: "\f02b";
 }
 .fa-edit:before {
   content: "\f044";

@@ -46,7 +46,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Surveys
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
-                .Include(p => p.Phase).ThenInclude(pr => pr.Project)
+                .Include(p => p.Phase).ThenInclude(pr => pr.Project).ThenInclude(pl => pl.Platform)
                 .Single(s => s.SurveyId == surveyId);
         }
         public Survey CreateSurvey(Survey survey)
@@ -86,7 +86,9 @@ namespace Integratieproject1.DAL.Repositories
 
         public Question GetQuestion(int questionId)
         {
-            return _ctx.Questions.Find(questionId);
+            return _ctx.Questions
+                .Include(q => q.Survey)
+                .Single(q => q.QuestionId == questionId);
         }
         
         public Question EditQuestion(Question question)

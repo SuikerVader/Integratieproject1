@@ -63,7 +63,10 @@ namespace Integratieproject1.DAL
                 Address = addressAntwerp,
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
-                Logo = "/images/uploads/LogoAntwerp.png"
+                Logo = "/images/uploads/LogoAntwerp.png",
+                BackgroundColor = "#d9e5f7",
+                ButtonColor = "#1e62c9",
+                TextColor = "black"
             };
 
             Platform platformGent = new Platform
@@ -75,7 +78,10 @@ namespace Integratieproject1.DAL
                 Address = addressGent,
                 Phonenumber = "0488644400",
                 BackgroundImage = "/images/uploads/BgImgGent.jpg",
-                Logo = "/images/uploads/LogoGent.png"
+                Logo = "/images/uploads/LogoGent.png",
+                BackgroundColor = "#dbffdf",
+                ButtonColor = "#0f9b1f",
+                TextColor = "black"
             };
 
             #endregion
@@ -242,22 +248,24 @@ namespace Integratieproject1.DAL
             {
                 CentralQuestion = "Welke fitnesstoestellen zouden jullie graag willen plaatsen op het plein?",
                 InputIdeation = true,
-                Phase = phaseOssenmarkt3
+                Phase = phaseOssenmarkt3,
+                ExternalLink = "https://www.antwerpen.be/nl/home"
+                
             };
 
             #endregion
             #region Persons
-            IdentityUser person = new IdentityUser
+            CustomUser person = new CustomUser
             {
                 UserName = "Albert",
                 Email = "testPerson1@test.com"
             };
-            IdentityUser organisation = new IdentityUser
+            CustomUser organisation = new CustomUser
             {
                 UserName = "McDonalds",
                 Email = "testOrganisation1@test.com"
             };
-            IdentityUser admin = new IdentityUser
+            CustomUser admin = new CustomUser
             {
                 UserName = "TestAdmin",
                 Email = "testAdmin1@test.com"
@@ -543,7 +551,7 @@ namespace Integratieproject1.DAL
             };
 
             #endregion
-            #region
+            #region 
             Reaction reactionPullup1 = new Reaction
             {
                 Idea = ideaFitness1,
@@ -604,8 +612,49 @@ namespace Integratieproject1.DAL
             };
             #endregion
 
+            #region Tags
+
+            Tag tag1 = new Tag()
+            {
+                TagName = "Sport"
+            };
+            Tag tag2 = new Tag()
+            {
+                TagName = "Kinderen"
+            };
+            Tag tag3 = new Tag()
+            {
+                TagName = "Cultuur"
+            };
+            Tag tag4 = new Tag()
+            {
+                TagName = "Jongeren"
+            };
+            IdeaTag ideaTag1 = new IdeaTag()
+            {
+                Tag = tag1,
+                Idea = ideaThema1
+            };
+            IdeaTag ideaTag2 = new IdeaTag()
+            {
+                Tag = tag2,
+                Idea = ideaThema2,
+            };
+            IdeaTag ideaTag3 = new IdeaTag()
+            {
+                Tag = tag3,
+                Idea = ideaThema2,
+            };
+            IdeaTag ideaTag4 = new IdeaTag()
+            {
+                Tag = tag4,
+                Idea = ideaThema2,
+            };
+
+            #endregion
+
             projectOssenmarkt.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
-            platformAntwerp.Users = new List<IdentityUser> {person, organisation, admin};
+            platformAntwerp.Users = new List<CustomUser> {person, organisation, admin};
             ideaThema1.IdeaObjects = new List<IdeaObject>() {textfieldSport};
             ideaThema2.IdeaObjects = new List<IdeaObject>() {textfieldSchool};
             ideaThema3.IdeaObjects = new List<IdeaObject>() {textfieldLiefde};
@@ -628,6 +677,10 @@ namespace Integratieproject1.DAL
             ideationOssenmarktSport.Reactions = new List<Reaction>() { reactionSport };
             ideaFitness1.Reactions = new List<Reaction>() { reactionPullup1, reactionPullup2, reactionPullup3 };
             ideaFitness2.Reactions = new List<Reaction>() { reactionSquat1 };
+
+            ctx.Tags.AddRange(tag1, tag2, tag3, tag4);
+            ideaThema1.IdeaTags = new List<IdeaTag>(){ideaTag1};
+            ideaThema2.IdeaTags = new List<IdeaTag>(){ideaTag2,ideaTag3,ideaTag4};
             //ctx.Ideas.Add(idea);
             ideationOssenmarktThema.Ideas = new List<Idea>() {ideaThema1, ideaThema2, ideaThema3};
             ideationOssenmarktSport.Ideas = new List<Idea>() {ideaSport1, ideaSport2, ideaSport3, ideaSport4, ideaSport5};
@@ -657,7 +710,7 @@ namespace Integratieproject1.DAL
             ctx.ChangeTracker.QueryTrackingBehavior = previousBehaviour;
         }
 
-        public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUsers(UserManager<CustomUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Rollen aanmaken
             var superAdminRole = new IdentityRole {NormalizedName = "SuperAdmin", Name = "SuperAdmin"};
@@ -674,12 +727,12 @@ namespace Integratieproject1.DAL
             await roleManager.CreateAsync(userRole);
 
             // TestUsers aanmaken
-            var superAdminTest = new IdentityUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true};
-            var adminTest = new IdentityUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
-            var modTest = new IdentityUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
-            var organisationTest = new IdentityUser
+            var superAdminTest = new CustomUser {UserName = "Superadmin", Email = "superadmin@gmail.com", EmailConfirmed=true, Name = "Super", Surname = "Admin", Sex = "Male", Age = 35, Zipcode = "2275"};
+            var adminTest = new CustomUser {UserName = "Admin", Email = "admin@gmail.com", EmailConfirmed = true };
+            var modTest = new CustomUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
+            var organisationTest = new CustomUser
                 {UserName = "Organisation", Email = "organisation@gmail.com", EmailConfirmed = true };
-            var userTest = new IdentityUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
+            var userTest = new CustomUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");
