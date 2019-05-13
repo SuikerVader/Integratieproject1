@@ -34,7 +34,7 @@
             @if (Model.Title.Equals("_NewIdea_"))
             {
                 <div class="dropdown">
-                    <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
+                    <input required id="ideaInput" onfocus="showIdeaResults()"  onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
                     <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
                         <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
                         <div class="dropdown-divider"></div>
@@ -258,6 +258,7 @@
     function showIdeaResults() {
         document.getElementById("ideaDropdown").classList.toggle("show");
     }
+
 
     function filterFunction() {
         var input, filter, ul, li, a, i;
