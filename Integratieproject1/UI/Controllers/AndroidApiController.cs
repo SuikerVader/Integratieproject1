@@ -49,7 +49,7 @@ namespace Integratieproject1.UI.Controllers
         [Route("Api/ideations/{id}")]
         public IEnumerable<Ideation> GetIdeations(int id)
         {
-            return _ideationsManager.GetProjectIdeation(id);
+            return _ideationsManager.GetProjectIdeations(id);
         }
 
         [HttpGet]

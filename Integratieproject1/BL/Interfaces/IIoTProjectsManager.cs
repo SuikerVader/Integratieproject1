@@ -9,6 +9,7 @@ namespace Integratieproject1.BL.Interfaces
     {
         void DeleteIoTSetup(IoTSetup ioTSetup);
         void CreateIoT(Position position, Idea idea, Question question);
+        void CreateIoTSetup(IoTSetup ioTSetup, int id, string type);
         string GenerateIoTUrl();
         void RegisterComplexVote(int id, int supportLv);
     }
