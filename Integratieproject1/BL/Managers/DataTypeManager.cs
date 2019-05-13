@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 
 namespace Integratieproject1.BL.Managers
 {
-    public class DataTypeManager
+    public class DataTypeManager : IDataTypeManager
     {
         private readonly DataTypeRepository _dataTypeRepository;
         private readonly UnitOfWorkManager _unitOfWorkManager;
@@ -62,7 +63,7 @@ namespace Integratieproject1.BL.Managers
             return _dataTypeRepository.GetAddress(addressId);
         }
 
-        private Address CheckAddress(Address toCheckAddress)
+        public Address CheckAddress(Address toCheckAddress)
         {
             IList<Address> addresses = _dataTypeRepository.GetAddresses().ToList();
             foreach (Address address in addresses)
