@@ -114,6 +114,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Position)
                 .Include(i => i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project).ThenInclude(pl => pl.Platform)
                 .Include(i => i.IdeaTags).ThenInclude(it => it.Tag)
+                .Include(i => i.IoTSetups).ThenInclude(i => i.Position)
                 .Single(i => i.IdeaId == ideaId);
         }
 

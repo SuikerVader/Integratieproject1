@@ -368,7 +368,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (var ioTSetup in idea.IoTSetups.ToList())
                 {
-                    ioTManager.DeleteIoTSetup(ioTSetup);
+                    ioTManager.DeleteIoTSetup(ioTSetup.Code);
                 }
             }
 

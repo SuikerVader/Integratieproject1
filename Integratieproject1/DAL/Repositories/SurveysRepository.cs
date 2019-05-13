@@ -28,6 +28,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Surveys
                 .Where(p => p.Phase.PhaseId == phaseId)
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Include(q => q.Questions).ThenInclude(q => q.IoTSetups).ThenInclude(i => i.Position)
                 .AsEnumerable();
         }
 
@@ -46,6 +47,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Surveys
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Include(q => q.Questions).ThenInclude(q => q.IoTSetups).ThenInclude(i => i.Position)
                 .Include(p => p.Phase).ThenInclude(pr => pr.Project).ThenInclude(pl => pl.Platform)
                 .Single(s => s.SurveyId == surveyId);
         }
@@ -88,6 +90,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Questions
                 .Include(q => q.Survey)
+                .Include(q => q.IoTSetups).ThenInclude(i => i.Position)
                 .Single(q => q.QuestionId == questionId);
         }
         

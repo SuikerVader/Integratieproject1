@@ -30,8 +30,9 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
 
-        public void DeleteIoTSetup(IoTSetup ioTSetup)
+        public void DeleteIoTSetup(string ioTId)
         {
+            IoTSetup ioTSetup = _ioTRepository.GetIoTSetup(ioTId);
             _ioTRepository.RemoveIoTSetup(ioTSetup);
             _unitOfWorkManager.Save();
         }
@@ -74,6 +75,21 @@ namespace Integratieproject1.BL.Managers
                 ioTSetup.Idea = ideationsManager.GetIdea(id);
             }
             _ioTRepository.CreateIoTSetup(ioTSetup);
+            _unitOfWorkManager.Save();
+        }
+
+        public IoTSetup GetIoT(string iotId)
+        {
+            return _ioTRepository.GetIoTSetup(iotId);
+        }
+
+        public void EditIoTSetup(IoTSetup ioTSetup, string iotId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            IoTSetup original = GetIoT(iotId);
+            dataTypeManager.EditPosition(ioTSetup.Position, original.Position.PositionId);
+            original.Position = ioTSetup.Position;
+            _ioTRepository.UpdateIoTSetup(original);
             _unitOfWorkManager.Save();
         }
     }

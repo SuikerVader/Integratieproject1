@@ -9,24 +9,24 @@
 <div class="container">
     <div >
         <div class="text-center">
-            <h2>Voeg IoT toe</h2>
+            <h2>Wijzig IoT</h2>
         </div>
         <div>
-            <form class="" asp-controller="Admin" asp-action="AddIoT" method="post" asp-route-type="question" asp-route-id="@Model.Question.QuestionId"}>
-                <div class="form-row">
-                    <div class="col-3 text-center">
-                        <input class="form-control"   id="autocomplete" oninput="inputAutocomplete()"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="form-control" required asp-for="Position.Lat" id="lat"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="form-control"  required asp-for="Position.Lng" id="lng"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="btn btn-primary btn-sm" type="submit" value="Voeg iot toe">
-                    </div>
+        <form class="" asp-controller="Admin" asp-action="EditIoT" method="post" asp-route-ioTId="@Model.Code"}>
+            <div class="form-row">
+                <div class="col-3 text-center">
+                    <input class="form-control"   id="autocomplete" oninput="inputAutocomplete()"/>
                 </div>
+                <div class="col-3 text-center">
+                    <input class="form-control" value="@Model.Position.Lat" required asp-for="Position.Lat" id="lat"/>
+                </div>
+                <div class="col-3 text-center">
+                    <input class="form-control" value="@Model.Position.Lng"  required asp-for="Position.Lng" id="lng"/>
+                </div>
+                <div class="col-3 text-center">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Wijzig iot">
+                </div>
+            </div>
             </form>
             @if (Model.Position != null)
             {
@@ -34,8 +34,11 @@
                     <div id="map"></div>
                 </div>
             }
+            <a class="btn btn-danger" asp-area="" asp-controller="Admin"
+               asp-action="DeleteIoT" asp-route-iotId="@Model.Code">
+                Verwijder IoT
+            </a>
         </div>
-        
        
     </div>
 
@@ -62,16 +65,18 @@
     function initMap() {
         var position = {}
         if (first === true) {
-            alert("first lat:" + @Model.Position.Lat + " lng:" + @Model.Position.Lng);
               position = {lat: @Model.Position.Lat, lng: @Model.Position.Lng};
              first = false;
         } else {
-           var lat = document.getElementById('lat').value;
-            var lng = document.getElementById('lng').value;
-            position = {lat: lat.toString(), lng: lng.toString()};
-           alert("lat:" + lat + " lng:" + lng + " pos" + position.toString());
+           var lat = document.getElementById('lat').value.toString();
+            var lng = document.getElementById('lng').value.toString();
+            position = {lat: lat, lng: lng};
+           alert("lat:" + lat + " lng:" + lng + " pos" + position);
         }
         // The location of Uluru
+       
+        
+
         // The map, centered at Uluru
         var map = new google.maps.Map(
             document.getElementById('map'), {zoom: 16, center: position});
