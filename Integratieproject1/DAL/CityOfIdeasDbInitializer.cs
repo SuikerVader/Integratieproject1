@@ -63,7 +63,10 @@ namespace Integratieproject1.DAL
                 Address = addressAntwerp,
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
-                Logo = "/images/uploads/LogoAntwerp.png"
+                Logo = "/images/uploads/LogoAntwerp.png",
+                BackgroundColor = "#d9e5f7",
+                ButtonColor = "#1e62c9",
+                TextColor = "black"
             };
 
             Platform platformGent = new Platform
@@ -75,7 +78,10 @@ namespace Integratieproject1.DAL
                 Address = addressGent,
                 Phonenumber = "0488644400",
                 BackgroundImage = "/images/uploads/BgImgGent.jpg",
-                Logo = "/images/uploads/LogoGent.png"
+                Logo = "/images/uploads/LogoGent.png",
+                BackgroundColor = "#dbffdf",
+                ButtonColor = "#0f9b1f",
+                TextColor = "black"
             };
 
             #endregion

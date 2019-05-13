@@ -12,8 +12,13 @@
         <div class="adminMain">
             <div>
                 <form asp-controller="SuperAdmin" asp-action="EditLayout" asp-route-platformId="@Model.PlatformId" method="post">
-                    <label asp-for="BackgroundColor">Kleur Achtergrond</label>
-                    <input required asp-for="BackgroundColor" value="@Model.BackgroundColor" class="form-control" />             
+                    <label asp-for="BackgroundColor">Kleur Achtergrond 1</label>
+                    <input required asp-for="BackgroundColor" value="@Model.BackgroundColor" class="form-control" />
+                    <label asp-for="ButtonColor">Kleur Knoppen</label>
+                    <input required asp-for="ButtonColor" value="@Model.ButtonColor" class="form-control" />
+                    <label asp-for="TextColor">Kleur Tekst</label>
+                    <input required asp-for="TextColor" value="@Model.TextColor" class="form-control" />
+                    <input class="btn btn-primary" type="submit" value="Layout Opslaan">
                 </form>        
             </div>
         </div>

@@ -18,6 +18,8 @@ namespace Integratieproject1.Domain.Projects
         public string Description { get; set; }
         public string BackgroundImage { get; set; }
         public string BackgroundColor { get; set; }
+        public string ButtonColor { get; set; }
+        public string TextColor { get; set; }
         public ICollection<Project> Projects { get; set; }
         public ICollection<CustomUser> Users { get; set; }
     }
