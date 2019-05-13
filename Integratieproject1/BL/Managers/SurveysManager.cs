@@ -42,6 +42,11 @@ namespace Integratieproject1.BL.Managers
         {
             return _surveysRepository.GetSurveys(phaseId).ToList();
         }
+        
+        public IList<Survey> GetProjectsSurveys(int projectId)
+        {
+            return _surveysRepository.GetProjectSurveys(projectId).ToList();
+        }
 
         public IList<Survey> GetAllSurveys()
         {
@@ -166,6 +171,11 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetQuestion(questionId);
         }
 
+        public IEnumerable<Question> GetQuestions(int surveyId)
+        {
+            return _surveysRepository.GetQuestions(surveyId);
+        }
+        
         #endregion
 
         #region Answer

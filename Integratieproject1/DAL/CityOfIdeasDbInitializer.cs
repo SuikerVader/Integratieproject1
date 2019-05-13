@@ -254,6 +254,7 @@ namespace Integratieproject1.DAL
             };
 
             #endregion
+
             #region Persons
             CustomUser person = new CustomUser
             {

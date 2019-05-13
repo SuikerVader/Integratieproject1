@@ -25,9 +25,9 @@ namespace Integratieproject1.UI.Controllers
         private readonly SurveysManager _surveysManager;
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<CustomUser> _signInManager;
 
-        public AndroidApiController(SignInManager<IdentityUser> signInManager)
+        public AndroidApiController(SignInManager<CustomUser> signInManager)
         { 
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
@@ -44,6 +44,13 @@ namespace Integratieproject1.UI.Controllers
         {
             return _ideationsManager.GetAllIdeas(id);
         }
+        
+        [HttpGet]
+        [Route("Api/idea/{id}")]
+        public Idea GetIdea(int id)
+        {
+            return _ideationsManager.GetIdea(id);
+        }
 
         [HttpGet]
         [Route("Api/ideations/{id}")]
@@ -53,10 +60,17 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
-        [Route("Api/reactions/{id}")]
-        public IEnumerable<Reaction> GetReactions(int id)
+        [Route("Api/ideation/{id}")]
+        public Ideation GetIdeation(int id)
         {
-            return _ideationsManager.GetAllReactions(id);
+            return _ideationsManager.GetIdeation(id);
+        }
+
+        [HttpGet]
+        [Route("Api/reactions/{id}")]
+        public IEnumerable<Reaction> GetIdeaReactions(int id)
+        {
+            return _ideationsManager.GetIdeaReactions(id);
         }
 
         [HttpGet]
@@ -74,16 +88,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
 
-        [HttpPost]
-        [Route("/Api/vote/{id}")]
-        public void androidVote(int id)
-        {
-           
-            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
-            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
-        }
-
+        
         #endregion
 
         #region Projects
@@ -109,14 +114,26 @@ namespace Integratieproject1.UI.Controllers
             return _projectsManager.GetPlatform(id);
         }
 
+
+        [HttpPost]
+        [Route("/Api/vote")]
+        public void androidVote([FromBody]int id)
+        {
+           
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
+        }
+
         #endregion
         #region surveys
-
+        
+        
         [HttpGet]
         [Route("Api/surveys/{id}")]
-        public IEnumerable<Survey> GetSurveys(int id)
+        public IEnumerable<Survey> GetProjectsSurveys(int id)
         {
-            return _surveysManager.GetSurveys(id);
+            return _surveysManager.GetProjectsSurveys(id);
         }
 
         [HttpGet]
@@ -127,13 +144,21 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
-        [Route("Api/question/{id}")]
-        public Question GetQuestions(int id)
+        [Route("Api/questions/{id}")]
+        public IEnumerable<Question> GetQuestions(int id)
         {
-            return _surveysManager.GetQuestion(id);
+            return _surveysManager.GetQuestions(id).ToList();
         }
 
         #endregion
+
+        
+        [HttpGet]
+        [Route("Api/tags")]
+        public IEnumerable<Tag> getTags()
+        {
+            return _ideationsManager.GetAllTags().ToList();
+        }
 
         #region Users
 
@@ -144,6 +169,14 @@ namespace Integratieproject1.UI.Controllers
             var result = await _signInManager.PasswordSignInAsync(email, password, true, true);
 
             return result.Succeeded ? _usersManager.GetUserByEmail(email) : null;
+        }
+
+        [HttpGet]
+        [Route("Api/users")]
+        public IEnumerable<IdentityUser> GetUsers()
+        {
+            var role = "userRole";
+            return _usersManager.GetUsers(role).ToList();
         }
 
         #endregion
