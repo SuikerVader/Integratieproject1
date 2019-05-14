@@ -418,6 +418,13 @@ namespace Integratieproject1.UI.Controllers
             ViewBag.tags = _ideationsManager.GetTags(ideaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
+        public IActionResult DeletePosition(int positionId, int ideaId)
+        {
+            _ideationsManager.DeleteLocationFromIdea(ideaId, positionId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
         public IActionResult AddTag(int ideaId, Tag tag)
         {
             _ideationsManager.CreateIdeaTag(ideaId, tag.TagId);

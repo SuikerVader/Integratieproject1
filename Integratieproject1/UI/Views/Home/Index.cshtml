@@ -60,9 +60,9 @@
                                 </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
                             </div>
@@ -101,20 +101,22 @@
                                     <p>@project.EndDate.ToString("d")</p>
 
                                 </div>
+                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                   asp-controller="Project"
+                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                    Bekijk Project
+                                </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
+                                
                             </div>
 
-                            <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                Bekijk Project
-                            </a>
+                            
                         </div>
                     </div>
                 }
@@ -149,19 +151,20 @@
                                     <p>@project.EndDate.ToString("d")</p>
 
                                 </div>
+                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                   asp-controller="Project"
+                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                    Bekijk Project
+                                </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                Bekijk Project
-                            </a>
+                            
                         </div>
                     </div>
                 }

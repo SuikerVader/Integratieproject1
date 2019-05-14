@@ -88,7 +88,7 @@ namespace Integratieproject1.BL.Managers
             {
                 if (!originalIdeation.Map && idea.Position != null)
                 {
-                    _dataTypeManager.DeletePosition(idea.Position);
+                    _dataTypeManager.DeletePosition(idea.Position.PositionId);
                     idea.Position = null;
                 }
                 foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
@@ -357,6 +357,15 @@ namespace Integratieproject1.BL.Managers
             };
             _ideationsRepository.RemoveIdea(idea);
             _ideationsRepository.UpdateIdea(editIdea);
+            _unitOfWorkManager.Save();
+        }
+        public void DeleteLocationFromIdea(int ideaId, int positionId)
+        {
+            DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
+            Idea idea = GetIdea(ideaId);
+            idea.Position = null;
+            _ideationsRepository.UpdateIdea(idea);
+            dataTypeManager.DeletePosition(positionId);
             _unitOfWorkManager.Save();
         }
         
@@ -855,6 +864,9 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        #endregion 
+        #endregion
+
+
+
     }
 }

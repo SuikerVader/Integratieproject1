@@ -33,7 +33,7 @@
         <div id="ideation">
             <div class="card text-center" style="border: none;">
                 <div class="card-body">
-                    <h1 class="card-title">@Model.CentralQuestion</h1>
+                    <h2 class="card-title">@Model.CentralQuestion</h2>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
                     {
                         <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
@@ -176,6 +176,7 @@
     <footer>
         <img src="@Model.Phase.Project.Platform.Logo" alt="Logo" height="75" width="75" style="float:right"/>
     </footer>
+</div>
 </body>
 
 @*************************@
