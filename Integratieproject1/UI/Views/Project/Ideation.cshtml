@@ -26,6 +26,14 @@
                     {
                         <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
+                    @if (ViewBag.hasIots == true)
+                    {
+                        <div>
+                            <a id="ideationIoTIcon" class="btn btn-lg btn-outline-primary text-center" asp-controller="Home"
+                               asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
+                                        
+                        </div>
+                    }
 
                 </div>
             </div>
@@ -38,6 +46,12 @@
                     {
                         <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
                            asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
+                            Idee Posten
+                        </a>
+                    }
+                    else if (Model.InputIdeation == true)
+                    {
+                        <a class="btn btn-secondary" asp-area="Identity" asp-page="/Account/Login">
                             Idee Posten
                         </a>
                     }

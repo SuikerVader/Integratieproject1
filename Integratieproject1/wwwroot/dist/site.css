@@ -92,23 +92,6 @@ p {
   margin-bottom: 1rem;
 }
 
-abbr[title],
-abbr[data-original-title] {
-  text-decoration: underline;
-  -webkit-text-decoration: underline dotted;
-  text-decoration: underline dotted;
-  cursor: help;
-  border-bottom: 0;
-  -webkit-text-decoration-skip-ink: none;
-  text-decoration-skip-ink: none;
-}
-
-address {
-  margin-bottom: 1rem;
-  font-style: normal;
-  line-height: inherit;
-}
-
 
 ul {
   margin-top: 0;
@@ -1600,9 +1583,6 @@ a.text-danger:hover, a.text-danger:focus {
   a:not(.btn) {
     text-decoration: underline;
   }
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
   tr,
   img {
     page-break-inside: avoid;
@@ -1742,6 +1722,9 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-user-times:before {
   content: "\f235";
+}
+.fa-map-pin:before {
+  content: "\f276";
 }
 .sr-only {
   position: absolute;

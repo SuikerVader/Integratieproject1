@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -26,6 +27,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly DataTypeManager _dataTypeManager;
+        private readonly IoTManager _ioTManager;
 
         public ProjectController()
         {
@@ -33,6 +35,7 @@ namespace Integratieproject1.UI.Controllers
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _dataTypeManager = new DataTypeManager();
+            _ioTManager = new IoTManager();
         }
 
         public IActionResult Project(int projectId, string platformName)
@@ -42,6 +45,15 @@ namespace Integratieproject1.UI.Controllers
                 Project project = _projectsManager.GetProject(projectId);
                 if (_projectsManager.GetPlatformByName(platformName) == project.Platform)
                 {
+                    List<IoTSetup> ioTSetups = _ioTManager.GetAllIoTSetupsForProject(projectId);
+                    if (ioTSetups != null && ioTSetups.Count > 0)
+                    {
+                        ViewBag.hasIots = true;
+                    }
+                    else
+                    {
+                        ViewBag.hasIots = false;
+                    }
                     return View("/UI/Views/Project/Project.cshtml", project);
                 }
                 else
@@ -60,6 +72,15 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult Ideation(int ideationId)
         {
             Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            List<IoTSetup> ioTSetups = _ioTManager.GetAllIoTSetupsForIdeation(ideationId);
+            if (ioTSetups != null && ioTSetups.Count > 0)
+            {
+                ViewBag.hasIots = true;
+            }
+            else
+            {
+                ViewBag.hasIots = false;
+            }
             return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
 

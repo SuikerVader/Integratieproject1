@@ -11,17 +11,20 @@ namespace Integratieproject1.DAL.Repositories
     public class IoTRepository : IIoTRepository
     {
         private readonly CityOfIdeasDbContext _ctx;
-        public IoTRepository( UnitOfWork unitOfWork)
+
+        public IoTRepository(UnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
                 throw new ArgumentNullException(nameof(unitOfWork));
 
             _ctx = unitOfWork.Ctx;
         }
+
         public IEnumerable<IoTSetup> GetIoTSetups()
         {
             return _ctx.IoTSetups.AsEnumerable();
         }
+
         public IoTSetup GetIoTSetup(string ioTSetupId)
         {
             return _ctx.IoTSetups
@@ -30,6 +33,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Position)
                 .Single(i => i.Code == ioTSetupId);
         }
+
         public IoTSetup CreateIoTSetup(IoTSetup ioTSetup)
         {
             _ctx.IoTSetups.Add(ioTSetup);
@@ -42,6 +46,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.IoTSetups.Remove(ioTSetup);
             _ctx.SaveChanges();
         }
+
         public IoTSetup GetIoTSetupByIdea(int id)
         {
             return _ctx.IoTSetups.First(ioTSetup => ioTSetup.Idea.IdeaId == id);
@@ -51,6 +56,47 @@ namespace Integratieproject1.DAL.Repositories
         {
             _ctx.IoTSetups.Update(original);
             _ctx.SaveChanges();
+        }
+
+        public IEnumerable<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
+        {
+            return _ctx.IoTSetups
+                .Where(i => i.Idea.Ideation.Phase.Project.Platform.PlatformId == platformId ||
+                            i.Question.Survey.Phase.Project.Platform.PlatformId == platformId)
+                .Include(i => i.Position)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<IoTSetup> GetAllIoTSetupsForProject(int id)
+        {
+            return _ctx.IoTSetups
+                .Where(i => i.Idea.Ideation.Phase.Project.ProjectId == id ||
+                            i.Question.Survey.Phase.Project.ProjectId == id)
+                .Include(i => i.Position)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<IoTSetup> GetAllIoTSetupsForIdeation(int id)
+        {
+            return _ctx.IoTSetups
+                .Where(i => i.Idea.Ideation.IdeationId == id)
+                .Include(i => i.Position)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<IoTSetup> GetAllIoTSetupsForIdea(int id)
+        {
+            return _ctx.IoTSetups
+                            .Where(i => i.Idea.IdeaId == id)
+                            .Include(i => i.Position)
+                            .AsEnumerable();
+        }
+        public IEnumerable<IoTSetup> GetAllIoTSetupsForQuestion(int id)
+        {
+            return _ctx.IoTSetups
+                .Where(i => i.Question.QuestionId == id)
+                .Include(i => i.Position)
+                .AsEnumerable();
         }
     }
 }
