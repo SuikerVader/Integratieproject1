@@ -53,6 +53,21 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetAllSurveys().ToList();
         }
 
+        public IList<Survey> GetAllSurveysBySort(string sortOrder)
+        {
+            IEnumerable<Survey> surveys = GetAllSurveys();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    surveys = surveys.OrderByDescending(t => t.Title);
+                    break;
+                default:
+                    surveys = surveys.OrderBy(t => t.Title);
+                    break;
+            }
+            return surveys.ToList();
+        }
+
         public void CreateSurvey(Survey survey)
         {
             _surveysRepository.CreateSurvey(survey);

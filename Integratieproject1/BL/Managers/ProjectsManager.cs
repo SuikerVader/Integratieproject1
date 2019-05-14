@@ -157,6 +157,45 @@ namespace Integratieproject1.BL.Managers
             return projects;
         }
 
+        public IList<Project> GetAdminProjectsBySort(string userId, string sortOrder)
+        {
+            IEnumerable<Project> projects = GetAdminProjects(userId);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    projects = projects.OrderByDescending(p => p.ProjectName);
+                    break;
+                case "StartDate":
+                    projects = projects.OrderBy(p => p.StartDate);
+                    break;
+                case "startdate_desc":
+                    projects = projects.OrderByDescending(p => p.StartDate);
+                    break;
+                case "Status":
+                    projects = projects.OrderBy(p => p.Status);
+                    break;
+                case "status_desc":
+                    projects = projects.OrderByDescending(p => p.Status);
+                    break;
+                case "EndDate":
+                    projects = projects.OrderBy(p => p.EndDate);
+                    break;
+                case "enddate_desc":
+                    projects = projects.OrderByDescending(p => p.EndDate);
+                    break;
+                case "Platform":
+                    projects = projects.OrderBy(p => p.Platform.PlatformName);
+                    break;
+                case "platform_desc":
+                    projects = projects.OrderByDescending(p => p.Platform.PlatformName);
+                    break;
+                default:
+                    projects = projects.OrderBy(s => s.ProjectName);
+                    break;
+            }
+            return projects.ToList();
+            }
+
         public IList<AdminProject> GetAllAdminProjects(string userId)
         {
             return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
