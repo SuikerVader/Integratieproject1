@@ -37,16 +37,12 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View("/UI/Views/Home/About.cshtml");
         }
 
-        public IActionResult Contact()
+        public IActionResult FAQ()
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View("/UI/Views/Home/Contact.cshtml");
+            return View("/UI/Views/Home/FAQ.cshtml");
         }
 
         public IActionResult Privacy()
