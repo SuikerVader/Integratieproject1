@@ -100,6 +100,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Where(i => i.Ideation.Phase.Project.Platform.PlatformId == platformId)
                 .Include(i => i.IdeaObjects)
+                .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
                 .AsEnumerable();
         }
 

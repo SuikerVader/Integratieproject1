@@ -278,7 +278,7 @@ namespace Integratieproject1.DAL
             {
                 Title = "Sport",
                 Ideation = ideationOssenmarktThema,
-                IdentityUser = admin
+                IdentityUser = admin,
             };
             Idea ideaThema2 = new Idea
             {

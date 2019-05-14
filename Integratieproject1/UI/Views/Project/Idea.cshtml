@@ -31,7 +31,7 @@
                 <div>
                     @foreach (var tag in Model.IdeaTags)
                     {
-                        <small><i class="fa fa-tag"></i>@tag.Tag.TagName</small>
+                        <small><i class="fa fa-tag"></i><a asp-controller="Home" asp-action="Search" asp-route-searchString="@tag.Tag.TagName">@tag.Tag.TagName</a></small>
                     }
                 </div>
                 <div>

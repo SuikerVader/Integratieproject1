@@ -57,9 +57,10 @@ namespace Integratieproject1.UI.Controllers
                 new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
 
-        public IActionResult Search(string searchString)
+        public IActionResult Search(string platformName, string searchString)
         {
-            const int platformId = 1;
+            Platform platform = _projectsManager.GetPlatformByName(platformName);
+            int platformId = platform.PlatformId;
 
             searchString = searchString.ToLower();
 
@@ -91,10 +92,15 @@ namespace Integratieproject1.UI.Controllers
                     .Where(i => i.CentralQuestion.ToLower().Contains(searchString))
                     .ToList()
                 );
-
+                List<string> tagNames = new List<string>();
                 foreach (var idea in ideas)
                 {
-                    if (idea.Title.ToLower().Contains(searchString))
+                    
+                    foreach (IdeaTag ideaTag in idea.IdeaTags)
+                    {
+                        tagNames.Add(ideaTag.Tag.TagName.ToLower());
+                    }
+                    if (idea.Title.ToLower().Contains(searchString) || tagNames.Contains(searchString))
                         searchResults.Add(idea);
                     
                     if (idea.IdeaObjects != null && idea.GetTextFields() != null)
