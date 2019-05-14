@@ -82,12 +82,26 @@ namespace Integratieproject1.BL.Managers
         
         public void EditPlatform(Platform platform, int platformId)
         {
-            platform.PlatformId = platformId;
-            if (platform.BackgroundImage == null)
-            {
-                platform.BackgroundImage = GetProject(platformId).BackgroundImage;
-            }
-            _projectsRepository.EditPlatform(platform);
+            Platform originalPlatform = GetPlatform(platformId);
+            originalPlatform.Address = platform.Address;
+            originalPlatform.BackgroundImage = platform.BackgroundImage;
+            originalPlatform.Description = platform.Description;
+            originalPlatform.Logo = platform.Logo;
+            originalPlatform.Phonenumber = platform.Phonenumber;
+            originalPlatform.PlatformName = platform.PlatformName;
+            originalPlatform.Projects = platform.Projects;
+            originalPlatform.Users = platform.Users;
+            _projectsRepository.EditPlatform(originalPlatform);
+            _unitOfWorkManager.Save();
+        }
+
+        public void EditPlatformLayout(Platform platform, int platformId)
+        {
+            Platform originalPlatform = GetPlatform(platformId);
+            originalPlatform.BackgroundColor = platform.BackgroundColor;
+            originalPlatform.ButtonColor = platform.ButtonColor;
+            originalPlatform.TextColor = platform.TextColor;
+            _projectsRepository.EditPlatform(originalPlatform);
             _unitOfWorkManager.Save();
         }
         public void DeleteBackgroundImagePlatform(int platformId)
@@ -147,12 +161,6 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
-
-        public IdentityUser GetUser(string id)
-        {
-            UsersManager userManager = new UsersManager(_unitOfWorkManager);
-            return userManager.GetUser(id);
-        }
         
         public void CreateProject(Project project, string userId, int platformId)
         {
@@ -188,6 +196,7 @@ namespace Integratieproject1.BL.Managers
             {
                 originalProject.BackgroundImage = project.BackgroundImage;
             }
+            _unitOfWorkManager.Save();
             return _projectsRepository.EditProject(originalProject);
         }
         public void DeleteBackgroundImageProject(int projectId)
@@ -394,8 +403,5 @@ namespace Integratieproject1.BL.Managers
 
 
         #endregion
-
-
-
     }
 }

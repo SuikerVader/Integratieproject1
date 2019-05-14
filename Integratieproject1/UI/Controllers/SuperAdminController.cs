@@ -277,7 +277,7 @@ namespace Integratieproject1.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _projectsManager.EditPlatform(platform, platformId);
+                _projectsManager.EditPlatformLayout(platform, platformId);
             }
 
             IList<Platform> platforms = _projectsManager.GetAllPlatforms();

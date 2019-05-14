@@ -119,6 +119,56 @@ namespace Integratieproject1.UI.Controllers
                 return View("/UI/Views/Project/EditIdea.cshtml", idea);
             }
         }
+        public IActionResult EditIoT(string iotId)
+        {
+            IoTSetup ioTSetup = _ioTManager.GetIoT(iotId);
+            return View("/UI/Views/Admin/EditIoTSetup.cshtml", ioTSetup);
+        }
+        [HttpPost]
+        public IActionResult EditIoT(string iotId,IoTSetup ioTSetup)
+        {
+            _ioTManager.EditIoTSetup(ioTSetup, iotId);
+            IoTSetup returnIoTSetup = _ioTManager.GetIoT(iotId);
+            if (returnIoTSetup.Question != null)
+            {
+                Survey survey = _surveysManager.GetSurvey(_surveysManager.GetQuestion(returnIoTSetup.Question.QuestionId).Survey.SurveyId);
+                return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            }
+            else
+            {
+                Idea idea = _ideationsManager.GetIdea(returnIoTSetup.Idea.IdeaId);
+                ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
+                return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            }
+        }
+        public IActionResult DeleteIoT(string iotId)
+        {
+            bool returnQuestion =  _ioTManager.GetIoT(iotId).Question != null;
+            int returnId = 0;
+            if (returnQuestion)
+            {
+               returnId = _ioTManager.GetIoT(iotId).Question.QuestionId;
+            }
+            else
+            {
+                returnId = _ioTManager.GetIoT(iotId).Idea.IdeaId;
+            }
+            _ioTManager.DeleteIoTSetup(iotId);
+            
+            if (returnQuestion)
+            {
+                Survey survey = _surveysManager.GetSurvey(_surveysManager.GetQuestion(returnId).Survey.SurveyId);
+                return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
+            }
+            else
+            {
+                Idea idea = _ideationsManager.GetIdea(returnId);
+                ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
+                return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            }
+            
+            
+        }
 
         #region VerificationRequests
 

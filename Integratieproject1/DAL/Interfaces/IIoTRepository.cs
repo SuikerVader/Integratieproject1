@@ -6,7 +6,7 @@ namespace Integratieproject1.DAL.Interfaces
     public interface IIoTRepository
     {
         IEnumerable<IoTSetup> GetIoTSetups();
-        IoTSetup GetIoTSetup(int ioTSetupId);
+        IoTSetup GetIoTSetup(string ioTSetupId);
         IoTSetup CreateIoTSetup(IoTSetup ioTSetup);
         IoTSetup GetIoTSetupByIdea(int id);
     }

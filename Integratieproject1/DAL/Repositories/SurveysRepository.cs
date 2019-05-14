@@ -28,7 +28,17 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Surveys
                 .Where(p => p.Phase.PhaseId == phaseId)
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
+                .Include(q => q.Questions).ThenInclude(q => q.IoTSetups).ThenInclude(i => i.Position)
                 .AsEnumerable();
+        }
+
+        public IEnumerable<Survey> GetProjectSurveys(int projectId)
+        {
+            return _ctx.Surveys
+                .Where(s => s.Phase.Project.ProjectId == projectId)
+                .Include(p => p.Phase).ThenInclude(ph => ph.Project)
+                .AsEnumerable();
+
         }
 
         public IEnumerable<Survey> GetAllSurveys()
@@ -46,7 +56,8 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Surveys
                 .Include(q => q.Questions).ThenInclude(a => a.Answers)
-                .Include(p => p.Phase).ThenInclude(pr => pr.Project)
+                .Include(q => q.Questions).ThenInclude(q => q.IoTSetups).ThenInclude(i => i.Position)
+                .Include(p => p.Phase).ThenInclude(pr => pr.Project).ThenInclude(pl => pl.Platform)
                 .Single(s => s.SurveyId == surveyId);
         }
         public Survey CreateSurvey(Survey survey)
@@ -81,13 +92,16 @@ namespace Integratieproject1.DAL.Repositories
         // Question methods
         public IEnumerable<Question> GetQuestions(int surveyId)
         {
-            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr).AsEnumerable();
+            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr)
+                .Include(s=>s.Answers)
+                .AsEnumerable();
         }
 
         public Question GetQuestion(int questionId)
         {
             return _ctx.Questions
                 .Include(q => q.Survey)
+                .Include(q => q.IoTSetups).ThenInclude(i => i.Position)
                 .Single(q => q.QuestionId == questionId);
         }
         

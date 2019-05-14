@@ -61,18 +61,16 @@
     function initMap() {
         var position = {}
         if (first === true) {
+            alert("first lat:" + @Model.Position.Lat + " lng:" + @Model.Position.Lng);
               position = {lat: @Model.Position.Lat, lng: @Model.Position.Lng};
              first = false;
         } else {
-           var lat = document.getElementById('lat').value.toString();
-            var lng = document.getElementById('lng').value.toString();
-            position = {lat: lat, lng: lng};
-           alert("lat:" + lat + " lng:" + lng + " pos" + position);
+           var lat = document.getElementById('lat').value;
+            var lng = document.getElementById('lng').value;
+            position = {lat: lat.toString(), lng: lng.toString()};
+           alert("lat:" + lat + " lng:" + lng + " pos" + position.toString());
         }
         // The location of Uluru
-       
-        
-
         // The map, centered at Uluru
         var map = new google.maps.Map(
             document.getElementById('map'), {zoom: 16, center: position});

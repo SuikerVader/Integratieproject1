@@ -11,21 +11,22 @@
     ViewBag.Element = "ideation";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
+<body style="background-color:@Model.Phase.Project.Platform.BackgroundColor;color:@Model.Phase.Project.Platform.TextColor">
 <div class="container">
     <div id="ideationGrid">
         <div id="ideationInfo">
             <div class="card text-center infoCard">
                 <div class="card-body">
                     <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br />
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br />
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
-                    <br/><br/>
+                    <br /><br />
                     @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
                     {
-                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>  
+                        <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
-                    
+
                 </div>
             </div>
         </div>
@@ -35,7 +36,7 @@
                     <h1 class="card-title">@Model.CentralQuestion</h1>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
                     {
-                        <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                        <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
                            asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
                             Idee Posten
                         </a>
@@ -46,14 +47,15 @@
                         <div class="d-flex flex-row justify-content-center flex-wrap">
                             @foreach (var idea in Model.Ideas)
                             {
-                                <a class="btn btn-primary" href="#@idea.IdeaId">@idea.Title</a>
+                                <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
                             }
                         </div>
                     }
-                    
+
                     <p class="card-text d-flex flex-row justify-content-end flex-wrap">
                         <small onclick="showHideReaction()">
-                            <i class="fa fa-comment"></i> @Model.Reactions.Count</small>
+                            <i class="fa fa-comment"></i> @Model.Reactions.Count
+                        </small>
                     </p>
                 </div>
             </div>
@@ -107,7 +109,8 @@
                                 else
                                 {
                                     <small>
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count</small>
+                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
+                                    </small>
                                 }
                             </p>
 
@@ -149,16 +152,18 @@
                                     <small>Ingezonden door: @idea.IdentityUser.UserName</small>
                                 </p>
                             }
-                            <a class="btn btn-primary" asp-area="" asp-controller="Project"
+                            <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
                                asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
                                 Bekijk Idee
                             </a>
                         </div>
                         <div class="card-footer d-flex flex-row justify-content-around">
                             <div>
-                                <i class="fa fa-heart"></i> @idea.Votes.Count</div>
+                                <i class="fa fa-heart"></i> @idea.Votes.Count
+                            </div>
                             <div>
-                                <i class="fa fa-comment"></i> @idea.Reactions.Count</div>
+                                <i class="fa fa-comment"></i> @idea.Reactions.Count
+                            </div>
                         </div>
                     </div>
                 }
@@ -166,38 +171,41 @@
 
         </div>
 
-    </div>
-</div>
 
+    </div>
+    <footer>
+        <img src="@Model.Phase.Project.Platform.Logo" alt="Logo" height="75" width="75" style="float:right"/>
+    </footer>
+</body>
 
 @*************************@
 @* refactor naar js file *@
 <script>
-    function showHideCreateIdea() {
-        var x = document.getElementById('idea');
-        if (x.style.display === 'none') {
-            x.style.display = 'inline-block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
+            function showHideCreateIdea() {
+                var x = document.getElementById('idea');
+                if (x.style.display === 'none') {
+                    x.style.display = 'inline-block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
 
-    function showHideReaction() {
-        var x = document.getElementById('reaction');
-        if (x.style.display === 'none') {
-            x.style.display = 'block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
+            function showHideReaction() {
+                var x = document.getElementById('reaction');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
 
-    function showHideCreateReaction() {
-        var x = document.getElementById('createReaction');
-        if (x.style.display === 'none') {
-            x.style.display = 'inline-block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
-</script>
+            function showHideCreateReaction() {
+                var x = document.getElementById('createReaction');
+                if (x.style.display === 'none') {
+                    x.style.display = 'inline-block';
+                } else {
+                    x.style.display = 'none';
+                }
+            }
+        </script>
 @*************************@
