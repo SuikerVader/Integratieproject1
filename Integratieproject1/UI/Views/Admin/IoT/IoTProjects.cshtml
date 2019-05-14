@@ -1,0 +1,26 @@
+@model IList<Integratieproject1.Domain.IoT.IoTSetup>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Mijn IoT-projecten</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Code</th>
+                <th>Email</th>
+                <th>Telefoonnummer</th>
+            </tr>
+            @foreach (var ioTSetup in Model)
+            {
+                <tr>
+                    <td>@ioTSetup.Code</td>
+                    <td>@ioTSetup.Position</td>
+                    <td>@ioTSetup.Question.QuestionText @ioTSetup.Idea.Title</td>  
+                </tr>
+            }
+        </table>
+    </div>
+</div>

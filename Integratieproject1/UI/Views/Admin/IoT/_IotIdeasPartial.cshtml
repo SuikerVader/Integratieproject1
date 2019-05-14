@@ -1,0 +1,23 @@
+@model IList<Integratieproject1.Domain.Ideations.Idea>
+@{
+    ViewBag.Title = "IoT-opstelling ";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Idee&euml;n</h2>
+<table class="table">
+    <tr>
+        <th>Idee</th>
+    </tr>
+    @foreach (var idea in Model)
+    {
+        <tr>
+            <td>
+                <a asp-area="" asp-controller="Admin"
+                   asp-action="EditIoTFromIdea" asp-route-ideaId="@idea.IdeaId">
+                    @idea.Title
+                </a>
+            </td>
+        </tr>
+    }
+</table>

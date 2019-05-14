@@ -1,0 +1,82 @@
+@using Integratieproject1.Domain.Datatypes
+@using Integratieproject1.Domain.Ideations
+@using Integratieproject1.Domain.Projects
+@using Integratieproject1.Domain.Surveys
+@model Integratieproject1.Domain.IoT.IoTSetup
+
+@{
+    ViewBag.Title = "IoT opstelling bewerken";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="text-center" style="padding: 30px">
+        <h2>IoT-opstelling bewerken</h2>
+        <h3>@Model.Code</h3>
+        <form asp-controller="Admin" action="AddPosition" asp-route-ideation="@Model">
+            <label for="Position">Locatie van de opstelling</label>
+            @if (Model.Position != null)
+            {
+                <div class="card">
+                    <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+                </div>
+                <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+                <div class="text-center" id="editLocation" style="display: none">
+                    @await Html.PartialAsync("/UI/Views/Project/_EditLocationPartial.cshtml", Model.Position)
+                </div>
+                
+            }
+            else
+            {
+                <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
+                <div class="text-center" id="addLocation" style="display: none">
+                    @await Html.PartialAsync("/UI/Views/Project/_AddLocationPartial.cshtml", new Position())
+                </div>
+            }
+        </form>
+
+    </div>
+</div>
+
+@*
+    <form asp-controller="Admin" action="CreateIoT" asp-route-ideation="@Model">
+        <label for="Position">Locatie van de opstelling</label>
+        @if (Model.Position != null)
+        {
+            <div class="card">
+                <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+            </div>
+            <button class="btn btn-primary" onclick="showHide('editLocation')" type="button">Locatie wijzigen</button>
+            <div class="text-center" id="editLocation" style="display: none">
+                @await Html.PartialAsync("/UI/Views/Project/_EditLocationPartial.cshtml", Model.Position)
+            </div>
+                
+        }
+        else
+        {
+            <button class="btn btn-primary" onclick="showHide('addLocation')" type="button">Locatie Toevoegen</button>
+            <div class="text-center" id="addLocation" style="display: none">
+                @await Html.PartialAsync("/UI/Views/Project/_AddLocationPartial.cshtml", new Position())
+            </div>
+        }
+    </form>
+    
+    
+    <form asp-controller="Admin" asp-action="AddIdeation" asp-route-phaseId="@ViewBag.Phase.PhaseId" method="post">
+        <label asp-for="CentralQuestion">Centrale Vraag</label>
+        <input required asp-for="CentralQuestion" class="form-control"/>
+        <formgroup>
+            <label asp-for="InputIdeation"></label><br/>
+            <input asp-for="InputIdeation" value="True" type="radio">Ja<br/>
+            <input asp-for="InputIdeation" value="False" type="radio">Nee<br/>
+        </formgroup>
+        <input class="btn btn-primary" type="submit" value="Ideation Toevoegen">
+    </form>
+    
+    
+    
+</div>
+</div>
+
+
+*@

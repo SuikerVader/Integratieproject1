@@ -10,6 +10,7 @@ using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,6 @@ namespace Integratieproject1.UI.Controllers
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly DataTypeManager _dataTypeManager;
-        private readonly IoTManager _ioTManager;
 
         public ProjectController()
         {
@@ -412,13 +412,6 @@ namespace Integratieproject1.UI.Controllers
             Idea idea = _ideationsManager.GetIdea(ideaId);
 
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult CreateIoT(int ideaId)
-        {
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            _ioTManager.CreateIoT(idea.Position, idea); //TODO: add position choice & question
-            return View("/UI/Views/Project/EditIdea.cshtml");
         }
     }
 }

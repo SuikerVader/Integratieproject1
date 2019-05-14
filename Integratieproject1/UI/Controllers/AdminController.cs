@@ -7,7 +7,9 @@ using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.DAL;
 using Integratieproject1.Domain;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
@@ -26,6 +28,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly UsersManager _usersManager;
+        private readonly IoTManager _ioTManager;
 
         public AdminController()
         {
@@ -344,6 +347,111 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/IdeationResult.cshtml", ideation);
         }
 
+        #endregion
+        
+        #region IoT
+
+        public IActionResult IoTPage()
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            try
+            {
+                IList<IoTSetup> ioTProjects = _ioTManager.GetUserIoTProjects(currentUserId);
+                return View("/UI/Views/Admin/IoT/IoTProjects.cshtml", ioTProjects);
+            }
+            catch(NullReferenceException)
+            {
+                IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+                return View("/UI/Views/Admin/IoT/CreateIoT.cshtml", projects);
+            }
+        }
+
+        public IActionResult IoTCreationPage()
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
+            return View("/UI/Views/Admin/IoT/CreateIoT.cshtml", projects);
+        }
+        
+        public IActionResult EditIoTFromIdea(int ideaId)
+        {
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            IoTSetup setup = _ioTManager.CreateIoTWithIdea(idea);
+            return View("/UI/Views/Admin/IoT/EditIoT.cshtml", setup);
+        }
+        public IActionResult EditIoTFromQuestion(int questionId)
+        {
+            Question question = _surveysManager.GetQuestion(questionId);
+            IoTSetup setup = _ioTManager.CreateIoTWithQuestion(question);
+            return View("/UI/Views/Admin/IoT/EditIoT.cshtml", setup);
+        }
+        
+
+        public IActionResult CreateIoT(Position position, Idea idea, Question question)
+        {
+            _ioTManager.CreateIoT(position, idea, question);
+            return View("/UI/Views/Admin/EditIdeation.cshtml");
+        }
+
+        public IActionResult IoTChoice(int projectId, int choice)
+        {
+            if (choice == 1)
+            {
+                List<Idea> list = new List<Idea>();
+                foreach (var phase in _projectsManager.GetPhases(projectId))
+                {
+                    foreach (var ideation in _ideationsManager.GetIdeations(phase.PhaseId))
+                    {
+                        foreach (var idea in _ideationsManager.GetIdeas(ideation.IdeationId))
+                        {
+                            list.Add(idea);
+                        }
+                    }
+                }
+                return PartialView("/UI/Views/Admin/IoT/_IoTIdeasPartial.cshtml",list);
+            }
+            else
+            {
+                if (choice == 2)
+                {
+                    List<Question> list = new List<Question>();
+                    foreach (var phase in _projectsManager.GetPhases(projectId))
+                    {
+                        foreach (var survey in _surveysManager.GetSurveys(phase.PhaseId) )
+                        {
+                            foreach (var question in _surveysManager.GetQuestions(survey))
+                            {
+                                list.Add(question);
+                            }
+                        }
+                    }
+                    return PartialView("/UI/Views/Admin/IoT/_IoTQuestionsPartial.cshtml", list);
+                }
+                else
+                {
+                    return View("/UI/Views/Admin/IoT/CreateIoT.cshtml");
+                }
+            }
+        }
+        
+        public IActionResult AddPosition(Position position, int IoTProjectId)
+        {
+            _ioTManager.AddPosition(position _ioTManager.)
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult EditPosition(Position position, int positionId, IoTProjectId)
+        {
+            _dataTypeManager.EditPosition(position,positionId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        
         #endregion
 
         #region Survey

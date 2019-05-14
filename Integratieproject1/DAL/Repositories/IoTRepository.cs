@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Integratieproject1.DAL.Interfaces;
+using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
+using Integratieproject1.Domain.Surveys;
 
 namespace Integratieproject1.DAL.Repositories
 {
@@ -40,6 +42,21 @@ namespace Integratieproject1.DAL.Repositories
         public IoTSetup GetIoTSetupByIdea(int id)
         {
             return _ctx.IoTSetups.First(ioTSetup => ioTSetup.Idea.IdeaId == id);
+        }
+        
+        public IoTSetup GetIoTSetupByQuestion(int id)
+        {
+            return _ctx.IoTSetups.First(ioTSetup => ioTSetup.Question.QuestionId == id);
+        }
+
+        public bool IoTExistsFromIdea(Idea idea)
+        {
+            return _ctx.IoTSetups.Any(x => x.Idea == idea);
+        }
+        
+        public bool IoTExistsFromQuestion(Question question)
+        {
+            return _ctx.IoTSetups.Any(x => x.Question == question);
         }
     }
 }

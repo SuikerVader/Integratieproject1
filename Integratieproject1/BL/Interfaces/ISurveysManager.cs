@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Integratieproject1.Domain.Surveys;
 
 namespace Integratieproject1.BL.Interfaces
@@ -9,5 +10,6 @@ namespace Integratieproject1.BL.Interfaces
         void CreateQuestion(Question question, int surveyId);
         void CreateAnswer(Answer answer);
         void UpdateSingleAnswer(Question question, int response);
+        IEnumerable<Question> GetQuestions(Survey survey);
     }
 }

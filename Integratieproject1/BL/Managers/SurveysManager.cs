@@ -166,6 +166,11 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetQuestion(questionId);
         }
 
+        public IEnumerable<Question> GetQuestions(Survey survey)
+        {
+            return _surveysRepository.GetQuestions(survey.SurveyId);
+        }
+
         #endregion
 
         #region Answer
