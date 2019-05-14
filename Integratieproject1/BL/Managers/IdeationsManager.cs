@@ -591,6 +591,10 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
+        public IList<Reaction> GetIdeaReactions(int id)
+        {
+            return _ideationsRepository.GetIdeaReactions(id).ToList();
+        }
 
         public IList<Reaction> GetReportedReactions(int projectId)
         {

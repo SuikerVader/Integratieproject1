@@ -171,6 +171,7 @@
 
         </div>
 
+
     </div>
 </div>
         <footer>
@@ -178,9 +179,17 @@
         </footer>
     </body>
 
-        @*************************@
-        @* refactor naar js file *@
-        <script>
+
+    </div>
+    <footer>
+        <img src="@Model.Phase.Project.Platform.Logo" alt="Logo" height="75" width="75" style="float:right"/>
+    </footer>
+</div>
+</body>
+
+@*************************@
+@* refactor naar js file *@
+<script>
             function showHideCreateIdea() {
                 var x = document.getElementById('idea');
                 if (x.style.display === 'none') {
@@ -208,4 +217,4 @@
                 }
             }
         </script>
-        @*************************@
+@*************************@
