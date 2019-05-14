@@ -5,10 +5,23 @@
 <body style="background-color:@Model.BackgroundColor;color:@Model.TextColor">
     <div class="jumbotron jumbotron-fluid text-center"
          @if (Model.BackgroundImage != null) { <text> style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+        <div style="position: relative"
+            @if (Model.BackgroundImage != null)
+            {
+                <text> class="jumbotronBackground" </text>
+            }
+        >
+            
+            
             <h1 class="display-4">@Model.PlatformName</h1>
             <h5>@Model.Description</h5>
-            <a class="btn btn-primary btn-lg" href="#projects" role="button" style="background-color:@Model.ButtonColor">Geef je idee!</a>
+            <a class="btn btn-primary btn-lg" href="#projects" role="button" style="background-color: @Model.ButtonColor">Geef je idee!</a>
+            @if (ViewBag.hasIots == true)
+            {
+                <br /> <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                   asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform"><i class="fa fa-map-pin"></i></a>
+            }
+
         </div>
     </div>
     <div class="container">
@@ -27,7 +40,13 @@
                     <div class="card text-center activeProject">
                         <div class="card-body"
                              @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-                            <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+                            <div
+                                @if (Model.BackgroundImage != null)
+                                {
+                                    <text> class="jumbotronBackground" </text>
+                                }
+                            >
+                                
                                 <h3 class="card-title">@project.ProjectName</h3>
                                 <p class="card-text">@project.Description</p>
                                 <div class="progress" style="height: 30px;">
@@ -53,16 +72,16 @@
                                     <p>@project.EndDate.ToString("d")</p>
 
                                 </div>
-                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                <a class="btn btn-primary" style="background-color: @Model.ButtonColor" asp-area=""
                                    asp-controller="Project"
                                    asp-action="Project" asp-route-projectId="@project.ProjectId">
                                     Bekijk Project
                                 </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
                             </div>
@@ -101,20 +120,22 @@
                                     <p>@project.EndDate.ToString("d")</p>
 
                                 </div>
+                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                   asp-controller="Project"
+                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                    Bekijk Project
+                                </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
+                                
                             </div>
 
-                            <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                Bekijk Project
-                            </a>
+                            
                         </div>
                     </div>
                 }
@@ -149,19 +170,20 @@
                                     <p>@project.EndDate.ToString("d")</p>
 
                                 </div>
+                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                   asp-controller="Project"
+                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                    Bekijk Project
+                                </a>
                                 <div style="border-top: solid 1px lightgray">
                                     <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i>@project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i>@project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i>@project.GetReactionCount()</p>
+                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                               asp-controller="Project"
-                               asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                Bekijk Project
-                            </a>
+                            
                         </div>
                     </div>
                 }

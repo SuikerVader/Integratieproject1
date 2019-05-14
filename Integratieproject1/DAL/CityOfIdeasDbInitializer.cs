@@ -7,6 +7,7 @@ using Integratieproject1.Areas.Identity.Pages.Account;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
@@ -64,7 +65,7 @@ namespace Integratieproject1.DAL
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
                 Logo = "/images/uploads/LogoAntwerp.png",
-                BackgroundColor = "#d9e5f7",
+                BackgroundColor = "white",
                 ButtonColor = "#1e62c9",
                 TextColor = "black"
             };
@@ -654,6 +655,55 @@ namespace Integratieproject1.DAL
 
             #endregion
 
+
+            #region IoT
+
+            Position groenplaats = new Position()
+            {
+                Lat = "51.2189511",
+                Lng = "4.40110100000004"
+            };
+            Position centraalStation = new Position()
+            {
+                Lat = "51.2171919",
+                Lng = "4.421446100000026"
+            };
+            Position pothoekstraat = new Position()
+            {
+                Lat = "51.22315260000001",
+                Lng = "4.436785299999997"
+            };
+            Position stadswaag = new Position()
+            {
+                Lat = "51.22365989999999",
+                Lng = "4.404823699999952"
+            };
+            
+            IoTSetup ioT1 = new IoTSetup()
+            {
+               Idea = ideaSport1,
+               Position = groenplaats
+            };
+            IoTSetup ioT2 = new IoTSetup()
+            {
+                Idea = ideaSport2,
+                Position = centraalStation
+            };
+            IoTSetup ioT3 = new IoTSetup()
+            {
+                Idea = ideaSport3,
+                Position = pothoekstraat
+            };
+            IoTSetup ioT4 = new IoTSetup()
+            {
+                Question = radioQuestion,
+                Position = stadswaag
+            };
+
+            
+
+            #endregion
+
             projectOssenmarkt.AdminProjects = new List<AdminProject> {adminProject, adminProject2};
             platformAntwerp.Users = new List<CustomUser> {person, organisation, admin};
             ideaThema1.IdeaObjects = new List<IdeaObject>() {textfieldSport};
@@ -682,6 +732,13 @@ namespace Integratieproject1.DAL
             ctx.Tags.AddRange(tag1, tag2, tag3, tag4);
             ideaThema1.IdeaTags = new List<IdeaTag>(){ideaTag1};
             ideaThema2.IdeaTags = new List<IdeaTag>(){ideaTag2,ideaTag3,ideaTag4};
+            
+            /*ctx.IoTSetups.AddRange(ioT1,ioT2,ioT3,ioT4);
+            ctx.Positions.AddRange(groenplaats,pothoekstraat,centraalStation,stadswaag);*/
+            ideaSport1.IoTSetups = new List<IoTSetup>(){ioT1};
+            ideaSport2.IoTSetups = new List<IoTSetup>(){ioT2};
+            ideaSport3.IoTSetups = new List<IoTSetup>(){ioT3};
+            radioQuestion.IoTSetups = new List<IoTSetup>(){ioT4};
             //ctx.Ideas.Add(idea);
             ideationOssenmarktThema.Ideas = new List<Idea>() {ideaThema1, ideaThema2, ideaThema3};
             ideationOssenmarktSport.Ideas = new List<Idea>() {ideaSport1, ideaSport2, ideaSport3, ideaSport4, ideaSport5};

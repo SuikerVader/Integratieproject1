@@ -26,7 +26,7 @@ namespace Integratieproject1.BL.Interfaces
         Position GetPosition(int positionId);
         Position CreatePosition(Position position);
         Position EditPosition(Position position, int positionId);
-        void DeletePosition(Position position);
+        void DeletePosition(int positionId);
 
         #endregion
     }

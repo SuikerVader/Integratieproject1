@@ -1,0 +1,36 @@
+﻿@model List<Integratieproject1.Domain.IoT.IoTSetup>;
+@{
+    ViewData["Title"] = "IoT";
+}
+<div class="container">
+
+    <h3>IoT Opstellingen</h3>
+    <div  id="map" style="height: 600px">
+
+    </div>
+</div>
+<script>
+    // Initialize and add the map
+    function initMap() {
+// The location of Uluru
+        var position = { lat: @Model.First().Position.Lat, lng: @Model.First().Position.Lng };
+// The map, centered at Uluru
+        var map = new google.maps.Map(document.getElementById('map'), { zoom: 12, center: position });
+// The marker, positioned at Uluru
+
+        @foreach (var iot in Model)
+        {
+          @:addMarker(@iot.Position.Lat, @iot.Position.Lng, map);
+        }
+
+
+    }
+
+    function addMarker(lat, lng, map) {
+        var position = { lat: lat, lng: lng };
+        var marker = new google.maps.Marker({ position: position, map: map });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMap">
+</script>

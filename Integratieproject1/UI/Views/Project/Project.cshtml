@@ -7,7 +7,12 @@
 <body style="background-color:@Model.Platform.BackgroundColor;color:@Model.Platform.TextColor">
     <div class="jumbotron jumbotron-fluid text-center"
          @if (Model.BackgroundImage != null) { <text> style="background-image: url(@Model.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text> }>
-        <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text> }>
+        <div style="position: relative"
+            @if (Model.BackgroundImage != null)
+            {
+                <text> class="jumbotronBackground" </text>
+            }
+        >
             <h1 class="display-4">@Model.ProjectName</h1>
             <p>@Model.Description</p>
             <div class="progress" style="height: 30px;">
@@ -32,6 +37,11 @@
                 <p>@Model.StartDate.ToString("d")</p>
                 <p>@Model.EndDate.ToString("d")</p>
             </div>
+            @if (ViewBag.hasIots == true)
+            {
+                <a id="projectIoTIcon" class="btn btn-lg btn-outline-primary text-center" asp-controller="Home"
+                   asp-action="IoTMap" asp-route-id="@Model.ProjectId" asp-route-type="project"><i class="fa fa-map-pin"></i></a>
+            }
         </div>
     </div>
     <div class="container">

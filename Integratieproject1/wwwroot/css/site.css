@@ -57,6 +57,48 @@ body {
     background-color: grey;
 
 }
+.iotIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+.iotIcon i {
+    color: #007bff;
+}
+.iotIcon:hover i {
+    color: white;
+}
+#projectIoTIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+#ideationIoTIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+#ideaIoTIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+@media screen and (min-width: 768px) {
+    #projectIoTIcon{
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 50%;
+        border-width: 3px;
+    }
+    .iotIcon{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+        border-width: 3px;
+    }
+}
 .jumbotronBackground {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;

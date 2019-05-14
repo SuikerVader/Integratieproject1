@@ -5,6 +5,7 @@ using System.Linq;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +16,29 @@ namespace Integratieproject1.UI.Controllers
     {
         private readonly ProjectsManager _projectsManager;
         private readonly IdeationsManager _ideationsManager;
+        private readonly IoTManager _ioTManager;
 
         public HomeController()
         {
             _projectsManager = new ProjectsManager();
             _ideationsManager = new IdeationsManager();
+            _ioTManager = new IoTManager();
         }
 
         public IActionResult Index(string platformName)
         {
             try{
                 Platform platform = _projectsManager.GetPlatformByName(platformName);
+                List<IoTSetup> ioTSetups = _ioTManager.GetAllIoTSetupsForPlatform(platform.PlatformId);
+                if (ioTSetups != null && ioTSetups.Count > 0)
+                {
+                    ViewBag.hasIots = true;
+                }
+                else
+                {
+                    ViewBag.hasIots = false;
+                }
+
                 return View("/UI/Views/Home/Index.cshtml", platform);
             }
             catch
@@ -138,6 +151,33 @@ namespace Integratieproject1.UI.Controllers
                 ViewBag.Logo = platform.Logo;
                 return PartialView("/UI/Views/Shared/_LogoPartial.cshtml");
             
+        }
+
+        public IActionResult IoTMap(int id, string type)
+        {
+            List<IoTSetup> ioTSetups = new List<IoTSetup>();
+            if (type.Equals("platform"))
+            {
+               ioTSetups = _ioTManager.GetAllIoTSetupsForPlatform(id);
+                           
+            } else if(type.Equals("project"))
+            {
+                ioTSetups = _ioTManager.GetAllIoTSetupsForProject(id);  
+            }
+            else if (type.Equals("ideation"))
+            {
+                ioTSetups = _ioTManager.GetAllIoTSetupsForIdeation(id);
+            }
+            else if (type.Equals("idea"))
+            {
+               ioTSetups = _ioTManager.GetAllIoTSetupsForIdea(id);  
+            }
+            else if (type.Equals("question"))
+            {
+                ioTSetups = _ioTManager.GetAllIoTSetupsForQuestion(id);
+            }
+
+            return View("/UI/Views/Home/IoTMap.cshtml", ioTSetups); 
         }
     }
 }

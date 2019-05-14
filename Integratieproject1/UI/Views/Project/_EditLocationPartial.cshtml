@@ -18,8 +18,13 @@
                 <input class="form-control" required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
             </div>
             <div class="col-3 text-center">
-                <input class="btn btn-primary btn-sm" type="submit" value="Locatie wijzigen">
+                <input class="btn btn-primary" type="submit" value="Locatie wijzigen">
+                <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                   asp-action="DeletePosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId">
+                    Verwijder locatie
+                </a>
             </div>
+            
         </div>
     </form>
 </div>
