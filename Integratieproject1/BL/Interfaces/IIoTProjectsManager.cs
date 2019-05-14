@@ -7,8 +7,9 @@ namespace Integratieproject1.BL.Interfaces
 {
     public interface IIoTProjectsManager
     {
-        void DeleteIoTSetup(IoTSetup ioTSetup);
+        void DeleteIoTSetup(string ioTSetup);
         void CreateIoT(Position position, Idea idea, Question question);
+        void CreateIoTSetup(IoTSetup ioTSetup, int id, string type);
         string GenerateIoTUrl();
         void RegisterComplexVote(int id, int supportLv);
     }

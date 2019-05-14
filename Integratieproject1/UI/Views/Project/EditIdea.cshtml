@@ -11,47 +11,47 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <div class="text-center" style="padding: 30px">
-        <h2>Wijzig Idee</h2>
-    </div>
-    <div id="editIdeaGrid">
-        <div id="editIdeaInfo">
-            <div class="card text-center infoCard">
-                <div class="card-body">
-                    <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br />
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br />
-                    @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br />
-                    Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
-                </div>
+<div class="text-center" style="padding: 30px">
+    <h2>Wijzig Idee</h2>
+</div>
+<div id="editIdeaGrid">
+    <div id="editIdeaInfo">
+        <div class="card text-center infoCard">
+            <div class="card-body">
+                <h5>Info:</h5>
+                Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.Project.ProjectName</a><br/>
+                Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br/>
+                @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br/>
+                Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
             </div>
         </div>
-        <div id="editIdeaTitle" class="text-center">
-            <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
-                <label asp-for="Title">
-                    <h5>Titel:</h5>
-                </label>
-                @if (Model.Title.Equals("_NewIdea_"))
-                {
-                    <div class="dropdown">
-                        <input required id="ideaInput" onfocus="showIdeaResults()" onfocusout="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control" />
-                        <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
-                            <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
-                            <div class="dropdown-divider"></div>
-                            @foreach (var idea in ViewBag.ideas)
+    </div>
+    <div id="editIdeaTitle" class="text-center">
+        <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
+            <label asp-for="Title">
+                <h5>Titel:</h5>
+            </label>
+            @if (Model.Title.Equals("_NewIdea_"))
+            {
+                <div class="dropdown">
+                    <input required id="ideaInput" onfocus="showIdeaResults()"  onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
+                    <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
+                        <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw. Je kan hier misschien op stemmen!</h6>
+                        <div class="dropdown-divider"></div>
+                        @foreach (var idea in ViewBag.ideas)
+                        {
+                            if (idea.IdeaId != Model.IdeaId)
                             {
-                                if (idea.IdeaId != Model.IdeaId)
-                                {
-                                    <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
-                                }
+                                <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
                             }
-                        </div>
+                        }
                     </div>
-                }
-                else
-                {
-                    <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%" />
-                }
+                </div>
+            }
+            else
+            {
+                <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="margin-left: 25%; margin-right: 25%; width: 50%"/>
+            }
 
                 <input class="btn btn-primary btn-sm" type="submit" value="Save Idea">
                 @if (Model.Title.Equals("_NewIdea_"))
@@ -102,8 +102,17 @@
                     <div class="text-center" id="addTag" style="display: none">
                         @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
                     </div>
+                    
                     if (User.IsInRole("Admin"))
                     {
+                        foreach (var ioT in Model.IoTSetups)
+                        {
+                            <small>
+                                iot<a style="text-decoration: none" asp-controller="Admin" asp-action="EditIot" asp-route-iotId="@ioT.Code">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </small>
+                        }
                         <div>
                             <a class="btn btn-primary" asp-area="" asp-controller="Admin"
                                asp-action="AddIoT" asp-route-id="@Model.IdeaId" asp-route-type="idea">
@@ -255,6 +264,7 @@
     function showIdeaResults() {
         document.getElementById("ideaDropdown").classList.toggle("show");
     }
+
 
     function filterFunction() {
         var input, filter, ul, li, a, i;

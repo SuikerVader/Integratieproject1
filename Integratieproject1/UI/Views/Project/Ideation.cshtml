@@ -18,13 +18,13 @@
             <div class="card text-center infoCard">
                 <div class="card-body">
                     <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br />
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br />
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
-                    <br/><br/>
+                    <br /><br />
                     @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
                     {
-                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
+                        <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
 
                 </div>
@@ -89,8 +89,7 @@
                                         }
                                         @if (userVoted == true)
                                         {
-                                            <i class="small fa fa-thumbs-up"></i>
-                                            @reaction.Likes.Count
+                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
                                         }
                                         else
                                         {
@@ -171,6 +170,15 @@
             </div>
 
         </div>
+
+
+    </div>
+</div>
+        <footer>
+            <img src="@Model.Phase.Project.Platform.Logo" alt="Logo" height="75" width="75" style="float:right" />
+        </footer>
+    </body>
+
 
     </div>
     <footer>

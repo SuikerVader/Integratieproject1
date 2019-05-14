@@ -193,7 +193,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private Answer GetAnswer(int answerId)
+        public Answer GetAnswer(int answerId)
         {
             return _surveysRepository.GetAnswer(answerId);
         }
