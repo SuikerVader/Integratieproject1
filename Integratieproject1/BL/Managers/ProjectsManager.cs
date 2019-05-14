@@ -161,12 +161,6 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
-
-        public IdentityUser GetUser(string id)
-        {
-            UsersManager userManager = new UsersManager(_unitOfWorkManager);
-            return userManager.GetUser(id);
-        }
         
         public void CreateProject(Project project, string userId, int platformId)
         {
@@ -409,8 +403,5 @@ namespace Integratieproject1.BL.Managers
 
 
         #endregion
-
-
-
     }
 }

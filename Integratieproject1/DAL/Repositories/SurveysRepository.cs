@@ -32,6 +32,15 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Survey> GetProjectSurveys(int projectId)
+        {
+            return _ctx.Surveys
+                .Where(s => s.Phase.Project.ProjectId == projectId)
+                .Include(p => p.Phase).ThenInclude(ph => ph.Project)
+                .AsEnumerable();
+
+        }
+
         public IEnumerable<Survey> GetAllSurveys()
         {
             return _ctx.Surveys
@@ -83,7 +92,9 @@ namespace Integratieproject1.DAL.Repositories
         // Question methods
         public IEnumerable<Question> GetQuestions(int surveyId)
         {
-            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr).AsEnumerable();
+            return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr)
+                .Include(s=>s.Answers)
+                .AsEnumerable();
         }
 
         public Question GetQuestion(int questionId)
