@@ -66,7 +66,7 @@ namespace Integratieproject1.UI.Controllers
 
             var projects = _projectsManager.GetProjects(platformId);
             var phases = _projectsManager.GetAllPhases(platformId);
-            var ideations = _ideationsManager.GetAllIdeations(platformId);
+            var ideations = _ideationsManager.GetIdeationsByPlatform(platformId);
             var ideas = _ideationsManager.GetAllIdeas(platformId);
             var reactions = _ideationsManager.GetAllReactions(platformId);
 
