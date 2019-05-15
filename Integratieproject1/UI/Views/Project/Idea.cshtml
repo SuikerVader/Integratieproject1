@@ -23,10 +23,11 @@
             Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
             @if (Model.IoTSetups != null && Model.IoTSetups.Count > 0)
             {
-                <div>
-                    <a id="ideaIoTIcon" class="btn btn-lg btn-outline-primary text-center" asp-controller="Home"
+                <div class="text-center d-flex flex-row justify-content-center">
+                    
+                    <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
                        asp-action="IoTMap" asp-route-id="@Model.IdeaId" asp-route-type="idea"><i class="fa fa-map-pin"></i></a>
-                                        
+
                 </div>
             }
             </div>
@@ -42,18 +43,17 @@
                         <small><i class="fa fa-tag"></i><a asp-controller="Home" asp-action="Search" asp-route-searchString="@tag.Tag.TagName">@tag.Tag.TagName</a></small>
                     }
                 </div>
-                <div>
+                <div >
                     @if (User.Identity.IsAuthenticated && (User.Identity.Name == Model.IdentityUser.UserName || User.IsInRole("Admin") || User.IsInRole("Mod")))
                     {
-                        <a style="text-decoration: none" asp-area="" asp-controller="Project"
+                        <a  class="btn btn-outline-primary btn-sm" style=" margin:2px" asp-area="" asp-controller="Project"
                            asp-action="EditIdea" asp-route-ideaId="@Model.IdeaId">
                             <i class="fa fa-edit"></i>
                         </a>
-
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a style="text-decoration: none" asp-area="" asp-controller="Project"
+                        <a class="btn btn-outline-primary btn-sm" style="margin:2px" asp-area="" asp-controller="Project"
                            asp-action="ReportPost" asp-route-id="@Model.IdeaId" asp-route-type="idea">
                             <i class="fa fa-flag"></i>
                         </a>
@@ -215,10 +215,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <div class="d-flex flex-row justify-content-end">
-                <button class="btn btn-sm btn-primary" onclick="showHideCreateReaction()">
-                    <i class="fa fa-comment"></i>
-                </button>
-                <div id="createReaction" style="display: none">
+                <div id="createReaction">
                     @await Html.PartialAsync("_PostReactionPartial.cshtml", new Reaction())
                 </div>
             </div>
@@ -290,15 +287,6 @@
                 var x = document.getElementById('reaction');
                 if (x.style.display === 'none') {
                     x.style.display = 'block';
-                } else {
-                    x.style.display = 'none';
-                }
-            }
-
-            function showHideCreateReaction() {
-                var x = document.getElementById('createReaction');
-                if (x.style.display === 'none') {
-                    x.style.display = 'inline-block';
                 } else {
                     x.style.display = 'none';
                 }
