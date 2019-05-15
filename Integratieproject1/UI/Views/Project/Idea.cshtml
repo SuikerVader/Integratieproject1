@@ -21,7 +21,15 @@
             Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Ideation.Phase.Project.ProjectId">@Model.Ideation.Phase.PhaseName</a><br />
             @Model.Ideation.Phase.StartDate.ToString("d") - @Model.Ideation.Phase.EndDate.ToString("d")<br />
             Ideation: <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@Model.Ideation.IdeationId">@Model.Ideation.CentralQuestion</a>
-        </div>
+            @if (Model.IoTSetups != null && Model.IoTSetups.Count > 0)
+            {
+                <div>
+                    <a id="ideaIoTIcon" class="btn btn-lg btn-outline-primary text-center" asp-controller="Home"
+                       asp-action="IoTMap" asp-route-id="@Model.IdeaId" asp-route-type="idea"><i class="fa fa-map-pin"></i></a>
+                                        
+                </div>
+            }
+            </div>
     </div>
 </div>
 <div id="ideaTitle">
@@ -31,7 +39,7 @@
                 <div>
                     @foreach (var tag in Model.IdeaTags)
                     {
-                        <small><i class="fa fa-tag"></i>@tag.Tag.TagName</small>
+                        <small><i class="fa fa-tag"></i><a asp-controller="Home" asp-action="Search" asp-route-searchString="@tag.Tag.TagName">@tag.Tag.TagName</a></small>
                     }
                 </div>
                 <div>

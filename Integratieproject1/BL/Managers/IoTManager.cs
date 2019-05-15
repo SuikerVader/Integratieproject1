@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Integratieproject1.BL.Interfaces;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Datatypes;
@@ -91,6 +94,36 @@ namespace Integratieproject1.BL.Managers
             original.Position = ioTSetup.Position;
             _ioTRepository.UpdateIoTSetup(original);
             _unitOfWorkManager.Save();
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForPlatform(platformId).ToList();
+            return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForProject(int id)
+        {
+             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForProject(id).ToList();
+                        return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForIdeation(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdeation(id).ToList();
+                                    return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForIdea(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdea(id).ToList();
+                                                return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForQuestion(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
+                                                            return ioTSetups;
         }
     }
 }

@@ -26,6 +26,14 @@
                     {
                         <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
+                    @if (ViewBag.hasIots == true)
+                    {
+                        <div>
+                            <a id="ideationIoTIcon" class="btn btn-lg btn-outline-primary text-center" asp-controller="Home"
+                               asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
+                                        
+                        </div>
+                    }
 
                 </div>
             </div>
@@ -33,11 +41,17 @@
         <div id="ideation">
             <div class="card text-center" style="border: none;">
                 <div class="card-body">
-                    <h1 class="card-title">@Model.CentralQuestion</h1>
+                    <h2 class="card-title">@Model.CentralQuestion</h2>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
                     {
                         <a class="btn btn-primary" style="background-color: @Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
                            asp-action="CreateIdea" asp-route-ideationId="@Model.IdeationId">
+                            Idee Posten
+                        </a>
+                    }
+                    else if (Model.InputIdeation == true)
+                    {
+                        <a class="btn btn-secondary" asp-area="Identity" asp-page="/Account/Login">
                             Idee Posten
                         </a>
                     }
@@ -136,6 +150,10 @@
                 <h1><i class="fa fa-lightbulb-o"></i> Idee&euml;n <i class="fa fa-lightbulb-o"></i></h1>
             </div>
             <div class="d-flex flex-row justify-content-around flex-wrap">
+                @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
+                {
+                    <canvas id="pie-chart" width="800" height="450"></canvas>
+                }
                 @foreach (var idea in Model.Ideas)
                 {
                     <div id="@idea.IdeaId" class="card text-center idea">
@@ -181,6 +199,7 @@
 
 @*************************@
 @* refactor naar js file *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
     function showHideCreateIdea() {
         var x = document.getElementById('idea');
@@ -200,13 +219,38 @@
         }
     }
 
-    function showHideCreateReaction() {
-        var x = document.getElementById('createReaction');
-        if (x.style.display === 'none') {
-            x.style.display = 'inline-block';
-        } else {
-            x.style.display = 'none';
-        }
+            function showHideCreateReaction() {
+                var x = document.getElementById('createReaction');
+                if (x.style.display === 'none') {
+                    x.style.display = 'inline-block';
+                } else {
+                    x.style.display = 'none';
+                }
     }
-</script>
+    var names = [];
+    var values = [];
+
+    @foreach (Idea idea in Model.Ideas)
+    {
+        @:names.push("@idea.Title");
+        @:values.push("@idea.Votes.Count");
+    }
+    new Chart(document.getElementById("pie-chart"), {
+        type: 'pie',
+        data: {
+            labels: names,
+            datasets: [{
+                label: "Stemmen",
+                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                data: values
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Aantal stemmen per idee'
+            }
+        }
+    });
+        </script>
 @*************************@
