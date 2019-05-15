@@ -56,9 +56,29 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetIdeations(phaseId).ToList();
         }
 
-        public IList<Ideation> GetAllIdeations(int platformId)
+        public IList<Ideation> GetIdeationsByPlatform(int platformId)
         {
-            return _ideationsRepository.GetAllIdeations(platformId).ToList();
+            return _ideationsRepository.GetIdeationsByPlatform(platformId).ToList();
+        }
+
+        public IList<Ideation> GetAllIdeations()
+        {
+            return _ideationsRepository.GetAllIdeations().ToList();
+        }
+
+        public IList<Ideation> GetAllIdeationsBySort(string sortOrder)
+        {
+            IEnumerable<Ideation> ideations = GetAllIdeations();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    ideations = ideations.OrderByDescending(t => t.CentralQuestion);
+                    break;
+                default:
+                    ideations = ideations.OrderBy(t => t.CentralQuestion);
+                    break;
+            }
+            return ideations.ToList();
         }
 
         public void CreateIdeation(Ideation ideation, int phaseId)
@@ -765,6 +785,21 @@ namespace Integratieproject1.BL.Managers
         public List<Tag> GetAllTags()
         {
             return _ideationsRepository.GetAllTags().ToList();
+        }
+
+        public List<Tag> GetAllTagsBySort(string sortOrder)
+        {
+            IEnumerable<Tag> tags =  GetAllTags();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    tags = tags.OrderByDescending(t => t.TagName);
+                    break;
+                default:
+                    tags = tags.OrderBy(t => t.TagName);
+                    break;
+            }
+            return tags.ToList();
         }
 
         public void DeleteIdeaTag(int ideaTagId)

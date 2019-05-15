@@ -6,23 +6,49 @@
 }
 <div class="container">
     <h2>Admins</h2>
+    <form asp-action="AddAdminsToProject" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="AddAdminsToProject">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table">
             <tr>
-                <th>Gebruikersnaam</th>
-                <th>Email</th>
-                <th>Telefoonnummer</th>
+                <th>
+                    <a asp-action="AddAdminsToProject" asp-route-sortOrder="@ViewData["UserNameSortParm"]">Gebruikersnaam</a>
+                </th>
+                <th>
+                    <a asp-action="AddAdminsToProject" asp-route-sortOrder="@ViewData["SurnameSortParm"]">Voornaam</a>
+                </th>
+                <th>
+                    <a asp-action="AddAdminsToProject" asp-route-sortOrder="@ViewData["NameSortParm"]">Achternaam</a>
+                </th>
+                <th>
+                    <a asp-action="AddAdminsToProject" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a>
+                </th>
+                <th>
+                    <a asp-action="AddAdminsToProject" asp-route-sortOrder="@ViewData["AgeSortParm"]">Leeftijd</a>
+                </th>
             </tr>
             @foreach (var admin in Model)
             {
-                <tr>
-                    <td>@admin.UserName</td>
-                    <td>@admin.Email</td>
-                    <td>@admin.PhoneNumber</td>
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="AddAdminProjects" asp-route-adminId="@admin.Id" asp-route-projectId="@ViewBag.ProjectId">Voeg toe aan project
-                    </a></td> 
-                </tr>
+            <tr>
+                <td>@admin.UserName</td>
+                <td>@admin.Surname</td>
+                <td>@admin.Name</td>
+                <td>@admin.Email</td>
+                <td>@admin.Age</td>
+                <td>
+                    <a asp-area="" asp-controller="SuperAdmin"
+                       asp-action="AddAdminProjects" asp-route-adminId="@admin.Id" asp-route-projectId="@ViewBag.ProjectId">
+                        Voeg toe aan project
+                    </a>
+                </td>
+            </tr>
             }
         </table>
     </div>

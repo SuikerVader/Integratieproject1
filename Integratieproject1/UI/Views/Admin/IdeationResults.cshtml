@@ -6,10 +6,21 @@
 }
 <div class="container">
     <h2>Ideations</h2>
+    <form asp-action="IdeationResults" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="IdeationResults">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table">
             <tr>
-                <th>Titel</th>
+                <th>
+                    <a asp-action="IdeationResults" asp-route-sortOrder="@ViewData["NameSortParm"]">Titel</a>
+                </th>
             </tr>
             @foreach (var ideation in Model)
             {

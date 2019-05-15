@@ -12,7 +12,8 @@ namespace Integratieproject1.BL.Interfaces
         Ideation GetIdeation(int ideationId);
         IList<Ideation> GetProjectIdeations(int projectId);
         IList<Ideation> GetIdeations(int phaseId);
-        IList<Ideation> GetAllIdeations(int platformId);
+        IList<Ideation> GetIdeationsByPlatform(int phaseId);
+        IList<Ideation> GetAllIdeations();
         void CreateIdeation(Ideation ideation, int phaseId);
         Ideation EditIdeation(Ideation ideation, int ideationId);
         void DeleteIdeation(int ideationId);

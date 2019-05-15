@@ -9,12 +9,23 @@
     <div >
         <div class=" text-center">
             <h2>Tags</h2>
+            <form asp-action="Tags" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                        <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                        <a asp-action="Tags">Terug naar volledige lijst</a>
+                    </p>
+                </div>
+            </form>
         </div>
         <div>
             <div>
                 <table class="table">
                     <tr>
-                        <th>Tag</th>
+                        <th>
+                            <a asp-action="Tags" asp-route-sortOrder="@ViewData["NameSortParm"]">Naam</a>
+                        </th>
                     </tr>
                     @foreach (var tag in Model)
                     {
