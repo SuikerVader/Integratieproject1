@@ -57,6 +57,27 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetPlatforms().ToList();
         }
 
+        public IList<Platform> GetAllPlatformsBySort(string sortOrder)
+        {
+            IEnumerable<Platform> platforms =  GetAllPlatforms().ToList();
+            switch (sortOrder)
+            {
+                case "id_desc":
+                    platforms = platforms.OrderByDescending(p => p.PlatformId);
+                    break;
+                case "Name":
+                    platforms = platforms.OrderBy(p => p.PlatformName);
+                    break;
+                case "name_desc":
+                    platforms = platforms.OrderByDescending(p => p.PlatformName);
+                    break;
+                default:
+                    platforms = platforms.OrderBy(p => p.PlatformName);
+                    break;
+            }
+            return platforms.ToList();
+        }
+
         public void DeletePlatform(int platformId)
         {
             Platform platform = _projectsRepository.GetPlatform(platformId);
@@ -138,6 +159,45 @@ namespace Integratieproject1.BL.Managers
             return _projectsRepository.GetAllProjects().ToList();
         }
 
+        public IList<Project> GetAllProjectsBySort(string sortOrder)
+        {
+            IEnumerable<Project> projects = _projectsRepository.GetAllProjects().ToList();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    projects = projects.OrderByDescending(p => p.ProjectName);
+                    break;
+                case "StartDate":
+                    projects = projects.OrderBy(p => p.StartDate);
+                    break;
+                case "startdate_desc":
+                    projects = projects.OrderByDescending(p => p.StartDate);
+                    break;
+                case "Status":
+                    projects = projects.OrderBy(p => p.Status);
+                    break;
+                case "status_desc":
+                    projects = projects.OrderByDescending(p => p.Status);
+                    break;
+                case "EndDate":
+                    projects = projects.OrderBy(p => p.EndDate);
+                    break;
+                case "enddate_desc":
+                    projects = projects.OrderByDescending(p => p.EndDate);
+                    break;
+                case "Platform":
+                    projects = projects.OrderBy(p => p.Platform.PlatformName);
+                    break;
+                case "platform_desc":
+                    projects = projects.OrderByDescending(p => p.Platform.PlatformName);
+                    break;
+                default:
+                    projects = projects.OrderBy(s => s.ProjectName);
+                    break;
+            }
+            return projects.ToList();
+        }
+
         public IList<Project> GetAdminProjects(string userId)
         {
             List<Project> projects = new List<Project>();
@@ -200,7 +260,46 @@ namespace Integratieproject1.BL.Managers
         {
             return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
-        
+
+        public IList<AdminProject> GetAllAdminProjectsBySort(string userId, string sortOrder)
+        {
+            IEnumerable<AdminProject> projects = GetAllAdminProjects(userId);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    projects = projects.OrderByDescending(p => p.Project.ProjectName);
+                    break;
+                case "StartDate":
+                    projects = projects.OrderBy(p => p.Project.StartDate);
+                    break;
+                case "startdate_desc":
+                    projects = projects.OrderByDescending(p => p.Project.StartDate);
+                    break;
+                case "Status":
+                    projects = projects.OrderBy(p => p.Project.Status);
+                    break;
+                case "status_desc":
+                    projects = projects.OrderByDescending(p => p.Project.Status);
+                    break;
+                case "EndDate":
+                    projects = projects.OrderBy(p => p.Project.EndDate);
+                    break;
+                case "enddate_desc":
+                    projects = projects.OrderByDescending(p => p.Project.EndDate);
+                    break;
+                case "Platform":
+                    projects = projects.OrderBy(p => p.Project.Platform.PlatformName);
+                    break;
+                case "platform_desc":
+                    projects = projects.OrderByDescending(p => p.Project.Platform.PlatformName);
+                    break;
+                default:
+                    projects = projects.OrderBy(p => p.Project.ProjectName);
+                    break;
+            }
+            return projects.ToList();
+        }
+
         public void CreateProject(Project project, string userId, int platformId)
         {
             CustomUser identityUser = _usersManager.GetUser(userId);
@@ -311,6 +410,45 @@ namespace Integratieproject1.BL.Managers
             }
 
             return allAdmins;
+        }
+
+        public IList<CustomUser> GetNotProjectAdminsBySort(int projectId, string sortOrder)
+        {
+            IEnumerable<CustomUser> admins = GetNotProjectAdmins(projectId);
+            switch (sortOrder)
+            {
+                case "username_desc":
+                    admins = admins.OrderByDescending(u => u.UserName);
+                    break;
+                case "Surname":
+                    admins = admins.OrderBy(u => u.Surname);
+                    break;
+                case "surname_desc":
+                    admins = admins.OrderByDescending(u => u.Surname);
+                    break;
+                case "Name":
+                    admins = admins.OrderBy(u => u.Name);
+                    break;
+                case "name_desc":
+                    admins = admins.OrderByDescending(u => u.Name);
+                    break;
+                case "Email":
+                    admins = admins.OrderBy(u => u.Email);
+                    break;
+                case "email_desc":
+                    admins = admins.OrderByDescending(p => p.Email);
+                    break;
+                case "Age":
+                    admins = admins.OrderBy(u => u.Age);
+                    break;
+                case "age_desc":
+                    admins = admins.OrderByDescending(u => u.Age);
+                    break;
+                default:
+                    admins = admins.OrderBy(u => u.UserName);
+                    break;
+            }
+            return admins.ToList();
         }
 
         #endregion
