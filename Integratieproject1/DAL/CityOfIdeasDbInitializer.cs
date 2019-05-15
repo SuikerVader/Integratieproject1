@@ -553,7 +553,7 @@ namespace Integratieproject1.DAL
             };
 
             #endregion
-            #region 
+            #region Reactions
             Reaction reactionPullup1 = new Reaction
             {
                 Idea = ideaFitness1,
@@ -588,7 +588,7 @@ namespace Integratieproject1.DAL
                 ReactionText = "Sporten is gezond! Dit is echt een goed idee."
             };
             #endregion
-            #region
+            #region Likes
             Like likeReactionPullup1 = new Like
             {
                 IdentityUser = person,
@@ -611,6 +611,57 @@ namespace Integratieproject1.DAL
             {
                 IdentityUser = person,
                 Reaction = reactionPullup2
+            };
+            #endregion
+
+            #region Votes
+            Vote vote1 = new Vote()
+            {
+                Idea = ideaFitness1,
+                IdentityUser = person,
+                VoteType = VoteType.VOTE
+            };
+
+            Vote vote2 = new Vote()
+            {
+                Idea = ideaFitness1,
+                IdentityUser = admin,
+                VoteType = VoteType.VOTE
+            };
+
+            Vote vote3 = new Vote()
+            {
+                Idea = ideaFitness1,
+                IdentityUser = person,
+                VoteType = VoteType.SHARE_FB
+            };
+
+            Vote vote4 = new Vote()
+            {
+                Idea = ideaFitness1,
+                IdentityUser = person,
+                VoteType = VoteType.SHARE_TW
+            };
+
+            Vote vote5 = new Vote()
+            {
+                Idea = ideaFitness2,
+                IdentityUser = person,
+                VoteType = VoteType.VOTE
+            };
+
+            Vote vote6 = new Vote()
+            {
+                Idea = ideaFitness2,
+                IdentityUser = admin,
+                VoteType = VoteType.VOTE
+            };
+
+            Vote vote7 = new Vote()
+            {
+                Idea = ideaFitness3,
+                IdentityUser = person,
+                VoteType = VoteType.VOTE
             };
             #endregion
 
@@ -710,6 +761,9 @@ namespace Integratieproject1.DAL
             ideaThema2.IdeaObjects = new List<IdeaObject>() {textfieldSchool};
             ideaThema3.IdeaObjects = new List<IdeaObject>() {textfieldLiefde};
             ideaFitness1.IdeaObjects = new List<IdeaObject>() { videoPullup, imagePullup, textPullup };
+            ideaFitness1.Votes = new List<Vote>() { vote1, vote2, vote3, vote4 };
+            ideaFitness2.Votes = new List<Vote>() { vote5, vote6 };
+            ideaFitness3.Votes = new List<Vote>() { vote7 };
             //ctx.Answers.Add(answer);
             openQuestion.Answers = new List<Answer>() { };
             radioQuestion.Answers = new List<Answer>() {radio1, radio2, radio3, radio4};

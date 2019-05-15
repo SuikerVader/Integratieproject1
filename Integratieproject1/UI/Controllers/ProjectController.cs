@@ -73,6 +73,7 @@ namespace Integratieproject1.UI.Controllers
         {
             Ideation ideation = _ideationsManager.GetIdeation(ideationId);
             List<IoTSetup> ioTSetups = _ioTManager.GetAllIoTSetupsForIdeation(ideationId);
+
             if (ioTSetups != null && ioTSetups.Count > 0)
             {
                 ViewBag.hasIots = true;
