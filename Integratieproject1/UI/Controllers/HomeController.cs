@@ -6,6 +6,8 @@ using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,6 +59,29 @@ namespace Integratieproject1.UI.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            if (exceptionFeature != null)
+            {
+                // Get which route the exception occurred at
+                string routeWhereExceptionOccurred = exceptionFeature.Path;
+
+                // Get the exception that occurred
+                Exception exceptionThatOccurred = exceptionFeature.Error;
+
+                if (exceptionThatOccurred.InnerException != null)
+                {
+                    exceptionThatOccurred = exceptionThatOccurred.InnerException;
+                }
+                
+                MailService.SendErrorMail(
+                    "info.cityofideas@gmail.com", 
+                    "CoIMySweet16", 
+                    routeWhereExceptionOccurred, 
+                    exceptionThatOccurred, 
+                    User.Identity);
+            }
+
             return View("/UI/Views/Shared/Error.cshtml",
                 new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
