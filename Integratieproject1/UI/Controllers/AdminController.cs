@@ -91,11 +91,26 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
 
-        public IActionResult Users()
+        public IActionResult Users(string sortOrder, string searchString)
         {
-            IList<CustomUser> users = _usersManager.GetUsers("USER");
-            return View("/UI/Views/Admin/Users.cshtml", users);
+            IEnumerable<CustomUser> users = _usersManager.GetUsersBySort("USER", sortOrder);
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                users = users.Where(u => u.UserName.ToLower().Contains(searchString)
+                                       || u.Surname.ToLower().Contains(searchString)
+                                       || u.Name.ToLower().Contains(searchString)
+                                       || u.Email.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/Users.cshtml", users.ToList());
         }
+
         public IActionResult AddIoT(int id, string type)
         {
             if (type.Equals("question"))

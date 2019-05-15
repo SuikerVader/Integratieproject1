@@ -6,33 +6,66 @@
 }
 <div class="container">
     <h2>Mijn Admins</h2>
+    <form asp-action="Admins" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="Admins">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table">
             <tr>
-                <th>Gebruikersnaam</th>
-                <th>Email</th>
-                <th>Telefoonnummer</th>
+                <th>
+                    <a asp-action="Admins" asp-route-sortOrder="@ViewData["UserNameSortParm"]">Gebruikersnaam</a>
+                </th>
+                <th>
+                    <a asp-action="Admins" asp-route-sortOrder="@ViewData["SurnameSortParm"]">Voornaam</a>
+                </th>
+                <th>
+                    <a asp-action="Admins" asp-route-sortOrder="@ViewData["NameSortParm"]">Achternaam</a>
+                </th>
+                <th>
+                    <a asp-action="Admins" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a>
+                </th>
+                <th>
+                    <a asp-action="Admins" asp-route-sortOrder="@ViewData["AgeSortParm"]">Leeftijd</a>
+                </th>
             </tr>
             @foreach (var admin in Model)
             {
-                <tr>
-                    <td>@admin.UserName</td>
-                    <td>@admin.Email</td>
-                    <td>@admin.PhoneNumber</td>
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">Verwijder Adminrol
-                    </a></td>
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="DeleteAdmin" asp-route-adminId="@admin.Id">Verwijder Account
-                    </a></td>      
-                    <td><a asp-area="" asp-controller="SuperAdmin"
-                           asp-action="AdminProjects" asp-route-adminId="@admin.Id">Projecten
-                    </a></td> 
-                </tr>
+            <tr>
+                <td>@admin.UserName</td>
+                <td>@admin.Surname</td>
+                <td>@admin.Name</td>
+                <td>@admin.Email</td>
+                <td>@admin.Age</td>
+                <td>
+                    <a asp-area="" asp-controller="SuperAdmin"
+                       asp-action="DeleteAdminRole" asp-route-adminId="@admin.Id">
+                        Verwijder Adminrol
+                    </a>
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="SuperAdmin"
+                       asp-action="DeleteAdmin" asp-route-adminId="@admin.Id">
+                        Verwijder Account
+                    </a>
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="SuperAdmin"
+                       asp-action="AdminProjects" asp-route-adminId="@admin.Id">
+                        Projecten
+                    </a>
+                </td>
+            </tr>
             }
         </table>
     </div>
     <a class="btn btn-primary" asp-area="" asp-controller="SuperAdmin"
-       asp-action="Users" >Geef Adminrol aan gebruiker
+       asp-action="Users">
+        Geef Adminrol aan gebruiker
     </a>
 </div>
