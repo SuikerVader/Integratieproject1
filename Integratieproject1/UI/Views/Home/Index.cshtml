@@ -15,11 +15,12 @@
             
             <h1 class="display-4">@Model.PlatformName</h1>
             <h5>@Model.Description</h5>
-            <a class="btn btn-primary btn-lg" href="#projects" role="button" style="background-color: @Model.ButtonColor">Geef je idee!</a>
+            <a class="btn btn-primary btn-lg" href="#projects" role="button" style="background-color: @Model.ButtonColor"><h2>Geef je idee!</h2></a>
             @if (ViewBag.hasIots == true)
             {
-                <br /> <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                <br /><div class="text-center d-flex flex-row justify-content-center"> <a id="platformIoTIcon" class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
                    asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform"><i class="fa fa-map-pin"></i></a>
+                      </div>
             }
 
         </div>
