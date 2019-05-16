@@ -7,7 +7,7 @@
 
 <div>
     <form class="" asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-        <div class="form-row">
+        @*<div class="form-row">
             <div class="col-3 text-center">
                 <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
             </div>
@@ -20,7 +20,15 @@
             <div class="col-3 text-center">
                 <input class="btn btn-primary btn-sm" type="submit" value="Locatie Toevoegen">
             </div>
-        </div>
+        </div>*@
+        <div class="input-group">
+            <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
+            <input class="form-control" required asp-for="Lat" id="lat"/>
+            <input class="form-control" required asp-for="Lng" id="lng"/>
+            <div class="input-group-append">
+                <input class="btn btn-primary btn-sm" type="submit" value="Locatie Toevoegen">
+            </div>
+        </div>  
     </form>
 </div>
 <script>

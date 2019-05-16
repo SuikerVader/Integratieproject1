@@ -6,30 +6,60 @@
 }
 <div class="container">
     <h2>Moderators</h2>
+    <form asp-action="Moderators" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="Moderators">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table">
             <tr>
-                <th>Gebruikersnaam</th>
-                <th>Email</th>
-                <th>Telefoonnummer</th>
+                <th>
+                    <a asp-action="Moderators" asp-route-sortOrder="@ViewData["UserNameSortParm"]">Gebruikersnaam</a>
+                </th>
+                <th>
+                    <a asp-action="Moderators" asp-route-sortOrder="@ViewData["SurnameSortParm"]">Voornaam</a>
+                </th>
+                <th>
+                    <a asp-action="Moderators" asp-route-sortOrder="@ViewData["NameSortParm"]">Achternaam</a>
+                </th>
+                <th>
+                    <a asp-action="Moderators" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a>
+                </th>
+                <th>
+                    <a asp-action="Moderators" asp-route-sortOrder="@ViewData["AgeSortParm"]">Leeftijd</a>
+                </th>
             </tr>
             @foreach (var mod in Model)
             {
-                <tr>
-                    <td>@mod.UserName</td>
-                    <td>@mod.Email</td>
-                    <td>@mod.PhoneNumber</td>
-                    <td><a asp-area="" asp-controller="Admin"
-                           asp-action="DeleteModRole" asp-route-modId="@mod.Id">Verwijder Moderatorrol
-                    </a></td>
-                    <td><a asp-area="" asp-controller="Admin"
-                           asp-action="DeleteMod" asp-route-modId="@mod.Id">Verwijder Account
-                    </a></td>      
-                </tr>
+            <tr>
+                <td>@mod.UserName</td>
+                <td>@mod.Surname</td>
+                <td>@mod.Name</td>
+                <td>@mod.Email</td>
+                <td>@mod.Age</td>
+                <td>
+                    <a asp-area="" asp-controller="Admin"
+                       asp-action="DeleteModRole" asp-route-modId="@mod.Id">
+                        Verwijder Moderatorrol
+                    </a>
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="Admin"
+                       asp-action="DeleteMod" asp-route-modId="@mod.Id">
+                        Verwijder Account
+                    </a>
+                </td>
+            </tr>
             }
         </table>
     </div>
     <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-       asp-action="Users" >Geef Moderatorrol aan gebruiker
+       asp-action="Users">
+        Geef Moderatorrol aan gebruiker
     </a>
 </div>

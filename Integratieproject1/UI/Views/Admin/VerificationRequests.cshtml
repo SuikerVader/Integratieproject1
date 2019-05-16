@@ -6,30 +6,45 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-            <h3>Verificatieverzoeken</h3>
-            <div class="d-flex flex-column justify-content-start" style="width: 100%">
-                <table class="table">
-                    <tr>
-                        <th>Gebruiker</th>
-                        <th>Verzoek</th>
-                    </tr>
-                    @foreach (VerificationRequest verificationRequest in @Model)
-                    {
-                        <tr>
-                            <td>@verificationRequest.user</td>
-                            <td>@verificationRequest.request</td>
-                            <td>
-                                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">Accepteer
-                                </a>
-                            </td>
-                            <td>
-                                <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                                   asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">Weiger
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </table>
+    <h3>Verificatieverzoeken</h3>
+    <form asp-action="VerificationRequests" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="VerificationRequests">Terug naar volledige lijst</a>
+            </p>
         </div>
+    </form>
+    <div class="d-flex flex-column justify-content-start" style="width: 100%">
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="VerificationRequests" asp-route-sortOrder="@ViewData["UserSortParm"]">Gebruikersnaam</a>
+                </th>
+                <th>
+                    <a asp-action="VerificationRequests" asp-route-sortOrder="@ViewData["RequestSortParm"]">Verzoek</a>
+                </th>
+            </tr>
+            @foreach (VerificationRequest verificationRequest in @Model)
+            {
+                <tr>
+                    <td>@verificationRequest.user</td>
+                    <td>@verificationRequest.request</td>
+                    <td>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                           asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">
+                            Accepteer
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
+                           asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">
+                            Weiger
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
     </div>
+</div>

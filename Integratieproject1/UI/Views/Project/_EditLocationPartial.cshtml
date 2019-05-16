@@ -7,20 +7,18 @@
 
 <div>
     <form class="" asp-controller="Project" asp-action="EditPosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-        <div class="form-row">
-            <div class="col-3 text-center">
-                <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
+        <div class="input-group">
+            <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
+            <input class="form-control" required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
+            <input class="form-control" required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
+            <div class="input-group-append">
+                <input class="btn btn-primary" type="submit" value="Locatie wijzigen">
+                <a class="btn btn-danger" asp-area="" asp-controller="Project"
+                   asp-action="DeletePosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId">
+                    Verwijder locatie
+                </a>
             </div>
-            <div class="col-3 text-center">
-                <input class="form-control" required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
-            </div>
-            <div class="col-3 text-center">
-                <input class="form-control" required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
-            </div>
-            <div class="col-3 text-center">
-                <input class="btn btn-primary btn-sm" type="submit" value="Locatie wijzigen">
-            </div>
-        </div>
+        </div>  
     </form>
 </div>
 <script>

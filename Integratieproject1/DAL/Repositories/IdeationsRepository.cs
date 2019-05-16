@@ -44,7 +44,14 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        public IEnumerable<Ideation> GetAllIdeations(int platformId)
+        public IEnumerable<Ideation> GetAllIdeations()
+        {
+            return _ctx.Ideations
+                .Include(i => i.Phase).ThenInclude(p => p.Project)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<Ideation> GetIdeationsByPlatform(int platformId)
         {
             return _ctx.Ideations
                 .Where(i => i.Phase.Project.Platform.PlatformId == platformId)
@@ -100,6 +107,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Where(i => i.Ideation.Phase.Project.Platform.PlatformId == platformId)
                 .Include(i => i.IdeaObjects)
+                .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
                 .AsEnumerable();
         }
 
@@ -114,6 +122,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Position)
                 .Include(i => i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project).ThenInclude(pl => pl.Platform)
                 .Include(i => i.IdeaTags).ThenInclude(it => it.Tag)
+                .Include(i => i.IoTSetups).ThenInclude(i => i.Position)
                 .Single(i => i.IdeaId == ideaId);
         }
 
