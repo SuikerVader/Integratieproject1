@@ -22,7 +22,7 @@
             </div>
         </div>*@
         <div class="input-group">
-            <input class="form-control" id="autocomplete" oninput="inputAutocomplete()"/>
+            <input class="form-control" id="autocompleteAdd" @*oninput="inputAutocomplete()"*@/>
             <input class="form-control" required asp-for="Lat" id="lat"/>
             <input class="form-control" required asp-for="Lng" id="lng"/>
             <div class="input-group-append">
@@ -32,25 +32,9 @@
     </form>
 </div>
 <script>
-    /*
- 
-    function inputAutocomplete(){
-        var prefix = 'Antwerpen, ';
-        var str = event.target.value;
-        if(str.indexOf(prefix) == 0) {
-            // string already started with prefix
-            return;
-        } else {
-            if (prefix.indexOf(str) >= 0) {
-                // string is part of prefix
-                event.target.value = prefix;
-            } else {
-                event.target.value = prefix+str;
-            }
-        }
-    };  */
-    function initAutocomplete() {
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+
+    function initAddAutocomplete() {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocompleteAdd'));
         autocomplete.setComponentRestrictions({'country': 'be'});
         google.maps.event.addListener(autocomplete,
             'place_changed',
