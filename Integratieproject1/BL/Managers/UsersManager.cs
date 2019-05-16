@@ -51,7 +51,46 @@ namespace Integratieproject1.BL.Managers
         {
             return _usersRepository.GetUsers(role).ToList();
         }
-        
+
+        public IList<CustomUser> GetUsersBySort(string role, string sortOrder)
+        {
+            IEnumerable<CustomUser> users = GetUsers(role).ToList();
+            switch (sortOrder)
+            {
+                case "username_desc":
+                    users = users.OrderByDescending(u => u.UserName);
+                    break;
+                case "Surname":
+                    users = users.OrderBy(u => u.Surname);
+                    break;
+                case "surname_desc":
+                    users = users.OrderByDescending(u => u.Surname);
+                    break;
+                case "Name":
+                    users = users.OrderBy(u => u.Name);
+                    break;
+                case "name_desc":
+                    users = users.OrderByDescending(u => u.Name);
+                    break;
+                case "Email":
+                    users = users.OrderBy(u => u.Email);
+                    break;
+                case "email_desc":
+                    users = users.OrderByDescending(p => p.Email);
+                    break;
+                case "Age":
+                    users = users.OrderBy(u => u.Age);
+                    break;
+                case "age_desc":
+                    users = users.OrderByDescending(u => u.Age);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.UserName);
+                    break;
+            }
+            return users.ToList();
+        }
+
         public void GiveRole(string userId, string role)
         {
             CustomUser identityUser = GetUser(userId);
@@ -75,6 +114,27 @@ namespace Integratieproject1.BL.Managers
         public IEnumerable<VerificationRequest> GetVerificationRequests()
         {
             return _usersRepository.GetVerificationRequests();
+        }
+
+        public IList<VerificationRequest> GetVerificationRequestsBySort(string sortOrder)
+        {
+            IEnumerable<VerificationRequest> requests = GetVerificationRequests();
+            switch (sortOrder)
+            {
+                case "user_desc":
+                    requests = requests.OrderByDescending(r => r.user.UserName);
+                    break;
+                case "Request":
+                    requests = requests.OrderBy(r => r.request);
+                    break;
+                case "request_desc":
+                    requests = requests.OrderByDescending(r => r.request);
+                    break;
+                default:
+                    requests = requests.OrderBy(r => r.user.UserName);
+                    break;
+            }
+            return requests.ToList();
         }
 
         public void CreateVerificationRequest(VerificationRequest verificationRequest)

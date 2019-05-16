@@ -34,7 +34,16 @@
                             <div class="question">
                                 @if (!(question.QuestionType == QuestionType.EMAIL && User.Identity.IsAuthenticated))
                                 {
-                                    <h5>@question.QuestionText</h5>
+                                    <h5>@question.QuestionText 
+                                        @if (question.IoTSetups != null && question.IoTSetups.Count > 0 )
+                                        {
+                          
+                                        <a target="_blank" asp-controller="Home"
+                                           asp-action="IoTMap" asp-route-id="@question.QuestionId" asp-route-type="question"><i class="fa fa-map-pin"></i></a>
+                  
+                                        }
+                                        </h5>
+                                    
                                 }
                                 @if (question.QuestionType == QuestionType.OPEN)
                                 {

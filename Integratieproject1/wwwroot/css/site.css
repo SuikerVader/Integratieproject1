@@ -57,6 +57,70 @@ body {
     background-color: grey;
 
 }
+.iconBtn{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+}
+.iconBtnSm{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+}
+.iotIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    transition: color 0.7s, background-color 0.4s, border-color 0.4s;
+}
+.iotIcon i {
+    color: #007bff;
+    
+}
+.iotIcon:hover i {
+    color: white;
+}
+#projectIoTIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+#platformIoTIcon{
+    position: static;
+    border-radius: 50%;
+    border-width: 3px;
+}
+@media screen and (min-width: 768px) {
+    #projectIoTIcon{
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 50%;
+        border-width: 3px;
+    }
+    #platformIoTIcon{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+        border-width: 3px;
+    }
+}
 .jumbotronBackground {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
@@ -72,21 +136,15 @@ body {
 .futureProject{
     display: none;
 }
-.ideations {
-    width: 100%;
-}
-.surveys {
+.phaseObject{
     width: 100%;
 }
 
 @media screen and (min-width: 768px){
-    .ideations {
-        width: 50%;
-    }
-    .surveys {
-        width: 50%;
-    } 
-    
+
+.phaseObject{
+    width: 45%;
+}    
     .jumbotronBackground {
         padding: 20px;
         padding-left: 50px;

@@ -79,12 +79,12 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Projects
                 .Where(p => p.Platform.PlatformId == platformId)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(r=>r.Reactions).ThenInclude(l=>l.Likes)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Votes)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=> k.IdeaObjects)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Reactions).ThenInclude(l=>l.Likes)
-                .Include(p => p.Phases).ThenInclude(s => s.Surveys).ThenInclude(q=>q.Questions).ThenInclude(a=>a.Answers)
-                .Include(l => l.Location).ThenInclude(a => a.Address)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions).ThenInclude(id => id.Likes)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.IdeaObjects)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions).ThenInclude(r => r.Likes)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Surveys).ThenInclude(s => s.Questions).ThenInclude(q => q.Answers)
+                .Include(l => l.Location).ThenInclude(ph => ph.Address)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
         }
@@ -119,8 +119,11 @@ namespace Integratieproject1.DAL.Repositories
         public Project GetProject(int projectId)
         {
             return _ctx.Projects
-                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
-                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(i => i.IdentityUser)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
+                .ThenInclude(id => id.Reactions)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
+                .ThenInclude(id => id.IdentityUser)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Surveys)
                 .Include(p => p.Location).ThenInclude(l => l.Address)
