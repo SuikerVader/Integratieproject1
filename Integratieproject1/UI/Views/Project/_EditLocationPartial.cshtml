@@ -7,23 +7,25 @@
 
 <div>
     <div class="card">
-        <div id="map"></div>
-        <div class=" d-flex flex-row justify-content-center ">
+        <div id="EditMap"></div>
+        
             <form class="" asp-controller="Project" asp-action="EditPosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-                <div class="input-group">
-                    <input class="form-control" id="autocompleteEdit" @*oninput="inputAutocomplete()*@"/>
-                    <input class="form-control" required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
-                    <input class="form-control" required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
-                    <div class="input-group-append">
-                        <input class="btn btn-primary" type="submit" value="Locatie wijzigen">
-                        <a class="btn btn-danger" asp-area="" asp-controller="Project"
-                           asp-action="DeletePosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId">
-                            Verwijder locatie
-                        </a>
+                <div class=" d-flex flex-row justify-content-center ">
+                    <div class="input-group">
+                        <input class="form-control" id="autocompleteEdit" @*oninput="inputAutocomplete()*@"/>
+                        <div class="input-group-append">
+                            <input class="btn btn-primary" type="submit" value="Locatie wijzigen">
+                            <a class="btn btn-danger" asp-area="" asp-controller="Project"
+                               asp-action="DeletePosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId">
+                                Verwijder locatie
+                            </a>
+                        </div>
                     </div>
                 </div>
+                <input class="form-control" hidden required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
+                <input class="form-control" hidden required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
             </form>                
-        </div>
+        
     </div>
     
 </div>
@@ -36,7 +38,7 @@
         var position = {lat: @ViewBag.Position.Lat, lng: @ViewBag.Position.Lng};
         // The map, centered at Uluru
        var map = new google.maps.Map(
-            document.getElementById('map'), {zoom: 16, center: position});
+            document.getElementById('EditMap'), {zoom: 16, center: position});
         // The marker, positioned at Uluru
         var marker = new google.maps.Marker({position: position, map: map});
         markers.push(marker);
@@ -66,11 +68,13 @@
     function changeMarker(coords,map) {
         clearMarkers();
         addMarker(coords, map);
+        map.setCenter(coords);
         document.getElementById('lat').value = coords.lat();
         document.getElementById('lng').value = coords.lng();
     }
     function addMarker(coords, map) {
         var marker = new google.maps.Marker({ position: coords, map: map });
+        marker.setLabel(N);
         markers.push(marker);
     }
     function clearMarkers() {

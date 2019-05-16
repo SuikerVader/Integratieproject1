@@ -71,10 +71,11 @@
         </div>*@
         <div class="text-center" id="editLocation" @*style="display: none; padding: 5px"*@>
             @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
-        </div>
-        
-        
+        </div>         
     }
+    <div class="text-center" id="addLocation" style="display: none; padding: 5px">
+        @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+    </div>
     <div>
              @if (!Model.Title.Equals("_NewIdea_"))
              {
@@ -131,9 +132,6 @@
     <div>
         <div class="text-center" id="addTag" style="display: none; padding: 5px">
             @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
-        </div>
-        <div class="text-center" id="addLocation" style="display: none; padding: 5px">
-            @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
         </div>
     </div>
  
@@ -270,7 +268,7 @@
     }
 
     function initMapsApi() {
-        initAddAutocomplete();
+        initAddMap();
         initEditMap();
 
     }
