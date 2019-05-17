@@ -30,17 +30,27 @@
                     {
                         <div>
                             <div class="text-center d-flex flex-row justify-content-center">
-                            <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
-                               asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
-                               </div>
+                                <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                                   asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
+                            </div>
                         </div>
                     }
 
                 </div>
             </div>
         </div>
+        @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
+        {
+            <div class="ideationGraph">
+                <div class="card text-center graphCard">
+                
+                    <canvas id="pie-chart" ></canvas>
+                
+                </div>
+            </div>
+        }
         <div id="ideation">
-            <div class="card text-center" style="border: none;">
+            <div class="card text-center">
                 <div class="card-body">
                     <h2 class="card-title">@Model.CentralQuestion</h2>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
@@ -185,10 +195,7 @@
 
                 }
             </div>
-            @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
-            {
-                <canvas id="pie-chart" width="800" height="450"></canvas>
-            }
+            
         </div>
     </div>
     <footer>
@@ -238,21 +245,27 @@
             @:values.push("@idea.Votes.Count");
         }
     }
-    new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: names,
-            datasets: [{
-                label: "Stemmen",
-                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                data: values
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Aantal stemmen per idee'
-            }
+            new Chart(document.getElementById("pie-chart"), {
+                type: 'pie',
+                data: {
+                    labels: names,
+                    datasets: [
+                        {
+                            label: "Stemmen",
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                            data: values
+                        }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Aantal stemmen per idee'
+                    },
+                    legend: {
+                        display: false
+                    }
+                    
         }
     });
 </script>

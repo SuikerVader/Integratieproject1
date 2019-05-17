@@ -302,19 +302,36 @@ body {
      height: 100%;
      width: 100%;
      display: grid;
-     grid-template-columns: 1fr ;
-     grid-template-rows: auto auto auto;
+     grid-template-columns: minmax(1fr,100%) ;
+     grid-template-rows: auto auto auto auto;
      grid-template-areas:
              "ideation"
              "ideationInfo"
              "ideas"
+    "ideationGraph"
 
  }
 #ideationInfo{
     grid-area: ideationInfo;
 }
+#ideationInfo .infoCard {
+    border: none;
+}
+#ideationGraph{
+    grid-area: ideationGraph;
+    
+}
+.graphCard{
+    border:none;
+}
+.graphCard canvas{
+    width: 75%;
+}
 #ideation {
     grid-area: ideation;
+}
+#ideation .card{
+    border:none;
 }
 #ideas {
     grid-area: ideas;
@@ -325,14 +342,31 @@ body {
 
 @media screen and (min-width: 768px){
     #ideationGrid {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: auto auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
         grid-template-areas:
-                "ideation ideation ideationInfo"
-                "ideas ideas ideas"
+                "ideation ideation"
+                "ideationInfo ideationGraph"
+                "ideas ideas "
     }
     .idea{
         width: 48%;
+    }
+}
+@media screen and (min-width: 1200px){
+    #ideationGrid {
+        grid-template-columns: 1fr 2fr minmax(auto, 1fr);
+        grid-template-rows: auto auto;
+        grid-template-areas:
+                "ideationInfo ideation ideationGraph"
+                "ideas ideas ideas "
+    }
+    .idea{
+        width: 48%;
+    }
+    #ideation .card {
+        border-left: 1px solid rgba(0, 0, 0, 0.125);
+        border-right: 1px solid rgba(0, 0, 0, 0.125);
     }
 }
 
