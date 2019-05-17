@@ -111,53 +111,21 @@ namespace Integratieproject1.BL.Managers
         
         #region VerificationRequest
 
-        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        public void AskVerify(string userId)
         {
-            return _usersRepository.GetVerificationRequests();
+            CustomUser user = GetUser(userId);
+            _usersRepository.AskVerify(user);
         }
 
-        public IList<VerificationRequest> GetVerificationRequestsBySort(string sortOrder)
+        public void Verify(string userId)
         {
-            IEnumerable<VerificationRequest> requests = GetVerificationRequests();
-            switch (sortOrder)
-            {
-                case "user_desc":
-                    requests = requests.OrderByDescending(r => r.user.UserName);
-                    break;
-                case "Request":
-                    requests = requests.OrderBy(r => r.request);
-                    break;
-                case "request_desc":
-                    requests = requests.OrderByDescending(r => r.request);
-                    break;
-                default:
-                    requests = requests.OrderBy(r => r.user.UserName);
-                    break;
-            }
-            return requests.ToList();
+            CustomUser user = GetUser(userId);
+            _usersRepository.Verify(user);
         }
 
-        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        public IList<CustomUser> GetRequests()
         {
-            _usersRepository.CreateVerificationRequest(verificationRequest);
-        }
-
-        public VerificationRequest CreateVerificationRequest(CustomUser user, string request)
-        {
-            VerificationRequest verificationRequest = new VerificationRequest();
-            verificationRequest.user = user;
-            verificationRequest.request = request;
-            verificationRequest.handled = false;
-            return verificationRequest;
-        }
-
-        public void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted)
-        {
-            if (accepted)
-            {
-                GiveRole(verificationRequest.user.Id, "ORGANISATION");
-            }
-            _usersRepository.SetVerificationRequestHandled(verificationRequest);
+            return _usersRepository.GetRequests();
         }
         #endregion
 

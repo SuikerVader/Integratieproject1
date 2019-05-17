@@ -53,7 +53,6 @@ namespace Integratieproject1.DAL
         public DbSet<IdeaObject> IdeaObjects { get; set; }
         public DbSet<TextField> TextFields { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<VerificationRequest> VerificationRequests { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<IdeaTag> IdeaTags { get; set; }

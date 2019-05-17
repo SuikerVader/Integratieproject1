@@ -64,6 +64,10 @@
             <button type="submit" class="btn btn-primary">Opslaan</button>
         </form>
     </div>
+    @if (User.IsInRole("User"))
+    {
+        <a asp-controller="Project" asp-action="AskVerify" class="btn btn-primary">Verifieer mij!</a>
+    }
 </div>
 
 @section Scripts {

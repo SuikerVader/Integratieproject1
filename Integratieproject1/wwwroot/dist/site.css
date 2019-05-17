@@ -387,31 +387,6 @@ a > code {
   }
 }
 
- .col-3, .col-4, .col-8 {
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.col-3 {
-  -ms-flex: 0 0 25%;
-  flex: 0 0 25%;
-  max-width: 25%;
-}
-
-.col-4 {
-  -ms-flex: 0 0 33.333333%;
-  flex: 0 0 33.333333%;
-  max-width: 33.333333%;
-}
-
-.col-8 {
-  -ms-flex: 0 0 66.666667%;
-  flex: 0 0 66.666667%;
-  max-width: 66.666667%;
-}
-
 .table {
   width: 100%;
   margin-bottom: 1rem;
@@ -513,21 +488,6 @@ textarea.form-control {
 
 .form-group {
   margin-bottom: 1rem;
-}
-
-.form-row {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -5px;
-  margin-left: -5px;
-}
-
-
-.form-row > [class*="col-"] {
-  padding-right: 5px;
-  padding-left: 5px;
 }
 
 .form-inline {
@@ -1706,6 +1666,9 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-edit:before {
   content: "\f044";
+}
+.fa-check-circle:before {
+  content: "\f058";
 }
 
 .fa-share:before {
