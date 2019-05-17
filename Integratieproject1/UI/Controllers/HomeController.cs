@@ -132,10 +132,9 @@ namespace Integratieproject1.UI.Controllers
                     .Where(i => i.CentralQuestion.ToLower().Contains(searchString))
                     .ToList()
                 );
-                List<string> tagNames = new List<string>();
                 foreach (var idea in ideas)
                 {
-                    
+                    List<string> tagNames = new List<string>();
                     foreach (IdeaTag ideaTag in idea.IdeaTags)
                     {
                         tagNames.Add(ideaTag.Tag.TagName.ToLower());
