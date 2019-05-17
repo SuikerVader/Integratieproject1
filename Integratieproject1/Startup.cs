@@ -103,7 +103,7 @@ namespace Integratieproject1
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
@@ -116,8 +116,6 @@ namespace Integratieproject1
                     template: "{platformName=Antwerpen}/{controller=Home}/{action=Index}/{id?}");
             });
             CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
-
-
         }
     }
 }
