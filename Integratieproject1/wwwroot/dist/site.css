@@ -387,17 +387,11 @@ a > code {
   }
 }
 
- .col-2, .col-3, .col-4, .col-8, .col-10 {
+ .col-3, .col-4, .col-8 {
   position: relative;
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
-}
-
-.col-2 {
-  -ms-flex: 0 0 16.666667%;
-  flex: 0 0 16.666667%;
-  max-width: 16.666667%;
 }
 
 .col-3 {
@@ -416,12 +410,6 @@ a > code {
   -ms-flex: 0 0 66.666667%;
   flex: 0 0 66.666667%;
   max-width: 66.666667%;
-}
-
-.col-10 {
-  -ms-flex: 0 0 83.333333%;
-  flex: 0 0 83.333333%;
-  max-width: 83.333333%;
 }
 
 .table {
@@ -691,6 +679,40 @@ a.btn.disabled {
 .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  color: #fff;
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-success:focus {
+  box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+}
+
+.btn-success.disabled, .btn-success:disabled {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:not(:disabled):not(.disabled):active, .btn-success:not(:disabled):not(.disabled).active,
+.show > .btn-success.dropdown-toggle {
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
+
+.btn-success:not(:disabled):not(.disabled):active:focus, .btn-success:not(:disabled):not(.disabled).active:focus,
+.show > .btn-success.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
 }
 
 .btn-info {
@@ -1531,11 +1553,6 @@ button.bg-light:focus {
   align-items: center !important;
 }
 
-.align-content-stretch {
-  -ms-flex-line-pack: stretch !important;
-  align-content: stretch !important;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1683,6 +1700,9 @@ a.text-danger:hover, a.text-danger:focus {
 }
 .fa-tag:before {
   content: "\f02b";
+}
+.fa-map-marker:before {
+  content: "\f041";
 }
 .fa-edit:before {
   content: "\f044";
