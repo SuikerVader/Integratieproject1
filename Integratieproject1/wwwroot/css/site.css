@@ -69,6 +69,27 @@ body {
     background-color: grey;
 
 }
+.progress{
+    display: none;
+}
+.projectDates{
+    display:none
+}
+
+@media screen and  (min-width: 768px) {
+    .progress{
+        display: flex;
+    }
+    .projectDates{
+        display: block;
+    }
+    .projectDatesSmallScreen{
+        display: none;
+    }
+    .phaseButtonsSmallScreen{
+        display: none;
+    }
+}
 .iconBtn{
     display: flex;
     flex-direction: row;
@@ -242,6 +263,36 @@ body {
         border-bottom: none ;
     }
 }
+#reactionGrid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto ;
+    grid-template-areas:
+            "reaction"
+            "reactionButtons"
+}
+#reaction {
+    grid-area: reaction;
+}
+#reactionButtons{
+    grid-area: reactionButtons;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding: 2px;
+}
+@media screen and (min-width: 768px) {
+    #reactionGrid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto ;
+        grid-template-rows: auto ;
+        grid-template-areas:
+                "reaction reactionButtons"
+    }
+}
+
 .adminGrid {
     padding-top: 20px;
     height: 100%;
@@ -350,7 +401,7 @@ body {
                 "ideas ideas "
     }
     .idea{
-        width: 48%;
+        width: 100%;
     }
 }
 @media screen and (min-width: 1200px){
@@ -390,6 +441,12 @@ body {
 #ideaTitle{
     grid-area: ideaTitle;
 }
+#ideaTitleTop{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 5px;
+}
 #ideaLocation{
     grid-area: ideaLocation;
 }
@@ -417,6 +474,12 @@ body {
     .ideaObject{
         padding-left: 100px;
         padding-right: 100px;
+    }
+    #ideaTitleTop{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
     }
 }
 #editIdeaGrid {

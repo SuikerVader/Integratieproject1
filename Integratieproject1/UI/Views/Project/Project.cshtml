@@ -17,6 +17,9 @@
              <text> class="jumbotronBackground" </text>
          }>
         <h1 class="display-4">@Model.ProjectName</h1>
+        <div class="projectDatesSmallScreen">
+            <small><p>@Model.StartDate.ToString("d") - @Model.EndDate.ToString("d")</p></small>
+        </div>
         <p>@Model.Description</p>
         <div class="progress" style="height: 30px;">
             @foreach (var phase in Model.Phases)
@@ -36,10 +39,14 @@
                 }
             }
         </div>
-        <div class="d-flex flex-row justify-content-between">
-            <p>@Model.StartDate.ToString("d")</p>
-            <p>@Model.EndDate.ToString("d")</p>
+        <div class="projectDates">
+            <div class="d-flex flex-row justify-content-between">
+                <p>@Model.StartDate.ToString("d")</p>
+                <p>@Model.EndDate.ToString("d")</p>
+            </div>  
         </div>
+        
+        
         @if (ViewBag.hasIots == true)
         {
             <div class="text-center d-flex flex-row justify-content-center">
@@ -49,6 +56,22 @@
                 </a>
             </div>
         }
+        <div class="phaseButtonsSmallScreen">
+          <div class="d-flex flex-column flex-wrap justify-content-center">
+                      @foreach (var phase in Model.Phases)
+                      {
+                          if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                          {
+                              <button id="btnPhaseSS+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())"  class="btn btn-primary btnPhaseSS">@phase.PhaseName</button>
+                          }
+                          else
+                          {
+                              <button id="btnPhaseSS+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="btn btn-secondary btnPhaseSS">@phase.PhaseName</button>
+                          }
+                      }
+                  </div>  
+        </div>
+        
         @foreach (var phase in Model.Phases)
         {
             if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
@@ -58,14 +81,19 @@
                         <div class=" text-center" style=" border: none; border-left: none; border-right: none; border-bottom: none; background-color: transparent">
                             <div class="">
                                 <h5>@phase.PhaseName</h5>
+                                <div class="projectDatesSmallScreen">
+                                    <small><p>@phase.StartDate.ToString("d") - @phase.EndDate.ToString("d")</p></small>
+                                </div>
                                 <p class="">@phase.Description</p>
                                 <div class="progress" style="height: 1px;">
                                     <div class="progress-bar" role="progressbar" style="width: 100%; background-color: #007bff" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <p>@phase.StartDate.ToString("d")</p>
-                                    <p>@phase.EndDate.ToString("d")</p>
+                                <div class="projectDates">
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <p>@phase.StartDate.ToString("d")</p>
+                                        <p>@phase.EndDate.ToString("d")</p>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
@@ -79,14 +107,19 @@
                         <div class="text-center" style=" border: none; border-left: none; border-right: none; border-bottom: none;background-color: transparent">
                             <div class="">
                                 <h5>@phase.PhaseName</h5>
+                                <div class="projectDatesSmallScreen">
+                                    <small><p>@phase.StartDate.ToString("d") - @phase.EndDate.ToString("d")</p></small>
+                                </div>
                                 <p class="">@phase.Description</p>
                                 <div class="progress" style="height: 1px;">
                                     <div class="progress-bar" role="progressbar" style="width: 100%; background-color: #007bff" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <p>@phase.StartDate.ToString("d")</p>
-                                    <p>@phase.EndDate.ToString("d")</p>
+                                <div class="projectDates">
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <p>@phase.StartDate.ToString("d")</p>
+                                        <p>@phase.EndDate.ToString("d")</p>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
@@ -248,19 +281,21 @@
         var btn = document.getElementById(id);
         var phase = document.getElementById("phase+" + id.substring(9));
         var phaseTitle = document.getElementById("phaseTitle+" + id.substring(9));
+        var btnSS = document.getElementById("btnPhaseSS+" + id.substring(9));
         var buttons = document.getElementsByClassName("btnPhase");
+        var buttonsSS = document.getElementsByClassName("btnPhaseSS");
         var phases = document.getElementsByClassName("phase");
         var phasesTitles = document.getElementsByClassName("phaseTitle");
         var i;
         for (i = 0; i < buttons.length; i++) {
-            /*buttons[i].classList.remove("btn-primary");
-            buttons[i].classList.add("btn-secondary");*/
+            buttonsSS[i].classList.remove("btn-primary");
+            buttonsSS[i].classList.add("btn-secondary");
             buttons[i].style.backgroundColor = "lightslategrey";
             phases[i].style.display = "none";
             phasesTitles[i].style.display = "none";
         }
-        /*btn.classList.remove("btn-secondary");
-        btn.classList.add("btn-primary");*/
+        btnSS.classList.remove("btn-secondary");
+        btnSS.classList.add("btn-primary");
         btn.style.backgroundColor = "#007bff";
         phase.style.display = "block";
         phaseTitle.style.display = "block";

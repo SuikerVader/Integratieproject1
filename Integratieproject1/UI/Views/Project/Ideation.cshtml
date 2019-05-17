@@ -86,62 +86,62 @@
             </div>
             <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
                 @foreach (var reaction in Model.Reactions)
-                {
-                    <p>
-                        <div class="d-flex flex-row justify-content-between">
-
-                            <p>
-                                <small>
-                                    <strong>@reaction.IdentityUser.UserName:</strong>
-                                </small>
-                                <small>@reaction.ReactionText</small>
-                            </p>
-                            <p>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <small>
-
-                                        @{
-                                            var userVoted = false;
-                                        }
-                                        @foreach (var like in reaction.Likes)
-                                        {
-                                            if (User.Identity.Name == like.IdentityUser.UserName)
-                                            {
-                                                userVoted = true;
-                                                break;
-                                            }
-                                        }
-                                        @if (userVoted == true)
-                                        {
-                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                        }
-                                        else
-                                        {
-                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
-                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                            </a>
-                                        }
-
-                                    </small>
-                                    <small>
-                                        <a asp-area="" asp-controller="Project"
-                                           asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                            <i class="fa fa-flag"></i>
-                                        </a>
-                                    </small>
-                                }
-                                else
-                                {
-                                    <small>
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
-                                    </small>
-                                }
-                            </p>
-
-                        </div>
+        {
+            <p>
+                <div id="reactionGrid">
+                    <p id="reaction">
+                        <small>
+                            <strong>@reaction.IdentityUser.UserName:</strong>
+                        </small>
+                        <small>@reaction.ReactionText</small>
                     </p>
-                }
+                    <p id="reactionButtons">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userVoted = false;
+
+                            foreach (var like in reaction.Likes)
+                            {
+                                if (User.Identity.Name == like.IdentityUser.UserName)
+                                {
+                                    userVoted = true;
+                                    break;
+                                }
+                            }
+                            if (userVoted == true)
+                            {
+                                <small>
+                                    <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                </small>
+                                
+                            }
+                            else
+                            {
+                                <small>
+                                    <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                        <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                    </a>   
+                                </small>
+                                
+                            }
+                            <small>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                    <i class="fa fa-flag"> </i>
+                                </a>
+                            </small>
+                        }
+                        else
+                        {
+                            <small>
+                                <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
+                            </small>
+                        }
+                    </p>
+
+                </div>
+            </p>
+        }
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
