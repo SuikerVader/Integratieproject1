@@ -94,7 +94,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public CustomUser GetUserByEmail(string email)
         {            
-            return _userStore.FindByNameAsync(email.ToUpper()).Result;
+            return _userStore.FindByEmailAsync(email.ToUpper()).Result;
         }
 
         public string GetSurname(CustomUser customUser)
