@@ -10,12 +10,12 @@
         <div class="input-group">
             <textarea rows="1" class="form-control" required asp-for="Text" value="@Model.Text" class="form-control"></textarea>
             <div class="input-group-append">
-                <input class="btn btn-primary" type="submit" value="Wijzig Tekstveld">
+                <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
                 @if ((Model.Idea.GetTextFields().Count != 1 && Model.Idea.Ideation.TextRequired == true) || User.IsInRole("Admin"))
                 {
                     <button class="btn btn-danger" asp-controller="Project"
                        asp-action="DeleteTextField" asp-route-ideaId="@ViewBag.IdeaId" asp-route-textFieldId="@Model.IdeaObjectId">
-                        Verwijder textField
+                        <i class="fa fa-times"></i>
                     </button>
                 }   
             </div>

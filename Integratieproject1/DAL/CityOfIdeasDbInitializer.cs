@@ -65,8 +65,8 @@ namespace Integratieproject1.DAL
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
                 Logo = "/images/uploads/LogoAntwerp.png",
-                BackgroundColor = "#eaeaea",
-                ButtonColor = "#1e62c9",
+                BackgroundColor = "white",
+                ButtonColor = "#007bff",
                 TextColor = "black"
             };
 
@@ -265,7 +265,9 @@ namespace Integratieproject1.DAL
             CustomUser organisation = new CustomUser
             {
                 UserName = "McDonalds",
-                Email = "testOrganisation1@test.com"
+                Email = "testOrganisation1@test.com",
+                Verified = true,
+                AskVerify = false
             };
             CustomUser admin = new CustomUser
             {
