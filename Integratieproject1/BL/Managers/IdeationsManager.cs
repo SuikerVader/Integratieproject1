@@ -231,6 +231,10 @@ namespace Integratieproject1.BL.Managers
                 IdentityUser = user,
                 IdeaObjects = new List<IdeaObject>()
             };
+            if (_usersManager.IsInRole(userId, "USER"))
+            {
+                idea.Published = false;
+            }
             if (ideation.MapRequired)
             {
                 Position position = new Position()
