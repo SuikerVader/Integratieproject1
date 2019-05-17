@@ -111,6 +111,17 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        public IEnumerable<Idea> GetAllNonPublishedIdeas()
+        {
+            return _ctx.Ideas
+                .Include(i => i.IdeaObjects)
+                .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
+                .Include(i => i.Ideation)
+                .Include(i => i.IdentityUser)
+                .Where(i => i.Published == false)
+                .AsEnumerable();
+        }
+
         public Idea GetIdea(int ideaId)
         {
             return _ctx.Ideas
@@ -149,6 +160,12 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
+        public void PublishIdea(Idea idea)
+        {
+            idea.Published = true;
+            _ctx.Ideas.Update(idea);
+            _ctx.SaveChanges();
+        }
 
         public void RemoveIdea(Idea idea)
         {

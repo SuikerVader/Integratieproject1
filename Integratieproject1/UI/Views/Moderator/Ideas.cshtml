@@ -1,0 +1,32 @@
+﻿@model IList<Integratieproject1.Domain.Ideations.Idea>
+
+@{
+    ViewBag.Title = "Moderator";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Niet gepubliceerde idee&uml;n</h2>
+    <div>
+        <table class="table">
+            <tr>
+                <th>Titel</th>
+                <th>Gebruiker</th>
+                <th>Ideation</th>
+            </tr>
+            @foreach (var idea in Model)
+            {
+                <tr>
+                    <td>@idea.Title</td>
+                    <td>@idea.IdentityUser.UserName</td>
+                    <td>@idea.Ideation.CentralQuestion</td>
+                    <td>
+                        <a asp-area="" asp-controller="Moderator"
+                           asp-action="Publish" asp-route-ideaId="@idea.IdeaId">
+                            Publiceer
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

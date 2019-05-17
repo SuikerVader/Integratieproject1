@@ -20,7 +20,7 @@
                          }
                          @if (User.IsInRole("Mod") || User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                          {
-                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderatorpagina's</a>
+                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Index">Moderatorpagina's</a>
                          }
                          @if (User.IsInRole("SuperAdmin"))
                          {
