@@ -19,7 +19,7 @@
             @if (ViewBag.hasIots == true)
             {
                 <br /><div class="text-center d-flex flex-row justify-content-center"> <a id="platformIoTIcon" class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
-                   asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform"><i class="fa fa-map-pin"></i></a>
+                   asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform" data-toggle="tooltip" title="Hooray!"><i class="fa fa-map-pin"></i></a>
                       </div>
             }
 
