@@ -30,17 +30,27 @@
                     {
                         <div>
                             <div class="text-center d-flex flex-row justify-content-center">
-                            <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
-                               asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
-                               </div>
+                                <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                                   asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
+                            </div>
                         </div>
                     }
 
                 </div>
             </div>
         </div>
+        @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
+        {
+            <div class="ideationGraph">
+                <div class="card text-center graphCard">
+                
+                    <canvas id="pie-chart" ></canvas>
+                
+                </div>
+            </div>
+        }
         <div id="ideation">
-            <div class="card text-center" style="border: none;">
+            <div class="card text-center">
                 <div class="card-body">
                     <h2 class="card-title">@Model.CentralQuestion</h2>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
@@ -76,11 +86,10 @@
             </div>
             <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
                 @foreach (var reaction in Model.Reactions)
-                {
-                    <p>
-                        <div class="d-flex flex-row justify-content-between">
-
-                            <p>
+        {
+            <p>
+                <div id="reactionGrid">
+                    <p id="reaction">
                                 <small>
                                     <strong>@reaction.IdentityUser.UserName </strong>
                                     @if (reaction.IdentityUser.Verified == true)
@@ -89,14 +98,11 @@
                                     };
                                 </small>
                                 <small>: @reaction.ReactionText</small>
-                            </p>
-                            <p>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <small>
-
-                                        @{
-                                            var userVoted = false;
+                    </p>
+                    <p id="reactionButtons">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userVoted = false;
                                         }
                                         @foreach (var like in reaction.Likes)
                                         {
@@ -117,25 +123,48 @@
                                             </a>
                                         }
 
-                                    </small>
-                                    <small>
-                                        <a asp-area="" asp-controller="Project"
-                                           asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                            <i class="fa fa-flag"></i>
-                                        </a>
-                                    </small>
-                                }
-                                else
+                            foreach (var like in reaction.Likes)
+                            {
+                                if (User.Identity.Name == like.IdentityUser.UserName)
                                 {
-                                    <small>
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
-                                    </small>
+                                    userVoted = true;
+                                    break;
                                 }
-                            </p>
-
-                        </div>
+                            }
+                            if (userVoted == true)
+                            {
+                                <small>
+                                    <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                </small>
+                                
+                            }
+                            else
+                            {
+                                <small>
+                                    <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                        <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                    </a>   
+                                </small>
+                                
+                            }
+                            <small>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                    <i class="fa fa-flag"> </i>
+                                </a>
+                            </small>
+                        }
+                        else
+                        {
+                            <small>
+                                <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
+                            </small>
+                        }
                     </p>
-                }
+
+                </div>
+            </p>
+        }
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
@@ -189,10 +218,7 @@
 
                 }
             </div>
-            @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
-            {
-                <canvas id="pie-chart" width="800" height="450"></canvas>
-            }
+            
         </div>
     </div>
     <footer>
@@ -242,21 +268,27 @@
             @:values.push("@idea.Votes.Count");
         }
     }
-    new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: names,
-            datasets: [{
-                label: "Stemmen",
-                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                data: values
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Aantal stemmen per idee'
-            }
+            new Chart(document.getElementById("pie-chart"), {
+                type: 'pie',
+                data: {
+                    labels: names,
+                    datasets: [
+                        {
+                            label: "Stemmen",
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                            data: values
+                        }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Aantal stemmen per idee'
+                    },
+                    legend: {
+                        display: false
+                    }
+                    
         }
     });
 </script>
