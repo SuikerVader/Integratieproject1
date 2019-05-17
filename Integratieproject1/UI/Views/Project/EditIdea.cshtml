@@ -63,31 +63,35 @@
     </form>
     @if (Model.Position != null)
     {
-        <div class="card">
-            <partial name="/UI/Views/Project/_MapPartial.cshtml"/>
+        @*<div class="card">
+            <div id="map"></div>
             <div class=" d-flex flex-row justify-content-end ">
                 <button class="btn btn-primary btn-sm" onclick="showHide('editLocation')" type="button"><i class="fa fa-edit"></i></button>                  
             </div>
-        </div>
-        <div class="text-center" id="editLocation" style="display: none; padding: 5px">
+        </div>*@
+        <div class="text-center" id="editLocation" @*style="display: none; padding: 5px"*@>
             @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
-        </div>
-        
-        
+        </div>         
     }
+    <div class="text-center" id="addLocation" style="display: none; padding: 5px">
+        @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+    </div>
     <div>
              @if (!Model.Title.Equals("_NewIdea_"))
              {
-                 <div class="card d-flex flex-row justify-content-center" style="padding: 5px">
-                     @foreach (var tag in Model.IdeaTags)
-                     {
-
-                         <a style="padding: 2px"><i class="fa fa-tag" style="padding: 2px"></i>@tag.Tag.TagName</a><a style="text-decoration: none; padding: 2px ;padding-right: 7px" asp-controller="Project" asp-action="RemoveIdeaTag" asp-route-ideaId="@Model.IdeaId" asp-route-ideaTagId="@tag.IdeaTagId">
-                         <i class="fa fa-times"></i>
-                     </a>
-
-                     }
-                 </div>
+                 if (Model.IdeaTags != null && Model.IdeaTags.Count > 0)
+                 {
+                     <div class="card d-flex flex-row justify-content-center" style="padding: 5px">
+                         @foreach (var tag in Model.IdeaTags)
+                         {
+                             <a style="padding: 2px">
+                                 <i class="fa fa-tag" style="padding: 2px"></i>@tag.Tag.TagName</a><a style="text-decoration: none; padding: 2px; padding-right: 7px" asp-controller="Project" asp-action="RemoveIdeaTag" asp-route-ideaId="@Model.IdeaId" asp-route-ideaTagId="@tag.IdeaTagId">
+                                                                                                       <i class="fa fa-times"></i>
+                                                                                                   </a>
+                         }
+                     </div>  
+                 }
+                 
      
                  if (User.IsInRole("Admin") && Model.IoTSetups != null && Model.IoTSetups.Count > 0)
                  {
@@ -128,9 +132,6 @@
     <div>
         <div class="text-center" id="addTag" style="display: none; padding: 5px">
             @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
-        </div>
-        <div class="text-center" id="addLocation" style="display: none; padding: 5px">
-            @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
         </div>
     </div>
  
@@ -267,10 +268,11 @@
     }
 
     function initMapsApi() {
-        initAutocomplete();
-        initMap();
+        initAddMap();
+        initEditMap();
 
     }
+    
 </script>
 <script>
     function showIdeaResults() {

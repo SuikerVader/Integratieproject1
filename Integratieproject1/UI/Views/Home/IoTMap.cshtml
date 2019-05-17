@@ -20,15 +20,30 @@
 
         @foreach (var iot in Model)
         {
-          @:addMarker(@iot.Position.Lat, @iot.Position.Lng, map);
-        }
+            if (iot.Question != null)
+            {
+                @:var infoWindow = new google.maps.InfoWindow({ content: '<a class="btn btn-primary" href="/@iot.Question.Survey.Phase.Project.Platform.PlatformName/Project/Survey?surveyId=@iot.Question.Survey.SurveyId">@iot.Question.QuestionText</a>' });
 
+                @:addIoTMarker(@iot.Position.Lat, @iot.Position.Lng, map, infoWindow);
+            }
+            else
+            {
+                @:var infoWindow = new google.maps.InfoWindow({ content: '<a class="btn btn-primary" href="/@iot.Idea.Ideation.Phase.Project.Platform.PlatformName/Project/Idea?ideaId=@iot.Idea.IdeaId">@iot.Idea.Title</a>' });
+
+                @:addIoTMarker(@iot.Position.Lat, @iot.Position.Lng, map, infoWindow);
+            }
+
+        }
 
     }
 
-    function addMarker(lat, lng, map) {
+    function addIoTMarker(lat, lng, map, infoWindow) {
         var position = { lat: lat, lng: lng };
         var marker = new google.maps.Marker({ position: position, map: map });
+        marker.addListener('click',function(){
+            infoWindow.open(map,marker);
+            });
+
     }
 </script>
 <script async defer

@@ -12,28 +12,29 @@
             <h2>Voeg IoT toe</h2>
         </div>
         <div>
-            <form class="" asp-controller="Admin" asp-action="AddIoT" method="post" asp-route-type="question" asp-route-id="@Model.Question.QuestionId"}>
-                <div class="form-row">
-                    <div class="col-3 text-center">
-                        <input class="form-control"   id="autocomplete" oninput="inputAutocomplete()"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="form-control" required asp-for="Position.Lat" id="lat"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="form-control"  required asp-for="Position.Lng" id="lng"/>
-                    </div>
-                    <div class="col-3 text-center">
-                        <input class="btn btn-primary btn-sm" type="submit" value="Voeg iot toe">
-                    </div>
-                </div>
-            </form>
+            
             @if (Model.Position != null)
             {
                 <div class="card">
                     <div id="map"></div>
                 </div>
             }
+            <form class="" asp-controller="Admin" asp-action="AddIoT" method="post" asp-route-type="question" asp-route-id="@Model.Question.QuestionId"}>
+                
+                <input class="form-control"   id="autocompleteIoT" />
+                   
+                    
+                <label>latitude</label>
+                <input class="form-control" required asp-for="Position.Lat" id="lat"/>
+                    
+                    
+                <label>longitude</label>
+                <input class="form-control" required asp-for="Position.Lng" id="lng"/>
+                  
+                    
+                <input class="btn btn-primary btn-sm" type="submit" value="Voeg iot toe">
+                 
+            </form>
         </div>
         
        
@@ -42,9 +43,27 @@
 
 </div>
 <script>
-    var first = true;
-    function initAutocomplete() {
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+    var markers = [];
+    
+    function initIoTMap() {
+        
+        // The location of Uluru
+        var position = {lat: 51.2194475, lng: 4.40246430000002};
+        // The map, centered at Uluru
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 13, center: position});
+        // The marker, positioned at Uluru
+        
+        google.maps.event.addListener(map, 'click', 
+            function(event) {
+                changeMarker(event.latLng, map);
+            });
+        initIoTAutocomplete(map);
+        
+        
+    }
+    function initIoTAutocomplete(map) {
+        var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocompleteIoT'));
         autocomplete.setComponentRestrictions({'country': 'be'});
         google.maps.event.addListener(autocomplete,
             'place_changed',
@@ -52,49 +71,31 @@
                 var place = autocomplete.getPlace();
                 var lat = place.geometry.location.lat();
                 var lng = place.geometry.location.lng();
-                document.getElementById('lat').value = lat;
-                document.getElementById('lng').value = lng;
-                initMap();
+                changeMarker(place.geometry.location,map);
+
             });
         
-
     }
-    function initMap() {
-        var position = {}
-        if (first === true) {
-            alert("first lat:" + @Model.Position.Lat + " lng:" + @Model.Position.Lng);
-              position = {lat: @Model.Position.Lat, lng: @Model.Position.Lng};
-             first = false;
-        } else {
-           var lat = document.getElementById('lat').value;
-            var lng = document.getElementById('lng').value;
-            position = {lat: lat.toString(), lng: lng.toString()};
-           alert("lat:" + lat + " lng:" + lng + " pos" + position.toString());
-        }
-        // The location of Uluru
-        // The map, centered at Uluru
-        var map = new google.maps.Map(
-            document.getElementById('map'), {zoom: 16, center: position});
-        // The marker, positioned at Uluru
-        var marker = new google.maps.Marker({position: position, map: map});  
+    function changeMarker(coords,map) {
+        clearMarkers();
+        addMarker(coords, map);
+        map.setCenter(coords);
+        map.setZoom(16);
+        document.getElementById('lat').value = coords.lat();
+        document.getElementById('lng').value = coords.lng();
     }
-</script>
-<script>
-    function showHide(id) {
-        var x = document.getElementById(id);
-        if (x.style.display === 'none') {
-            x.style.display = 'block';
-        } else {
-            x.style.display = 'none';
+    function addMarker(coords, map) {
+        var marker = new google.maps.Marker({ position: coords, map: map });
+        markers.push(marker);
+    }
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+            markers.pop(markers[i]);
         }
     }
-
-    function initMapsApi() {
-        initAutocomplete();
-        initMap();
-
-    }
 </script>
+
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initMapsApi">
+        src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places,drawing,geometry,visualization&key=AIzaSyBuYpAodlfpx5uWlMiFTMx3AG7DVRG-T0w&callback=initIoTMap">
 </script>
