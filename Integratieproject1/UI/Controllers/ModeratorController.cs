@@ -75,5 +75,17 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Moderator/Users.cshtml", users);
         }
 
+        public IActionResult Ideas()
+        {
+            IList<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas();
+            return View("/UI/Views/Moderator/Ideas.cshtml", ideas);
+        }
+
+        public IActionResult Publish(int ideaId)
+        {
+            _ideationsManager.PublishIdea(ideaId);
+            IList<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas();
+            return View("/UI/Views/Moderator/Ideas.cshtml", ideas);
+        }
     }
 }

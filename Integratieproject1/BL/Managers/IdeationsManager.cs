@@ -201,6 +201,11 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
 
+        public IList<Idea> GetAllNonPublishedIdeas()
+        {
+            return _ideationsRepository.GetAllNonPublishedIdeas().ToList();
+        }
+
         public IList<Idea> GetIdeas(int ideationId)
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
@@ -302,6 +307,13 @@ namespace Integratieproject1.BL.Managers
             Idea created = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return created;
+        }
+
+        public void PublishIdea(int ideaId)
+        {
+            Idea idea = GetIdea(ideaId);
+            _ideationsRepository.PublishIdea(idea);
+            _unitOfWorkManager.Save();
         }
 
         public void ChangeIdea(Idea idea)

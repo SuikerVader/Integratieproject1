@@ -65,7 +65,7 @@ namespace Integratieproject1.DAL
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
                 Logo = "/images/uploads/LogoAntwerp.png",
-                BackgroundColor = "white",
+                BackgroundColor = "#eaeaea",
                 ButtonColor = "#1e62c9",
                 TextColor = "black"
             };
