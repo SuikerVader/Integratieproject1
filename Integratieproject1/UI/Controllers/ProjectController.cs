@@ -259,37 +259,6 @@ namespace Integratieproject1.UI.Controllers
             }
         }
 
-        [HttpPost]
-        /*public IActionResult PostIdea(IFormCollection formCollection, List<IFormFile> formFiles, int ideationId)
-        {
-            ArrayList parameters = new ArrayList();
-
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                parameters.Add(pair.Value);
-            }
-
-            if (parameters.Count > 0)
-            {
-                ClaimsPrincipal currentUser = User;
-                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-                Idea idea = _ideationsManager.PostIdea(parameters, ideationId, currentUserId);
-
-                if (formFiles.Count > 0)
-                {
-                    UploadImages(formFiles, idea.IdeaId);
-                }
-
-                Ideation ideation = _ideationsManager.GetIdeation(ideationId);
-                return View("/UI/Views/Project/Ideation.cshtml", ideation);
-            }
-            else
-            {
-                throw new Exception("fout createIdea");
-            }
-        }*/
-
         private void UploadImage(IFormFile formFile, int ideaId)
         {
             string wwwroot = "wwwroot/";
@@ -319,6 +288,7 @@ namespace Integratieproject1.UI.Controllers
 
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
             ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
+            ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
             return View("/UI/Views/Project/EditIdea.cshtml", idea);
         }
 
