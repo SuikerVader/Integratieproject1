@@ -90,38 +90,19 @@
             <p>
                 <div id="reactionGrid">
                     <p id="reaction">
-                                <small>
-                                    <strong>@reaction.IdentityUser.UserName </strong>
-                                    @if (reaction.IdentityUser.Verified == true)
-                                    {
-                                        <i class="fas fa-check-circle"></i>
-                                    };
-                                </small>
-                                <small>: @reaction.ReactionText</small>
+                        <small>
+                            <strong>@reaction.IdentityUser.UserName </strong>
+                            @if (reaction.IdentityUser.Verified == true)
+                            {
+                                <i class="fa fa-check-circle"></i>
+                            };
+                        </small>
+                        <small>: @reaction.ReactionText</small>
                     </p>
                     <p id="reactionButtons">
                         @if (User.Identity.IsAuthenticated)
                         {
                             var userVoted = false;
-                                        }
-                                        @foreach (var like in reaction.Likes)
-                                        {
-                                            if (User.Identity.Name == like.IdentityUser.UserName)
-                                            {
-                                                userVoted = true;
-                                                break;
-                                            }
-                                        }
-                                        @if (userVoted == true)
-                                        {
-                                            <i class="small fa fa-thumbs-up"></i>
-                                        }
-                                        else
-                                        {
-                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
-                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                            </a>
-                                        }
 
                             foreach (var like in reaction.Likes)
                             {
