@@ -164,9 +164,11 @@
                     @if (ideaObject.GetType() == typeof(TextField))
                     {
                         var textField = (TextField) ideaObject;
-                        <div class="d-flex flex-row justify-content-between align-items-center">
-                            <p>@textField.Text</p>
-                            <div>
+                        <div class="ideaObjectGrid" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                            <div class="ideaObjectArea">
+                                <div>@textField.Text</div>
+                            </div>
+                            <div class="ideaObjectBtn"> 
                                 <button class="btn btn-primary" onclick="showHide('@textField.IdeaObjectId.ToString()editTextField')">
                                     <i class="fa fa-edit"></i>
                                 </button>
@@ -180,9 +182,12 @@
                     @if (ideaObject.GetType() == typeof(Image))
                     {
                         var image = (Image) ideaObject;
-                        <div class="d-flex flex-row justify-content-between align-items-center">
-                            <img src="@image.ImagePath" style="max-height: 200px" class="img-fluid img-thumbnail" alt="@image.ImageName"/>
-                            <div>
+                        <div class="ideaObjectGrid" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                            <div class="ideaObjectArea">
+                                <img src="@image.ImagePath" style="max-height: 200px; max-width:200px " class=" img-thumbnail" alt="@image.ImageName"/>
+
+                            </div>
+                            <div class="ideaObjectBtn">
                                 @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
@@ -196,12 +201,12 @@
                     @if (ideaObject.GetType() == typeof(Video))
                     {
                         var video = (Video) ideaObject;
-                        <div class="d-flex flex-row justify-content-between align-items-center">
-                            <iframe src="@video.Url" width="100%"
+                        <div class="ideaObjectGrid text-center" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                            
+                            <iframe class="ideaObjectArea" src="@video.Url" width="100%"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                             </iframe>
-                            <br/>
-                            <div>
+                            <div class="ideaObjectBtn">
                                 @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"

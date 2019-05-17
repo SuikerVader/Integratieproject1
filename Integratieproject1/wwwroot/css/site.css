@@ -69,6 +69,7 @@ body {
     background-color: grey;
 
 }
+
 .progress{
     display: none;
 }
@@ -514,6 +515,26 @@ body {
                 "editIdeaObjects editIdeaObjects editIdeaObjects"
     }
 }
+.ideaObjectGrid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto ;
+    grid-template-rows: auto;
+    grid-template-areas:
+            "ideaObjectArea ideaObjectBtn"
+}
+.ideaObjectArea{
+    grid-area: ideaObjectArea;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ideaObjectBtn{
+    grid-area: ideaObjectBtn;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 #surveyGrid{
     padding-top: 20px;
@@ -634,5 +655,6 @@ body {
     position: relative;
     
 }
+
 
 
