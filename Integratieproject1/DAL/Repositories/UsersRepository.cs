@@ -68,22 +68,28 @@ namespace Integratieproject1.DAL.Repositories
         
         #region VerificationRequest
 
-        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        public void AskVerify(CustomUser user)
         {
-            return _ctx.VerificationRequests.AsEnumerable();
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
+            user.AskVerify = true;
+            userManager.UpdateAsync(user);
         }
 
-        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        public void Verify(CustomUser user)
         {
-            _ctx.VerificationRequests.Add(verificationRequest);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
+            user.Verified = true;
+            user.AskVerify = false;
+            userManager.UpdateAsync(user);
         }
 
-        public void SetVerificationRequestHandled(VerificationRequest verificationRequest)
+        public IList<CustomUser> GetRequests()
         {
-            verificationRequest.handled = true;
-            _ctx.VerificationRequests.Update(verificationRequest);
+            return _ctx.Users
+                .Where(u => u.AskVerify == true)
+                .AsEnumerable().ToList();
         }
-        
+
         #endregion
 
         public async void BlockUser(CustomUser identityUser, int days)
@@ -94,7 +100,7 @@ namespace Integratieproject1.DAL.Repositories
 
         public CustomUser GetUserByEmail(string email)
         {            
-            return _userStore.FindByNameAsync(email.ToUpper()).Result;
+            return _userStore.FindByEmailAsync(email.ToUpper()).Result;
         }
 
         public string GetSurname(CustomUser customUser)

@@ -2,10 +2,13 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity;
 using Integratieproject1.Areas.Identity.Services;
 using Integratieproject1.DAL;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +19,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using static Integratieproject1.DAL.MqttClient;
 using Newtonsoft.Json;
 using Integratieproject1.Domain.Users;
+using Integratieproject1.Services;
 
 namespace Integratieproject1
 {
@@ -67,6 +72,23 @@ namespace Integratieproject1
             // using WebPWrecover.Services;
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            // configure JWTSettings for AndroidAPI
+            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
+
+            services.AddAuthentication().AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = Configuration["JWTSettings:Issuer"],
+                    ValidAudience = Configuration["JWTSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:SecretKey"]))
+                };
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +103,7 @@ namespace Integratieproject1
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
@@ -94,8 +116,6 @@ namespace Integratieproject1
                     template: "{platformName=Antwerpen}/{controller=Home}/{action=Index}/{id?}");
             });
             CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
-
-
         }
     }
 }

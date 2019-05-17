@@ -11,6 +11,7 @@ using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace Integratieproject1.UI.Controllers
     public class ProjectController : Controller
     {
         private readonly ProjectsManager _projectsManager;
+        private readonly UsersManager _userManager;
         private readonly IdeationsManager _ideationsManager;
         private readonly SurveysManager _surveysManager;
         private readonly DataTypeManager _dataTypeManager;
@@ -32,6 +34,7 @@ namespace Integratieproject1.UI.Controllers
         public ProjectController()
         {
             _projectsManager = new ProjectsManager();
+            _userManager = new UsersManager();
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _dataTypeManager = new DataTypeManager();
@@ -447,7 +450,12 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
 
-
+        public IActionResult AskVerify()
+        {
+            string currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _userManager.AskVerify(currentUserId);
+            return RedirectToAction("Index", "Home");
+        }
         
     }
 }

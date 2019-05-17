@@ -6,27 +6,49 @@
 }
 <div class="container">
     <h2>Alle Projecten</h2>
+    <form asp-action="Projects" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="Projects">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table">
             <tr>
-                <th>Naam</th>
-                <th>Beschrijving</th>
-                <th>Startdatum</th>
-                <th>Einddatum</th>
-                <th>Locatie</th>
+                <th>
+                    <a asp-action="Projects" asp-route-sortOrder="@ViewData["NameSortParm"]">Naam</a>
+                </th>
+                <th>
+                    <a asp-action="Projects" asp-route-sortOrder="@ViewData["StatusSortParm"]">Status</a>
+                </th>
+                <th>
+                    <a asp-action="Projects" asp-route-sortOrder="@ViewData["StartDateSortParm"]">Startdatum</a>
+                </th>
+                <th>
+                    <a asp-action="Projects" asp-route-sortOrder="@ViewData["EndDateSortParm"]">Einddatum</a>
+                </th>
+                <th>
+                    <a asp-action="Projects" asp-route-sortOrder="@ViewData["PlatformSortParm"]">District</a>
+                </th>
             </tr>
             @foreach (var project in Model)
             {
-                <tr>
-                    <td>@project.ProjectName</td>
-                    <td>@project.Description</td>
-                    <td>@project.StartDate</td>
-                    <td>@project.EndDate</td>
-                    <td>@project.Location.LocationName</td>
-                    <td><a asp-area="" asp-controller="Moderator"
-                           asp-action="Posts" asp-route-projectId="@project.ProjectId">Bekijk Posts
-                    </a></td>
-                </tr>
+            <tr>
+                <td>@project.ProjectName</td>
+                <td>@project.Status</td>
+                <td>@project.StartDate</td>
+                <td>@project.EndDate</td>
+                <td>@project.Platform.PlatformName</td>
+                <td>
+                    <a asp-area="" asp-controller="Moderator"
+                       asp-action="Posts" asp-route-projectId="@project.ProjectId">
+                        Bekijk Posts
+                    </a>
+                </td>
+            </tr>
             }
         </table>
     </div>

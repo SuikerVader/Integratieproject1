@@ -1,46 +1,42 @@
-@using Integratieproject1.Domain.Users
-@model IList<VerificationRequest>
+@model IList<Integratieproject1.Domain.Users.CustomUser>
 
 @{
     ViewBag.Title = "Admin";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-    <h3>Verificatieverzoeken</h3>
-    <form asp-action="VerificationRequests" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
-                <a asp-action="VerificationRequests">Terug naar volledige lijst</a>
-            </p>
-        </div>
-    </form>
-    <div class="d-flex flex-column justify-content-start" style="width: 100%">
+    <h2>Verificatieverzoeken</h2>
+    <div>
         <table class="table">
             <tr>
                 <th>
-                    <a asp-action="VerificationRequests" asp-route-sortOrder="@ViewData["UserSortParm"]">Gebruikersnaam</a>
+                    Gebruikersnaam
                 </th>
                 <th>
-                    <a asp-action="VerificationRequests" asp-route-sortOrder="@ViewData["RequestSortParm"]">Verzoek</a>
+                    Voornaam
+                </th>
+                <th>
+                   Achternaam
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Leeftijd
                 </th>
             </tr>
-            @foreach (VerificationRequest verificationRequest in @Model)
+            @foreach (var user in Model)
             {
                 <tr>
-                    <td>@verificationRequest.user</td>
-                    <td>@verificationRequest.request</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Surname</td>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.Age</td>
                     <td>
-                        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                           asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@true">
-                            Accepteer
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" asp-area="" asp-controller="Admin"
-                           asp-action="HandleVerificationRequest" asp-route-user="@verificationRequest.user" asp-route-accepted="@false">
-                            Weiger
+                        <a asp-area="" asp-controller="Admin"
+                           asp-action="Verify" asp-route-userId="@user.Id">
+                            Verifieer gebruiker
                         </a>
                     </td>
                 </tr>

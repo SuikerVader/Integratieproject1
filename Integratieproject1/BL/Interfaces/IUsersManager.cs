@@ -31,13 +31,5 @@ namespace Integratieproject1.BL.Interfaces
 
         #endregion
 
-        #region VerificationRequest
-
-        IEnumerable<VerificationRequest> GetVerificationRequests();
-        void CreateVerificationRequest(VerificationRequest verificationRequest);
-        VerificationRequest CreateVerificationRequest(CustomUser user, string request);
-        void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted);
-
-        #endregion
     }
 }

@@ -11,20 +11,20 @@
     ViewBag.Element = "ideation";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-<body style="background-color:@Model.Phase.Project.Platform.BackgroundColor;color:@Model.Phase.Project.Platform.TextColor">
+<body style="background-color: @Model.Phase.Project.Platform.BackgroundColor; color: @Model.Phase.Project.Platform.TextColor">
 <div class="container">
     <div id="ideationGrid">
         <div id="ideationInfo">
             <div class="card text-center infoCard">
                 <div class="card-body">
                     <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br />
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br />
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
-                    <br /><br />
+                    <br/><br/>
                     @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
                     {
-                        <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
+                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
                     @if (ViewBag.hasIots == true)
                     {
@@ -72,7 +72,7 @@
                         <div class="d-flex flex-row justify-content-center flex-wrap">
                             @foreach (var idea in Model.Ideas)
                             {
-                                <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
+                                <a class="btn btn-primary" style="background-color: @Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
                             }
                         </div>
                     }
@@ -90,15 +90,38 @@
             <p>
                 <div id="reactionGrid">
                     <p id="reaction">
-                        <small>
-                            <strong>@reaction.IdentityUser.UserName:</strong>
-                        </small>
-                        <small>@reaction.ReactionText</small>
+                                <small>
+                                    <strong>@reaction.IdentityUser.UserName </strong>
+                                    @if (reaction.IdentityUser.Verified == true)
+                                    {
+                                        <i class="fas fa-check-circle"></i>
+                                    };
+                                </small>
+                                <small>: @reaction.ReactionText</small>
                     </p>
                     <p id="reactionButtons">
                         @if (User.Identity.IsAuthenticated)
                         {
                             var userVoted = false;
+                                        }
+                                        @foreach (var like in reaction.Likes)
+                                        {
+                                            if (User.Identity.Name == like.IdentityUser.UserName)
+                                            {
+                                                userVoted = true;
+                                                break;
+                                            }
+                                        }
+                                        @if (userVoted == true)
+                                        {
+                                            <i class="small fa fa-thumbs-up"></i>
+                                        }
+                                        else
+                                        {
+                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
+                                            </a>
+                                        }
 
                             foreach (var like in reaction.Likes)
                             {
@@ -208,23 +231,23 @@
 @* refactor naar js file *@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
-            function showHideCreateIdea() {
-                var x = document.getElementById('idea');
-                if (x.style.display === 'none') {
-                    x.style.display = 'inline-block';
-                } else {
-                    x.style.display = 'none';
-                }
-            }
+    function showHideCreateIdea() {
+        var x = document.getElementById('idea');
+        if (x.style.display === 'none') {
+            x.style.display = 'inline-block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
 
-            function showHideReaction() {
-                var x = document.getElementById('reaction');
-                if (x.style.display === 'none') {
-                    x.style.display = 'block';
-                } else {
-                    x.style.display = 'none';
-                }
-            }
+    function showHideReaction() {
+        var x = document.getElementById('reaction');
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
 
             function showHideCreateReaction() {
                 var x = document.getElementById('createReaction');

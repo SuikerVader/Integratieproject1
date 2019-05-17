@@ -13,5 +13,7 @@ namespace Integratieproject1.Domain.Users
         public string Sex { get; set; } = "";
         public int Age { get; set; } = 0;
         public string Zipcode { get; set; }
+        public bool Verified { get; set; } = false;
+        public bool AskVerify { get; set; } = false;
     }
 }

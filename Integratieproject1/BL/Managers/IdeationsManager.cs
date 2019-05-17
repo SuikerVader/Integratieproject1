@@ -201,6 +201,34 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
 
+
+        public IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder)
+        {
+            IEnumerable<Idea> ideas = _ideationsRepository.GetAllNonPublishedIdeas().ToList();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    ideas = ideas.OrderByDescending(i => i.Title);
+                    break;
+                case "User":
+                    ideas = ideas.OrderBy(i => i.IdentityUser.UserName);
+                    break;
+                case "user_desc":
+                    ideas = ideas.OrderByDescending(i => i.IdentityUser.UserName);
+                    break;
+                case "Ideation":
+                    ideas = ideas.OrderBy(i => i.Ideation.CentralQuestion);
+                    break;
+                case "ideation_desc":
+                    ideas = ideas.OrderByDescending(i => i.Ideation.CentralQuestion);
+                    break;
+                default:
+                    ideas = ideas.OrderBy(i => i.Title);
+                    break;
+            }
+            return ideas;
+        }
+
         public IList<Idea> GetIdeas(int ideationId)
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
@@ -302,6 +330,13 @@ namespace Integratieproject1.BL.Managers
             Idea created = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return created;
+        }
+
+        public void PublishIdea(int ideaId)
+        {
+            Idea idea = GetIdea(ideaId);
+            _ideationsRepository.PublishIdea(idea);
+            _unitOfWorkManager.Save();
         }
 
         public void ChangeIdea(Idea idea)
