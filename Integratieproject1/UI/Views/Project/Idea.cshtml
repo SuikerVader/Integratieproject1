@@ -167,9 +167,13 @@
                 <div class="d-flex flex-row justify-content-between">
                     <p>
                         <small>
-                            <strong>@reaction.IdentityUser.UserName:</strong>
+                            <strong>@reaction.IdentityUser.UserName </strong>
+                            @if (reaction.IdentityUser.Verified == true)
+                            {
+                                <i class="fas fa-check-circle"></i>
+                            };
                         </small>
-                        <small>@reaction.ReactionText</small>
+                        <small>: @reaction.ReactionText</small>
                     </p>
                     <p>
                         @if (User.Identity.IsAuthenticated)
