@@ -114,7 +114,7 @@ namespace Integratieproject1.BL.Managers
         public void AskVerify(string userId)
         {
             CustomUser user = GetUser(userId);
-            _usersRepository.AskVerify(user);
+            _usersRepository.AskVerifyAsync(user);
         }
 
         public void Verify(string userId)
