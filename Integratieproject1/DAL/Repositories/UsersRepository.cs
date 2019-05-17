@@ -68,11 +68,11 @@ namespace Integratieproject1.DAL.Repositories
         
         #region VerificationRequest
 
-        public void AskVerify(CustomUser user)
+        public async void AskVerifyAsync(CustomUser user)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
             user.AskVerify = true;
-            userManager.UpdateAsync(user);
+            await userManager.UpdateAsync(user);
         }
 
         public void Verify(CustomUser user)

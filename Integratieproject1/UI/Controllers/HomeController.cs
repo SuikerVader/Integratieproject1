@@ -102,8 +102,6 @@ namespace Integratieproject1.UI.Controllers
             Platform platform = _projectsManager.GetPlatformByName(platformName);
             int platformId = platform.PlatformId;
 
-            searchString = searchString.ToLower();
-
             var projects = _projectsManager.GetProjects(platformId);
             var phases = _projectsManager.GetAllPhases(platformId);
             var ideations = _ideationsManager.GetIdeationsByPlatform(platformId);
@@ -114,6 +112,7 @@ namespace Integratieproject1.UI.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.ToLower();
                 searchResults.AddRange(projects
                     .Where(p => string.IsNullOrEmpty(p.Description)
                         ? p.ProjectName.ToLower().Contains(searchString)
