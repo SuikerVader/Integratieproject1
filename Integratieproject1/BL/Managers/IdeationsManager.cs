@@ -201,6 +201,7 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
 
+
         public IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder)
         {
             IEnumerable<Idea> ideas = _ideationsRepository.GetAllNonPublishedIdeas().ToList();
