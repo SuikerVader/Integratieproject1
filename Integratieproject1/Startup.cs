@@ -68,7 +68,7 @@ namespace Integratieproject1
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             }, ArrayPool<char>.Shared));
             });
-
+            
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
             // using WebPWrecover.Services;

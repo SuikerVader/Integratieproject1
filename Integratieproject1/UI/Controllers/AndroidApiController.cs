@@ -100,7 +100,6 @@ namespace Integratieproject1.UI.Controllers
 
         #region Projects
 
-//        [Authorize]
         [HttpGet]
         [Route("Api/projects/{id}")]
         public IEnumerable<Project> GetProjects(int id)
@@ -179,44 +178,27 @@ namespace Integratieproject1.UI.Controllers
             return _usersManager.GetUsers("USER");
         }
 
-//        [HttpGet]
-//        [Route("Api/users/new/{email}/{password}")]
-//        public async Task<IdentityUser> CreateUser(string email, string password)
-//        {
-//            var newUser = new IdentityUser
-//            {
-//                UserName = email, 
-//                Email = email
-//            };
-//            var result = await _userManager.CreateAsync(newUser, password);
-//            _usersManager.GiveRole(newUser.Id, "USER");
-//            if (result.Succeeded)
-//            {
-//                var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-//                var callbackUrl = .Page(
-//                    "/Account/ConfirmEmail",
-//                    pageHandler: null,
-//                    values: new { userId = newUser.Id, code = code },
-//                    protocol: Request.Scheme);
-//
-//                
-//                await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email",
-//                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-//
-//        }
-
         [HttpGet]
         [Route("Api/users/login")]
-        public async Task<CustomUser> SignIn([FromHeader(Name = "Email")] string email,
+        public async Task<CustomUser> SignIn([FromHeader(Name = "Username")] string username,
             [FromHeader(Name = "Password")] string password)
         {
-            byte[] decodedEmail = Convert.FromBase64String(email);
-            email = System.Text.Encoding.UTF8.GetString(decodedEmail);
+            byte[] decodedUsername = Convert.FromBase64String(username);
+            username = System.Text.Encoding.UTF8.GetString(decodedUsername);
 
             byte[] decodedPassword = Convert.FromBase64String(password);
             password = System.Text.Encoding.UTF8.GetString(decodedPassword);
 
-            var user = _usersManager.GetUserByEmail(email);
+            CustomUser user = null;
+            
+            if (username.Contains("@"))
+            {
+                user = _usersManager.GetUserByEmail(username);
+            }
+            else
+            {
+                user = _usersManager.GetUserByUsername(username);
+            }
 
             var result = await _signInManager.PasswordSignInAsync(user.UserName, password, true, true);
             if (result.Succeeded)
@@ -225,6 +207,24 @@ namespace Integratieproject1.UI.Controllers
             }
 
             return null;
+        }
+
+        [HttpPost]
+        [Route("Api/users/update")]
+        public void UpdateUser([FromHeader(Name = "Username")] string username, [FromBody] UserUpdateValuesModel userUpdateValues)
+        {
+            var user = _usersManager.GetUserByUsername(username);
+
+            if (user != null)
+            {
+                user.Surname = userUpdateValues.Surname;
+                user.Name = userUpdateValues.LastName;
+                user.Sex = userUpdateValues.Sex;
+                user.Age = Int32.Parse(userUpdateValues.Age);
+                user.Zipcode = userUpdateValues.ZipCode;
+            
+                _usersManager.UpdateUser(user);
+            }
         }
 
         #endregion
