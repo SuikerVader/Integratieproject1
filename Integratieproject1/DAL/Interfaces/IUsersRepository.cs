@@ -12,8 +12,5 @@ namespace Integratieproject1.DAL.Interfaces
         IEnumerable<CustomUser> GetUsers(string role);
         void GiveRole(CustomUser identityUser, string role);
         void CreateUser(CustomUser identityUser);
-        IEnumerable<VerificationRequest> GetVerificationRequests();
-        void CreateVerificationRequest(VerificationRequest verificationRequest);
-        void SetVerificationRequestHandled(VerificationRequest verificationRequest);
     }
 }

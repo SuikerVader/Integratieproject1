@@ -102,8 +102,6 @@ namespace Integratieproject1.UI.Controllers
             Platform platform = _projectsManager.GetPlatformByName(platformName);
             int platformId = platform.PlatformId;
 
-            searchString = searchString.ToLower();
-
             var projects = _projectsManager.GetProjects(platformId);
             var phases = _projectsManager.GetAllPhases(platformId);
             var ideations = _ideationsManager.GetIdeationsByPlatform(platformId);
@@ -114,6 +112,7 @@ namespace Integratieproject1.UI.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.ToLower();
                 searchResults.AddRange(projects
                     .Where(p => string.IsNullOrEmpty(p.Description)
                         ? p.ProjectName.ToLower().Contains(searchString)
@@ -132,10 +131,9 @@ namespace Integratieproject1.UI.Controllers
                     .Where(i => i.CentralQuestion.ToLower().Contains(searchString))
                     .ToList()
                 );
-                List<string> tagNames = new List<string>();
                 foreach (var idea in ideas)
                 {
-                    
+                    List<string> tagNames = new List<string>();
                     foreach (IdeaTag ideaTag in idea.IdeaTags)
                     {
                         tagNames.Add(ideaTag.Tag.TagName.ToLower());

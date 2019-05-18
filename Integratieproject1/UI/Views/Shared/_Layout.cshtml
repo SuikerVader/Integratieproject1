@@ -15,7 +15,7 @@
     
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <div class="container">
         @* <div class="navbar-header"> *@
         @*     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse"> *@
@@ -55,7 +55,7 @@
 <div class="body-content">
     @RenderBody()
     <hr/>
-    <footer>
+    <footer >
         <p>&copy; 2019 - Integratieproject1 - <a asp-controller="Home" asp-action="About">Info</a> - <a asp-controller="Home" asp-action="FAQ">FAQ</a> - <a asp-controller="Home" asp-action="Privacy">Privacy</a></p>
     </footer>
 </div>
@@ -63,3 +63,9 @@
 @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

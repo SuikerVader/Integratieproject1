@@ -11,7 +11,7 @@
                          <i class="fa fa-user"></i>
                      </a>
                      <form class="dropdown-menu" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new {area = ""})" method="post" id="logoutForm" class="dropdown-menu p-4">
-                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
+                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
                          <button type="submit" class="dropdown-item">Uitloggen</button>
                          <div class="dropdown-divider"></div>
                          @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
@@ -20,7 +20,7 @@
                          }
                          @if (User.IsInRole("Mod") || User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                          {
-                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Projects">Moderatorpagina's</a>
+                                 <a class="dropdown-item" asp-area="" asp-controller="Moderator" asp-action="Index">Moderatorpagina's</a>
                          }
                          @if (User.IsInRole("SuperAdmin"))
                          {

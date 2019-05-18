@@ -66,7 +66,7 @@ namespace Integratieproject1.DAL
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
                 Logo = "/images/uploads/LogoAntwerp.png",
                 BackgroundColor = "white",
-                ButtonColor = "#1e62c9",
+                ButtonColor = "#007bff",
                 TextColor = "black"
             };
 
@@ -265,7 +265,9 @@ namespace Integratieproject1.DAL
             CustomUser organisation = new CustomUser
             {
                 UserName = "McDonalds",
-                Email = "testOrganisation1@test.com"
+                Email = "testOrganisation1@test.com",
+                Verified = true,
+                AskVerify = false
             };
             CustomUser admin = new CustomUser
             {

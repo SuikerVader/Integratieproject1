@@ -14,10 +14,10 @@
                     <div class="input-group">
                         <input class="form-control" id="autocompleteEdit" @*oninput="inputAutocomplete()*@"/>
                         <div class="input-group-append">
-                            <input class="btn btn-primary" type="submit" value="Locatie wijzigen">
+                            <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
                             <a class="btn btn-danger" asp-area="" asp-controller="Project"
                                asp-action="DeletePosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId">
-                                Verwijder locatie
+                                <i class="fa fa-times"></i>
                             </a>
                         </div>
                     </div>

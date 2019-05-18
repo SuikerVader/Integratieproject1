@@ -1,0 +1,47 @@
+﻿@model IList<Integratieproject1.Domain.Ideations.Idea>
+
+@{
+    ViewBag.Title = "Moderator";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Niet gepubliceerde idee&euml;n</h2>
+    <form asp-action="Ideas" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="Ideas">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
+    <div>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="Ideas" asp-route-sortOrder="@ViewData["NameSortParm"]">Titel</a>
+                </th>
+                <th>
+                    <a asp-action="Ideas" asp-route-sortOrder="@ViewData["UserSortParm"]">Gebruiker</a>
+                </th>
+                <th>
+                    <a asp-action="Ideas" asp-route-sortOrder="@ViewData["IdeationSortParm"]">Ideation</a>
+                </th>
+            </tr>
+            @foreach (var idea in Model)
+            {
+                <tr>
+                    <td>@idea.Title</td>
+                    <td>@idea.IdentityUser.UserName</td>
+                    <td>@idea.Ideation.CentralQuestion</td>
+                    <td>
+                        <a asp-area="" asp-controller="Moderator"
+                           asp-action="Publish" asp-route-ideaId="@idea.IdeaId">
+                            Publiceer
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -18,6 +18,7 @@ namespace Integratieproject1.Domain.Ideations
         
         [DefaultValue(false)]
         public Boolean Reported { get; set; }
+        public Boolean Published { get; set; } = true;
         [Required] public String Title { get; set; }
         [Required] public CustomUser IdentityUser { get; set; }
         [Required] public Ideation Ideation { get; set; }
