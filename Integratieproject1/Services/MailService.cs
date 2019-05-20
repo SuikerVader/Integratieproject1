@@ -14,7 +14,7 @@ namespace Integratieproject1.Services
         private static readonly UsersManager UsersManager = new UsersManager();
 
         public static void SendErrorMail(string email, string password, string routeWhereExceptionOccurred,
-            string exceptionThatOccurred, IIdentity userIdentity)
+            Exception exceptionThatOccurred, IIdentity userIdentity)
         {            
             using (SmtpClient client = new SmtpClient
             {
@@ -29,7 +29,7 @@ namespace Integratieproject1.Services
                 using (MailMessage mail = new MailMessage {From = new MailAddress(email, "CityOfIdeas")})
                 {                    
                     mail.To.Add("info.cityofideas@gmail.com");
-                    foreach (var user in UsersManager.GetUsers("SuperAdmin"))
+                    foreach (var user in UsersManager.GetUsers("SUPERADMIN"))
                     {
                         mail.To.Add(new MailAddress(user.Email));
                     }
@@ -60,7 +60,7 @@ namespace Integratieproject1.Services
                 </tr>
                 <tr>
                     <td style=""text-align: right;font-weight: bold"">Stack Trace:</td>
-                    <td>{exceptionThatOccurred.Replace(Environment.NewLine, "<br />")}</td>
+                    <td>{exceptionThatOccurred.Message.Replace(Environment.NewLine, "<br />")}</td>
                 </tr>
             </table>
         </body>
