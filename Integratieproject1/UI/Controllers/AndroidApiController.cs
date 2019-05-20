@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
@@ -28,7 +30,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly SignInManager<CustomUser> _signInManager;
 
         public AndroidApiController(SignInManager<CustomUser> signInManager)
-        { 
+        {
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _projectsManager = new ProjectsManager();
@@ -44,7 +46,7 @@ namespace Integratieproject1.UI.Controllers
         {
             return _ideationsManager.GetAllIdeas(id);
         }
-        
+
         [HttpGet]
         [Route("Api/idea/{id}")]
         public Idea GetIdea(int id)
@@ -57,13 +59,6 @@ namespace Integratieproject1.UI.Controllers
         public IEnumerable<Ideation> GetIdeations(int id)
         {
             return _ideationsManager.GetProjectIdeations(id);
-        }
-
-        [HttpGet]
-        [Route("Api/ideation/{id}")]
-        public Ideation GetIdeation(int id)
-        {
-            return _ideationsManager.GetIdeation(id);
         }
 
         [HttpGet]
@@ -94,8 +89,6 @@ namespace Integratieproject1.UI.Controllers
             return null;
         }
 
-
-        
         #endregion
 
         #region Projects
@@ -124,18 +117,22 @@ namespace Integratieproject1.UI.Controllers
 
         [HttpPost]
         [Route("/Api/vote")]
-        public void androidVote([FromBody]int id)
+        public void androidVote([FromHeader] int id, [FromHeader] String vote/*, [FromHeader] string userId*/)
         {
-           
-            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
-            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
+            Console.WriteLine(id);
+            //Console.WriteLine(userId);
+            Console.WriteLine(vote);
+            VoteType voteType = (VoteType) Enum.Parse(typeof(VoteType), vote, true);
+            
+//               ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+//               var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+               _ideationsManager.CreateVote(id,voteType,"helloooooo");
         }
 
         #endregion
+
         #region surveys
-        
-        
+
         [HttpGet]
         [Route("Api/surveys/{id}")]
         public IEnumerable<Survey> GetProjectsSurveys(int id)
@@ -159,7 +156,7 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-        
+
         [HttpGet]
         [Route("Api/tags")]
         public IEnumerable<Tag> getTags()
