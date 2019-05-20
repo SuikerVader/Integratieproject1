@@ -41,7 +41,7 @@ namespace Integratieproject1.DAL.Repositories
         public async void DeleteRole(CustomUser identityUser, string role)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.RemoveFromRoleAsync(identityUser, role);
+            await userManager.RemoveFromRoleAsync(identityUser, role);
         }
 
         public IEnumerable<CustomUser> GetUsers(string role)
@@ -51,13 +51,19 @@ namespace Integratieproject1.DAL.Repositories
         public async void GiveRole(CustomUser identityUser, string role)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.AddToRoleAsync(identityUser, role);
+            await userManager.AddToRoleAsync(identityUser, role);
         }
         
         public async void CreateUser(CustomUser identityUser)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.CreateAsync(identityUser);
+            await userManager.CreateAsync(identityUser);
+        }
+
+        public async void UpdateUser(CustomUser identityUser)
+        {
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
+            await userManager.UpdateAsync(identityUser);
         }
 
         public bool IsInRole(CustomUser user, string role)
@@ -68,22 +74,28 @@ namespace Integratieproject1.DAL.Repositories
         
         #region VerificationRequest
 
-        public IEnumerable<VerificationRequest> GetVerificationRequests()
+        public async void AskVerifyAsync(CustomUser user)
         {
-            return _ctx.VerificationRequests.AsEnumerable();
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
+            user.AskVerify = true;
+            await userManager.UpdateAsync(user);
         }
 
-        public void CreateVerificationRequest(VerificationRequest verificationRequest)
+        public void Verify(CustomUser user)
         {
-            _ctx.VerificationRequests.Add(verificationRequest);
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore, null, null, null, null, null, null, null, null);
+            user.Verified = true;
+            user.AskVerify = false;
+            userManager.UpdateAsync(user);
         }
 
-        public void SetVerificationRequestHandled(VerificationRequest verificationRequest)
+        public IList<CustomUser> GetRequests()
         {
-            verificationRequest.handled = true;
-            _ctx.VerificationRequests.Update(verificationRequest);
+            return _ctx.Users
+                .Where(u => u.AskVerify == true)
+                .AsEnumerable().ToList();
         }
-        
+
         #endregion
 
         public async void BlockUser(CustomUser identityUser, int days)
@@ -94,7 +106,12 @@ namespace Integratieproject1.DAL.Repositories
 
         public CustomUser GetUserByEmail(string email)
         {            
-            return _userStore.FindByNameAsync(email.ToUpper()).Result;
+            return _userStore.FindByEmailAsync(email.ToUpper()).Result;
+        }
+
+        public CustomUser GetUserByUsername(string username)
+        {
+            return _userStore.FindByNameAsync(username.ToUpper()).Result;
         }
 
         public string GetSurname(CustomUser customUser)

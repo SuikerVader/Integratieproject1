@@ -2,10 +2,14 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity;
 using Integratieproject1.Areas.Identity.Services;
 using Integratieproject1.DAL;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +20,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using static Integratieproject1.DAL.MqttClient;
 using Newtonsoft.Json;
 using Integratieproject1.Domain.Users;
+using Integratieproject1.Services;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Integratieproject1
 {
@@ -29,7 +36,7 @@ namespace Integratieproject1
         {
             Configuration = configuration;
             MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
-        }
+        }    
 
         public IConfiguration Configuration { get; }
 
@@ -61,7 +68,7 @@ namespace Integratieproject1
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             }, ArrayPool<char>.Shared));
             });
-
+            
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
             // using WebPWrecover.Services;
@@ -74,14 +81,19 @@ namespace Integratieproject1
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // Uncomment when done testing
+//                app.UseDeveloperExceptionPage();
+
+                // Comment when done testing
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
@@ -94,8 +106,6 @@ namespace Integratieproject1
                     template: "{platformName=Antwerpen}/{controller=Home}/{action=Index}/{id?}");
             });
             CityOfIdeasDbInitializer.SeedUsers(userManager,roleManager);
-
-
         }
     }
 }

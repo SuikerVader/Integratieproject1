@@ -59,14 +59,14 @@ namespace Integratieproject1.DAL
             {
                 PlatformName = "Antwerpen",
                 Description =
-                    "Bent u Antwerpenaar in hart en nieren? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
-                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                    "Bent u Antwerpenaar in hart en nieren? Beslis mee over uw stad!" +
+                    " U kan hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
                 Address = addressAntwerp,
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
                 Logo = "/images/uploads/LogoAntwerp.png",
                 BackgroundColor = "white",
-                ButtonColor = "#1e62c9",
+                ButtonColor = "#007bff",
                 TextColor = "black"
             };
 
@@ -265,7 +265,9 @@ namespace Integratieproject1.DAL
             CustomUser organisation = new CustomUser
             {
                 UserName = "McDonalds",
-                Email = "testOrganisation1@test.com"
+                Email = "testOrganisation1@test.com",
+                Verified = true,
+                AskVerify = false
             };
             CustomUser admin = new CustomUser
             {

@@ -11,36 +11,46 @@
     ViewBag.Element = "ideation";
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
-<body style="background-color:@Model.Phase.Project.Platform.BackgroundColor;color:@Model.Phase.Project.Platform.TextColor">
+<body style="background-color: @Model.Phase.Project.Platform.BackgroundColor; color: @Model.Phase.Project.Platform.TextColor">
 <div class="container">
     <div id="ideationGrid">
         <div id="ideationInfo">
             <div class="card text-center infoCard">
                 <div class="card-body">
                     <h5>Info:</h5>
-                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br />
-                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br />
+                    Project: <a class="" asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.Project.ProjectName</a><br/>
+                    Fase: <a asp-controller="Project" asp-action="Project" asp-route-projectId="@Model.Phase.Project.ProjectId">@Model.Phase.PhaseName</a><br/>
                     @Model.Phase.StartDate.ToString("d") - @Model.Phase.EndDate.ToString("d")
-                    <br /><br />
+                    <br/><br/>
                     @if (Model.ExternalLink != null && !Model.ExternalLink.Equals(""))
                     {
-                        <p>Extra info hier:<br /> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
+                        <p>Extra info hier:<br/> <a target="_blank" href="@Model.ExternalLink">@Model.ExternalLink</a></p>
                     }
                     @if (ViewBag.hasIots == true)
                     {
                         <div>
                             <div class="text-center d-flex flex-row justify-content-center">
-                            <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
-                               asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
-                               </div>
+                                <a class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                                   asp-action="IoTMap" asp-route-id="@Model.IdeationId" asp-route-type="ideation"><i class="fa fa-map-pin"></i></a>
+                            </div>
                         </div>
                     }
 
                 </div>
             </div>
         </div>
+        @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
+        {
+            <div class="ideationGraph">
+                <div class="card text-center graphCard">
+                
+                    <canvas id="pie-chart" ></canvas>
+                
+                </div>
+            </div>
+        }
         <div id="ideation">
-            <div class="card text-center" style="border: none;">
+            <div class="card text-center">
                 <div class="card-body">
                     <h2 class="card-title">@Model.CentralQuestion</h2>
                     @if (User.Identity.IsAuthenticated && Model.InputIdeation == true)
@@ -52,7 +62,7 @@
                     }
                     else if (Model.InputIdeation == true)
                     {
-                        <a class="btn btn-secondary btn-lg" asp-area="Identity" asp-page="/Account/Login">
+                        <a class="btn btn-secondary btn-lg" asp-area="Identity" asp-page="/Account/Login" data-toggle="tooltip" data-placement="top" title="Je moet eerst inloggen.">
                             Idee Posten
                         </a>
                     }
@@ -62,7 +72,7 @@
                         <div class="d-flex flex-row justify-content-center flex-wrap">
                             @foreach (var idea in Model.Ideas)
                             {
-                                <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
+                                <a class="btn btn-primary" style="background-color: @Model.Phase.Project.Platform.ButtonColor" href="#@idea.IdeaId">@idea.Title</a>
                             }
                         </div>
                     }
@@ -76,62 +86,66 @@
             </div>
             <div id="reaction" class="card " style="padding: 10px; border-left: none; border-right: none; display: none">
                 @foreach (var reaction in Model.Reactions)
-                {
-                    <p>
-                        <div class="d-flex flex-row justify-content-between">
-
-                            <p>
-                                <small>
-                                    <strong>@reaction.IdentityUser.UserName:</strong>
-                                </small>
-                                <small>@reaction.ReactionText</small>
-                            </p>
-                            <p>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <small>
-
-                                        @{
-                                            var userVoted = false;
-                                        }
-                                        @foreach (var like in reaction.Likes)
-                                        {
-                                            if (User.Identity.Name == like.IdentityUser.UserName)
-                                            {
-                                                userVoted = true;
-                                                break;
-                                            }
-                                        }
-                                        @if (userVoted == true)
-                                        {
-                                            <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                        }
-                                        else
-                                        {
-                                            <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
-                                                <i class="small fa fa-thumbs-up"></i>@reaction.Likes.Count
-                                            </a>
-                                        }
-
-                                    </small>
-                                    <small>
-                                        <a asp-area="" asp-controller="Project"
-                                           asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
-                                            <i class="fa fa-flag"></i>
-                                        </a>
-                                    </small>
-                                }
-                                else
-                                {
-                                    <small>
-                                        <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
-                                    </small>
-                                }
-                            </p>
-
-                        </div>
+        {
+            <p>
+                <div id="reactionGrid">
+                    <p id="reaction">
+                        <small>
+                            <strong>@reaction.IdentityUser.UserName </strong>
+                            @if (reaction.IdentityUser.Verified == true)
+                            {
+                                <i class="fa fa-check-circle"></i>
+                            };
+                        </small>
+                        <small>: @reaction.ReactionText</small>
                     </p>
-                }
+                    <p id="reactionButtons">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userVoted = false;
+
+                            foreach (var like in reaction.Likes)
+                            {
+                                if (User.Identity.Name == like.IdentityUser.UserName)
+                                {
+                                    userVoted = true;
+                                    break;
+                                }
+                            }
+                            if (userVoted == true)
+                            {
+                                <small>
+                                    <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                </small>
+                                
+                            }
+                            else
+                            {
+                                <small>
+                                    <a style="text-decoration: none" asp-controller="Project" asp-action="LikeReaction" asp-route-type="ideation" asp-route-id="@Model.IdeationId" asp-route-reactionId="@reaction.ReactionId">
+                                        <i class="small fa fa-thumbs-up"> </i>@reaction.Likes.Count 
+                                    </a>   
+                                </small>
+                                
+                            }
+                            <small>
+                                <a asp-area="" asp-controller="Project"
+                                   asp-action="ReportPost" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
+                                    <i class="fa fa-flag"> </i>
+                                </a>
+                            </small>
+                        }
+                        else
+                        {
+                            <small>
+                                <i class="small fa fa-thumbs-up"></i> @reaction.Likes.Count
+                            </small>
+                        }
+                    </p>
+
+                </div>
+            </p>
+        }
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex flex-row justify-content-end">
@@ -147,47 +161,46 @@
                 <h1><i class="fa fa-lightbulb-o"></i> Idee&euml;n <i class="fa fa-lightbulb-o"></i></h1>
             </div>
             <div class="d-flex flex-row justify-content-around flex-wrap">
-                
+
                 @foreach (var idea in Model.Ideas)
                 {
-                    <div id="@idea.IdeaId" class="card text-center idea">
+                    if (idea.Published == true)
+                    {
+                        <div id="@idea.IdeaId" class="card text-center idea">
 
-                        <div class="card-body">
-                            <h5 class="card-title">@idea.Title</h5>
-                            @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0)
-                            {
-                                <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
-                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@idea.Title</h5>
+                                @if (idea.GetTextFields() != null && idea.GetTextFields().Count > 0)
+                                {
+                                    <p class="card-text">@idea.GetTextFields().OrderBy(t => t.OrderNr).First().Text</p>
+                                }
 
-                            @if (Model.InputIdeation == true)
-                            {
-                                <p>
-                                    <small>Ingezonden door: @idea.IdentityUser.UserName</small>
-                                </p>
-                            }
-                            <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
-                                Bekijk Idee
-                            </a>
-                        </div>
-                        <div class="card-footer d-flex flex-row justify-content-around">
-                            <div>
-                                <i class="fa fa-heart"></i> @idea.Votes.Count
+                                @if (Model.InputIdeation == true)
+                                {
+                                    <p>
+                                        <small>Ingezonden door: @idea.IdentityUser.UserName</small>
+                                    </p>
+                                }
+                                <a class="btn btn-primary" style="background-color:@Model.Phase.Project.Platform.ButtonColor" asp-area="" asp-controller="Project"
+                                   asp-action="Idea" asp-route-ideaId="@idea.IdeaId">
+                                    Bekijk Idee
+                                </a>
                             </div>
-                            <div>
-                                <i class="fa fa-comment"></i> @idea.Reactions.Count
+                            <div class="card-footer d-flex flex-row justify-content-around">
+                                <div>
+                                    <i class="fa fa-heart"></i> @idea.Votes.Count
+                                </div>
+                                <div>
+                                    <i class="fa fa-comment"></i> @idea.Reactions.Count
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+
                 }
             </div>
-            @if (Model.Ideas.Sum(i => i.Votes.Count) > 0)
-            {
-                <canvas id="pie-chart" width="800" height="450"></canvas>
-            }
+            
         </div>
-        
-
     </div>
     <footer>
         <img src="@Model.Phase.Project.Platform.Logo" alt="Logo" height="75" width="75" style="float:right"/>
@@ -199,23 +212,23 @@
 @* refactor naar js file *@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
-            function showHideCreateIdea() {
-                var x = document.getElementById('idea');
-                if (x.style.display === 'none') {
-                    x.style.display = 'inline-block';
-                } else {
-                    x.style.display = 'none';
-                }
-            }
+    function showHideCreateIdea() {
+        var x = document.getElementById('idea');
+        if (x.style.display === 'none') {
+            x.style.display = 'inline-block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
 
-            function showHideReaction() {
-                var x = document.getElementById('reaction');
-                if (x.style.display === 'none') {
-                    x.style.display = 'block';
-                } else {
-                    x.style.display = 'none';
-                }
-            }
+    function showHideReaction() {
+        var x = document.getElementById('reaction');
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
 
             function showHideCreateReaction() {
                 var x = document.getElementById('createReaction');
@@ -230,25 +243,34 @@
 
     @foreach (Idea idea in Model.Ideas)
     {
-        @:names.push("@idea.Title");
-        @:values.push("@idea.Votes.Count");
+        if(idea.Published == true)
+        {
+            @:names.push("@idea.Title");
+            @:values.push("@idea.Votes.Count");
+        }
     }
-    new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: names,
-            datasets: [{
-                label: "Stemmen",
-                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                data: values
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Aantal stemmen per idee'
-            }
+            new Chart(document.getElementById("pie-chart"), {
+                type: 'pie',
+                data: {
+                    labels: names,
+                    datasets: [
+                        {
+                            label: "Stemmen",
+                            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                            data: values
+                        }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Aantal stemmen per idee'
+                    },
+                    legend: {
+                        display: false
+                    }
+                    
         }
     });
-        </script>
+</script>
 @*************************@
