@@ -23,7 +23,8 @@ namespace Integratieproject1.Areas.Identity
                 {
                     config.SignIn.RequireConfirmedEmail = true;
                 }).AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<CityOfIdeasDbContext>();
+                    .AddEntityFrameworkStores<CityOfIdeasDbContext>()
+                    .AddUserManager<UserManager<CustomUser>>();
                 
             });
         }
