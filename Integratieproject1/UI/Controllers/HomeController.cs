@@ -7,6 +7,8 @@ using Integratieproject1.Domain;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,8 +28,9 @@ namespace Integratieproject1.UI.Controllers
         }
 
         public IActionResult Index(string platformName)
-        {
-            try{
+        {            
+            try
+            {
                 Platform platform = _projectsManager.GetPlatformByName(platformName);
                 List<IoTSetup> ioTSetups = _ioTManager.GetAllIoTSetupsForPlatform(platform.PlatformId);
                 if (ioTSetups != null && ioTSetups.Count > 0)
@@ -49,7 +52,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         public IActionResult About()
-        {
+        {   
             return View("/UI/Views/Home/About.cshtml");
         }
 
@@ -66,6 +69,32 @@ namespace Integratieproject1.UI.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            if (exceptionFeature != null)
+            {
+                Console.WriteLine("exceptionFeature not null");
+                
+                // Get which route the exception occurred at
+                string routeWhereExceptionOccurred = exceptionFeature.Path;
+
+                // Get the exception that occurred
+                Exception exceptionThatOccurred = exceptionFeature.Error;
+
+                if (exceptionThatOccurred.InnerException != null)
+                {
+                    exceptionThatOccurred = exceptionThatOccurred.InnerException;
+                }
+                
+                MailService.SendErrorMail(
+                    "info.cityofideas@gmail.com", 
+                    "CoIMySweet16", 
+                    routeWhereExceptionOccurred, 
+                    exceptionThatOccurred, 
+                    User.Identity
+                );
+            }
+
             return View("/UI/Views/Shared/Error.cshtml",
                 new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
@@ -74,8 +103,6 @@ namespace Integratieproject1.UI.Controllers
         {
             Platform platform = _projectsManager.GetPlatformByName(platformName);
             int platformId = platform.PlatformId;
-
-            searchString = searchString.ToLower();
 
             var projects = _projectsManager.GetProjects(platformId);
             var phases = _projectsManager.GetAllPhases(platformId);
@@ -87,6 +114,7 @@ namespace Integratieproject1.UI.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.ToLower();
                 searchResults.AddRange(projects
                     .Where(p => string.IsNullOrEmpty(p.Description)
                         ? p.ProjectName.ToLower().Contains(searchString)
@@ -105,10 +133,9 @@ namespace Integratieproject1.UI.Controllers
                     .Where(i => i.CentralQuestion.ToLower().Contains(searchString))
                     .ToList()
                 );
-                List<string> tagNames = new List<string>();
                 foreach (var idea in ideas)
                 {
-                    
+                    List<string> tagNames = new List<string>();
                     foreach (IdeaTag ideaTag in idea.IdeaTags)
                     {
                         tagNames.Add(ideaTag.Tag.TagName.ToLower());

@@ -201,28 +201,18 @@ namespace Integratieproject1.UI.Controllers
 
         #region VerificationRequests
 
-        public IActionResult VerificationRequests(string sortOrder, string searchString)
+        public IActionResult VerificationRequests()
         {
-            IEnumerable<VerificationRequest> requests = _usersManager.GetVerificationRequestsBySort(sortOrder);
-            ViewData["UserSortParm"] = String.IsNullOrEmpty(sortOrder) ? "user_desc" : "";
-            ViewData["RequestSortParm"] = sortOrder == "Request" ? "request_desc" : "Request";
-            ViewData["CurrentFilter"] = searchString;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                requests = requests.Where(r => r.user.UserName.ToLower().Contains(searchString)
-                                       || r.request.ToLower().Contains(searchString));
-            }
-            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests.ToList());
+            IList<CustomUser> users = _usersManager.GetRequests();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", users);
         }
 
-        public IActionResult HandleVerificationRequest(VerificationRequest request, bool acc)
+        public IActionResult Verify(string userId)
         {
-            _usersManager.HandleVerificationRequest(request, acc);
-            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
-            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
+            _usersManager.Verify(userId);
+            IList<CustomUser> users = _usersManager.GetRequests();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", users);
         }
-
         #endregion
 
         #region Project

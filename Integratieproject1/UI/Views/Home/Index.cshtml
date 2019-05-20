@@ -18,8 +18,8 @@
             <a class="btn btn-primary btn-lg" href="#projects" role="button" style="background-color: @Model.ButtonColor"><h2>Geef je idee!</h2></a>
             @if (ViewBag.hasIots == true)
             {
-                <br /><div class="text-center d-flex flex-row justify-content-center"> <a id="platformIoTIcon" class="btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
-                   asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform"><i class="fa fa-map-pin"></i></a>
+                <br /><div class=" text-center d-flex flex-row justify-content-center"> <a id="platformIoTIcon" class=" btn btn-lg btn-outline-primary text-center iotIcon" asp-controller="Home"
+                   asp-action="IoTMap" asp-route-id="@Model.PlatformId" asp-route-type="platform" data-toggle="tooltip" data-placement="top" title="IoT opstellingen"><i class="fa fa-map-pin"></i></a>
                       </div>
             }
 
@@ -68,10 +68,11 @@
                                         }
                                     }
                                 </div>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <p>@project.StartDate.ToString("d")</p>
-                                    <p>@project.EndDate.ToString("d")</p>
-
+                                <div class="projectDates">
+                                    <div class=" d-flex flex-row justify-content-between">
+                                        <div>@project.StartDate.ToString("d")</div>
+                                        <div>@project.EndDate.ToString("d")</div>
+                                    </div>
                                 </div>
                                 <a class="btn btn-primary" style="background-color: @Model.ButtonColor" asp-area=""
                                    asp-controller="Project"
@@ -117,8 +118,8 @@
                                     }
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
-                                    <p>@project.StartDate.ToString("d")</p>
-                                    <p>@project.EndDate.ToString("d")</p>
+                                    <div>@project.StartDate.ToString("d")</div>
+                                    <div>@project.EndDate.ToString("d")</div>
 
                                 </div>
                                 <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
@@ -167,8 +168,8 @@
                                     }
                                 </div>
                                 <div class="d-flex flex-row justify-content-between">
-                                    <p>@project.StartDate.ToString("d")</p>
-                                    <p>@project.EndDate.ToString("d")</p>
+                                    <div>@project.StartDate.ToString("d")</div>
+                                    <div>@project.EndDate.ToString("d")</div>
 
                                 </div>
                                 <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""

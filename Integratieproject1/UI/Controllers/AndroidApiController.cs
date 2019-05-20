@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Mvc;
-using Integratieproject1.DAL;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Http.Headers;
+using JWT;
+using JWT.Serializers;
+using JWT.Algorithms;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Platform = Integratieproject1.Domain.Projects.Platform;
 using Project = Integratieproject1.Domain.Projects.Project;
 
@@ -117,6 +126,7 @@ namespace Integratieproject1.UI.Controllers
 
         [HttpPost]
         [Route("/Api/vote")]
+        //public void AndroidVote([FromBody] int id)
         public void androidVote([FromHeader] int id, [FromHeader] String vote/*, [FromHeader] string userId*/)
         {
             Console.WriteLine(id);
@@ -131,7 +141,7 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-        #region surveys
+        #region Surveys
 
         [HttpGet]
         [Route("Api/surveys/{id}")]
@@ -156,31 +166,73 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
 
-
+        #region Tags
+        
         [HttpGet]
         [Route("Api/tags")]
-        public IEnumerable<Tag> getTags()
+        public IEnumerable<Tag> GetTags()
         {
             return _ideationsManager.GetAllTags().ToList();
         }
 
+        #endregion
+        
         #region Users
-
-        [HttpGet]
-        [Route("Api/users/{email}/{password}")]
-        public async Task<IdentityUser> GetUser(string email, string password)
-        {
-            var result = await _signInManager.PasswordSignInAsync(email, password, true, true);
-
-            return result.Succeeded ? _usersManager.GetUserByEmail(email) : null;
-        }
 
         [HttpGet]
         [Route("Api/users")]
         public IEnumerable<IdentityUser> GetUsers()
         {
-            var role = "userRole";
-            return _usersManager.GetUsers(role).ToList();
+            return _usersManager.GetUsers("USER");
+        }
+
+        [HttpGet]
+        [Route("Api/users/login")]
+        public async Task<CustomUser> SignIn([FromHeader(Name = "Username")] string username,
+            [FromHeader(Name = "Password")] string password)
+        {
+            byte[] decodedUsername = Convert.FromBase64String(username);
+            username = System.Text.Encoding.UTF8.GetString(decodedUsername);
+
+            byte[] decodedPassword = Convert.FromBase64String(password);
+            password = System.Text.Encoding.UTF8.GetString(decodedPassword);
+
+            CustomUser user = null;
+            
+            if (username.Contains("@"))
+            {
+                user = _usersManager.GetUserByEmail(username);
+            }
+            else
+            {
+                user = _usersManager.GetUserByUsername(username);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, password, true, true);
+            if (result.Succeeded)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        [Route("Api/users/update")]
+        public void UpdateUser([FromHeader(Name = "Username")] string username, [FromBody] UserUpdateValuesModel userUpdateValues)
+        {
+            var user = _usersManager.GetUserByUsername(username);
+
+            if (user != null)
+            {
+                user.Surname = userUpdateValues.Surname;
+                user.Name = userUpdateValues.LastName;
+                user.Sex = userUpdateValues.Sex;
+                user.Age = Int32.Parse(userUpdateValues.Age);
+                user.Zipcode = userUpdateValues.ZipCode;
+            
+                _usersManager.UpdateUser(user);
+            }
         }
 
         #endregion
