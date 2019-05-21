@@ -41,7 +41,7 @@ namespace Integratieproject1.DAL.Repositories
         public async void DeleteRole(CustomUser identityUser, string role)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.RemoveFromRoleAsync(identityUser, role);
+            await userManager.RemoveFromRoleAsync(identityUser, role);
         }
 
         public IEnumerable<CustomUser> GetUsers(string role)
@@ -51,13 +51,19 @@ namespace Integratieproject1.DAL.Repositories
         public async void GiveRole(CustomUser identityUser, string role)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.AddToRoleAsync(identityUser, role);
+            await userManager.AddToRoleAsync(identityUser, role);
         }
         
         public async void CreateUser(CustomUser identityUser)
         {
             UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
-            userManager.CreateAsync(identityUser);
+            await userManager.CreateAsync(identityUser);
+        }
+
+        public async void UpdateUser(CustomUser identityUser)
+        {
+            UserManager<CustomUser> userManager = new UserManager<CustomUser>(_userStore,null,null,null,null,null,null,null,null);
+            await userManager.UpdateAsync(identityUser);
         }
 
         public bool IsInRole(CustomUser user, string role)
@@ -101,6 +107,11 @@ namespace Integratieproject1.DAL.Repositories
         public CustomUser GetUserByEmail(string email)
         {            
             return _userStore.FindByEmailAsync(email.ToUpper()).Result;
+        }
+
+        public CustomUser GetUserByUsername(string username)
+        {
+            return _userStore.FindByNameAsync(username.ToUpper()).Result;
         }
 
         public string GetSurname(CustomUser customUser)

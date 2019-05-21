@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity;
@@ -24,6 +25,7 @@ using static Integratieproject1.DAL.MqttClient;
 using Newtonsoft.Json;
 using Integratieproject1.Domain.Users;
 using Integratieproject1.Services;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Integratieproject1
 {
@@ -34,7 +36,7 @@ namespace Integratieproject1
         {
             Configuration = configuration;
             MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
-        }
+        }    
 
         public IConfiguration Configuration { get; }
 
@@ -66,29 +68,12 @@ namespace Integratieproject1
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             }, ArrayPool<char>.Shared));
             });
-
+            
             // requires
             // using Microsoft.AspNetCore.Identity.UI.Services;
             // using WebPWrecover.Services;
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
-            // configure JWTSettings for AndroidAPI
-            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
-
-            services.AddAuthentication().AddJwtBearer(cfg =>
-            {
-                cfg.RequireHttpsMetadata = false;
-                cfg.SaveToken = true;
-
-                cfg.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidIssuer = Configuration["JWTSettings:Issuer"],
-                    ValidAudience = Configuration["JWTSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:SecretKey"]))
-                };
-
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +81,12 @@ namespace Integratieproject1
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // Uncomment when done testing
+//                app.UseDeveloperExceptionPage();
+
+                // Comment when done testing
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
             else
             {

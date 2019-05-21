@@ -108,6 +108,11 @@ namespace Integratieproject1.BL.Managers
         {
             _usersRepository.CreateUser(identityUser);
         }
+
+        public void UpdateUser(CustomUser identityUser)
+        {
+            _usersRepository.UpdateUser(identityUser);
+        }
         
         #region VerificationRequest
 
@@ -138,6 +143,11 @@ namespace Integratieproject1.BL.Managers
         public CustomUser GetUserByEmail(string email)
         {
             return _usersRepository.GetUserByEmail(email);
+        }
+
+        public CustomUser GetUserByUsername(string username)
+        {
+            return _usersRepository.GetUserByUsername(username);
         }
 
         public string GetSurname(CustomUser customUser)
