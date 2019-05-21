@@ -27,13 +27,13 @@
                 var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((Model.EndDate - Model.StartDate).TotalDays) * 100), 0);
                 if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
                 {
-                    <div id="btnPhase+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="progress-bar btnPhase" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                    <div id="btnPhase+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="progress-bar btnPhase" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="Bekijk de fase">
                         @phase.PhaseName
                     </div>
                 }
                 else
                 {
-                    <div id="btnPhase+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="progress-bar btnPhase" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                    <div id="btnPhase+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="progress-bar btnPhase" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top" title="Bekijk de fase">
                         @phase.PhaseName
                     </div>
                 }
@@ -51,7 +51,7 @@
         {
             <div class="text-center d-flex flex-row justify-content-center">
                 <a id="projectIoTIcon" class="btn btn-lg btn-outline-primary iotIcon text-center" asp-controller="Home"
-                   asp-action="IoTMap" asp-route-id="@Model.ProjectId" asp-route-type="project">
+                   asp-action="IoTMap" asp-route-id="@Model.ProjectId" asp-route-type="project" data-toggle="tooltip" data-placement="top" title="IoT opstellingen">
                     <i class="fa fa-map-pin"></i>
                 </a>
             </div>

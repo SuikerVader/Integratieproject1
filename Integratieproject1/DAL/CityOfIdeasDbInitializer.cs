@@ -59,8 +59,8 @@ namespace Integratieproject1.DAL
             {
                 PlatformName = "Antwerpen",
                 Description =
-                    "Bent u Antwerpenaar in hart en nieren? Wilt u meebeslissen bij bepaalde projecten in uw eigen stad?" +
-                    " Dan kan u hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
+                    "Bent u Antwerpenaar in hart en nieren? Beslis mee over uw stad!" +
+                    " U kan hier meestemmen op projecten in uw buurt en zelf je eigen ideeën plaatsen!",
                 Address = addressAntwerp,
                 Phonenumber = "0488643152",
                 BackgroundImage = "/images/uploads/BgImgAntwerp.jpg",
