@@ -21,7 +21,7 @@ namespace Integratieproject1.Areas.Identity
 
                 services.AddDefaultIdentity<CustomUser>(config =>
                 {
-                    config.SignIn.RequireConfirmedEmail = true;
+                    config.SignIn.RequireConfirmedEmail = false;
                 }).AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<CityOfIdeasDbContext>()
                     .AddUserManager<UserManager<CustomUser>>();
