@@ -35,159 +35,227 @@
         <br />
         <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
             @foreach (var project in Model.Projects)
-            {
+            { 
                 if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
                 {
-                    <div class="card text-center activeProject">
-                        <div class="card-body"
-                             @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-                            <div
-                                @if (Model.BackgroundImage != null)
-                                {
-                                    <text> class="jumbotronBackground" </text>
-                                }
-                            >
+                        <div class="card text-center activeProject ">
+                            <div class="projectGrid"
+                                 @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
+                                <div
+                                    @if (Model.BackgroundImage != null)
+                                    {
+                                        <text> class="jumbotronBackground project card" </text>
+                                    }
+                                    else
+                                    {
+                                        <text> class="project card" </text>
+                                    }
+                                >
                                 
-                                <h3 class="card-title">@project.ProjectName</h3>
-                                <p class="card-text">@project.Description</p>
-                                <div class="progress" style="height: 30px;">
+                                    <h3 class="card-title">@project.ProjectName</h3>
+                                    <p class="card-text">@project.Description</p>
+                                    <div class="progress" style="height: 30px;">
+                                        @foreach (var phase in project.Phases)
+                                        {
+                                            var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                            if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    <strong>@phase.PhaseName</strong>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    @phase.PhaseName
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="projectDates">
+                                        <div class=" d-flex flex-row justify-content-between">
+                                            <div>@project.StartDate.ToString("d")</div>
+                                            <div>@project.EndDate.ToString("d")</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-primary" style="background-color: @Model.ButtonColor" asp-area=""
+                                           asp-controller="Project"
+                                           asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                            Bekijk Project
+                                        </a> 
+                                    </div>
+                                    
+                                    <div style="border-top: solid 1px lightgray">
+                                        <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
+                                            <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                            <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                            <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div  @if (Model.BackgroundImage != null)
+                                      {
+                                          <text> class="jumbotronBackground projectIdea card" style="padding: 10px" </text>
+                                      }
+                                      else
+                                      {
+                                          <text> class="projectIdea card" </text>
+                                      }>
                                     @foreach (var phase in project.Phases)
                                     {
-                                        var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
                                         if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
                                         {
-                                            <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                <strong>@phase.PhaseName</strong>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                @phase.PhaseName
-                                            </div>
+                                                <h4 class="card-title">@phase.PhaseName</h4>
+                                                if (phase.Ideations != null && phase.Ideations.Count > 0)
+                                                {
+                                                    <h5>@phase.GetTopIdeation().CentralQuestion :</h5> 
+                                                    <div class="card" @*style="border-top: solid lightgray 2px; border-bottom: solid lightgray 2px;"*@ >
+                                                        <h6 >
+                                                            @phase.GetTopIdeation().GetTopIdea().Title
+                                                        </h6>
+                                                        <div >
+                                                            <a asp-controller="Project" asp-action="Idea" asp-route-ideaId="@phase.GetTopIdeation().GetTopIdea().IdeaId"
+                                                                    class="btn btn-sm" style="color: black" ><i class="fa fa-heart"></i> @phase.GetTopIdeation().GetTopIdea().Votes.Count</a>
+                                                            <a asp-controller="Project" asp-action="Idea" asp-route-ideaId="@phase.GetTopIdeation().GetTopIdea().IdeaId"
+                                                                    class="btn btn-primary btn-sm">Stem op dit idee!</a>
+                                                        </div>
+                                                        
+                                                    </div>  
+                                                    <div class="d-flex flex-row justify-content-center ">
+                                                        <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@phase.GetTopIdeation().IdeationId" 
+                                                                class="btn btn-primary">Bekijk andere!</a>
+                                                        <a asp-controller="Project" asp-action="Ideation" asp-route-ideationId="@phase.GetTopIdeation().IdeationId" class="btn btn-primary">Post jouw idee!</a>   
+                                                    </div>
+                                                    
+                                                } else if (phase.Surveys !=null && phase.Surveys.Count > 0)
+                                                {
+                                                    <h5>@phase.GetFirstSurvey().Title :</h5> 
+                                                    <div class="card" @*style="border-top: solid lightgray 2px; border-bottom: solid lightgray 2px;"*@ >
+                                                        <h6>
+                                                            @phase.GetFirstSurvey().Questions.First().QuestionText
+                                                        </h6>
+                                                        <div>
+                                                            <a asp-controller="Project" asp-action="Survey" asp-route-surveyId="@phase.GetFirstSurvey().SurveyId" 
+                                                                    class="btn btn-primary btn-sm"> Geef je antwoord!</a>  
+                                                        </div>
+                                                        
+                                                    </div>  
+                                                    <div class="d-flex flex-row justify-content-center ">
+                                                        <a asp-controller="Project" asp-action="Survey" asp-route-surveyId="@phase.GetFirstSurvey().SurveyId"
+                                                                class="btn btn-primary">Bekijk andere vragen!</a>  
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex flex-column justify-content-center" style="height: 100%">
+                                                     <p>Er staat nog niets in deze fase. <br/> Kom zeker later nog eens kijken!</p>   
+                                                    </div>
+                                                    
+                                                }
                                         }
                                     }
                                 </div>
-                                <div class="projectDates">
-                                    <div class=" d-flex flex-row justify-content-between">
-                                        <div>@project.StartDate.ToString("d")</div>
-                                        <div>@project.EndDate.ToString("d")</div>
-                                    </div>
-                                </div>
-                                <a class="btn btn-primary" style="background-color: @Model.ButtonColor" asp-area=""
-                                   asp-controller="Project"
-                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                    Bekijk Project
-                                </a>
-                                <div style="border-top: solid 1px lightgray">
-                                    <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
-                                    </div>
-                                </div>
-                            </div>
 
+                            </div>
                         </div>
-                    </div>
                 }
                 else if (DateTime.Now > project.EndDate)
                 {
-                    <div class="card text-center closedProject">
-                        <div class="card-body"
-                             @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-                            <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
-                                <h3 class="card-title">@project.ProjectName</h3>
-                                <h5 class="card-text">@project.Description</h5>
-                                <div class="progress" style="height: 30px">
-                                    @foreach (var phase in project.Phases)
-                                    {
-                                        var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                        if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                        <div class="card text-center closedProject">
+                            <div class="card-body"
+                                 @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
+                                <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+                                    <h3 class="card-title">@project.ProjectName</h3>
+                                    <h5 class="card-text">@project.Description</h5>
+                                    <div class="progress" style="height: 30px">
+                                        @foreach (var phase in project.Phases)
                                         {
-                                            <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                <strong>@phase.PhaseName</strong>
-                                            </div>
+                                            var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                            if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    <strong>@phase.PhaseName</strong>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    @phase.PhaseName
+                                                </div>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                @phase.PhaseName
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <div>@project.StartDate.ToString("d")</div>
-                                    <div>@project.EndDate.ToString("d")</div>
-
-                                </div>
-                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                                   asp-controller="Project"
-                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                    Bekijk Project
-                                </a>
-                                <div style="border-top: solid 1px lightgray">
-                                    <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
                                     </div>
-                                </div>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <div>@project.StartDate.ToString("d")</div>
+                                        <div>@project.EndDate.ToString("d")</div>
+
+                                    </div>
+                                    <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                       asp-controller="Project"
+                                       asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                        Bekijk Project
+                                    </a>
+                                    <div style="border-top: solid 1px lightgray">
+                                        <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
+                                            <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                            <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                            <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
+                                        </div>
+                                    </div>
                                 
-                            </div>
+                                </div>
 
                             
+                            </div>
                         </div>
-                    </div>
                 }
                 else if (DateTime.Now < project.StartDate)
                 {
-                    <div class="card text-center futureProject">
-                        <div class="card-body"
-                             @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
-                            <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
-                                <h3 class="card-title">@project.ProjectName</h3>
-                                <h5 class="card-text">@project.Description</h5>
-                                <div class="progress" style="height: 30px">
-                                    @foreach (var phase in project.Phases)
-                                    {
-                                        var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
-                                        if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                        <div class="card text-center futureProject">
+                            <div class="card-body"
+                                 @if (project.BackgroundImage != null) { <text> style="background-image: url(@project.BackgroundImage); background-position: center; background-repeat: no-repeat; background-size: cover;" </text>  }>
+                                <div @if (Model.BackgroundImage != null) { <text> class="jumbotronBackground" </text>  }>
+                                    <h3 class="card-title">@project.ProjectName</h3>
+                                    <h5 class="card-text">@project.Description</h5>
+                                    <div class="progress" style="height: 30px">
+                                        @foreach (var phase in project.Phases)
                                         {
-                                            <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                <strong>@phase.PhaseName</strong>
-                                            </div>
+                                            var phaseWidth = Math.Round((((phase.EndDate - phase.StartDate).TotalDays) / ((project.EndDate - project.StartDate).TotalDays) * 100), 0);
+                                            if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
+                                            {
+                                                <div class="progress-bar " role="progressbar" style="width: @phaseWidth%; background-color: #007bff" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    <strong>@phase.PhaseName</strong>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                    @phase.PhaseName
+                                                </div>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <div class="progress-bar" role="progressbar" style="width: @phaseWidth%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                                @phase.PhaseName
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <div>@project.StartDate.ToString("d")</div>
-                                    <div>@project.EndDate.ToString("d")</div>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <div>@project.StartDate.ToString("d")</div>
+                                        <div>@project.EndDate.ToString("d")</div>
 
-                                </div>
-                                <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
-                                   asp-controller="Project"
-                                   asp-action="Project" asp-route-projectId="@project.ProjectId">
-                                    Bekijk Project
-                                </a>
-                                <div style="border-top: solid 1px lightgray">
-                                    <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
-                                        <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
-                                        <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
-                                        <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
+                                    </div>
+                                    <a class="btn btn-primary"  style="background-color:@Model.ButtonColor" asp-area=""
+                                       asp-controller="Project"
+                                       asp-action="Project" asp-route-projectId="@project.ProjectId">
+                                        Bekijk Project
+                                    </a>
+                                    <div style="border-top: solid 1px lightgray">
+                                        <div class="d-flex flex-row justify-content-around" style="padding-top: 5px">
+                                            <p><i class="fa fa-lightbulb-o"></i> @project.GetIdeaCount()</p>
+                                            <p><i class="fa fa-heart"></i> @project.GetVoteCount()</p>
+                                            <p><i class="fa fa-comment"></i> @project.GetReactionCount()</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
-                    </div>
                 }
             }
         </div>

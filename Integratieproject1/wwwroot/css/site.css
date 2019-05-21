@@ -293,7 +293,38 @@ body {
                 "reaction reactionButtons"
     }
 }
+.projectGrid {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+            "project"
+            "projectIdea"
 
+}
+.project{
+    grid-area: project;
+}
+.projectIdea {
+    grid-area: projectIdea;
+
+}
+.projectIdea * {
+    padding: 5px;
+}
+
+
+@media screen and (min-width: 1200px){
+    .projectGrid {
+        grid-template-columns: 2fr minmax(auto,1fr) ;
+        grid-template-rows: auto;
+        grid-template-areas:
+                "project projectIdea"
+    }
+}
 .adminGrid {
     padding-top: 20px;
     height: 100%;
