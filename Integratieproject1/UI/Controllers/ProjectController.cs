@@ -291,10 +291,17 @@ namespace Integratieproject1.UI.Controllers
 
             Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
             ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
-            ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+            return View("/UI/Views/Project/AddIdea.cshtml", idea);
         }
+        [HttpPost]
+        public IActionResult AddIdea(Idea idea, int ideaId, int ideationId)
+        {
+            _ideationsManager.EditIdea(idea, ideaId);
+            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
 
+            ViewBag.tags = _ideationsManager.GetTags(returnIdea.IdeaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", returnIdea);
+        }
         public IActionResult EditIdea(int ideaId)
         {
             Idea idea = _ideationsManager.GetIdea(ideaId);
@@ -456,6 +463,7 @@ namespace Integratieproject1.UI.Controllers
             _userManager.AskVerify(currentUserId);
             return RedirectToAction("Index", "Home");
         }
+
         
     }
 }
