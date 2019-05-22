@@ -212,7 +212,7 @@ namespace Integratieproject1.UI.Controllers
 
         public IActionResult UserIdeas(string sortOrder, string searchString)
         {
-            ClaimsPrincipal currentUser = User;
+            ClaimsPrincipal  currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUser(currentUserId);
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
