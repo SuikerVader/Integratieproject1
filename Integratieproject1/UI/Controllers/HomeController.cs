@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
 using Integratieproject1.Services;
@@ -206,6 +208,28 @@ namespace Integratieproject1.UI.Controllers
             }
 
             return View("/UI/Views/Home/IoTMap.cshtml", ioTSetups); 
+        }
+
+        public IActionResult UserIdeas(string sortOrder, string searchString)
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUser(currentUserId);
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["IdeationSortParm"] = sortOrder == "Ideation" ? "ideation_desc" : "Ideation";
+            ViewData["PhaseSortParm"] = sortOrder == "Phase" ? "phase_desc" : "Phase";
+            ViewData["ProjectSortParm"] = sortOrder == "Project" ? "project_desc" : "Project";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                ideas = ideas.Where(i => i.Title.ToLower().Contains(searchString)
+                                               || i.Ideation.CentralQuestion.ToLower().Contains(searchString)
+                                               || i.Ideation.Phase.PhaseName.ToLower().Contains(searchString)
+                                               || i.Ideation.Phase.Project.ProjectName.ToLower().Contains(searchString));
+            }
+
+            return View("/UI/Views/Home/UserIdeas.cshtml", ideas.ToList());
         }
     }
 }

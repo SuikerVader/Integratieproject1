@@ -142,26 +142,14 @@
     </div>
 </div>
 <div class="container">
-    @*<div class="d-flex flex-row flex-wrap justify-content-center">
-            @foreach (var phase in Model.Phases)
-            {
-                if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
-                {
-                    <button  class="btn btn-primary btnPhase">@phase.PhaseName</button>
-                }
-                else
-                {
-                    <button id="btnPhase+@phase.PhaseId.ToString()" onclick="displayPhase('btnPhase+' + @phase.PhaseId.ToString())" class="btn btn-secondary btnPhase">@phase.PhaseName</button>
-                }
-            }
-        </div>*@
     @foreach (var phase in Model.Phases)
     {
         if (DateTime.Now >= phase.StartDate && DateTime.Now <= phase.EndDate)
         {
             <div id="phase+@phase.PhaseId.ToString()" class="phase" style="display: block">
-
-                <div class="d-flex flex-row flex-wrap justify-content-around">
+                @if ((phase.Surveys != null && phase.Surveys.Count > 0) || (phase.Ideations != null && phase.Ideations.Count > 0))
+                {
+                 <div class="d-flex flex-row flex-wrap justify-content-around">
                     @foreach (var survey in phase.Surveys)
                     {
                         <div class="card text-center phaseObject">
@@ -206,7 +194,18 @@
                             </div>
                         </div>
                     }
-                </div>
+                </div>   
+                }
+                else
+                {
+                    <div class="d-flex flex-row justify-content-center" style="height: 100%">
+                        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%">
+                            <div style="font-size: 24px" ><i class="fa fa-frown-o fa-5x"></i></div>
+                            <p>Er staat nog niets in deze fase. Kom zeker later nog eens kijken!</p>
+                        </div>
+                    </div>
+                }
+                
 
 
             </div>
@@ -214,70 +213,66 @@
         else
         {
             <div id="phase+@phase.PhaseId.ToString()" class="phase" style="display: none">
-                @*<div class="d-flex flex-row flex-wrap justify-content-center ">
-                    <div class="card text-center" style="width: 75%; border-left: none; border-right: none; border-bottom: none;">
-                        <div class="card-body">
-                            <h5 class="card-title">@phase.PhaseName</h5>
-                            <p class="card-text">@phase.Description</p>
-                            <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" style="width: 100%; background-color: #007bff" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                @if ((phase.Surveys != null && phase.Surveys.Count > 0) || (phase.Ideations != null && phase.Ideations.Count > 0))
+                {
+                    <div class="d-flex flex-row flex-wrap justify-content-around">
+                        @foreach (var survey in phase.Surveys)
+                        {
+                            <div class="card text-center phaseObject ">
+                                <div class="card-body d-flex flex-column justify-content-center">
+                                    <h5 class="card-title">@survey.Title</h5>
+                                    <div>
+                                        <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
+                                           asp-controller="Project"
+                                           asp-action="Survey" asp-route-surveyId="@survey.SurveyId">
+                                            Geef je input!
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="d-flex flex-row justify-content-between">
-                                <p>@phase.StartDate.ToString("d")</p>
-                                <p>@phase.EndDate.ToString("d")</p>
+                        }
+                        @foreach (var ideation in phase.Ideations)
+                        {
+                            <div class="card text-center phaseObject">
+                                <div class="card-body">
+                                    <h5 class="card-title">@ideation.CentralQuestion</h5>
+
+                                    @if (ideation.InputIdeation == true)
+                                    {
+                                        <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
+                                           asp-controller="Project"
+                                           asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
+                                            Geef je idee!
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
+                                           asp-controller="Project"
+                                           asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
+                                            Stem voor je favoriet!
+                                        </a>
+                                    }
+
+
+                                </div>
+                                <div class="card-footer">
+                                    <i class="fa fa-lightbulb-o"></i> @ideation.Ideas.Count
+                                </div>
                             </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex flex-row justify-content-center" style="height: 100%">
+                        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%">
+                            <div style="font-size: 24px" ><i class="fa fa-frown-o fa-5x"></i></div>
+                            <p>Er staat nog niets in deze fase. Kom zeker later nog eens kijken!</p>
                         </div>
                     </div>
-                </div>*@
-                <div class="d-flex flex-row flex-wrap justify-content-around">
-                    @foreach (var survey in phase.Surveys)
-                    {
-                        <div class="card text-center phaseObject ">
-                            <div class="card-body d-flex flex-column justify-content-center">
-                                <h5 class="card-title">@survey.Title</h5>
-                                <div>
-                                    <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
-                                       asp-controller="Project"
-                                       asp-action="Survey" asp-route-surveyId="@survey.SurveyId">
-                                        Geef je input!
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
-                    @foreach (var ideation in phase.Ideations)
-                    {
-                        <div class="card text-center phaseObject">
-                            <div class="card-body">
-                                <h5 class="card-title">@ideation.CentralQuestion</h5>
-
-                                @if (ideation.InputIdeation == true)
-                                {
-                                    <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
-                                       asp-controller="Project"
-                                       asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
-                                        Geef je idee!
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-primary" style="background-color: @Model.Platform.ButtonColor" asp-area=""
-                                       asp-controller="Project"
-                                       asp-action="Ideation" asp-route-ideationId="@ideation.IdeationId">
-                                        Stem voor je favoriet!
-                                    </a>
-                                }
-
-
-                            </div>
-                            <div class="card-footer">
-                                <i class="fa fa-lightbulb-o"></i> @ideation.Ideas.Count
-                            </div>
-                        </div>
-                    }
-                </div>
+                }
             </div>
         }
     }
