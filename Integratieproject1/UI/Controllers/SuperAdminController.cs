@@ -35,6 +35,28 @@ namespace Integratieproject1.UI.Controllers
         {
             return View("/UI/Views/SuperAdmin/SuperAdmin.cshtml", user);
         }
+        private string GetImagePath(IFormFile file)
+        {
+            string wwwroot = "wwwroot/";
+            string uploads = "/images/uploads/";
+            string path = wwwroot + uploads;
+
+            if (file.Length > 0)
+            {
+                string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                return Path.Combine(uploads, imagePath);
+            }
+
+            return null;
+        }
+
+        #region Admins
 
         public IActionResult Admins(string sortOrder, string searchString)
         {
@@ -49,9 +71,9 @@ namespace Integratieproject1.UI.Controllers
             {
                 searchString = searchString.ToLower();
                 admins = admins.Where(u => u.UserName.ToLower().Contains(searchString)
-                                       || u.Surname.ToLower().Contains(searchString)
-                                       || u.Name.ToLower().Contains(searchString)
-                                       || u.Email.ToLower().Contains(searchString));
+                                           || u.Surname.ToLower().Contains(searchString)
+                                           || u.Name.ToLower().Contains(searchString)
+                                           || u.Email.ToLower().Contains(searchString));
             }
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins.ToList());
         }
@@ -70,7 +92,11 @@ namespace Integratieproject1.UI.Controllers
             IList<CustomUser> admins = _usersManager.GetUsers("ADMIN");
             return View("/UI/Views/SuperAdmin/Admins.cshtml", admins);
         }
-        
+
+
+        #endregion
+
+        #region Users
         public IActionResult Users(string sortOrder, string searchString)
         {
             IEnumerable<CustomUser> users = _usersManager.GetUsersBySort("USER", sortOrder);
@@ -84,9 +110,9 @@ namespace Integratieproject1.UI.Controllers
             {
                 searchString = searchString.ToLower();
                 users = users.Where(u => u.UserName.ToLower().Contains(searchString)
-                                       || u.Surname.ToLower().Contains(searchString)
-                                       || u.Name.ToLower().Contains(searchString)
-                                       || u.Email.ToLower().Contains(searchString));
+                                         || u.Surname.ToLower().Contains(searchString)
+                                         || u.Name.ToLower().Contains(searchString)
+                                         || u.Email.ToLower().Contains(searchString));
             }
             return View("/UI/Views/SuperAdmin/Users.cshtml", users.ToList());
         }
@@ -105,30 +131,9 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/Users.cshtml", users);
         }
         
-        public IActionResult AdminProjects(string adminId, string sortOrder, string searchString)
-        {
-            IEnumerable<AdminProject> adminProjects = _projectsManager.GetAllAdminProjectsBySort(adminId, sortOrder).ToList();
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
-            ViewData["StartDateSortParm"] = sortOrder == "StartDate" ? "startdate_desc" : "StartDate";
-            ViewData["EndDateSortParm"] = sortOrder == "EndDate" ? "enddate_desc" : "EndDate";
-            ViewData["PlatformSortParm"] = sortOrder == "Platform" ? "platform_desc" : "Platform";
-            ViewData["CurrentFilter"] = searchString;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                adminProjects = adminProjects.Where(p => p.Project.ProjectName.ToLower().Contains(searchString)
-                                       || p.Project.Status.ToLower().Contains(searchString)
-                                       || p.Project.Platform.PlatformName.ToLower().Contains(searchString));
-            }
-            return View("/UI/Views/SuperAdmin/AdminProjects.cshtml", adminProjects.ToList());
-        }
-        
-        public IActionResult DeleteAdminProject(int adminProjectId)
-        {
-            _projectsManager.DeleteAdminProject(adminProjectId);
-            return RedirectToAction("Index", "Home");
-        }
+        #endregion
+
+        #region Projects
         public IActionResult Projects(string sortOrder, string searchString)
         {
             IEnumerable<Project> projects = _projectsManager.GetAllProjectsBySort(sortOrder);
@@ -200,26 +205,7 @@ namespace Integratieproject1.UI.Controllers
             IList<Project> projects = _projectsManager.GetAllProjects();
             return View("/UI/Views/SuperAdmin/Projects.cshtml", projects);
         }
-        private string GetImagePath(IFormFile file)
-        {
-            string wwwroot = "wwwroot/";
-            string uploads = "/images/uploads/";
-            string path = wwwroot + uploads;
-
-            if (file.Length > 0)
-            {
-                string imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
-
-                using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
-
-                return Path.Combine(uploads, imagePath);
-            }
-
-            return null;
-        }
+        
         public IActionResult DeleteBackgroundImageProject(int projectId)
         {
             _projectsManager.DeleteBackgroundImageProject(projectId);
@@ -227,6 +213,66 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/EditProject.cshtml", returnProject);
         }
 
+
+        #region AdminProjects
+        public IActionResult AdminProjects(string adminId, string sortOrder, string searchString)
+        {
+            IEnumerable<AdminProject> adminProjects = _projectsManager.GetAllAdminProjectsBySort(adminId, sortOrder).ToList();
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
+            ViewData["StartDateSortParm"] = sortOrder == "StartDate" ? "startdate_desc" : "StartDate";
+            ViewData["EndDateSortParm"] = sortOrder == "EndDate" ? "enddate_desc" : "EndDate";
+            ViewData["PlatformSortParm"] = sortOrder == "Platform" ? "platform_desc" : "Platform";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                adminProjects = adminProjects.Where(p => p.Project.ProjectName.ToLower().Contains(searchString)
+                                                         || p.Project.Status.ToLower().Contains(searchString)
+                                                         || p.Project.Platform.PlatformName.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/SuperAdmin/AdminProjects.cshtml", adminProjects.ToList());
+        }
+        
+        public IActionResult DeleteAdminProject(int adminProjectId)
+        {
+            _projectsManager.DeleteAdminProject(adminProjectId);
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult AddAdminsToProject(int projectId, string sortOrder, string searchString)
+        {
+            IEnumerable<CustomUser> admins = _projectsManager.GetNotProjectAdminsBySort(projectId, sortOrder);
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                admins = admins.Where(u => u.UserName.ToLower().Contains(searchString)
+                                           || u.Surname.ToLower().Contains(searchString)
+                                           || u.Name.ToLower().Contains(searchString)
+                                           || u.Email.ToLower().Contains(searchString));
+            }
+            ViewBag.ProjectId = projectId;
+            return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins.ToList());
+        }
+
+        public IActionResult AddAdminProjects(int projectId, string adminId)
+        {
+            _projectsManager.CreateAdminProject(projectId, adminId);
+            IList<CustomUser> admins = _projectsManager.GetNotProjectAdmins(projectId);
+            ViewBag.ProjectId = projectId;
+            return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Platforms
         public IActionResult Platforms(string sortOrder, string searchString)
         {
             IEnumerable<Platform> platforms = _projectsManager.GetAllPlatformsBySort(sortOrder);
@@ -240,7 +286,6 @@ namespace Integratieproject1.UI.Controllers
             }
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms.ToList());
         }
-
         public IActionResult DeletePlatform(int platformId)
         {
             _projectsManager.DeletePlatform(platformId);
@@ -311,36 +356,6 @@ namespace Integratieproject1.UI.Controllers
             IList<Platform> platforms = _projectsManager.GetAllPlatforms();
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
-
-        public IActionResult AddAdminsToProject(int projectId, string sortOrder, string searchString)
-        {
-            IEnumerable<CustomUser> admins = _projectsManager.GetNotProjectAdminsBySort(projectId, sortOrder);
-            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
-            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
-            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
-            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
-            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
-            ViewData["CurrentFilter"] = searchString;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                admins = admins.Where(u => u.UserName.ToLower().Contains(searchString)
-                                       || u.Surname.ToLower().Contains(searchString)
-                                       || u.Name.ToLower().Contains(searchString)
-                                       || u.Email.ToLower().Contains(searchString));
-            }
-            ViewBag.ProjectId = projectId;
-            return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins.ToList());
-        }
-
-        public IActionResult AddAdminProjects(int projectId, string adminId)
-        {
-            _projectsManager.CreateAdminProject(projectId, adminId);
-            IList<CustomUser> admins = _projectsManager.GetNotProjectAdmins(projectId);
-            ViewBag.ProjectId = projectId;
-            return View("/UI/Views/SuperAdmin/AddAdminsToProject.cshtml", admins);
-        }
-
         public IActionResult EditLayout(int platformId)
         {
             Platform platform = _projectsManager.GetPlatform(platformId);
@@ -359,5 +374,7 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/SuperAdmin/Platforms.cshtml", platforms);
         }
 
+        #endregion
+    
     }
 }

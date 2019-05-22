@@ -180,6 +180,7 @@ namespace Integratieproject1.UI.Controllers
             
         }
 
+
         public IActionResult IoTMap(int id, string type)
         {
             List<IoTSetup> ioTSetups = new List<IoTSetup>();

@@ -30,23 +30,13 @@ namespace Integratieproject1.BL.Managers
             _usersRepository = new UsersRepository(_unitOfWorkManager.UnitOfWork);
         }
 
+        #region User
+
+        #region Gets
         public CustomUser GetUser(string userId)
         {
             return _usersRepository.GetUser(userId);
         }
-        
-        public void DeleteUser(string userId)
-        {
-            CustomUser identityUser = GetUser(userId);
-            _usersRepository.DeleteUser(identityUser);
-        }
-
-        public void DeleteRole(string userId, string role)
-        {
-            CustomUser identityUser = GetUser(userId);
-            _usersRepository.DeleteRole(identityUser, role);
-        }
-        
         public IList<CustomUser> GetUsers(string role)
         {
             return _usersRepository.GetUsers(role).ToList();
@@ -90,56 +80,6 @@ namespace Integratieproject1.BL.Managers
             }
             return users.ToList();
         }
-
-        public void GiveRole(string userId, string role)
-        {
-            CustomUser identityUser = GetUser(userId);
-            _usersRepository.DeleteRole(identityUser, "USER");
-            _usersRepository.GiveRole(identityUser, role);
-        }
-        
-        public bool IsInRole(string userId, string role)
-        {
-            CustomUser identityUser = GetUser(userId);
-            return _usersRepository.IsInRole(identityUser, role);
-        }
-
-        public void CreateUser(CustomUser identityUser)
-        {
-            _usersRepository.CreateUser(identityUser);
-        }
-
-        public void UpdateUser(CustomUser identityUser)
-        {
-            _usersRepository.UpdateUser(identityUser);
-        }
-        
-        #region VerificationRequest
-
-        public void AskVerify(string userId)
-        {
-            CustomUser user = GetUser(userId);
-            _usersRepository.AskVerifyAsync(user);
-        }
-
-        public void Verify(string userId)
-        {
-            CustomUser user = GetUser(userId);
-            _usersRepository.Verify(user);
-        }
-
-        public IList<CustomUser> GetRequests()
-        {
-            return _usersRepository.GetRequests();
-        }
-        #endregion
-
-        public void BlockUser(string userId, int days)
-        {
-            CustomUser identityUser = GetUser(userId);
-            _usersRepository.BlockUser(identityUser, days);
-        }
-
         public CustomUser GetUserByEmail(string email)
         {
             return _usersRepository.GetUserByEmail(email);
@@ -174,5 +114,74 @@ namespace Integratieproject1.BL.Managers
         {
             return _usersRepository.GetZipcode(customUser);
         }
+
+        #endregion
+        
+        public void BlockUser(string userId, int days)
+        {
+            CustomUser identityUser = GetUser(userId);
+            _usersRepository.BlockUser(identityUser, days);
+        }
+        public void CreateUser(CustomUser identityUser)
+        {
+            _usersRepository.CreateUser(identityUser);
+        }
+
+        public void UpdateUser(CustomUser identityUser)
+        {
+            _usersRepository.UpdateUser(identityUser);
+        }
+
+        public void DeleteUser(string userId)
+        {
+            CustomUser identityUser = GetUser(userId);
+            _usersRepository.DeleteUser(identityUser);
+        }
+        #endregion
+
+        #region Roles
+        public void GiveRole(string userId, string role)
+        {
+            CustomUser identityUser = GetUser(userId);
+            _usersRepository.DeleteRole(identityUser, "USER");
+            _usersRepository.GiveRole(identityUser, role);
+        }
+        
+        public bool IsInRole(string userId, string role)
+        {
+            CustomUser identityUser = GetUser(userId);
+            return _usersRepository.IsInRole(identityUser, role);
+        }
+        public void DeleteRole(string userId, string role)
+        {
+            CustomUser identityUser = GetUser(userId);
+            _usersRepository.DeleteRole(identityUser, role);
+        }
+
+        #endregion
+
+        #region VerificationRequest
+
+        public void AskVerify(string userId)
+        {
+            CustomUser user = GetUser(userId);
+            _usersRepository.AskVerifyAsync(user);
+        }
+
+        public void Verify(string userId)
+        {
+            CustomUser user = GetUser(userId);
+            _usersRepository.Verify(user);
+        }
+
+        public IList<CustomUser> GetRequests()
+        {
+            return _usersRepository.GetRequests();
+        }
+        #endregion
+
+        
+
+       
     }
 }

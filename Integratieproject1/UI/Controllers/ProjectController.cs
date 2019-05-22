@@ -41,6 +41,8 @@ namespace Integratieproject1.UI.Controllers
             _ioTManager = new IoTManager();
         }
 
+        #region Project
+
         public IActionResult Project(int projectId, string platformName)
         {
             try
@@ -72,6 +74,9 @@ namespace Integratieproject1.UI.Controllers
                 
         }
 
+        #endregion
+
+        #region Ideation
         public IActionResult Ideation(int ideationId)
         {
             Ideation ideation = _ideationsManager.GetIdeation(ideationId);
@@ -88,11 +93,10 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Project/Ideation.cshtml", ideation);
         }
 
-        public IActionResult Survey(int surveyId)
-        {
-            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
-            return View("/UI/Views/Project/Survey.cshtml", survey);
-        }
+
+        #endregion
+        
+        #region Idea
 
         public IActionResult Idea(int ideaId)
         {
@@ -109,6 +113,342 @@ namespace Integratieproject1.UI.Controllers
 
             return View("/UI/Views/Project/Idea.cshtml", idea);
         }
+        
+        public IActionResult CreateIdea(int ideationId)
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
+            ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
+            return View("/UI/Views/Project/AddIdea.cshtml", idea);
+        }
+        [HttpPost]
+        public IActionResult AddIdea(Idea idea, int ideaId, int ideationId)
+        {
+            _ideationsManager.EditIdea(idea, ideaId);
+            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
+
+            ViewBag.tags = _ideationsManager.GetTags(returnIdea.IdeaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", returnIdea);
+        }
+        public IActionResult EditIdea(int ideaId)
+        {
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        [HttpPost]
+        public IActionResult EditIdea(Idea idea, int ideaId, int ideationId)
+        {
+            _ideationsManager.EditIdea(idea, ideaId);
+            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
+            if (User.Identity.IsAuthenticated)
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, ideaId);
+                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, ideaId);
+                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, ideaId);
+            }
+            
+            return View("/UI/Views/Project/Idea.cshtml", returnIdea);
+        }
+        public IActionResult DeleteIdea(int ideaId, int ideationId)
+        {
+            _ideationsManager.DeleteIdea(ideaId);
+            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
+            return View("/UI/Views/Project/Ideation.cshtml", ideation);
+        }
+        
+        public IActionResult CreateVote(int ideaId, VoteType voteType)
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            _ideationsManager.CreateVote(ideaId, voteType, currentUserId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, ideaId);
+            ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, ideaId);
+            ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, ideaId);
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
+        
+        public IActionResult ViewOtherIdea(int newIdeaId, int otherIdeaId)
+        {
+            _ideationsManager.DeleteIdea(newIdeaId);
+            Idea idea = _ideationsManager.GetIdea(otherIdeaId);
+            if (User.Identity.IsAuthenticated)
+            {
+                ClaimsPrincipal currentUser = User;
+                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, otherIdeaId);
+                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, otherIdeaId);
+                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, otherIdeaId);
+            }
+            return View("/UI/Views/Project/Idea.cshtml", idea);
+        }
+
+        #region Tags
+
+        public IActionResult AddTag(int ideaId, Tag tag)
+        {
+            _ideationsManager.CreateIdeaTag(ideaId, tag.TagId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult RemoveIdeaTag(int ideaTagId, int ideaId)
+        {
+            _ideationsManager.DeleteIdeaTag(ideaTagId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        #endregion
+
+        #region Position
+        public IActionResult AddPosition(Position position, int ideaId)
+        {
+            _ideationsManager.AddPosition(position, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult EditPosition(Position position, int positionId, int ideaId)
+        {
+            _dataTypeManager.EditPosition(position,positionId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult DeletePosition(int positionId, int ideaId)
+        {
+            _ideationsManager.DeleteLocationFromIdea(ideaId, positionId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+
+        #endregion
+
+        #region IdeaObjects
+        public IActionResult OrderNrUp(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult OrderNrDown(int ideaObjectId, int ideaId)
+        {
+            _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        #region TextFields
+
+        public IActionResult AddTextField(TextField textField, int ideaId)
+        {
+            _ideationsManager.AddTextField(textField, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult EditTextField(TextField textField, int ideaId, int textFieldId)
+        {
+            _ideationsManager.EditTextField(textField, textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult DeleteTextField(int textFieldId, int ideaId)
+        {
+            _ideationsManager.DeleteTextField(textFieldId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        
+
+        #endregion
+
+        #region Videos
+        public IActionResult AddVideo(Video video, int ideaId)
+        {
+            _ideationsManager.AddVideo(video, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        public IActionResult DeleteVideo(int videoId, int ideaId)
+        {
+            _ideationsManager.DeleteVideo(videoId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+
+        #endregion
+
+        #region Images
+        public IActionResult AddImage(IFormFile formFile, int ideaId)
+        {
+            UploadImage(formFile, ideaId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+
+        public IActionResult DeleteImage(int imageId, int ideaId)
+        {
+            _ideationsManager.DeleteImage(imageId);
+            Idea idea = _ideationsManager.GetIdea(ideaId);
+            ViewBag.tags = _ideationsManager.GetTags(ideaId);
+            return View("/UI/Views/Project/EditIdea.cshtml", idea);
+        }
+        private void UploadImage(IFormFile formFile, int ideaId)
+        {
+            string wwwroot = "wwwroot/";
+            string uploads = "/images/uploads/";
+            string path = wwwroot + uploads;
+
+            
+            if (formFile.Length > 0)
+            {
+                string imagePath = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
+                {
+                    formFile.CopyTo(fileStream);
+                }
+
+                _ideationsManager.CreateImage(Path.GetFileName(formFile.FileName), Path.Combine(uploads, imagePath),
+                    ideaId);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #region Survey
+
+        public IActionResult Survey(int surveyId)
+        {
+            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Project/Survey.cshtml", survey);
+        }
+        [HttpPost]
+        public IActionResult SaveSurveyFormData(IFormCollection formCollection, int surveyId)
+        {
+            ArrayList answers = new ArrayList();
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
+            {
+                try
+                {
+                    if (_surveysManager.IsEmail(surveyId, Convert.ToInt32(pair.Key)))
+                    {
+                        var apiKey = "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";
+                        var client = new SendGridClient(apiKey);
+                        var msg = new SendGridMessage()
+                        {
+                            From = new EmailAddress("CityOfIdeas@coi.com", "City Of Ideas"),
+                            Subject = "Register",
+                            PlainTextContent = "Hi!",
+                            HtmlContent = "<strong>Thanks for filling in our survey! If you're interested in future projects and would like to be up to date then you can register here: https://localhost:44305/Identity/Account/Register </strong>"
+                        };
+                        msg.AddTo(new EmailAddress(pair.Value));
+                        client.SendEmailAsync(msg);
+                    }
+                    answers.Add(pair.Value);
+                }
+                catch
+                {
+
+                }
+            }
+
+            _surveysManager.UpdateAnswers(answers, surveyId);
+            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
+            Project project = _projectsManager.GetProject(survey.Phase.Project.ProjectId);
+            return View("/UI/Views/Project/Project.cshtml", project);
+        }
+
+        #endregion
+
+        #region Reactions
+        [HttpPost]
+        public IActionResult PostReaction(IFormCollection formCollection, int id, string element)
+        {
+            ArrayList parameters = new ArrayList();
+            foreach (KeyValuePair<string, StringValues> pair in formCollection)
+            {
+                parameters.Add(pair.Value);
+            }
+
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            _ideationsManager.PostReaction(parameters, id, currentUserId, element);
+            if (element.Equals("idea"))
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, id);
+                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, id);
+                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, id);
+                return View("/UI/Views/Project/Idea.cshtml", idea);
+            }
+            else if (element.Equals("ideation"))
+
+            {
+                Domain.Ideations.Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+            else
+            {
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+        }
+        
+        public IActionResult LikeReaction(int id, string type, int reactionId)
+        {
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            _ideationsManager.LikeReaction(reactionId, currentUserId);
+            if (type.Equals("idea"))
+            {
+                Idea idea = _ideationsManager.GetIdea(id);
+                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, id);
+                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, id);
+                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, id);
+                return View("/UI/Views/Project/Idea.cshtml", idea);
+            }
+            else
+            {
+                Ideation ideation = _ideationsManager.GetIdeation(id);
+                return View("/UI/Views/Project/Ideation.cshtml", ideation);
+            }
+        }
+
+        
+
+        #endregion
+        
         
 
         public IActionResult ReportPost(int id, string type)
@@ -151,311 +491,13 @@ namespace Integratieproject1.UI.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult PostReaction(IFormCollection formCollection, int id, string element)
-        {
-            ArrayList parameters = new ArrayList();
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                parameters.Add(pair.Value);
-            }
-
-            ClaimsPrincipal currentUser = User;
-            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            _ideationsManager.PostReaction(parameters, id, currentUserId, element);
-            if (element.Equals("idea"))
-            {
-                Idea idea = _ideationsManager.GetIdea(id);
-                    ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, id);
-                    ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, id);
-                    ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, id);
-                return View("/UI/Views/Project/Idea.cshtml", idea);
-            }
-            else if (element.Equals("ideation"))
-
-            {
-                Domain.Ideations.Ideation ideation = _ideationsManager.GetIdeation(id);
-                return View("/UI/Views/Project/Ideation.cshtml", ideation);
-            }
-            else
-            {
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-        }
-
-        [HttpPost]
-        public IActionResult SaveSurveyFormData(IFormCollection formCollection, int surveyId)
-        {
-            ArrayList answers = new ArrayList();
-            foreach (KeyValuePair<string, StringValues> pair in formCollection)
-            {
-                try
-                {
-                    if (_surveysManager.IsEmail(surveyId, Convert.ToInt32(pair.Key)))
-                    {
-                        var apiKey = "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";
-                        var client = new SendGridClient(apiKey);
-                        var msg = new SendGridMessage()
-                        {
-                            From = new EmailAddress("CityOfIdeas@coi.com", "City Of Ideas"),
-                            Subject = "Register",
-                            PlainTextContent = "Hi!",
-                            HtmlContent = "<strong>Thanks for filling in our survey! If you're interested in future projects and would like to be up to date then you can register here: https://localhost:44305/Identity/Account/Register </strong>"
-                        };
-                        msg.AddTo(new EmailAddress(pair.Value));
-                        client.SendEmailAsync(msg);
-                    }
-                    answers.Add(pair.Value);
-                }
-                catch
-                {
-
-                }
-            }
-
-            _surveysManager.UpdateAnswers(answers, surveyId);
-            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
-            Project project = _projectsManager.GetProject(survey.Phase.Project.ProjectId);
-            return View("/UI/Views/Project/Project.cshtml", project);
-        }
-
-        public IActionResult SurveyResults(int surveyId)
-        {
-            Domain.Surveys.Survey survey = _surveysManager.GetSurvey(surveyId);
-            return View("/UI/Views/Project/SurveyResults.cshtml", survey);
-        }
-
-        public IActionResult CreateVote(int ideaId, VoteType voteType)
-        {
-            ClaimsPrincipal currentUser = User;
-            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            _ideationsManager.CreateVote(ideaId, voteType, currentUserId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, ideaId);
-                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, ideaId);
-                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, ideaId);
-            return View("/UI/Views/Project/Idea.cshtml", idea);
-        }
-
-        public IActionResult LikeReaction(int id, string type, int reactionId)
-        {
-            ClaimsPrincipal currentUser = User;
-            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            _ideationsManager.LikeReaction(reactionId, currentUserId);
-            if (type.Equals("idea"))
-            {
-                Idea idea = _ideationsManager.GetIdea(id);
-                    ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, id);
-                    ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, id);
-                    ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, id);
-                return View("/UI/Views/Project/Idea.cshtml", idea);
-            }
-            else
-            {
-                Ideation ideation = _ideationsManager.GetIdeation(id);
-                return View("/UI/Views/Project/Ideation.cshtml", ideation);
-            }
-        }
-
-        private void UploadImage(IFormFile formFile, int ideaId)
-        {
-            string wwwroot = "wwwroot/";
-            string uploads = "/images/uploads/";
-            string path = wwwroot + uploads;
-
-            
-                if (formFile.Length > 0)
-                {
-                    string imagePath = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
-
-                    using (var fileStream = new FileStream(Path.Combine(path, imagePath), FileMode.Create))
-                    {
-                        formFile.CopyTo(fileStream);
-                    }
-
-                    _ideationsManager.CreateImage(Path.GetFileName(formFile.FileName), Path.Combine(uploads, imagePath),
-                        ideaId);
-                }
-        }
-
-
-        public IActionResult CreateIdea(int ideationId)
-        {
-            ClaimsPrincipal currentUser = User;
-            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            Idea idea = _ideationsManager.CreateNewIdea(ideationId, currentUserId);
-            ViewBag.ideas = _ideationsManager.GetOtherIdeas(ideationId);
-            ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult EditIdea(int ideaId)
-        {
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        [HttpPost]
-        public IActionResult EditIdea(Idea idea, int ideaId, int ideationId)
-        {
-            _ideationsManager.EditIdea(idea, ideaId);
-            Idea returnIdea = _ideationsManager.GetIdea(ideaId);
-            if (User.Identity.IsAuthenticated)
-            {
-                ClaimsPrincipal currentUser = User;
-                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, ideaId);
-                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, ideaId);
-                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, ideaId);
-            }
-            
-            return View("/UI/Views/Project/Idea.cshtml", returnIdea);
-        }
-
-        public IActionResult OrderNrUp(int ideaObjectId, int ideaId)
-        {
-            _ideationsManager.OrderNrChange(ideaObjectId, "up", ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult OrderNrDown(int ideaObjectId, int ideaId)
-        {
-            _ideationsManager.OrderNrChange(ideaObjectId, "down", ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult DeleteIdea(int ideaId, int ideationId)
-        {
-            _ideationsManager.DeleteIdea(ideaId);
-            Ideation ideation = _ideationsManager.GetIdeation(ideationId);
-            return View("/UI/Views/Project/Ideation.cshtml", ideation);
-        }
-
-        public IActionResult AddVideo(Video video, int ideaId)
-        {
-            _ideationsManager.AddVideo(video, ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult AddTextField(TextField textField, int ideaId)
-        {
-            _ideationsManager.AddTextField(textField, ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult EditTextField(TextField textField, int ideaId, int textFieldId)
-        {
-            _ideationsManager.EditTextField(textField, textFieldId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult AddImage(IFormFile formFile, int ideaId)
-        {
-            UploadImage(formFile, ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult DeleteImage(int imageId, int ideaId)
-        {
-            _ideationsManager.DeleteImage(imageId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult DeleteVideo(int videoId, int ideaId)
-        {
-            _ideationsManager.DeleteVideo(videoId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult DeleteTextField(int textFieldId, int ideaId)
-        {
-            _ideationsManager.DeleteTextField(textFieldId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult AddPosition(Position position, int ideaId)
-        {
-            _ideationsManager.AddPosition(position, ideaId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult EditPosition(Position position, int positionId, int ideaId)
-        {
-            _dataTypeManager.EditPosition(position,positionId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-        public IActionResult DeletePosition(int positionId, int ideaId)
-        {
-            _ideationsManager.DeleteLocationFromIdea(ideaId, positionId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-        public IActionResult AddTag(int ideaId, Tag tag)
-        {
-            _ideationsManager.CreateIdeaTag(ideaId, tag.TagId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-        public IActionResult RemoveIdeaTag(int ideaTagId, int ideaId)
-        {
-            _ideationsManager.DeleteIdeaTag(ideaTagId);
-            Idea idea = _ideationsManager.GetIdea(ideaId);
-            ViewBag.tags = _ideationsManager.GetTags(ideaId);
-            return View("/UI/Views/Project/EditIdea.cshtml", idea);
-        }
-
-        public IActionResult ViewOtherIdea(int newIdeaId, int otherIdeaId)
-        {
-            _ideationsManager.DeleteIdea(newIdeaId);
-            Idea idea = _ideationsManager.GetIdea(otherIdeaId);
-            if (User.Identity.IsAuthenticated)
-            {
-                ClaimsPrincipal currentUser = User;
-                string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ViewBag.voteCheck = _ideationsManager.CheckVote(currentUserId, VoteType.VOTE, otherIdeaId);
-                ViewBag.sharefbCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_FB, otherIdeaId);
-                ViewBag.sharetwCheck = _ideationsManager.CheckVote(currentUserId, VoteType.SHARE_TW, otherIdeaId);
-            }
-            return View("/UI/Views/Project/Idea.cshtml", idea);
-        }
-
         public IActionResult AskVerify()
         {
             string currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             _userManager.AskVerify(currentUserId);
             return RedirectToAction("Index", "Home");
         }
+
         
     }
 }

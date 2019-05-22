@@ -28,48 +28,19 @@
 </div>
 <div id="editIdeaTitle" class="text-center">
     <form asp-controller="Project" asp-action="EditIdea" asp-route-ideationId="@Model.Ideation.IdeationId" asp-route-ideaId="@Model.IdeaId" method="post">
-
+        <div class="d-flex flex-row justify-content-start ">
+            <button class="btn btn-success iconBtn" type="submit" data-toggle="tooltip" data-placement="top" title="Save het idee">
+                <i class="fa fa-check"></i></button>
+            <a class="btn btn-danger iconBtn " asp-area="" asp-controller="Project"
+               asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId" data-toggle="tooltip" data-placement="top" title="Verwijder het idee">
+                <i class="fa fa-times"></i>
+            </a>
+        </div>
         <h5>Titel:</h5>
 
-        
-            @if (Model.Title.Equals("_NewIdea_"))
-            {
-                <div class="input-group dropdown" style="padding: 5px">
-                <input required id="ideaInput" onfocus="showIdeaResults()" onkeyup="filterFunction()" asp-for="Title" value="" class="form-control"/>
-                <div id="ideaDropdown" class="dropdown-menu" style="width: 100%">
-                    <h6 class="dropdown-header">Andere idee&euml;n die lijken op dat van jouw?</h6>
-                    <div class="dropdown-divider"></div>
-                    @foreach (var idea in ViewBag.ideas)
-                    {
-                        if (idea.IdeaId != Model.IdeaId)
-                        {
-                            <a class="dropdown-item" asp-controller="Project" asp-action="ViewOtherIdea" asp-route-otherIdeaId="@idea.IdeaId" asp-route-newIdeaId="@Model.IdeaId">@idea.Title</a>
-                        }
-                    }
-                </div>
-                <div class="input-group-append">
-                    <button class="btn btn-success" type="submit" data-toggle="tooltip" data-placement="top" title="Save het idee">
-                        <i class="fa fa-check"></i>
-                    </button>
-                    <a class="btn btn-danger " asp-area="" asp-controller="Project"
-                       asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId" data-toggle="tooltip" data-placement="top" title="Verwijder het idee">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
-                </div>
-            }
-            else
-            {
-                <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="padding: 5px"/>
-            }
+        <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="padding: 5px"/>
         @if (Model.Position != null)
         {
-        @*<div class="card">
-            <div id="map"></div>
-            <div class=" d-flex flex-row justify-content-end ">
-                <button class="btn btn-primary btn-sm" onclick="showHide('editLocation')" type="button"><i class="fa fa-edit"></i></button>                  
-            </div>
-        </div>*@
             <div class="text-center" id="editLocation" @*style="display: none; padding: 5px"*@>
                 @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
             </div>
@@ -78,9 +49,7 @@
             @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
         </div>
         <div>
-            @if (!Model.Title.Equals("_NewIdea_"))
-            {
-                if (Model.IdeaTags != null && Model.IdeaTags.Count > 0)
+                @if (Model.IdeaTags != null && Model.IdeaTags.Count > 0)
                 {
                     <div class="card d-flex flex-row justify-content-center" style="padding: 5px">
                         @foreach (var tag in Model.IdeaTags)
@@ -95,7 +64,7 @@
                 }
 
 
-                if (User.IsInRole("Admin") && Model.IoTSetups != null && Model.IoTSetups.Count > 0)
+                @if (User.IsInRole("Admin") && Model.IoTSetups != null && Model.IoTSetups.Count > 0)
                 {
                     <div class="card d-flex flex-row justify-content-center" style="padding: 5px">
                         @foreach (var ioT in Model.IoTSetups)
@@ -109,48 +78,32 @@
                         }
                     </div>
                 }
-            }
         </div>
         <div>
             <div class="text-center" id="addTag" style="display: none; padding: 5px">
                 @await Html.PartialAsync("_AddTagPartial.cshtml", new Tag())
             </div>
         </div>
-    @if (!Model.Title.Equals("_NewIdea_"))
-    {
-        <div class="d-flex flex-row justify-content-between">
-            <div class="d-flex flex-row justify-content-start">
+            <div class="d-flex flex-row justify-content-end">
 
                 @if (Model.Position == null)
                 {
-                <button class="btn btn-primary iconBtn" onclick="showHide('addLocation')" type="button" data-toggle="tooltip" data-placement="top" title="Voeg een locatie toe">
-                    <i class="fa fa-map-marker"></i>
-                </button>
+                    <button class="btn btn-primary iconBtn" onclick="showHide('addLocation')" type="button" data-toggle="tooltip" data-placement="top" title="Voeg een locatie toe">
+                        <i class="fa fa-map-marker"></i>
+                    </button>
                 }
                 <button class="btn btn-primary iconBtn" onclick="showHide('addTag')" type="button" data-toggle="tooltip" data-placement="top" title="Voeg een tag toe">
                     <i class="fa fa-tag"></i>
                 </button>
                 @if (User.IsInRole("Admin"))
                 {
-                <a class="btn btn-primary iconBtn" asp-area="" asp-controller="Admin"
-                   asp-action="AddIoT" asp-route-id="@Model.IdeaId" asp-route-type="idea" data-toggle="tooltip" data-placement="top" title="Voeg een IoT opstelling toe">
-                    <i class="fa fa-map-pin"></i>
-                </a>
+                    <a class="btn btn-primary iconBtn" asp-area="" asp-controller="Admin"
+                       asp-action="AddIoT" asp-route-id="@Model.IdeaId" asp-route-type="idea" data-toggle="tooltip" data-placement="top" title="Voeg een IoT opstelling toe">
+                        <i class="fa fa-map-pin"></i>
+                    </a>
                 }
-
             </div >
-            <div class="d-flex flex-row justify-content-end">
-                <button class="btn btn-success iconBtn" type="submit" data-toggle="tooltip" data-placement="top" title="Save het idee">
-                    <i class="fa fa-check"></i>
-                </button>
-                <a class="btn btn-danger iconBtn " asp-area="" asp-controller="Project"
-                   asp-action="DeleteIdea" asp-route-ideaId="@Model.IdeaId" asp-route-ideationId="@Model.Ideation.IdeationId" data-toggle="tooltip" data-placement="top" title="Verwijder het idee">
-                    <i class="fa fa-times"></i>
-                </a>
-            </div>
-        </div>
-    }
-
+                
     </form>
 </div>
 <div id="editIdeaObjects">
@@ -248,8 +201,8 @@
     <div id="newVideo" style="display: none; padding: 5px">
         @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
     </div>
-    @if (!Model.Title.Equals("_NewIdea_"))
-    {
+    @*@if (!Model.Title.Equals("_NewIdea_"))
+    {*@
         <div class="d-flex flex-row justify-content-center">
             <div class="dropdown">
                 <button class="btn btn-primary btn-lg" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -271,7 +224,7 @@
                 </div>
             </div>
         </div>
-    }
+    @*}*@
 </div>
 </div>
 </div>
