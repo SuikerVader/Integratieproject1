@@ -794,6 +794,10 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetVote(voteId);
         }
 
+        public IEnumerable<Vote> GetIdeaVote(int ideaId)
+        {
+            return _ideationsRepository.GetIdeaVotes(ideaId);
+        }
         #endregion
 
         #region Tag

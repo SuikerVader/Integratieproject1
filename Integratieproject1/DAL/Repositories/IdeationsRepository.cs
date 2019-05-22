@@ -38,7 +38,7 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideations
                 .Include(ph => ph.Phase)
                 .Where(ideation => ideation.Phase.Project.ProjectId == projectId)
-                .Include(i=>i.Ideas).ThenInclude(id =>id.IdeaObjects )
+                .Include(i => i.Ideas).ThenInclude(id => id.IdeaObjects)
                 .Include(i => i.Ideas).ThenInclude(v => v.Votes)
                 .Include(i => i.Ideas).ThenInclude(r => r.Reactions)
                 .AsEnumerable();
@@ -131,7 +131,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.IdeaObjects)
                 .Include(i => i.IdentityUser)
                 .Include(i => i.Position)
-                .Include(i => i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project).ThenInclude(pl => pl.Platform)
+                .Include(i => i.Ideation).ThenInclude(id => id.Phase).ThenInclude(p => p.Project)
+                .ThenInclude(pl => pl.Platform)
                 .Include(i => i.IdeaTags).ThenInclude(it => it.Tag)
                 .Include(i => i.IoTSetups).ThenInclude(i => i.Position)
                 .Single(i => i.IdeaId == ideaId);
@@ -172,7 +173,6 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Ideas.Remove(idea);
             _ctx.SaveChanges();
         }
-
 
         #endregion
 
@@ -309,7 +309,7 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Reactions.Where(reaction => reaction.Idea == idea).AsEnumerable();
         }
-        
+
         public IEnumerable<Reaction> GetIdeaReactions(int id)
         {
             return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id).AsEnumerable();
@@ -355,6 +355,15 @@ namespace Integratieproject1.DAL.Repositories
         public Vote GetVote(int voteId)
         {
             return _ctx.Votes.Find(voteId);
+        }
+
+        public IEnumerable<Vote> GetIdeaVotes(int ideaId)
+        {
+            return _ctx.Votes.
+                Where(i => i.Idea.IdeaId == ideaId)
+                .Include(v=>v.Idea)
+                .Include(v=>v.IdentityUser)
+                .AsEnumerable();
         }
 
         public Vote CreateVote(Vote vote)
@@ -426,16 +435,17 @@ namespace Integratieproject1.DAL.Repositories
 
 
         #region Tag methods
-        
+
         public Tag GetTag(int tagId)
         {
             return _ctx.Tags.Find(tagId);
         }
+
         public IEnumerable<Tag> GetAllTags()
         {
             return _ctx.Tags.AsEnumerable();
         }
-        
+
         public IdeaTag GetIdeaTag(int ideaTagId)
         {
             return _ctx.IdeaTags
@@ -443,7 +453,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Tag)
                 .Single(i => i.IdeaTagId == ideaTagId);
         }
-        
+
         public void CreateIdeaTag(IdeaTag ideaTag)
         {
             _ctx.IdeaTags.Add(ideaTag);
@@ -455,7 +465,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.IdeaTags.Remove(ideaTag);
             _ctx.SaveChanges();
         }
-        
+
         public void EditTag(Tag tag)
         {
             _ctx.Tags.Update(tag);
@@ -473,9 +483,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Tags.Remove(tag);
             _ctx.SaveChanges();
         }
+
         #endregion
-
-
-        
     }
 }

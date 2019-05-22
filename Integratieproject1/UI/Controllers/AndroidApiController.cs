@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,7 +22,12 @@ using JWT.Algorithms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Platform = Integratieproject1.Domain.Projects.Platform;
@@ -85,10 +91,10 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
-        [Route("Api/votes/{id}")]
+        [Route("Api/sharedVotes/{id}")]
         public IEnumerable<Vote> GetVotes(int id)
         {
-            return null;
+            return _ideationsManager.GetIdeaVote(id);
         }
 
         [HttpGet]
@@ -96,6 +102,16 @@ namespace Integratieproject1.UI.Controllers
         public IEnumerable<Like> GetLikes(int id)
         {
             return null;
+        }
+
+
+        [HttpPost]
+        [Route("Api/Reaction")]
+        public void postReaction([FromHeader] String param,[FromHeader] int id,[FromHeader] String userId,[FromHeader] String element)
+        {
+             ArrayList parameter = new ArrayList();
+             parameter.Add(param);
+            _ideationsManager.PostReaction(parameters:parameter,id:id,userId:userId,element:element);
         }
 
         #endregion
@@ -127,16 +143,13 @@ namespace Integratieproject1.UI.Controllers
         [HttpPost]
         [Route("/Api/vote")]
         //public void AndroidVote([FromBody] int id)
-        public void androidVote([FromHeader] int id, [FromHeader] String vote/*, [FromHeader] string userId*/)
+        public void androidVote([FromHeader] int id, [FromHeader] String vote, [FromHeader] string userId)
         {
             Console.WriteLine(id);
-            //Console.WriteLine(userId);
+            Console.WriteLine(userId);
             Console.WriteLine(vote);
             VoteType voteType = (VoteType) Enum.Parse(typeof(VoteType), vote, true);
-            
-//               ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
-//               var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-               _ideationsManager.CreateVote(id,voteType,"helloooooo");
+            _ideationsManager.CreateVote(id,voteType,userId);
         }
 
         #endregion
