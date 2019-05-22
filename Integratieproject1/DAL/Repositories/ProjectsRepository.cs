@@ -49,6 +49,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Surveys).ThenInclude(i => i.Questions)
                 .Single(pl => pl.PlatformName == platformName);
         }
 

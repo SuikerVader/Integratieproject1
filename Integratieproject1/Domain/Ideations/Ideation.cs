@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Integratieproject1.Domain.Projects;
 
 namespace Integratieproject1.Domain.Ideations
@@ -24,5 +25,19 @@ namespace Integratieproject1.Domain.Ideations
         public Phase Phase { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
         public ICollection<Idea> Ideas { get; set; }
+
+        public Idea GetTopIdea()
+        {
+            Idea returnIdea = Ideas.First();
+            foreach (var idea in Ideas)
+            {
+                if (idea.Votes.Count > returnIdea.Votes.Count)
+                {
+                    returnIdea = idea;
+                }
+            }
+
+          return  returnIdea;
+        }
     }
 }

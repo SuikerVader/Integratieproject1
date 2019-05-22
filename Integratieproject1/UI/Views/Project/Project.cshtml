@@ -108,7 +108,13 @@
                             <div class="">
                                 <h5>@phase.PhaseName</h5>
                                 <div class="projectDatesSmallScreen">
-                                    <small><p>@phase.StartDate.ToString("d") - @phase.EndDate.ToString("d")</p></small>
+                                    <p><small>@phase.StartDate.ToString("d") - @phase.EndDate.ToString("d")
+                                        @if (DateTime.Now > phase.EndDate)
+                                        {
+                                            <br/>@:Fase is afgelopen
+                                        }
+                                        </small></p>
+                                    
                                 </div>
                                 <p class="">@phase.Description</p>
                                 <div class="progress" style="height: 1px;">
@@ -118,6 +124,10 @@
                                 <div class="projectDates">
                                     <div class="d-flex flex-row justify-content-between">
                                         <p>@phase.StartDate.ToString("d")</p>
+                                        @if (DateTime.Now > phase.EndDate)
+                                        {
+                                            <p><small>Fase is afgelopen</small></p>
+                                        }
                                         <p>@phase.EndDate.ToString("d")</p>
                                     </div> 
                                 </div>

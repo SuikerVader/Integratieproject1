@@ -148,7 +148,7 @@ namespace Integratieproject1.DAL
                 Description = "In de allereerste fase van dit project zouden we graag algemene ideeën krijgen " +
                 "van jullie om de Ossenmarkt aantrekkelijker te maken voor jongeren.",
                 StartDate = projectOssenmarkt.StartDate,
-                EndDate = new DateTime(2018, 11, 17, 22, 30, 0),
+                EndDate = new DateTime(2018, 8, 17, 22, 30, 0),
                 Project = projectOssenmarkt
             };
             Phase phaseOssenmarkt2 = new Phase
@@ -158,7 +158,7 @@ namespace Integratieproject1.DAL
                 Description = "Na de eerste fase zijn we tot de conclusie gekomen om het project op de Ossenmarkt " +
                 "in verband met sport te maken.",
                 StartDate = phaseOssenmarkt1.EndDate,
-                EndDate = new DateTime(2019, 4, 2, 22, 30, 0),
+                EndDate = new DateTime(2019, 2, 2, 22, 30, 0),
                 Project = projectOssenmarkt
             };
             Phase phaseOssenmarkt3 = new Phase
@@ -540,6 +540,19 @@ namespace Integratieproject1.DAL
                 Question = emailQuestion,
                 AnswerText = ""
             };
+            
+            Survey survey2 = new Survey
+            {
+                Title = "Vragenlijst Vrijdagmarkt",
+                Phase = phaseVrijdagmarkt1
+            };
+            Question openQuestion2 = new Question
+            {
+                QuestionNr = 1,
+                Survey = survey2,
+                QuestionType = QuestionType.OPEN,
+                QuestionText = "Wat is het belangrijkste voor dit plein?"
+            };
 
             #endregion
             #region AdminProjects
@@ -775,8 +788,10 @@ namespace Integratieproject1.DAL
             //ctx.Questions.Add(question);
             survey.Questions = new List<Question>()
                 {openQuestion, radioQuestion, checkQuestion, dropQuestion, emailQuestion};
+            survey2.Questions = new List<Question>(){openQuestion2};
             //ctx.Surveys.Add(survey);
             phaseOssenmarkt1.Surveys = new List<Survey>() {survey};
+            phaseVrijdagmarkt1.Surveys = new List<Survey>(){survey2};
             //ctx.Likes.Add(like);
             reactionPullup1.Likes = new List<Like>() { likeReactionPullup1, likeReactionPullup2, likeReactionPullup3 };
             reactionPullup2.Likes = new List<Like>() { likeReactionPullup4 };

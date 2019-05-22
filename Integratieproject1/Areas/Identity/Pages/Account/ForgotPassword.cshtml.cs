@@ -56,8 +56,8 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Wachtwoord resetten",
+                    $"Reset je wachtwoord door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier te klikken!</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
