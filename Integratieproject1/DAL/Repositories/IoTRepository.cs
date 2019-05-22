@@ -20,6 +20,8 @@ namespace Integratieproject1.DAL.Repositories
             _ctx = unitOfWork.Ctx;
         }
 
+
+        #region Gets
         public IEnumerable<IoTSetup> GetIoTSetups()
         {
             return _ctx.IoTSetups.AsEnumerable();
@@ -33,31 +35,10 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Position)
                 .Single(i => i.Code == ioTSetupId);
         }
-
-        public IoTSetup CreateIoTSetup(IoTSetup ioTSetup)
-        {
-            _ctx.IoTSetups.Add(ioTSetup);
-            _ctx.SaveChanges();
-            return ioTSetup;
-        }
-
-        public void RemoveIoTSetup(IoTSetup ioTSetup)
-        {
-            _ctx.IoTSetups.Remove(ioTSetup);
-            _ctx.SaveChanges();
-        }
-
         public IoTSetup GetIoTSetupByIdea(int id)
         {
             return _ctx.IoTSetups.First(ioTSetup => ioTSetup.Idea.IdeaId == id);
         }
-
-        public void UpdateIoTSetup(IoTSetup original)
-        {
-            _ctx.IoTSetups.Update(original);
-            _ctx.SaveChanges();
-        }
-
         public IEnumerable<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
         {
             return _ctx.IoTSetups
@@ -108,5 +89,34 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Idea)
                 .AsEnumerable();
         }
+        
+
+        #endregion
+
+        #region CUD
+        public IoTSetup CreateIoTSetup(IoTSetup ioTSetup)
+        {
+            _ctx.IoTSetups.Add(ioTSetup);
+            _ctx.SaveChanges();
+            return ioTSetup;
+        }
+
+        public void RemoveIoTSetup(IoTSetup ioTSetup)
+        {
+            _ctx.IoTSetups.Remove(ioTSetup);
+            _ctx.SaveChanges();
+        }
+
+       
+
+        public void UpdateIoTSetup(IoTSetup original)
+        {
+            _ctx.IoTSetups.Update(original);
+            _ctx.SaveChanges();
+        }
+
+        #endregion
+
+        
     }
 }

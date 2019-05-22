@@ -49,6 +49,8 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
 
+        #region Moderators
+
         public IActionResult Moderators(string sortOrder, string searchString)
         {
             IEnumerable<CustomUser> mods = _usersManager.GetUsersBySort("MOD", sortOrder);
@@ -111,7 +113,12 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Users.cshtml", users.ToList());
         }
 
-        public IActionResult AddIoT(int id, string type)
+        
+        #endregion
+
+        #region IoTSetup
+
+             public IActionResult AddIoT(int id, string type)
         {
             if (type.Equals("question"))
             {
@@ -198,6 +205,9 @@ namespace Integratieproject1.UI.Controllers
             
             
         }
+
+
+        #endregion
 
         #region VerificationRequests
 
@@ -498,6 +508,11 @@ namespace Integratieproject1.UI.Controllers
             ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/Surveys.cshtml", surveys);
         }
+        public IActionResult SurveyResults(int surveyId)
+        {
+            Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/SurveyResult.cshtml", survey);
+        }
 
         public IActionResult AddSurvey(int phaseId)
         {
@@ -601,7 +616,7 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
 
-        public IActionResult SurveyResults(string sortOrder, string searchString)
+        public IActionResult SortSurveyResults(string sortOrder, string searchString)
         {
             IEnumerable<Survey> surveys = _surveysManager.GetAllSurveysBySort(sortOrder);
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
