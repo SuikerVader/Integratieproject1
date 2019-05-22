@@ -44,15 +44,15 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Mij onthouden?")]
             public bool RememberMe { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
+            if (!string.IsNullOrEmpty("Dit veld is verplicht!"))
             {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
+                ModelState.AddModelError(string.Empty, "Dit veld is verplicht");
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -76,7 +76,7 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("Gebruiker ingelogd.");
                     return RedirectToAction("Index", "Home");
                 }
                 if (result.RequiresTwoFactor)
@@ -85,12 +85,12 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Gebruikersaccount geblokkerd.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Foutieve login.");
                     return Page();
                 }
             }
