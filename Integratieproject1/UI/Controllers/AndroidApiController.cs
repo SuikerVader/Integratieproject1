@@ -1,18 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Mvc;
-using Integratieproject1.DAL;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
+using Microsoft.AspNetCore.Http.Headers;
+using JWT;
+using JWT.Serializers;
+using JWT.Algorithms;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Platform = Integratieproject1.Domain.Projects.Platform;
 using Project = Integratieproject1.Domain.Projects.Project;
 
@@ -25,10 +34,10 @@ namespace Integratieproject1.UI.Controllers
         private readonly SurveysManager _surveysManager;
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<CustomUser> _signInManager;
 
-        public AndroidApiController(SignInManager<IdentityUser> signInManager)
-        { 
+        public AndroidApiController(SignInManager<CustomUser> signInManager)
+        {
             _ideationsManager = new IdeationsManager();
             _surveysManager = new SurveysManager();
             _projectsManager = new ProjectsManager();
@@ -46,17 +55,31 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
+        [Route("Api/idea/{id}")]
+        public Idea GetIdea(int id)
+        {
+            return _ideationsManager.GetIdea(id);
+        }
+
+        [HttpGet]
         [Route("Api/ideations/{id}")]
         public IEnumerable<Ideation> GetIdeations(int id)
         {
-            return _ideationsManager.GetProjectIdeation(id);
+            return _ideationsManager.GetProjectIdeations(id);
+        }
+
+        [HttpGet]
+        [Route("Api/ideation/{id}")]
+        public Ideation GetIdeation(int id)
+        {
+            return _ideationsManager.GetIdeation(id);
         }
 
         [HttpGet]
         [Route("Api/reactions/{id}")]
-        public IEnumerable<Reaction> GetReactions(int id)
+        public IEnumerable<Reaction> GetIdeaReactions(int id)
         {
-            return _ideationsManager.GetAllReactions(id);
+            return _ideationsManager.GetIdeaReactions(id);
         }
 
         [HttpGet]
@@ -71,17 +94,6 @@ namespace Integratieproject1.UI.Controllers
         public IEnumerable<Like> GetLikes(int id)
         {
             return null;
-        }
-
-
-        [HttpPost]
-        [Route("/Api/vote/{id}")]
-        public void androidVote(int id)
-        {
-           
-            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
-            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
         }
 
         #endregion
@@ -109,15 +121,25 @@ namespace Integratieproject1.UI.Controllers
             return _projectsManager.GetPlatform(id);
         }
 
+
+        [HttpPost]
+        [Route("/Api/vote")]
+        public void AndroidVote([FromBody] int id)
+        {
+            ClaimsPrincipal currentUser = ClaimsPrincipal.Current;
+            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _ideationsManager.CreateVote(ideaId: id, voteType: VoteType.VOTE, userId: currentUserId);
+        }
+
         #endregion
 
         #region Surveys
 
         [HttpGet]
         [Route("Api/surveys/{id}")]
-        public IEnumerable<Survey> GetSurveys(int id)
+        public IEnumerable<Survey> GetProjectsSurveys(int id)
         {
-            return _surveysManager.GetSurveys(id);
+            return _surveysManager.GetProjectsSurveys(id);
         }
 
         [HttpGet]
@@ -128,23 +150,81 @@ namespace Integratieproject1.UI.Controllers
         }
 
         [HttpGet]
-        [Route("Api/question/{id}")]
-        public Question GetQuestions(int id)
+        [Route("Api/questions/{id}")]
+        public IEnumerable<Question> GetQuestions(int id)
         {
-            return _surveysManager.GetQuestion(id);
+            return _surveysManager.GetQuestions(id).ToList();
         }
 
         #endregion
 
+        #region Tags
+        
+        [HttpGet]
+        [Route("Api/tags")]
+        public IEnumerable<Tag> GetTags()
+        {
+            return _ideationsManager.GetAllTags().ToList();
+        }
+
+        #endregion
+        
         #region Users
 
         [HttpGet]
-        [Route("Api/users/{email}/{password}")]
-        public async Task<IdentityUser> GetUser(string email, string password)
+        [Route("Api/users")]
+        public IEnumerable<IdentityUser> GetUsers()
         {
-            var result = await _signInManager.PasswordSignInAsync(email, password, true, true);
+            return _usersManager.GetUsers("USER");
+        }
 
-            return result.Succeeded ? _usersManager.GetUserByEmail(email) : null;
+        [HttpGet]
+        [Route("Api/users/login")]
+        public async Task<CustomUser> SignIn([FromHeader(Name = "Username")] string username,
+            [FromHeader(Name = "Password")] string password)
+        {
+            byte[] decodedUsername = Convert.FromBase64String(username);
+            username = System.Text.Encoding.UTF8.GetString(decodedUsername);
+
+            byte[] decodedPassword = Convert.FromBase64String(password);
+            password = System.Text.Encoding.UTF8.GetString(decodedPassword);
+
+            CustomUser user = null;
+            
+            if (username.Contains("@"))
+            {
+                user = _usersManager.GetUserByEmail(username);
+            }
+            else
+            {
+                user = _usersManager.GetUserByUsername(username);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, password, true, true);
+            if (result.Succeeded)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        [Route("Api/users/update")]
+        public void UpdateUser([FromHeader(Name = "Username")] string username, [FromBody] UserUpdateValuesModel userUpdateValues)
+        {
+            var user = _usersManager.GetUserByUsername(username);
+
+            if (user != null)
+            {
+                user.Surname = userUpdateValues.Surname;
+                user.Name = userUpdateValues.LastName;
+                user.Sex = userUpdateValues.Sex;
+                user.Age = Int32.Parse(userUpdateValues.Age);
+                user.Zipcode = userUpdateValues.ZipCode;
+            
+                _usersManager.UpdateUser(user);
+            }
         }
 
         #endregion

@@ -6,8 +6,6 @@
 
 <div>
     <form class="" asp-controller="Project" asp-action="AddImage" asp-route-ideaId="@ViewBag.IdeaId" method="post" enctype="multipart/form-data">
-        <div class="form-row">
-            <div class="col-10 text-center">
                 <div class="form-group" id="imagesUpload" >
                     <label for="uploadedImages" style="width: 100%">
                         <div class="input-group" >
@@ -15,7 +13,8 @@
                                 Kies afbeelding...
                             </span>
                             <div class="input-group-append">
-                                <span class="input-group-text btn btn-outline-secondary">Kies</span>
+                                <span class="input-group-text btn btn-primary">Kies</span>
+                                <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
                             </div>
                         </div>
                     </label>
@@ -27,11 +26,7 @@
                            accept="image/x-png,image/gif,image/jpeg"
                            onchange="PreviewImage(this)">
                 </div>
-            </div>
-            <div class="col-2 text-center">
-                <input class="btn btn-primary btn-sm" style="background-color:@Model.Ideation.Phase.Project.Platform.BackgroundColor" type="submit" value="Afbeelding toevoegen">
-            </div>
-        </div>
+        
     </form>
 </div>
 <script>

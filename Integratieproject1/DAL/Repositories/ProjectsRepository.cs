@@ -49,6 +49,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Votes)
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
                 .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
+                .Include(pl => pl.Projects).ThenInclude(ph => ph.Phases).ThenInclude(ph => ph.Surveys).ThenInclude(i => i.Questions)
                 .Single(pl => pl.PlatformName == platformName);
         }
 
@@ -64,7 +65,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Platforms.Remove(platform);
             _ctx.SaveChanges();
         }
-        
+
         public void EditPlatform(Platform platform)
         {
             _ctx.Platforms.Update(platform);
@@ -79,16 +80,49 @@ namespace Integratieproject1.DAL.Repositories
         {
             return _ctx.Projects
                 .Where(p => p.Platform.PlatformId == platformId)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(r=>r.Reactions).ThenInclude(l=>l.Likes)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Votes)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=> k.IdeaObjects)
-                .Include(p => p.Phases).ThenInclude(i => i.Ideations).ThenInclude(idea=>idea.Ideas).ThenInclude(k=>k.Reactions).ThenInclude(l=>l.Likes)
-                .Include(p => p.Phases).ThenInclude(s => s.Surveys).ThenInclude(q=>q.Questions).ThenInclude(a=>a.Answers)
-                .Include(l => l.Location).ThenInclude(a => a.Address)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(r => r.Reactions)
+                    .ThenInclude(l => l.Likes)
+                    .ThenInclude(l => l.IdentityUser)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(r => r.Reactions)
+                    .ThenInclude(r => r.IdentityUser)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(idea => idea.Ideas)
+                    .ThenInclude(k => k.Votes)
+                    .ThenInclude(v => v.IdentityUser)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(idea => idea.Ideas)
+                    .ThenInclude(i => i.IdeaTags)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(idea => idea.Ideas)
+                    .ThenInclude(k => k.IdeaObjects)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(idea => idea.Ideas)
+                    .ThenInclude(k => k.Reactions)
+                    .ThenInclude(l => l.Likes)
+                    .ThenInclude(l => l.IdentityUser)
+                .Include(p => p.Phases)
+                    .ThenInclude(i => i.Ideations)
+                    .ThenInclude(idea => idea.Ideas)
+                    .ThenInclude(k => k.Reactions)
+                    .ThenInclude(r => r.IdentityUser)
+                .Include(p => p.Phases)
+                    .ThenInclude(s => s.Surveys)
+                    .ThenInclude(q => q.Questions)
+                    .ThenInclude(a => a.Answers)
+                .Include(l => l.Location)
+                    .ThenInclude(a => a.Address)
                 .Include(pl => pl.Platform)
                 .AsEnumerable();
         }
-        
+
         public IEnumerable<Project> GetAllProjects()
         {
             return _ctx.Projects
@@ -107,6 +141,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(p => p.Project).ThenInclude(p => p.Platform)
                 .AsEnumerable();
         }
+
         public IEnumerable<AdminProject> GetAdminProjectsByProject(int projectId)
         {
             return _ctx.AdminProjects.Where(a => a.Project.ProjectId == projectId)
@@ -115,12 +150,15 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        
+
         public Project GetProject(int projectId)
         {
             return _ctx.Projects
-                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(id => id.Reactions)
-                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas).ThenInclude(i => i.IdentityUser)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
+                .ThenInclude(id => id.Reactions)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
+                .ThenInclude(id => id.IdentityUser)
+                .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Ideas)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Ideations).ThenInclude(i => i.Reactions)
                 .Include(p => p.Phases).ThenInclude(ph => ph.Surveys)
                 .Include(p => p.Location).ThenInclude(l => l.Address)
@@ -213,11 +251,13 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
             return phase;
         }
+
         public void RemovePhase(Phase phase)
         {
             _ctx.Phases.Remove(phase);
             _ctx.SaveChanges();
         }
+
         public Phase EditPhase(Phase phase)
         {
             _ctx.Phases.Update(phase);
@@ -225,9 +265,6 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Phases.Find(phase.PhaseId);
         }
 
-
         #endregion
-
-        
     }
 }

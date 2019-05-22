@@ -42,10 +42,30 @@ namespace Integratieproject1.BL.Managers
         {
             return _surveysRepository.GetSurveys(phaseId).ToList();
         }
+        
+        public IList<Survey> GetProjectsSurveys(int projectId)
+        {
+            return _surveysRepository.GetProjectSurveys(projectId).ToList();
+        }
 
         public IList<Survey> GetAllSurveys()
         {
             return _surveysRepository.GetAllSurveys().ToList();
+        }
+
+        public IList<Survey> GetAllSurveysBySort(string sortOrder)
+        {
+            IEnumerable<Survey> surveys = GetAllSurveys();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    surveys = surveys.OrderByDescending(t => t.Title);
+                    break;
+                default:
+                    surveys = surveys.OrderBy(t => t.Title);
+                    break;
+            }
+            return surveys.ToList();
         }
 
         public void CreateSurvey(Survey survey)
@@ -166,6 +186,11 @@ namespace Integratieproject1.BL.Managers
             return _surveysRepository.GetQuestion(questionId);
         }
 
+        public IEnumerable<Question> GetQuestions(int surveyId)
+        {
+            return _surveysRepository.GetQuestions(surveyId);
+        }
+        
         #endregion
 
         #region Answer
@@ -183,7 +208,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private Answer GetAnswer(int answerId)
+        public Answer GetAnswer(int answerId)
         {
             return _surveysRepository.GetAnswer(answerId);
         }

@@ -6,12 +6,16 @@
 <script>
     // Initialize and add the map
     function initMap() {
+        var markers = [];
         // The location of Uluru
         var position = {lat: @ViewBag.Position.Lat, lng: @ViewBag.Position.Lng};
         // The map, centered at Uluru
         var map = new google.maps.Map(
             document.getElementById('map'), {zoom: 16, center: position});
         // The marker, positioned at Uluru
-        var marker = new google.maps.Marker({position: position, map: map});  
+        var marker = new google.maps.Marker({position: position, map: map});
+
+        
     }
+    
 </script>

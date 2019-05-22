@@ -49,10 +49,26 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Admin.cshtml", user);
         }
 
-        public IActionResult Moderators()
+        #region Moderators
+
+        public IActionResult Moderators(string sortOrder, string searchString)
         {
-            IList<CustomUser> mods = _usersManager.GetUsers("MOD");
-            return View("/UI/Views/Admin/Moderators.cshtml", mods);
+            IEnumerable<CustomUser> mods = _usersManager.GetUsersBySort("MOD", sortOrder);
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                mods = mods.Where(u => u.UserName.ToLower().Contains(searchString)
+                                       || u.Surname.ToLower().Contains(searchString)
+                                       || u.Name.ToLower().Contains(searchString)
+                                       || u.Email.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/Moderators.cshtml", mods.ToList());
         }
 
         public IActionResult DeleteModRole(string modId)
@@ -77,12 +93,32 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Moderators.cshtml", mods);
         }
 
-        public IActionResult Users()
+        public IActionResult Users(string sortOrder, string searchString)
         {
-            IList<CustomUser> users = _usersManager.GetUsers("USER");
-            return View("/UI/Views/Admin/Users.cshtml", users);
+            IEnumerable<CustomUser> users = _usersManager.GetUsersBySort("USER", sortOrder);
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                users = users.Where(u => u.UserName.ToLower().Contains(searchString)
+                                       || u.Surname.ToLower().Contains(searchString)
+                                       || u.Name.ToLower().Contains(searchString)
+                                       || u.Email.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/Users.cshtml", users.ToList());
         }
-        public IActionResult AddIoT(int id, string type)
+
+        
+        #endregion
+
+        #region IoTSetup
+
+             public IActionResult AddIoT(int id, string type)
         {
             if (type.Equals("question"))
             {
@@ -170,31 +206,47 @@ namespace Integratieproject1.UI.Controllers
             
         }
 
+
+        #endregion
+
         #region VerificationRequests
 
         public IActionResult VerificationRequests()
         {
-            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
-            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
+            IList<CustomUser> users = _usersManager.GetRequests();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", users);
         }
 
-        public IActionResult HandleVerificationRequest(VerificationRequest request, bool acc)
+        public IActionResult Verify(string userId)
         {
-            _usersManager.HandleVerificationRequest(request, acc);
-            IList<VerificationRequest> requests = _usersManager.GetVerificationRequests().ToList();
-            return View("/UI/Views/Admin/VerificationRequests.cshtml", requests);
+            _usersManager.Verify(userId);
+            IList<CustomUser> users = _usersManager.GetRequests();
+            return View("/UI/Views/Admin/VerificationRequests.cshtml", users);
         }
-
         #endregion
 
         #region Project
 
-        public IActionResult Projects()
+        public IActionResult Projects(string sortOrder, string searchString)
         {
             ClaimsPrincipal currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IList<Project> projects = _projectsManager.GetAdminProjects(currentUserId);
-            return View("/UI/Views/Admin/Projects.cshtml", projects);
+            IEnumerable<Project> projects = _projectsManager.GetAdminProjectsBySort(currentUserId, sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
+            ViewData["StartDateSortParm"] = sortOrder == "StartDate" ? "startdate_desc" : "StartDate";
+            ViewData["EndDateSortParm"] = sortOrder == "EndDate" ? "enddate_desc" : "EndDate";
+            ViewData["PlatformSortParm"] = sortOrder == "Platform" ? "platform_desc" : "Platform";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                projects = projects.Where(p => p.ProjectName.ToLower().Contains(searchString)
+                                       || p.Status.ToLower().Contains(searchString)
+                                       || p.Platform.PlatformName.ToLower().Contains(searchString));
+            }
+
+            return View("/UI/Views/Admin/Projects.cshtml", projects.ToList());
         }
 
         public IActionResult EditProject(int projectId)
@@ -426,10 +478,18 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/Ideas.cshtml", ideas);
         }
 
-        public IActionResult IdeationResults()
+        public IActionResult IdeationResults(string platformName, string sortOrder, string searchString)
         {
-            IList<Ideation> ideations = _ideationsManager.GetAllIdeations(1);
-            return View("/UI/Views/Admin/IdeationResults.cshtml", ideations);
+            int platformId = _projectsManager.GetPlatformByName(platformName).PlatformId;
+            IEnumerable<Ideation> ideations = _ideationsManager.GetAllIdeationsBySort(sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                ideations = ideations.Where(i => i.CentralQuestion.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/IdeationResults.cshtml", ideations.ToList());
         }
 
         public IActionResult IdeationResult(int ideationId)
@@ -447,6 +507,11 @@ namespace Integratieproject1.UI.Controllers
             IList<Survey> surveys = _surveysManager.GetSurveys(phaseId);
             ViewBag.Phase = _projectsManager.GetPhase(phaseId);
             return View("/UI/Views/Admin/Surveys.cshtml", surveys);
+        }
+        public IActionResult SurveyResults(int surveyId)
+        {
+            Survey survey = _surveysManager.GetSurvey(surveyId);
+            return View("/UI/Views/Admin/SurveyResult.cshtml", survey);
         }
 
         public IActionResult AddSurvey(int phaseId)
@@ -551,20 +616,34 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Admin/EditSurvey.cshtml", survey);
         }
 
-        public IActionResult SurveyResults()
+        public IActionResult SortSurveyResults(string sortOrder, string searchString)
         {
-            IList<Survey> surveys = _surveysManager.GetAllSurveys();
-            return View("/UI/Views/Admin/SurveyResults.cshtml", surveys);
+            IEnumerable<Survey> surveys = _surveysManager.GetAllSurveysBySort(sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                surveys = surveys.Where(s => s.Title.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/SurveyResults.cshtml", surveys.ToList());
         }
 
         #endregion
 
         #region Tags
         
-        public IActionResult Tags()
+        public IActionResult Tags(string sortOrder, string searchString)
         {
-           List<Tag> tags = _ideationsManager.GetAllTags();
-           return View("/UI/Views/Admin/Tags.cshtml", tags);
+           IEnumerable<Tag> tags = _ideationsManager.GetAllTagsBySort(sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                tags = tags.Where(t => t.TagName.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Admin/Tags.cshtml", tags.ToList());
         }
         public IActionResult EditTag(int tagId)
         {

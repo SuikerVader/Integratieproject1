@@ -7,15 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="google-site-verification" content="CIYO5SWRNrTqz7NScM_jxfBQMXuf4ESBGR7sCkrihhc" />
     <title>@ViewData["Title"] - City Of Ideas</title>
-
     <script type="module" src="~/dist/site.entry.js" defer></script>
     <link rel="stylesheet" href="~/dist/site.css">
     <link rel="stylesheet" href="~/css/site.css"/>
+    
 
     
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <div class="container">
         @* <div class="navbar-header"> *@
         @*     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse"> *@
@@ -45,7 +45,7 @@
             </ul>
             <partial name="/UI/Views/Shared/_SearchPartial.cshtml"/>
             <partial name="/UI/Views/Shared/_LoginPartial.cshtml"/>
-            <partial name="/UI/Views/Shared/_SharedPartial.cshtml"/>
+            <partial  name="/UI/Views/Shared/_SharedPartial.cshtml"/>
         </div>
     </div>
 </nav>
@@ -55,11 +55,12 @@
 <div class="body-content">
     @RenderBody()
     <hr/>
-    <footer>
-        <p>&copy; 2019 - Integratieproject1</p>
+    <footer >
+        <p>&copy; 2019 - Integratieproject1 - <a asp-controller="Home" asp-action="About">Info</a> - <a asp-controller="Home" asp-action="FAQ">FAQ</a> - <a asp-controller="Home" asp-action="Privacy">Privacy</a></p>
     </footer>
 </div>
 
 @RenderSection("Scripts", required: false)
 </body>
 </html>
+

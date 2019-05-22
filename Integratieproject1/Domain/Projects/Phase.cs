@@ -24,7 +24,33 @@ namespace Integratieproject1.Domain.Projects
         public ICollection<Ideation> Ideations { get; set; }
         public ICollection<Survey> Surveys { get; set; }
 
+        public Ideation GetTopIdeation()
+        {
+            Ideation returnIdeation = Ideations.First();
+            int returnIdeaCount = 1;
+            foreach (var ideation in Ideations)
+            {
+               int ideaCount = 0;
+               foreach (var idea in ideation.Ideas)
+               {
+                   ideaCount++;
+               }
 
+               if (ideaCount > returnIdeaCount)
+               {
+                   returnIdeation = ideation;
+                   returnIdeaCount = ideaCount;
+               }
+            }
+
+            return returnIdeation;
+        }
+
+        public Survey GetFirstSurvey()
+        {
+            return Surveys.First();
+        }
+        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> errors = new List<ValidationResult>();

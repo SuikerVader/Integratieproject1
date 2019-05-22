@@ -7,14 +7,12 @@
 
 <div>
     <form class="" asp-controller="Project" asp-action="AddTextField" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-        <div class="form-row">
-            <div class="col-10 text-center">
-              <textarea rows="1" class="form-control" required asp-for="Text" placeholder=""></textarea>  
+        <div class="input-group">
+            <textarea rows="1" class="form-control" required asp-for="Text" placeholder=""></textarea>  
+            <div class="input-group-append">
+                <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
             </div>
-            <div class="col-2 text-center">
-                <input class="btn btn-primary btn-sm" type="submit" value="Tekstveld Toevoegen">
-            </div>
-        </div>
+        </div>  
     </form>
     
 </div>

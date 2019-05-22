@@ -7,15 +7,29 @@ namespace Integratieproject1.BL.Interfaces
 {
     public interface IUsersManager
     {
+        #region User
+
         CustomUser GetUser(string userId);
-        void DeleteUser(string userId);
-        void DeleteRole(string userId, string role);
+        CustomUser GetUserByEmail(string email);
+        string GetSurname(CustomUser customUser);
+        string GetName(CustomUser customUser);
+        string GetSex(CustomUser customUser);
+        int GetAge(CustomUser customUser);
+        string GetZipcode(CustomUser customUser);
         IList<CustomUser> GetUsers(string role);
-        void GiveRole(string userId, string role);
         void CreateUser(CustomUser identityUser);
-        IEnumerable<VerificationRequest> GetVerificationRequests();
-        void CreateVerificationRequest(VerificationRequest verificationRequest);
-        VerificationRequest CreateVerificationRequest(CustomUser user, string request);
-        void HandleVerificationRequest(VerificationRequest verificationRequest, bool accepted);
+        void DeleteUser(string userId);
+        void BlockUser(string userId, int days);
+
+        #endregion
+
+        #region Role
+
+        void DeleteRole(string userId, string role);
+        void GiveRole(string userId, string role);
+        bool IsInRole(string userId, string role);
+
+        #endregion
+
     }
 }

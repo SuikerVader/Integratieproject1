@@ -44,7 +44,14 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-        public IEnumerable<Ideation> GetAllIdeations(int platformId)
+        public IEnumerable<Ideation> GetAllIdeations()
+        {
+            return _ctx.Ideations
+                .Include(i => i.Phase).ThenInclude(p => p.Project)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<Ideation> GetIdeationsByPlatform(int platformId)
         {
             return _ctx.Ideations
                 .Where(i => i.Phase.Project.Platform.PlatformId == platformId)
@@ -100,6 +107,18 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Ideas
                 .Where(i => i.Ideation.Phase.Project.Platform.PlatformId == platformId)
                 .Include(i => i.IdeaObjects)
+                .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
+                .AsEnumerable();
+        }
+
+        public IEnumerable<Idea> GetAllNonPublishedIdeas()
+        {
+            return _ctx.Ideas
+                .Include(i => i.IdeaObjects)
+                .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
+                .Include(i => i.Ideation)
+                .Include(i => i.IdentityUser)
+                .Where(i => i.Published == false)
                 .AsEnumerable();
         }
 
@@ -141,6 +160,12 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
+        public void PublishIdea(Idea idea)
+        {
+            idea.Published = true;
+            _ctx.Ideas.Update(idea);
+            _ctx.SaveChanges();
+        }
 
         public void RemoveIdea(Idea idea)
         {
@@ -283,6 +308,11 @@ namespace Integratieproject1.DAL.Repositories
         public IEnumerable<Reaction> GetReactionsOnIdea(Idea idea)
         {
             return _ctx.Reactions.Where(reaction => reaction.Idea == idea).AsEnumerable();
+        }
+        
+        public IEnumerable<Reaction> GetIdeaReactions(int id)
+        {
+            return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id).AsEnumerable();
         }
 
         public Reaction GetReaction(int reactionId)

@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.DAL.Repositories;
 using Integratieproject1.Domain.Ideations;
@@ -32,12 +35,30 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Moderator/Index.cshtml", user);
         }
 
-        public IActionResult Projects()
+        public IActionResult Projects(string sortOrder, string searchString)
         {
-            IList<Project> projects = _projectsManager.GetAllProjects();
-            return View("/UI/Views/Moderator/Projects.cshtml", projects);
+            ClaimsPrincipal currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<Project> projects = _projectsManager.GetAdminProjectsBySort(currentUserId, sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
+            ViewData["StartDateSortParm"] = sortOrder == "StartDate" ? "startdate_desc" : "StartDate";
+            ViewData["EndDateSortParm"] = sortOrder == "EndDate" ? "enddate_desc" : "EndDate";
+            ViewData["PlatformSortParm"] = sortOrder == "Platform" ? "platform_desc" : "Platform";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                projects = projects.Where(p => p.ProjectName.ToLower().Contains(searchString)
+                                       || p.Status.ToLower().Contains(searchString)
+                                       || p.Platform.PlatformName.ToLower().Contains(searchString));
+            }
+
+            return View("/UI/Views/Moderator/Projects.cshtml", projects.ToList());
         }
 
+
+        #region Posts
         public IActionResult Posts(int projectId)
         {
             ViewBag.ReportedIdeas = _ideationsManager.GetReportedIdeas(projectId);
@@ -56,15 +77,32 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult DeletePost(int projectId, int id, string type)
         {
             _ideationsManager.DeletePost(id, type);
-                        Project project = _projectsManager.GetProject(projectId);
-                        return View("/UI/Views/Moderator/Posts.cshtml", project);
+            Project project = _projectsManager.GetProject(projectId);
+            return View("/UI/Views/Moderator/Posts.cshtml", project);
         }
 
-        public IActionResult Users()
+        #endregion
+
+        #region Users
+
+        public IActionResult Users(string sortOrder, string searchString)
         {
-            UsersManager usersManager = new UsersManager();
-            IList<CustomUser> users = usersManager.GetUsers("USER");
-            return View("/UI/Views/Moderator/Users.cshtml", users);
+            IEnumerable<CustomUser> users = _usersManager.GetUsersBySort("USER", sortOrder);
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "username_desc" : "";
+            ViewData["SurnameSortParm"] = sortOrder == "Surname" ? "surname_desc" : "Surname";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewData["AgeSortParm"] = sortOrder == "Age" ? "age_desc" : "Age";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                users = users.Where(u => u.UserName.ToLower().Contains(searchString)
+                                         || u.Surname.ToLower().Contains(searchString)
+                                         || u.Name.ToLower().Contains(searchString)
+                                         || u.Email.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Moderator/Users.cshtml", users.ToList());
         }
 
         public IActionResult BlockAccount(string userId, int days)
@@ -75,5 +113,38 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Moderator/Users.cshtml", users);
         }
 
+        #endregion
+
+        #region Ideas
+
+        public IActionResult Ideas(string sortOrder, string searchString)
+        {
+            IEnumerable<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas(sortOrder);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["UserSortParm"] = sortOrder == "User" ? "user_desc" : "User";
+            ViewData["IdeationSortParm"] = sortOrder == "Ideation" ? "ideation_desc" : "Ideation";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                ideas = ideas.Where(i => i.Title.ToLower().Contains(searchString)
+                                         || i.IdentityUser.UserName.ToLower().Contains(searchString)
+                                         || i.Ideation.CentralQuestion.ToLower().Contains(searchString));
+            }
+            return View("/UI/Views/Moderator/Ideas.cshtml", ideas.ToList());
+        }
+
+        public IActionResult Publish(int ideaId)
+        {
+            _ideationsManager.PublishIdea(ideaId);
+            IList<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas("").ToList();
+            return View("/UI/Views/Moderator/Ideas.cshtml", ideas.ToList());
+        }
+
+
+        #endregion
+        
+
+        
     }
 }

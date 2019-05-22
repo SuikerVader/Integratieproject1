@@ -5,38 +5,60 @@
     Layout = "/UI/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
-@if (Model.Count == 0)
-{
-    <h2>Geen projecten gevonden voor deze admin!</h2>
-}
-else
-{
-    
-        <h2>Admin: @Model.First().Admin.Email </h2>
+    @if (Model.Count == 0)
+    {
+        <h2>Geen projecten gevonden voor deze admin!</h2>
+    }
+    else
+    {
+
+        <h2>Admin: @Model.First().Admin.UserName </h2>
+        <form asp-action="AdminProjects" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                    <a asp-action="AdminProjects">Terug naar volledige lijst</a>
+                </p>
+            </div>
+        </form>
         <div>
             <table class="table">
                 <tr>
-                    <th>Projectnaam</th>
-                    <th>Beschrijving</th>
-                    <th>Startdatum</th>
-                    <th>Einddatum</th>
-                    <th>Locatie</th>
+                    <th>
+                        <a asp-action="AdminProjects" asp-route-sortOrder="@ViewData["NameSortParm"]">Naam</a>
+                    </th>
+                    <th>
+                        <a asp-action="AdminProjects" asp-route-sortOrder="@ViewData["StatusSortParm"]">Status</a>
+                    </th>
+                    <th>
+                        <a asp-action="AdminProjects" asp-route-sortOrder="@ViewData["StartDateSortParm"]">Startdatum</a>
+                    </th>
+                    <th>
+                        <a asp-action="AdminProjects" asp-route-sortOrder="@ViewData["EndDateSortParm"]">Einddatum</a>
+                    </th>
+                    <th>
+                        <a asp-action="AdminProjects" asp-route-sortOrder="@ViewData["PlatformSortParm"]">District</a>
+                    </th>
                 </tr>
                 @foreach (var adminProject in Model)
                 {
                     <tr>
                         <td>@adminProject.Project.ProjectName</td>
-                        <td>@adminProject.Project.Description</td>
+                        <td>@adminProject.Project.Status</td>
                         <td>@adminProject.Project.StartDate</td>
                         <td>@adminProject.Project.EndDate</td>
-                        <td>@adminProject.Project.Location.LocationName</td>
-                        <td><a asp-area="" asp-controller="SuperAdmin"
-                               asp-action="DeleteAdminProject" asp-route-adminProjectId="@adminProject.AdminProjectId">Verwijder AdminProject
-                        </a></td>
+                        <td>@adminProject.Project.Platform.PlatformName</td>
+                        <td>
+                            <a asp-area="" asp-controller="SuperAdmin"
+                               asp-action="DeleteAdminProject" asp-route-adminProjectId="@adminProject.AdminProjectId">
+                                Verwijder AdminProject
+                            </a>
+                        </td>
                     </tr>
                 }
             </table>
         </div>
-    
-}
+
+    }
 </div>
