@@ -32,7 +32,59 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager = unitOfWorkManager;
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
+        
+        public string GenerateIoTUrl()
+        {
+            //TODO: creeer link die doorverwijst naar sign-up page.
+            return "randomSignUpUrl" + DateTime.Now;
+        }
 
+        //in case of an IoTSetup that offers multiple options (buttons)
+        public void RegisterComplexVote(int id, int supportLv)
+        {
+            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
+            IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
+            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+        }
+        
+        #region Gets
+        public IoTSetup GetIoT(string iotId)
+        {
+            return _ioTRepository.GetIoTSetup(iotId);
+        }
+        public List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForPlatform(platformId).ToList();
+            return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForProject(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForProject(id).ToList();
+            return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForIdeation(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdeation(id).ToList();
+            return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForIdea(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdea(id).ToList();
+            return ioTSetups;
+        }
+
+        public List<IoTSetup> GetAllIoTSetupsForQuestion(int id)
+        {
+            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
+            return ioTSetups;
+        }
+
+        #endregion
+        
+        #region CUD
         public void DeleteIoTSetup(string ioTId)
         {
             IoTSetup ioTSetup = _ioTRepository.GetIoTSetup(ioTId);
@@ -49,21 +101,6 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository.CreateIoTSetup(setup);
             _unitOfWorkManager.Save();
         }
-        
-        public string GenerateIoTUrl()
-        {
-            //TODO: creeer link die doorverwijst naar sign-up page.
-            return "randomSignUpUrl" + DateTime.Now;
-        }
-
-        //in case of an IoTSetup that offers multiple options (buttons)
-        public void RegisterComplexVote(int id, int supportLv)
-        {
-            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
-            IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
-            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
-        }
-
         public void CreateIoTSetup(IoTSetup ioTSetup, int id, string type)
         {
             
@@ -81,10 +118,6 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public IoTSetup GetIoT(string iotId)
-        {
-            return _ioTRepository.GetIoTSetup(iotId);
-        }
 
         public void EditIoTSetup(IoTSetup ioTSetup, string iotId)
         {
@@ -96,34 +129,8 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
-        {
-            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForPlatform(platformId).ToList();
-            return ioTSetups;
-        }
 
-        public List<IoTSetup> GetAllIoTSetupsForProject(int id)
-        {
-             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForProject(id).ToList();
-                        return ioTSetups;
-        }
-
-        public List<IoTSetup> GetAllIoTSetupsForIdeation(int id)
-        {
-            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdeation(id).ToList();
-                                    return ioTSetups;
-        }
-
-        public List<IoTSetup> GetAllIoTSetupsForIdea(int id)
-        {
-            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdea(id).ToList();
-                                                return ioTSetups;
-        }
-
-        public List<IoTSetup> GetAllIoTSetupsForQuestion(int id)
-        {
-            List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
-                                                            return ioTSetups;
-        }
+        #endregion
+        
     }
 }

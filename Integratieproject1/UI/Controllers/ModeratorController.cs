@@ -57,6 +57,8 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Moderator/Projects.cshtml", projects.ToList());
         }
 
+
+        #region Posts
         public IActionResult Posts(int projectId)
         {
             ViewBag.ReportedIdeas = _ideationsManager.GetReportedIdeas(projectId);
@@ -75,9 +77,13 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult DeletePost(int projectId, int id, string type)
         {
             _ideationsManager.DeletePost(id, type);
-                        Project project = _projectsManager.GetProject(projectId);
-                        return View("/UI/Views/Moderator/Posts.cshtml", project);
+            Project project = _projectsManager.GetProject(projectId);
+            return View("/UI/Views/Moderator/Posts.cshtml", project);
         }
+
+        #endregion
+
+        #region Users
 
         public IActionResult Users(string sortOrder, string searchString)
         {
@@ -92,9 +98,9 @@ namespace Integratieproject1.UI.Controllers
             {
                 searchString = searchString.ToLower();
                 users = users.Where(u => u.UserName.ToLower().Contains(searchString)
-                                       || u.Surname.ToLower().Contains(searchString)
-                                       || u.Name.ToLower().Contains(searchString)
-                                       || u.Email.ToLower().Contains(searchString));
+                                         || u.Surname.ToLower().Contains(searchString)
+                                         || u.Name.ToLower().Contains(searchString)
+                                         || u.Email.ToLower().Contains(searchString));
             }
             return View("/UI/Views/Moderator/Users.cshtml", users.ToList());
         }
@@ -107,6 +113,10 @@ namespace Integratieproject1.UI.Controllers
             return View("/UI/Views/Moderator/Users.cshtml", users);
         }
 
+        #endregion
+
+        #region Ideas
+
         public IActionResult Ideas(string sortOrder, string searchString)
         {
             IEnumerable<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas(sortOrder);
@@ -118,8 +128,8 @@ namespace Integratieproject1.UI.Controllers
             {
                 searchString = searchString.ToLower();
                 ideas = ideas.Where(i => i.Title.ToLower().Contains(searchString)
-                                       || i.IdentityUser.UserName.ToLower().Contains(searchString)
-                                       || i.Ideation.CentralQuestion.ToLower().Contains(searchString));
+                                         || i.IdentityUser.UserName.ToLower().Contains(searchString)
+                                         || i.Ideation.CentralQuestion.ToLower().Contains(searchString));
             }
             return View("/UI/Views/Moderator/Ideas.cshtml", ideas.ToList());
         }
@@ -130,5 +140,11 @@ namespace Integratieproject1.UI.Controllers
             IList<Idea> ideas = _ideationsManager.GetAllNonPublishedIdeas("").ToList();
             return View("/UI/Views/Moderator/Ideas.cshtml", ideas.ToList());
         }
+
+
+        #endregion
+        
+
+        
     }
 }
