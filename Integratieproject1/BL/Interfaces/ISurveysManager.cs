@@ -11,6 +11,8 @@ namespace Integratieproject1.BL.Interfaces
         Survey GetSurvey(int surveyId);
         IList<Survey> GetSurveys(int phaseId);
         IList<Survey> GetAllSurveys();
+        IList<Survey> GetAllSurveysBySort(string sortOrder);
+        IList<Survey> GetProjectsSurveys(int projectId);
         void CreateSurvey(Survey survey);
         void CreateNewSurvey(int phaseId);
         Survey EditSurvey(Survey survey, int surveyId);

@@ -12,6 +12,7 @@ namespace Integratieproject1.BL.Interfaces
         Platform GetPlatform(int platformId);
         Platform GetPlatformByName(string platformName);
         IList<Platform> GetAllPlatforms();
+        IList<Platform> GetAllPlatformsBySort(string sortOrder);
         void CreatePlatform(Platform platform);
         void EditPlatform(Platform platform, int platformId);
         void EditPlatformLayout(Platform platform, int platformId);
@@ -27,9 +28,13 @@ namespace Integratieproject1.BL.Interfaces
         AdminProject GetAdminProject(int adminProjectId);
         IList<Project> GetProjects(int platformId);
         IList<Project> GetAllProjects();
+        IList<Project> GetAllProjectsBySort(string sortOrder);
         IList<Project> GetAdminProjects(string userId);
         IList<AdminProject> GetAllAdminProjects(string userId);
+        IList<Project> GetAdminProjectsBySort(string userId, string sortOrder);
+        IList<AdminProject> GetAllAdminProjectsBySort(string userId, string sortOrder);
         IList<CustomUser> GetNotProjectAdmins(int projectId);
+        IList<CustomUser> GetNotProjectAdminsBySort(int projectId, string sortOrder);
         void CreateProject(Project project, string id, int platformId);
         void CreateAdminProject(int projectId, string adminId);
         Project EditProject(Project project, int projectId);

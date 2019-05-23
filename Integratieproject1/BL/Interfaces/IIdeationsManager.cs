@@ -12,8 +12,9 @@ namespace Integratieproject1.BL.Interfaces
         Ideation GetIdeation(int ideationId);
         IList<Ideation> GetProjectIdeations(int projectId);
         IList<Ideation> GetIdeations(int phaseId);
-        IList<Ideation> GetIdeationsByPlatform(int phaseId);
+        IList<Ideation> GetIdeationsByPlatform(int platformId);
         IList<Ideation> GetAllIdeations();
+        IList<Ideation> GetAllIdeationsBySort(string sortOrder);
         void CreateIdeation(Ideation ideation, int phaseId);
         Ideation EditIdeation(Ideation ideation, int ideationId);
         void DeleteIdeation(int ideationId);
@@ -25,15 +26,17 @@ namespace Integratieproject1.BL.Interfaces
         Idea GetIdea(int ideaId);
         IList<Idea> GetIdeas(int ideationId);
         IList<Idea> GetAllIdeas(int platformId); 
+        IEnumerable<Idea> GetIdeasByUser(string currentUserId); 
+        IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder); 
         IList<Idea> GetOtherIdeas(int ideationId);
         IList<Idea> GetReportedIdeas(int projectId);
-        Idea CreateIdea(Idea idea);
         Idea CreateNewIdea(int ideationId, string userId);
+        void PublishIdea(int ideaId);
         void EditIdea(Idea idea, int ideaId);
         void ChangeIdea(Idea idea);
         void DeleteIdea(int ideaId);
-        Idea PostIdea(ArrayList parameters, int ideationId, string userId);
         void AddPosition(Position position, int ideaId);
+        void DeleteLocationFromIdea(int ideaId, int positionId);
 
         #endregion
 
@@ -44,6 +47,32 @@ namespace Integratieproject1.BL.Interfaces
         void EditIdeaObject(IdeaObject ideaObject);
         void OrderNrChange(int ideaObjectId, string changer, int ideaId);
 
+        #region TextFields
+
+        void AddTextField(TextField textField, int ideaId);
+        void EditTextField(TextField textField, int textFieldId);
+        void DeleteTextField(int textFieldId);
+        TextField GetTextField(int textFieldId);
+        
+        #endregion
+        
+        #region Video
+
+        void AddVideo(Video video, int ideaId);
+        void DeleteVideo(int videoId);
+        Video GetVideo(int videoId);
+
+        #endregion
+        
+        #region Images
+
+        void CreateImage(string name, string path, int ideaId);
+        IEnumerable<Image> GetImages(int ideaId);
+        Image GetImage(int imageId);
+        void DeleteImage(int imageId);
+        
+        #endregion
+        
         #endregion
 
         #region Like
@@ -57,6 +86,7 @@ namespace Integratieproject1.BL.Interfaces
 
         Reaction GetReaction(int reactionId);
         IList<Reaction> GetAllReactions(int platformId);
+        IList<Reaction> GetIdeaReactions(int id);
         IList<Reaction> GetReportedReactions(int projectId);
         void PostReaction(ArrayList parameters, int id, string userId, string element);
         void LikeReaction(int reactionId, string userId);
@@ -79,6 +109,7 @@ namespace Integratieproject1.BL.Interfaces
         IdeaTag GetIdeaTag(int ideaTagId);
         List<Tag> GetTags(int ideaId);
         List<Tag> GetAllTags();
+        List<Tag> GetAllTagsBySort(string sortOrder);
         void AddTag(Tag tag);
         void CreateIdeaTag(int ideaId, int tagId);
         void EditTag(Tag tag, int tagId);

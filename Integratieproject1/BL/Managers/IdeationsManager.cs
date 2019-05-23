@@ -309,33 +309,6 @@ namespace Integratieproject1.BL.Managers
             return returnIdea;
         }
 
-        public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
-        {
-            Idea idea = new Idea
-            {
-                Ideation = GetIdeation(ideationId),
-                IdentityUser = _usersManager.GetUser(userId),
-                Title = parameters[0].ToString(),
-            };
-            TextField textField = new TextField
-            {
-                Text = parameters[1].ToString(),
-            };
-            Video video = new Video
-            {
-                Url = parameters[2].ToString().Replace("watch?v=", "embed/"),
-            };
-            idea.IdeaObjects = new List<IdeaObject>() {textField, video};
-            return CreateIdea(idea);
-        }
-
-        public Idea CreateIdea(Idea idea)
-        {
-            Idea created = _ideationsRepository.CreateIdea(idea);
-            _unitOfWorkManager.Save();
-            return created;
-        }
-
         public void PublishIdea(int ideaId)
         {
             Idea idea = GetIdea(ideaId);
@@ -542,7 +515,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private TextField GetTextField(int textFieldId)
+        public TextField GetTextField(int textFieldId)
         {
             return _ideationsRepository.GetTextField(textFieldId);
         }
@@ -578,7 +551,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private Video GetVideo(int videoId)
+        public Video GetVideo(int videoId)
         {
             return _ideationsRepository.GetVideo(videoId);
         }

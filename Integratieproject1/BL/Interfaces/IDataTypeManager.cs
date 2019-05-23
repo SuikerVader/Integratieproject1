@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Integratieproject1.BL.Interfaces
 {
-    interface IDataTypeManager
+interface IDataTypeManager
     {
         #region Location
 
