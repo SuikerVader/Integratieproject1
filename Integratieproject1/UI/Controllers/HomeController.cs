@@ -251,5 +251,27 @@ namespace Integratieproject1.UI.Controllers
                 return RedirectToIdeation(id);
             }
         }
+
+        public IActionResult UserIdeas(string sortOrder, string searchString)
+        {
+            ClaimsPrincipal  currentUser = User;
+            string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUser(currentUserId);
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["IdeationSortParm"] = sortOrder == "Ideation" ? "ideation_desc" : "Ideation";
+            ViewData["PhaseSortParm"] = sortOrder == "Phase" ? "phase_desc" : "Phase";
+            ViewData["ProjectSortParm"] = sortOrder == "Project" ? "project_desc" : "Project";
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                ideas = ideas.Where(i => i.Title.ToLower().Contains(searchString)
+                                               || i.Ideation.CentralQuestion.ToLower().Contains(searchString)
+                                               || i.Ideation.Phase.PhaseName.ToLower().Contains(searchString)
+                                               || i.Ideation.Phase.Project.ProjectName.ToLower().Contains(searchString));
+            }
+
+            return View("/UI/Views/Home/UserIdeas.cshtml", ideas.ToList());
+        }
     }
 }

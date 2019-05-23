@@ -14,5 +14,12 @@ namespace Integratieproject1.BL.Interfaces
         string GenerateIoTUrl(string url);
         void RegisterComplexVote(int id, int supportLv, int amount);
         List<IoTSetup> GetAllIoTSetups();
+        IoTSetup GetIoT(string iotId);
+        List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId);
+        List<IoTSetup> GetAllIoTSetupsForProject(int id);
+        List<IoTSetup> GetAllIoTSetupsForIdeation(int id);
+        List<IoTSetup> GetAllIoTSetupsForIdea(int id);
+        List<IoTSetup> GetAllIoTSetupsForQuestion(int id);
+        void EditIoTSetup(IoTSetup ioTSetup, string iotId);
     }
 }

@@ -210,7 +210,7 @@ namespace Integratieproject1.UI.Controllers
         #endregion
 
         #region Position
-        public IActionResult AddPosition(Position position, int ideaId)
+        public IActionResult AddPosition(int ideaId, Position position)
         {
             _ideationsManager.AddPosition(position, ideaId);
             Idea idea = _ideationsManager.GetIdea(ideaId);

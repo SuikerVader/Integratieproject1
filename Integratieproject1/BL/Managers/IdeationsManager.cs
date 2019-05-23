@@ -96,32 +96,32 @@ namespace Integratieproject1.BL.Managers
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
             originalIdeation.ExternalLink = ideation.ExternalLink;
-            originalIdeation.Text = ideation.Text;
+            originalIdeation.TextAllowed = ideation.TextAllowed;
             originalIdeation.TextRequired = ideation.TextRequired;
-            originalIdeation.Image = ideation.Image;
+            originalIdeation.ImageAllowed = ideation.ImageAllowed;
             originalIdeation.ImageRequired = ideation.ImageRequired;
-            originalIdeation.Video = ideation.Video;
+            originalIdeation.VideoAllowed = ideation.VideoAllowed;
             originalIdeation.VideoRequired = ideation.VideoRequired;
-            originalIdeation.Map = ideation.Map;
+            originalIdeation.MapAllowed = ideation.MapAllowed;
             originalIdeation.MapRequired = ideation.MapRequired;
             foreach (Idea idea in originalIdeation.Ideas.ToList())
             {
-                if (!originalIdeation.Map && idea.Position != null)
+                if (!originalIdeation.MapAllowed && idea.Position != null)
                 {
                     _dataTypeManager.DeletePosition(idea.Position.PositionId);
                     idea.Position = null;
                 }
                 foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
                 {
-                    if (!originalIdeation.Text && ideaObject.GetType() == typeof(TextField))
+                    if (!originalIdeation.TextAllowed && ideaObject.GetType() == typeof(TextField))
                     {
                         DeleteTextField(ideaObject.IdeaObjectId);
                     }
-                    if (!originalIdeation.Image && ideaObject.GetType() == typeof(Image))
+                    if (!originalIdeation.ImageAllowed && ideaObject.GetType() == typeof(Image))
                     {
                         DeleteImage(ideaObject.IdeaObjectId);
                     }
-                    if (!originalIdeation.Video && ideaObject.GetType() == typeof(Video))
+                    if (!originalIdeation.VideoAllowed && ideaObject.GetType() == typeof(Video))
                     {
                         DeleteVideo(ideaObject.IdeaObjectId);
                     }
@@ -199,6 +199,10 @@ namespace Integratieproject1.BL.Managers
         public IList<Idea> GetAllIdeas(int platformId)
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
+        }
+        public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
+        {
+            return _ideationsRepository.GetIdeasByUser(currentUserId);
         }
 
 
@@ -303,33 +307,6 @@ namespace Integratieproject1.BL.Managers
             Idea returnIdea = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return returnIdea;
-        }
-
-        public Idea PostIdea(ArrayList parameters, int ideationId, string userId)
-        {
-            Idea idea = new Idea
-            {
-                Ideation = GetIdeation(ideationId),
-                IdentityUser = _usersManager.GetUser(userId),
-                Title = parameters[0].ToString(),
-            };
-            TextField textField = new TextField
-            {
-                Text = parameters[1].ToString(),
-            };
-            Video video = new Video
-            {
-                Url = parameters[2].ToString().Replace("watch?v=", "embed/"),
-            };
-            idea.IdeaObjects = new List<IdeaObject>() {textField, video};
-            return CreateIdea(idea);
-        }
-
-        public Idea CreateIdea(Idea idea)
-        {
-            Idea created = _ideationsRepository.CreateIdea(idea);
-            _unitOfWorkManager.Save();
-            return created;
         }
 
         public void PublishIdea(int ideaId)
@@ -538,13 +515,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private TextField GetTextField(int textFieldId)
+        public TextField GetTextField(int textFieldId)
         {
             return _ideationsRepository.GetTextField(textFieldId);
         }
         #endregion
         
-        #region Video
+        #region VideoAllowed
 
         public void AddVideo(Video video, int ideaId)
         {
@@ -574,7 +551,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        private Video GetVideo(int videoId)
+        public Video GetVideo(int videoId)
         {
             return _ideationsRepository.GetVideo(videoId);
         }
@@ -941,6 +918,6 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
-
+        
     }
 }

@@ -12,10 +12,5 @@ namespace Integratieproject1.Domain.Ideations
         public CustomUser IdentityUser { get; set; }
         [Required] public Idea Idea { get; set; }
 
-        /*[ForeignKey("User")]
-        public int UserFK { get; set; }
-        [Required]
-        [ForeignKey("Idea")]
-        public int IdeaFK { get; set; }*/
     }
 }

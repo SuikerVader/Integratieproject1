@@ -10,7 +10,5 @@ namespace Integratieproject1.Domain.Surveys
         public int TotalTimesChosen { get; set; }
     [Required] public Question Question { get; set; }
     
-    /*[ForeignKey("QuestionFK")]
-    public int QuestionFK { get; set; }*/
   }
 }

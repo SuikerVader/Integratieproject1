@@ -110,6 +110,14 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
                 .AsEnumerable();
         }
+        
+        public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
+        {
+            return _ctx.Ideas
+                .Where(i => i.IdentityUser.Id == currentUserId)
+                .Include(i => i.Ideation).ThenInclude(i => i.Phase).ThenInclude(p => p.Project)
+                .AsEnumerable();
+        }
 
         public IEnumerable<Idea> GetAllNonPublishedIdeas()
         {
@@ -222,7 +230,7 @@ namespace Integratieproject1.DAL.Repositories
 
         #endregion
 
-        #region Video
+        #region VideoAllowed
 
         public Video GetVideo(int videoId)
         {
