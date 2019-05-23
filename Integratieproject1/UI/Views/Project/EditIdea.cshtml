@@ -39,15 +39,19 @@
         <h5>Titel:</h5>
 
         <input required id="ideaInput" asp-for="Title" value="@Model.Title" class="form-control" style="padding: 5px"/>
+        </form>
         @if (Model.Position != null)
         {
             <div class="text-center" id="editLocation" @*style="display: none; padding: 5px"*@>
                 @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
             </div>
-        }
-        <div class="text-center" id="addLocation" style="display: none; padding: 5px">
-            @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+        } 
+        <div>
+            <div class="text-center" id="addLocation" style="display: none; padding: 5px">
+                @await Html.PartialAsync("_AddLocationPartial.cshtml", new Position())
+            </div>
         </div>
+        
         <div>
                 @if (Model.IdeaTags != null && Model.IdeaTags.Count > 0)
                 {
@@ -103,8 +107,6 @@
                     </a>
                 }
             </div >
-                
-    </form>
 </div>
 <div id="editIdeaObjects">
     @if (Model.IdeaObjects != null && Model.IdeaObjects.Count > 0)
