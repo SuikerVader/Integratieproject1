@@ -88,9 +88,7 @@ namespace Integratieproject1.UI.Controllers
                     exceptionThatOccurred = exceptionThatOccurred.InnerException;
                 }
                 
-                MailService.SendErrorMail(
-                    "info.cityofideas@gmail.com", 
-                    "CoIMySweet16", 
+                MailService.SendErrorMail( 
                     routeWhereExceptionOccurred, 
                     exceptionThatOccurred, 
                     User.Identity
