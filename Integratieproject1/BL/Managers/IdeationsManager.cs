@@ -78,6 +78,7 @@ namespace Integratieproject1.BL.Managers
                     ideations = ideations.OrderBy(t => t.CentralQuestion);
                     break;
             }
+
             return ideations.ToList();
         }
 
@@ -111,21 +112,25 @@ namespace Integratieproject1.BL.Managers
                     _dataTypeManager.DeletePosition(idea.Position.PositionId);
                     idea.Position = null;
                 }
+
                 foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
                 {
                     if (!originalIdeation.Text && ideaObject.GetType() == typeof(TextField))
                     {
                         DeleteTextField(ideaObject.IdeaObjectId);
                     }
+
                     if (!originalIdeation.Image && ideaObject.GetType() == typeof(Image))
                     {
                         DeleteImage(ideaObject.IdeaObjectId);
                     }
+
                     if (!originalIdeation.Video && ideaObject.GetType() == typeof(Video))
                     {
                         DeleteVideo(ideaObject.IdeaObjectId);
                     }
                 }
+
                 if (originalIdeation.MapRequired)
                 {
                     Position position = new Position()
@@ -135,6 +140,7 @@ namespace Integratieproject1.BL.Managers
                     };
                     idea.Position = position;
                 }
+
                 if (originalIdeation.TextRequired && idea.GetTextFields().Count == 0)
                 {
                     TextField textField = new TextField
@@ -144,6 +150,7 @@ namespace Integratieproject1.BL.Managers
                     };
                     AddTextField(textField, idea.IdeaId);
                 }
+
                 if (originalIdeation.ImageRequired && idea.GetImages().Count == 0)
                 {
                     Image image = new Image
@@ -154,6 +161,7 @@ namespace Integratieproject1.BL.Managers
                     };
                     CreateImage(image.ImageName, image.ImagePath, idea.IdeaId);
                 }
+
                 if (originalIdeation.VideoRequired && idea.GetVideos().Count == 0)
                 {
                     Video video = new Video
@@ -164,6 +172,7 @@ namespace Integratieproject1.BL.Managers
                     AddVideo(video, idea.IdeaId);
                 }
             }
+
             Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
             return returnIdeation;
@@ -226,6 +235,7 @@ namespace Integratieproject1.BL.Managers
                     ideas = ideas.OrderBy(i => i.Title);
                     break;
             }
+
             return ideas;
         }
 
@@ -233,7 +243,7 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
         }
-        
+
         public IList<Idea> GetOtherIdeas(int ideationId)
         {
             Ideation ideation = GetIdeation(ideationId);
@@ -263,6 +273,7 @@ namespace Integratieproject1.BL.Managers
             {
                 idea.Published = false;
             }
+
             if (ideation.MapRequired)
             {
                 Position position = new Position()
@@ -272,6 +283,7 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.Position = position;
             }
+
             if (ideation.TextRequired)
             {
                 TextField textField = new TextField
@@ -281,6 +293,7 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(textField);
             }
+
             if (ideation.ImageRequired)
             {
                 Image image = new Image
@@ -291,6 +304,7 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(image);
             }
+
             if (ideation.VideoRequired)
             {
                 Video video = new Video
@@ -300,6 +314,7 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(video);
             }
+
             Idea returnIdea = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return returnIdea;
@@ -391,13 +406,12 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.RemoveIdea(idea);
             _unitOfWorkManager.Save();
         }
-        
+
         public void AddPosition(Position position, int ideaId)
         {
-            
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
-            
+
 
             Idea idea = GetIdea(ideaId);
             Idea editIdea = new Idea()
@@ -411,13 +425,14 @@ namespace Integratieproject1.BL.Managers
                 IoTSetups = idea.IoTSetups,
                 Votes = idea.Votes,
                 Reactions = idea.Reactions,
-                
+
                 Position = position,
             };
             _ideationsRepository.RemoveIdea(idea);
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
+
         public void DeleteLocationFromIdea(int ideaId, int positionId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
@@ -427,7 +442,6 @@ namespace Integratieproject1.BL.Managers
             dataTypeManager.DeletePosition(positionId);
             _unitOfWorkManager.Save();
         }
-        
 
         #endregion
 
@@ -503,8 +517,8 @@ namespace Integratieproject1.BL.Managers
         }
 
         #region TextField
-            
-            public void AddTextField(TextField textField, int ideaId)
+
+        public void AddTextField(TextField textField, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
             textField.Idea = idea;
@@ -542,8 +556,9 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetTextField(textFieldId);
         }
+
         #endregion
-        
+
         #region Video
 
         public void AddVideo(Video video, int ideaId)
@@ -651,6 +666,29 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetLike(likeId);
         }
 
+        public void postLike(int reactionId, string userId)
+        {
+            Like like = new Like();
+            Reaction reaction = GetReaction(reactionId);
+            if (userId != null)
+            {
+                UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+                CustomUser user = usersManager.GetUser(userId);
+
+                if (_ideationsRepository.CheckLike(reaction, user) == true)
+                {
+                    like.IdentityUser = user;
+                    like.Reaction = reaction;
+                    _ideationsRepository.CreateLike(like);
+                    _unitOfWorkManager.Save();
+                }
+                else
+                {
+                    throw new Exception("user already voted in that type");
+                }
+            }
+        }
+
         #endregion
 
         #region Reaction
@@ -659,6 +697,7 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
+
         public IList<Reaction> GetIdeaReactions(int id)
         {
             return _ideationsRepository.GetIdeaReactions(id).ToList();
@@ -767,7 +806,7 @@ namespace Integratieproject1.BL.Managers
                 _unitOfWorkManager.Save();
             }
         }
-        
+
         public bool CheckVote(string userId, VoteType voteType, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
@@ -798,14 +837,16 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeaVotes(ideaId);
         }
+
         #endregion
 
         #region Tag
 
         public Tag GetTag(int tagId)
         {
-           return  _ideationsRepository.GetTag(tagId);
+            return _ideationsRepository.GetTag(tagId);
         }
+
         public List<Tag> GetTags(int ideaId)
         {
             List<Tag> tags = GetAllTags();
@@ -832,7 +873,7 @@ namespace Integratieproject1.BL.Managers
 
         public List<Tag> GetAllTagsBySort(string sortOrder)
         {
-            IEnumerable<Tag> tags =  GetAllTags();
+            IEnumerable<Tag> tags = GetAllTags();
             switch (sortOrder)
             {
                 case "name_desc":
@@ -842,6 +883,7 @@ namespace Integratieproject1.BL.Managers
                     tags = tags.OrderBy(t => t.TagName);
                     break;
             }
+
             return tags.ToList();
         }
 
@@ -851,7 +893,7 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.DeleteIdeaTag(ideaTag);
             _unitOfWorkManager.Save();
         }
-        
+
         public void CreateIdeaTag(int ideaId, int tagId)
         {
             IdeaTag ideaTag = new IdeaTag()
@@ -868,7 +910,7 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetIdeaTag(ideaTagId);
         }
-        
+
         public void EditTag(Tag tag, int tagId)
         {
             tag.TagId = tagId;
@@ -885,9 +927,10 @@ namespace Integratieproject1.BL.Managers
 
         public void AddTag(Tag tag)
         {
-           _ideationsRepository.AddTag(tag);
-           _unitOfWorkManager.Save();
+            _ideationsRepository.AddTag(tag);
+            _unitOfWorkManager.Save();
         }
+
         #endregion
 
         #region Posts
@@ -943,8 +986,5 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
-
-
-
     }
 }

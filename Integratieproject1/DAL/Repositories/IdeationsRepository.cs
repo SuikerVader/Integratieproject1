@@ -312,7 +312,10 @@ namespace Integratieproject1.DAL.Repositories
 
         public IEnumerable<Reaction> GetIdeaReactions(int id)
         {
-            return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id).AsEnumerable();
+            return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id)
+                .Include(r=>r.IdentityUser)
+                .Include(r=>r.Likes)
+                .AsEnumerable();
         }
 
         public Reaction GetReaction(int reactionId)

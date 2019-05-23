@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
+using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Mvc;
 using Integratieproject1.Domain.Ideations;
@@ -68,6 +69,18 @@ namespace Integratieproject1.UI.Controllers
         {
             return _ideationsManager.GetIdea(id);
         }
+        
+        //Work in progress
+        [HttpPost]
+        [Route("Api/idea")]
+        public Idea GetIdea([FromHeader] int ideationid, [FromHeader] string userid, [FromBody] JsonObject<IdeaObject> parameters)
+        {
+            
+            Console.WriteLine(parameters.ToString());
+
+            return null;
+            //return _ideationsManager.PostIdea();
+        }
 
         [HttpGet]
         [Route("Api/ideations/{id}")]
@@ -97,6 +110,15 @@ namespace Integratieproject1.UI.Controllers
             return _ideationsManager.GetIdeaVote(id);
         }
 
+        [HttpPost]
+        [Route("Api/like")]
+        public void postLike([FromHeader] int reactionId,[FromHeader] string userid)
+        {
+            Console.WriteLine(reactionId + userid);
+            _ideationsManager.postLike(reactionId, userid);
+        }
+        
+        
         [HttpGet]
         [Route("Api/like/{id}")]
         public IEnumerable<Like> GetLikes(int id)
