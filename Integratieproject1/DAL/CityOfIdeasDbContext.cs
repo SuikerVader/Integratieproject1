@@ -61,7 +61,7 @@ namespace Integratieproject1.DAL
     {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source=CityOfIdeas.db");
-            //optionsBuilder.UseMySql("Server=146.148.126.19;Database=db1;Uid=root;Pwd=KdG241Rk");
+            //optionsBuilder.UseMySql("Server=146.148.126.19;Database=db1;Uid=root;Pwd=$password");
             optionsBuilder.UseLoggerFactory(new LoggerFactory(
                 providers: new[]
                 {

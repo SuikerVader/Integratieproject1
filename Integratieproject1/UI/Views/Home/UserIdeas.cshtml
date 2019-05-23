@@ -1,0 +1,60 @@
+@using Integratieproject1.Domain.Projects
+@model IList<Integratieproject1.Domain.Ideations.Idea>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Mijn Idee&euml;n</h2>
+    <form asp-action="UserIdeas" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Filter: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Zoeken" class="btn btn-primary" /> |
+                <a asp-action="UserIdeas">Terug naar volledige lijst</a>
+            </p>
+        </div>
+    </form>
+    <div>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="UserIdeas" asp-route-sortOrder="@ViewData["TitleSortParm"]">Title</a>
+                </th>
+                <th>
+                    <a asp-action="UserIdeas" asp-route-sortOrder="@ViewData["IdeationSortParm"]">Ideation</a>
+                </th>
+                <th>
+                    <a asp-action="UserIdeas" asp-route-sortOrder="@ViewData["ProjectSortParm"]">Project</a>
+                </th>
+                <th>
+                    <a asp-action="UserIdeas" asp-route-sortOrder="@ViewData["PhaseSortParm"]">Phase</a>
+                </th>
+            </tr>
+            @foreach (var idea in Model)
+            {
+                <tr>
+                    <td>@idea.Title</td>
+                    <td>@idea.Ideation.CentralQuestion</td>
+                    <td>@idea.Ideation.Phase.Project.ProjectName</td>
+                    <td>@idea.Ideation.Phase.PhaseName</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" asp-area="" asp-controller="Project"
+                           asp-action="EditIdea" asp-route-ideaId="@idea.IdeaId">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
+                           asp-action="DeleteIdea" asp-route-ideaId="@idea.IdeaId" asp-route-ideationId="@idea.Ideation.IdeationId">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

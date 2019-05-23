@@ -42,10 +42,17 @@
 </div>
 <br/>
 <div id="projects" class="d-flex flex-column justify-content-start flex-wrap">
+@{
+    var activeprojectCount = 0;
+    var futureprojectCount = 0;
+    var closedprojectCount = 0;
+}
 @foreach (var project in Model.Projects)
 {
+
     if (DateTime.Now >= project.StartDate && DateTime.Now <= project.EndDate)
     {
+        activeprojectCount++;
         <div class="card text-center activeProject ">
             <div class="projectGrid"
                  @if (project.BackgroundImage != null)
@@ -177,6 +184,7 @@
                             else
                             {
                                 <div class="d-flex flex-column justify-content-center" style="height: 100%">
+                                    <div ><i class="fa fa-frown-o fa-5x"></i></div>
                                     <p>Er staat nog niets in deze fase. <br/> Kom zeker later nog eens kijken!</p>
                                 </div>
                             }
@@ -189,6 +197,7 @@
     }
     else if (DateTime.Now > project.EndDate)
     {
+        closedprojectCount++;
         <div class="card text-center closedProject">
             <div class="card-body"
                  @if (project.BackgroundImage != null)
@@ -250,6 +259,7 @@
     }
     else if (DateTime.Now < project.StartDate)
     {
+        futureprojectCount++;
         <div class="card text-center futureProject">
             <div class="card-body"
                  @if (project.BackgroundImage != null)
@@ -306,6 +316,47 @@
             </div>
         </div>
     }
+
+}
+@if (activeprojectCount == 0)
+{
+    <div class="activeProject">
+        <div class="d-flex flex-row justify-content-center" style="height: 100%">
+            <div class="d-flex flex-column justify-content-center align-items-center " style="height: 100%">
+                <div style="font-size: 48px">
+                    <i class="fa fa-frown-o fa-5x"></i>
+                </div>
+                <p>Er zijn hier nog geen projecten te zien Kom zeker later nog eens kijken!</p>
+            </div>
+        </div>
+    </div>
+}
+@if (closedprojectCount == 0)
+{
+    <div class="closedProject">
+        <div class="d-flex flex-row justify-content-center" style="height: 100%">
+            <div class="d-flex flex-column justify-content-center align-items-center " style="height: 100%">
+                <div style="font-size: 48px">
+                    <i class="fa fa-frown-o fa-5x"></i>
+                </div>
+                <p>Er zijn hier nog geen projecten te zien Kom zeker later nog eens kijken!</p>
+            </div>
+        </div>
+    </div>
+}
+@if (futureprojectCount == 0)
+{
+    <div class="futureProject">
+        <div class="d-flex flex-row justify-content-center" style="height: 100%">
+            <div class="d-flex flex-column justify-content-center align-items-center " style="height: 100%">
+                <div style="font-size: 48px">
+                    <i class="fa fa-frown-o fa-5x"></i>
+                </div>
+                <p>Er zijn hier nog geen projecten te zien Kom zeker later nog eens kijken!</p>
+            </div>
+        </div>
+    </div>
+    
 }
 </div>
 </div>
