@@ -200,6 +200,10 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
+        public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
+        {
+            return _ideationsRepository.GetIdeasByUser(currentUserId);
+        }
 
 
         public IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder)
@@ -941,6 +945,6 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
 
-
+        
     }
 }
