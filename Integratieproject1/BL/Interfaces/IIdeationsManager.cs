@@ -56,7 +56,7 @@ namespace Integratieproject1.BL.Interfaces
         
         #endregion
         
-        #region Video
+        #region VideoAllowed
 
         void AddVideo(Video video, int ideaId);
         void DeleteVideo(int videoId);

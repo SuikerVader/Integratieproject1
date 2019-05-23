@@ -96,32 +96,32 @@ namespace Integratieproject1.BL.Managers
             originalIdeation.CentralQuestion = ideation.CentralQuestion;
             originalIdeation.InputIdeation = ideation.InputIdeation;
             originalIdeation.ExternalLink = ideation.ExternalLink;
-            originalIdeation.Text = ideation.Text;
+            originalIdeation.TextAllowed = ideation.TextAllowed;
             originalIdeation.TextRequired = ideation.TextRequired;
-            originalIdeation.Image = ideation.Image;
+            originalIdeation.ImageAllowed = ideation.ImageAllowed;
             originalIdeation.ImageRequired = ideation.ImageRequired;
-            originalIdeation.Video = ideation.Video;
+            originalIdeation.VideoAllowed = ideation.VideoAllowed;
             originalIdeation.VideoRequired = ideation.VideoRequired;
-            originalIdeation.Map = ideation.Map;
+            originalIdeation.MapAllowed = ideation.MapAllowed;
             originalIdeation.MapRequired = ideation.MapRequired;
             foreach (Idea idea in originalIdeation.Ideas.ToList())
             {
-                if (!originalIdeation.Map && idea.Position != null)
+                if (!originalIdeation.MapAllowed && idea.Position != null)
                 {
                     _dataTypeManager.DeletePosition(idea.Position.PositionId);
                     idea.Position = null;
                 }
                 foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
                 {
-                    if (!originalIdeation.Text && ideaObject.GetType() == typeof(TextField))
+                    if (!originalIdeation.TextAllowed && ideaObject.GetType() == typeof(TextField))
                     {
                         DeleteTextField(ideaObject.IdeaObjectId);
                     }
-                    if (!originalIdeation.Image && ideaObject.GetType() == typeof(Image))
+                    if (!originalIdeation.ImageAllowed && ideaObject.GetType() == typeof(Image))
                     {
                         DeleteImage(ideaObject.IdeaObjectId);
                     }
-                    if (!originalIdeation.Video && ideaObject.GetType() == typeof(Video))
+                    if (!originalIdeation.VideoAllowed && ideaObject.GetType() == typeof(Video))
                     {
                         DeleteVideo(ideaObject.IdeaObjectId);
                     }
@@ -521,7 +521,7 @@ namespace Integratieproject1.BL.Managers
         }
         #endregion
         
-        #region Video
+        #region VideoAllowed
 
         public void AddVideo(Video video, int ideaId)
         {

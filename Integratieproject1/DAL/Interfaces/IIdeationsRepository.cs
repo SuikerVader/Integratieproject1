@@ -51,7 +51,7 @@ namespace Integratieproject1.DAL.Interfaces
         
         #endregion
 
-        #region Video
+        #region VideoAllowed
 
         Video GetVideo(int videoId);
         void AddVideo(Video video);

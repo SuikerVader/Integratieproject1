@@ -209,15 +209,15 @@
                     <i class="fa fa-plus"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    @if (Model.Ideation.Text || User.IsInRole("Admin"))
+                    @if (Model.Ideation.TextAllowed || User.IsInRole("Admin"))
                     {
                         <button class="dropdown-item" onclick="showHide('newTextField')" type="button">Tekstveld</button>
                     }
-                    @if (Model.Ideation.Image || User.IsInRole("Admin"))
+                    @if (Model.Ideation.ImageAllowed || User.IsInRole("Admin"))
                     {
                         <button class="dropdown-item" onclick="showHide('newImage')" type="button">Afbeelding</button>
                     }
-                    @if (Model.Ideation.Video || User.IsInRole("Admin"))
+                    @if (Model.Ideation.VideoAllowed || User.IsInRole("Admin"))
                     {
                         <button class="dropdown-item" onclick="showHide('newVideo')" type="button">Video</button>
                     }
