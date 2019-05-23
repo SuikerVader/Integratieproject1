@@ -6,21 +6,12 @@
 }
 
 <div>
-    @*<form class="" asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-        <div class="input-group">
-            <input class="form-control" id="autocompleteAdd" $1$oninput="inputAutocomplete()"#1#/>
-            <input class="form-control" required asp-for="Lat" id="lat"/>
-            <input class="form-control" required asp-for="Lng" id="lng"/>
-            <div class="input-group-append">
-                <input class="btn btn-primary btn-sm" type="submit" value="Locatie Toevoegen">
-            </div>
-        </div>  
-    </form>*@
     <div class="card">
         <div id="AddMap"></div>
         
-        <form class="" asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId" method="post">
-            
+        <form asp-controller="Project" asp-action="AddPosition" asp-route-ideaId="@ViewBag.IdeaId">
+            <input class="form-control" hidden required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
+            <input class="form-control" hidden required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
             <div class=" d-flex flex-row justify-content-center ">
                 <div class="input-group">
                     <input class="form-control" id="autocompleteAdd" @*oninput="inputAutocomplete()*@"/>
@@ -29,8 +20,7 @@
                     </div>
                 </div>
             </div>
-            <input class="form-control" hidden required placeholder="Breedtegraad" asp-for="Lat" id="lat"/>
-            <input class="form-control" hidden required placeholder="Lengtegraad" asp-for="Lng" id="lng"/>
+           
         </form>                
         
     </div>
@@ -40,12 +30,9 @@
     
     function initAddMap() {
         
-        // The location of Uluru
         var position = {lat: 51.2194475, lng: 4.40246430000002};
-        // The map, centered at Uluru
         var map = new google.maps.Map(
             document.getElementById('AddMap'), {zoom: 13, center: position});
-        // The marker, positioned at Uluru
         
         google.maps.event.addListener(map, 'click', 
             function(event) {

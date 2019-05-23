@@ -4,14 +4,9 @@ using System.Net.Mail;
 using System.Security.Principal;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Integratieproject1.Areas.Identity.Services;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Integratieproject1.Services
 {

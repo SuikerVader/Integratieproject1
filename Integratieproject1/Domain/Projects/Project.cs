@@ -16,10 +16,7 @@ namespace Integratieproject1.Domain.Projects
         [Required] public Location Location { get; set; }
         public string Status { get; set; }
         public string BackgroundImage { get; set; }
-
-        //[Required] 
         public Platform Platform { get; set; }
-
         public ICollection<Phase> Phases { get; set; }
         public ICollection<AdminProject> AdminProjects { get; set; }
 
