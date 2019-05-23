@@ -78,7 +78,6 @@ namespace Integratieproject1.BL.Managers
                     ideations = ideations.OrderBy(t => t.CentralQuestion);
                     break;
             }
-
             return ideations.ToList();
         }
 
@@ -112,25 +111,21 @@ namespace Integratieproject1.BL.Managers
                     _dataTypeManager.DeletePosition(idea.Position.PositionId);
                     idea.Position = null;
                 }
-
                 foreach (IdeaObject ideaObject in idea.IdeaObjects.ToList())
                 {
                     if (!originalIdeation.Text && ideaObject.GetType() == typeof(TextField))
                     {
                         DeleteTextField(ideaObject.IdeaObjectId);
                     }
-
                     if (!originalIdeation.Image && ideaObject.GetType() == typeof(Image))
                     {
                         DeleteImage(ideaObject.IdeaObjectId);
                     }
-
                     if (!originalIdeation.Video && ideaObject.GetType() == typeof(Video))
                     {
                         DeleteVideo(ideaObject.IdeaObjectId);
                     }
                 }
-
                 if (originalIdeation.MapRequired)
                 {
                     Position position = new Position()
@@ -140,7 +135,6 @@ namespace Integratieproject1.BL.Managers
                     };
                     idea.Position = position;
                 }
-
                 if (originalIdeation.TextRequired && idea.GetTextFields().Count == 0)
                 {
                     TextField textField = new TextField
@@ -150,7 +144,6 @@ namespace Integratieproject1.BL.Managers
                     };
                     AddTextField(textField, idea.IdeaId);
                 }
-
                 if (originalIdeation.ImageRequired && idea.GetImages().Count == 0)
                 {
                     Image image = new Image
@@ -161,7 +154,6 @@ namespace Integratieproject1.BL.Managers
                     };
                     CreateImage(image.ImageName, image.ImagePath, idea.IdeaId);
                 }
-
                 if (originalIdeation.VideoRequired && idea.GetVideos().Count == 0)
                 {
                     Video video = new Video
@@ -172,7 +164,6 @@ namespace Integratieproject1.BL.Managers
                     AddVideo(video, idea.IdeaId);
                 }
             }
-
             Ideation returnIdeation = _ideationsRepository.EditIdeation(originalIdeation);
             _unitOfWorkManager.Save();
             return returnIdeation;
@@ -209,6 +200,10 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
+        public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
+        {
+            return _ideationsRepository.GetIdeasByUser(currentUserId);
+        }
 
 
         public IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder)
@@ -235,7 +230,6 @@ namespace Integratieproject1.BL.Managers
                     ideas = ideas.OrderBy(i => i.Title);
                     break;
             }
-
             return ideas;
         }
 
@@ -273,7 +267,6 @@ namespace Integratieproject1.BL.Managers
             {
                 idea.Published = false;
             }
-
             if (ideation.MapRequired)
             {
                 Position position = new Position()
@@ -283,7 +276,6 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.Position = position;
             }
-
             if (ideation.TextRequired)
             {
                 TextField textField = new TextField
@@ -293,7 +285,6 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(textField);
             }
-
             if (ideation.ImageRequired)
             {
                 Image image = new Image
@@ -304,7 +295,6 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(image);
             }
-
             if (ideation.VideoRequired)
             {
                 Video video = new Video
@@ -314,7 +304,6 @@ namespace Integratieproject1.BL.Managers
                 };
                 idea.IdeaObjects.Add(video);
             }
-
             Idea returnIdea = _ideationsRepository.CreateIdea(idea);
             _unitOfWorkManager.Save();
             return returnIdea;
@@ -411,7 +400,7 @@ namespace Integratieproject1.BL.Managers
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
-
+            
 
             Idea idea = GetIdea(ideaId);
             Idea editIdea = new Idea()
@@ -425,14 +414,12 @@ namespace Integratieproject1.BL.Managers
                 IoTSetups = idea.IoTSetups,
                 Votes = idea.Votes,
                 Reactions = idea.Reactions,
-
                 Position = position,
             };
             _ideationsRepository.RemoveIdea(idea);
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
-
         public void DeleteLocationFromIdea(int ideaId, int positionId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
@@ -556,9 +543,8 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetTextField(textFieldId);
         }
-
         #endregion
-
+        
         #region Video
 
         public void AddVideo(Video video, int ideaId)
@@ -697,7 +683,6 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
-
         public IList<Reaction> GetIdeaReactions(int id)
         {
             return _ideationsRepository.GetIdeaReactions(id).ToList();
@@ -806,7 +791,7 @@ namespace Integratieproject1.BL.Managers
                 _unitOfWorkManager.Save();
             }
         }
-
+        
         public bool CheckVote(string userId, VoteType voteType, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
