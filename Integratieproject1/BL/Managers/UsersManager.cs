@@ -137,6 +137,7 @@ namespace Integratieproject1.BL.Managers
             CustomUser identityUser = GetUser(userId);
             _usersRepository.DeleteUser(identityUser);
         }
+
         #endregion
 
         #region Roles

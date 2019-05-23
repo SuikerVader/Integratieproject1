@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using Integratieproject1.Areas.Identity.Pages.Account.Manage;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain;
 using Integratieproject1.Domain.Datatypes;
+using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
 using Integratieproject1.Domain.Projects;
+using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +23,9 @@ namespace Integratieproject1.UI.Controllers
         private readonly ProjectsManager _projectsManager;
         private readonly IdeationsManager _ideationsManager;
         private readonly IoTManager _ioTManager;
+        private readonly ProjectController _projectController;
+        private readonly UsersManager _userManager;
+        private readonly SurveysManager _surveysManager;
 
         public HomeController()
         {
@@ -28,7 +35,7 @@ namespace Integratieproject1.UI.Controllers
         }
 
         public IActionResult Index(string platformName)
-        {            
+        {
             try
             {
                 Platform platform = _projectsManager.GetPlatformByName(platformName);
@@ -48,11 +55,10 @@ namespace Integratieproject1.UI.Controllers
             {
                 return NotFound();
             }
-            
         }
 
         public IActionResult About()
-        {   
+        {
             return View("/UI/Views/Home/About.cshtml");
         }
 
@@ -74,7 +80,7 @@ namespace Integratieproject1.UI.Controllers
             if (exceptionFeature != null)
             {
                 Console.WriteLine("exceptionFeature not null");
-                
+
                 // Get which route the exception occurred at
                 string routeWhereExceptionOccurred = exceptionFeature.Path;
 
@@ -85,12 +91,12 @@ namespace Integratieproject1.UI.Controllers
                 {
                     exceptionThatOccurred = exceptionThatOccurred.InnerException;
                 }
-                
+
                 MailService.SendErrorMail(
-                    "info.cityofideas@gmail.com", 
-                    "CoIMySweet16", 
-                    routeWhereExceptionOccurred, 
-                    exceptionThatOccurred, 
+                    "info.cityofideas@gmail.com",
+                    "CoIMySweet16",
+                    routeWhereExceptionOccurred,
+                    exceptionThatOccurred,
                     User.Identity
                 );
             }
@@ -118,14 +124,16 @@ namespace Integratieproject1.UI.Controllers
                 searchResults.AddRange(projects
                     .Where(p => string.IsNullOrEmpty(p.Description)
                         ? p.ProjectName.ToLower().Contains(searchString)
-                        : p.ProjectName.ToLower().Contains(searchString) || p.Description.ToLower().Contains(searchString))
+                        : p.ProjectName.ToLower().Contains(searchString) ||
+                          p.Description.ToLower().Contains(searchString))
                     .ToList()
                 );
 
                 searchResults.AddRange(phases
                     .Where(p => string.IsNullOrEmpty(p.Description)
                         ? p.PhaseName.ToLower().Contains(searchString)
-                        : p.PhaseName.ToLower().Contains(searchString) || p.Description.ToLower().Contains(searchString))
+                        : p.PhaseName.ToLower().Contains(searchString) ||
+                          p.Description.ToLower().Contains(searchString))
                     .ToList()
                 );
 
@@ -140,14 +148,15 @@ namespace Integratieproject1.UI.Controllers
                     {
                         tagNames.Add(ideaTag.Tag.TagName.ToLower());
                     }
+
                     if (idea.Title.ToLower().Contains(searchString) || tagNames.Contains(searchString))
                         searchResults.Add(idea);
-                    
+
                     if (idea.IdeaObjects != null && idea.GetTextFields() != null)
                     {
                         foreach (var tf in idea.GetTextFields())
                         {
-                            if (!string.IsNullOrEmpty(tf.Text) 
+                            if (!string.IsNullOrEmpty(tf.Text)
                                 && tf.Text.ToLower().Contains(searchString))
                             {
                                 searchResults.Add(tf);
@@ -159,7 +168,7 @@ namespace Integratieproject1.UI.Controllers
                 searchResults.AddRange(reactions
                     .Where(r => r.ReactionText.ToLower().Contains(searchString))
                     .ToList()
-                );                
+                );
             }
 
             return View("/UI/Views/Shared/SearchResult.cshtml", new SearchResultModel
@@ -173,11 +182,9 @@ namespace Integratieproject1.UI.Controllers
         [HttpGet]
         public IActionResult LogoPartial(string platformName)
         {
-           
-                Platform platform = _projectsManager.GetPlatformByName(platformName);
-                ViewBag.Logo = platform.Logo;
-                return PartialView("/UI/Views/Shared/_LogoPartial.cshtml");
-            
+            Platform platform = _projectsManager.GetPlatformByName(platformName);
+            ViewBag.Logo = platform.Logo;
+            return PartialView("/UI/Views/Shared/_LogoPartial.cshtml");
         }
 
 
@@ -186,11 +193,11 @@ namespace Integratieproject1.UI.Controllers
             List<IoTSetup> ioTSetups = new List<IoTSetup>();
             if (type.Equals("platform"))
             {
-               ioTSetups = _ioTManager.GetAllIoTSetupsForPlatform(id);
-                           
-            } else if(type.Equals("project"))
+                ioTSetups = _ioTManager.GetAllIoTSetupsForPlatform(id);
+            }
+            else if (type.Equals("project"))
             {
-                ioTSetups = _ioTManager.GetAllIoTSetupsForProject(id);  
+                ioTSetups = _ioTManager.GetAllIoTSetupsForProject(id);
             }
             else if (type.Equals("ideation"))
             {
@@ -198,14 +205,51 @@ namespace Integratieproject1.UI.Controllers
             }
             else if (type.Equals("idea"))
             {
-               ioTSetups = _ioTManager.GetAllIoTSetupsForIdea(id);  
+                ioTSetups = _ioTManager.GetAllIoTSetupsForIdea(id);
             }
             else if (type.Equals("question"))
             {
                 ioTSetups = _ioTManager.GetAllIoTSetupsForQuestion(id);
             }
 
-            return View("/UI/Views/Home/IoTMap.cshtml", ioTSetups); 
+            return View("/UI/Views/Home/IoTMap.cshtml", ioTSetups);
+        }
+
+        public IActionResult RedirectToIdeation(string id)
+        {
+            IoTSetup setup = _ioTManager.GetIoT(id);
+
+            if (setup.Idea != null)
+            {
+                Console.WriteLine("Found idea, id is " + id);
+                return View("/UI/Views/Project/Idea.cshtml", _ideationsManager.GetIdea(setup.Idea.IdeaId));
+            }
+            else
+            {
+                if (setup.Question != null)
+                {
+                    Question question = _surveysManager.GetQuestion(setup.Question.QuestionId);
+                    Survey survey = _surveysManager.GetSurvey(question.Survey.SurveyId);
+                    return View("/UI/Views/Project/Survey.cshtml", survey);
+                }
+                else
+                {
+                    Console.WriteLine("Found nothing at all, id is " + id);
+                    return Index("Antwerpen");
+                }
+            }
+        }
+
+        public IActionResult QrCode(string id)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View("/UI/Views/Shared/_LoginPartial.cshtml");
+            }
+            else
+            {
+                return RedirectToIdeation(id);
+            }
         }
     }
 }

@@ -265,8 +265,10 @@ namespace Integratieproject1.BL.Managers
         }
 
         //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
-        public void UpdateSingleAnswer(Question question, int response)
+        public void UpdateSingleAnswer(int questionId, int response)
         {
+            Console.WriteLine("updating answer response");
+            Question question = _surveysRepository.GetQuestion(questionId);
             foreach (Answer answer in question.Answers)
             {
                 if (answer.AnswerId == response)

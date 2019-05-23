@@ -16,6 +16,8 @@ namespace Integratieproject1.BL.Managers
     {
         private readonly IoTRepository _ioTRepository;
         private readonly UnitOfWorkManager _unitOfWorkManager;
+        private readonly IdeationsManager _ideationsManager;
+        private readonly SurveysManager _surveysManager;
     
 
         public IoTManager()
@@ -33,20 +35,30 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
         
-        public string GenerateIoTUrl()
+        public string GenerateIoTUrl(string id)
         {
             //TODO: creeer link die doorverwijst naar sign-up page.
-            return "randomSignUpUrl" + DateTime.Now;
+            return "http://34.76.196.101/Antwerpen/Home/QrCode/" + id;
         }
 
         //in case of an IoTSetup that offers multiple options (buttons)
-        public void RegisterComplexVote(int id, int supportLv)
+        public void RegisterComplexVote(int questionId, int answer, int amount)
         {
-            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
-            IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
-            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+            for (int i = 0; i < amount; i++)
+            {
+                _surveysManager.UpdateSingleAnswer(questionId, answer);
+            }
         }
-        
+
+        public void RegisterSimpleVote(int ideaId, int amount)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                Console.WriteLine("registering votes on idea: "+ ideaId + "times " +amount);
+                _ideationsManager.CreateVote(ideaId, VoteType.IOT, null);
+            }
+        }
+
         #region Gets
         public IoTSetup GetIoT(string iotId)
         {
@@ -96,11 +108,68 @@ namespace Integratieproject1.BL.Managers
         {
             IoTSetup setup = new IoTSetup
             {
-                Idea = idea, Position = position, Question = question, Code = GenerateIoTUrl()
+                Idea = idea, Position = position, Question = question
             };
             _ioTRepository.CreateIoTSetup(setup);
             _unitOfWorkManager.Save();
         }
+
+        public void RegisterVotes(string payload)
+        {
+            var contents = payload.Split('-');
+            if (contents.Length < 3)
+            {
+                Console.WriteLine("Error in mqttpacket");
+            }
+            else
+            {
+
+                if (contents.Length == 3)
+                {
+                    RegisterIdeaVotes(contents[1], contents[2]);
+                }
+                else
+                {
+                    RegisterQuestionVotes(contents);
+                }
+            }
+        }
+
+        public void RegisterQuestionVotes(string[] contents)
+        {
+            try
+            {
+                var setup = GetIoT(contents[1]);
+                for (int q = 0; q < contents.Length-2; q++)
+                {
+                    if (Int32.TryParse(contents[q+2], out int x))
+                    {
+                        for (int i=0; i < x; i++)
+                        {
+                            _surveysManager.UpdateSingleAnswer(setup.Question.QuestionId, q);
+                        }
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Error in mqttpacket");
+            }
+        }
+
+        public void RegisterIdeaVotes(string id, string votes)
+        {
+            var setup = GetIoT(id);
+            if (Int32.TryParse(votes, out int i))
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    _ideationsManager.CreateVote(setup.Idea.IdeaId, VoteType.IOT, null);
+                    Console.WriteLine("simple vote " + i);
+                }
+            }
+        }
+
         public void CreateIoTSetup(IoTSetup ioTSetup, int id, string type)
         {
             
@@ -127,6 +196,11 @@ namespace Integratieproject1.BL.Managers
             original.Position = ioTSetup.Position;
             _ioTRepository.UpdateIoTSetup(original);
             _unitOfWorkManager.Save();
+        }
+        
+        public List<IoTSetup> GetAllIoTSetups()
+        {
+            List<IoTSetup> list = _ioTRepository.GetIoTSetups().ToList();return list;
         }
 
 

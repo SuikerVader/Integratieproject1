@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Integratieproject1.Domain.Datatypes;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.IoT;
@@ -10,7 +11,8 @@ namespace Integratieproject1.BL.Interfaces
         void DeleteIoTSetup(string ioTSetup);
         void CreateIoT(Position position, Idea idea, Question question);
         void CreateIoTSetup(IoTSetup ioTSetup, int id, string type);
-        string GenerateIoTUrl();
-        void RegisterComplexVote(int id, int supportLv);
+        string GenerateIoTUrl(string url);
+        void RegisterComplexVote(int id, int supportLv, int amount);
+        List<IoTSetup> GetAllIoTSetups();
     }
 }
