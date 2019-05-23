@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Users;
@@ -11,24 +12,28 @@ namespace Integratieproject1.Services
 {
     public static class MailService
     {
+        private const string Host = "smtp.gmail.com";
+        private const int PortNr = 587;
+        private const string EmailCoI = "info.cityofideas@gmail.com";
+        private const string DisplayNameCoI = "City Of Ideas";
+        private const string PwdCoI = "CoIMySweet16";
         private static readonly UsersManager UsersManager = new UsersManager();
-
-        public static void SendErrorMail(string email, string password, string routeWhereExceptionOccurred,
-            Exception exceptionThatOccurred, IIdentity userIdentity)
+        
+        public static void SendErrorMail(string routeWhereExceptionOccurred, Exception exceptionThatOccurred, IIdentity userIdentity)
         {            
             using (SmtpClient client = new SmtpClient
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
+                Host = Host,
+                Port = PortNr,
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(email, password),
+                Credentials = new NetworkCredential(EmailCoI, PwdCoI),
                 DeliveryMethod = SmtpDeliveryMethod.Network
             })
             {
-                using (MailMessage mail = new MailMessage {From = new MailAddress(email, "CityOfIdeas")})
+                using (MailMessage mail = new MailMessage {From = new MailAddress(EmailCoI, DisplayNameCoI)})
                 {                    
-                    mail.To.Add("info.cityofideas@gmail.com");
+                    mail.To.Add(EmailCoI);
                     foreach (var user in UsersManager.GetUsers("SUPERADMIN"))
                     {
                         mail.To.Add(new MailAddress(user.Email));
@@ -67,7 +72,6 @@ namespace Integratieproject1.Services
         </html>";
 
                     client.Send(mail);
-                    Console.WriteLine("mail sent");
                 }
             }
         }

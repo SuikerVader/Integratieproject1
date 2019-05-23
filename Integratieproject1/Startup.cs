@@ -81,10 +81,6 @@ namespace Integratieproject1
         {
             if (env.IsDevelopment())
             {
-                // Uncomment when done testing
-//                app.UseDeveloperExceptionPage();
-
-                // Comment when done testing
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
