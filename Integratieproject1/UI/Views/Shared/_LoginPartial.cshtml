@@ -14,6 +14,7 @@
                          <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
                          <button type="submit" class="dropdown-item">Uitloggen</button>
                          <div class="dropdown-divider"></div>
+                         <a class="dropdown-item" asp-controller="Home" asp-action="UserIdeas">Mijn idee&euml;n</a>
                          @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                          {
                              <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Admin">Adminpagina's</a>
