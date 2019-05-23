@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Integratieproject1.Areas.Identity.Services;
@@ -14,6 +15,7 @@ using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
 using Integratieproject1.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Platform = Integratieproject1.Domain.Projects.Platform;
 using Project = Integratieproject1.Domain.Projects.Project;
 
@@ -27,6 +29,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
         private readonly SignInManager<CustomUser> _signInManager;
+        
         public AndroidApiController(SignInManager<CustomUser> signInManager)
         {
             _ideationsManager = new IdeationsManager();
@@ -262,9 +265,7 @@ namespace Integratieproject1.UI.Controllers
                 _usersManager.GiveRole(user.Id, "USER");
 
                 if (result.Succeeded)
-                {                
-                    //TODO: send verification email to new user
-                    
+                {
                     return user;
                 }
             }
