@@ -89,8 +89,8 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Email bevestigen",
+                        $"Bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier te klikken</a>.");
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
