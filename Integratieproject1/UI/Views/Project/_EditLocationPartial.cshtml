@@ -12,7 +12,7 @@
             <form class="" asp-controller="Project" asp-action="EditPosition" asp-route-positionId="@Model.PositionId" asp-route-ideaId="@ViewBag.IdeaId" method="post">
                 <div class=" d-flex flex-row justify-content-center ">
                     <div class="input-group">
-                        <input class="form-control" id="autocompleteEdit" @*oninput="inputAutocomplete()*@"/>
+                        <input class="form-control" id="autocompleteEdit" />
                         <div class="input-group-append">
                             <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
                             <a class="btn btn-danger" asp-area="" asp-controller="Project"
@@ -33,13 +33,12 @@
     var markers = [];
     
     function initEditMap() {
-        
-        // The location of Uluru
+  
         var position = {lat: @ViewBag.Position.Lat, lng: @ViewBag.Position.Lng};
-        // The map, centered at Uluru
+
        var map = new google.maps.Map(
             document.getElementById('EditMap'), {zoom: 16, center: position});
-        // The marker, positioned at Uluru
+
         var marker = new google.maps.Marker({position: position, map: map});
         markers.push(marker);
         
