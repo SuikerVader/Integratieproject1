@@ -27,6 +27,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
         private readonly SignInManager<CustomUser> _signInManager;
+        
         public AndroidApiController(SignInManager<CustomUser> signInManager)
         {
             _ideationsManager = new IdeationsManager();

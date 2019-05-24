@@ -81,8 +81,7 @@ namespace Integratieproject1
         {
             if (env.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
