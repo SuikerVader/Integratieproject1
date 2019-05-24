@@ -23,20 +23,23 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Locations
         
+        // Returns enumerable of all locations
         public IEnumerable<Location> GetLocations()
         {
             return _ctx.Locations.AsEnumerable();
         }
-        
+
         #endregion
-        
+
         #region Addresses
-        
+
+        // Returns the address based on the ID
         public Address GetAddress(int addressId)
         {
            return _ctx.Addresses.Find(addressId);
         }
 
+        // Returns enumerable of all addresses
         public IEnumerable<Address> GetAddresses()
         {
             return _ctx.Addresses.AsEnumerable();
@@ -46,6 +49,8 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Position
 
+        // Creates a position in the database based on given position
+        // Returns newly created position
         public Position CreatePosition(Position position)
         {
             _ctx.Positions.Add(position);
@@ -53,16 +58,20 @@ namespace Integratieproject1.DAL.Repositories
             return position;
         }
 
+        // Deletes given position from database
         public void DeletePosition(Position position)
         {
             _ctx.Positions.Remove(position);
             _ctx.SaveChanges();
         }
 
+        // Returns the position based on given ID
         public Position GetPosition(int positionId)
         {
            return  _ctx.Positions.Find(positionId);
         }
+
+        // Updates the values of position based on given position
         public void UpdatePosition(Position position)
         {
             _ctx.Positions.Update(position);

@@ -91,12 +91,10 @@ namespace Integratieproject1.UI.Controllers
                 {
                     exceptionThatOccurred = exceptionThatOccurred.InnerException;
                 }
-
-                MailService.SendErrorMail(
-                    "info.cityofideas@gmail.com",
-                    "CoIMySweet16",
-                    routeWhereExceptionOccurred,
-                    exceptionThatOccurred,
+                
+                MailService.SendErrorMail( 
+                    routeWhereExceptionOccurred, 
+                    exceptionThatOccurred, 
                     User.Identity
                 );
             }
@@ -256,7 +254,7 @@ namespace Integratieproject1.UI.Controllers
         {
             ClaimsPrincipal  currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUser(currentUserId);
+            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUserSorted(currentUserId, sortOrder);
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["IdeationSortParm"] = sortOrder == "Ideation" ? "ideation_desc" : "Ideation";
             ViewData["PhaseSortParm"] = sortOrder == "Phase" ? "phase_desc" : "Phase";

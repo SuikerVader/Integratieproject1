@@ -33,26 +33,31 @@ namespace Integratieproject1.BL.Managers
 
         #region Survey
 
+        // Returns a survey based on ID
         public Survey GetSurvey(int surveyId)
         {
             return _surveysRepository.GetSurvey(surveyId);
         }
 
+        // Returns a list of all surveys of a phase based on ID of phase
         public IList<Survey> GetSurveys(int phaseId)
         {
             return _surveysRepository.GetSurveys(phaseId).ToList();
         }
         
+        // Returns a list of all surveys of a project based on ID of project
         public IList<Survey> GetProjectsSurveys(int projectId)
         {
             return _surveysRepository.GetProjectSurveys(projectId).ToList();
         }
 
+        // Returns a list of all surveys
         public IList<Survey> GetAllSurveys()
         {
             return _surveysRepository.GetAllSurveys().ToList();
         }
 
+        // Returns a list of all surveys sorted by: title
         public IList<Survey> GetAllSurveysBySort(string sortOrder)
         {
             IEnumerable<Survey> surveys = GetAllSurveys();
@@ -68,12 +73,14 @@ namespace Integratieproject1.BL.Managers
             return surveys.ToList();
         }
 
+        // Creates new survey based on given survey
         public void CreateSurvey(Survey survey)
         {
             _surveysRepository.CreateSurvey(survey);
             _unitOfWorkManager.Save();
         }
 
+        // Creates new template survey based on phase of given ID
         public void CreateNewSurvey(int phaseId)
         {
             ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
@@ -82,6 +89,8 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates survey based on given survey and ID
+        // Returns updated survey
         public Survey EditSurvey(Survey survey, int surveyId)
         {
             Survey originalSurvey = GetSurvey(surveyId);
@@ -91,6 +100,7 @@ namespace Integratieproject1.BL.Managers
             return returnSurvey;
         }
 
+        // Deletes survey from database based on ID
         public void DeleteSurvey(int surveyId)
         {
             Survey survey = GetSurvey(surveyId);
@@ -98,7 +108,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (var question in survey.Questions.ToList())
                 {
-                    this.DeleteQuestion(question.QuestionId);
+                    DeleteQuestion(question.QuestionId);
                 }
             }
 
@@ -110,6 +120,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Question
 
+        // Creates new question based on given question and add survey based on ID
         public void CreateQuestion(Question question, int surveyId)
         {
             IEnumerable<Question> questions = _surveysRepository.GetQuestions(surveyId);
@@ -119,6 +130,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates question based on given question and ID
         public void EditQuestion(Question question, int questionId, int surveyId)
         {
             question.QuestionId = questionId;
@@ -127,6 +139,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates order of question based on ID and string 
         public void QuestionNrChange(int questionId, string changer, int surveyId)
         {
             Question question = _surveysRepository.GetQuestion(questionId);
@@ -161,6 +174,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes question from database based on ID
         public void DeleteQuestion(int questionId)
         {
             Question question = GetQuestion(questionId);
@@ -176,11 +190,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns a question based on ID
         public Question GetQuestion(int questionId)
         {
             return _surveysRepository.GetQuestion(questionId);
         }
 
+        // Returns a list of all questions of a survey based on ID of survey
         public IEnumerable<Question> GetQuestions(int surveyId)
         {
             return _surveysRepository.GetQuestions(surveyId);
@@ -190,12 +206,14 @@ namespace Integratieproject1.BL.Managers
 
         #region Answer
 
+        // Creates new answer based on given answer
         public void CreateAnswer(Answer answer)
         {
             _surveysRepository.CreateAnswer(answer);
             _unitOfWorkManager.Save();
         }
 
+        // Deletes answer from database based on ID
         public void DeleteAnswer(int answerId)
         {
             Answer answer = GetAnswer(answerId);
@@ -203,11 +221,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns answer based on ID
         public Answer GetAnswer(int answerId)
         {
             return _surveysRepository.GetAnswer(answerId);
         }
 
+        // Update answer from question based on given answer and ID
         public void EditAnswer(Answer answer, int answerId, int questionId)
         {
             answer.AnswerId = answerId;
@@ -216,6 +236,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates arraylist of answers from survey based on ID of survey
         public void UpdateAnswers(ArrayList answers, int surveyId)
         {
             Survey survey = GetSurvey(surveyId);
@@ -260,6 +281,7 @@ namespace Integratieproject1.BL.Managers
         }
 
         //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
+        // Updates single answer based on question and ID
         public void UpdateSingleAnswer(int questionId, int response)
         {
             Console.WriteLine("updating answer response");
@@ -277,6 +299,10 @@ namespace Integratieproject1.BL.Managers
         {
             return _surveysRepository.GetAnswersFromQuestion(question).ToList();
         }
+
+        // Checks if answer is email or not
+        // Returns true if email
+        // Returns false if not email
         public bool IsEmail(int id, int key)
         {
             return _surveysRepository.IsEmail(id, key);

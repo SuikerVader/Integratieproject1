@@ -5,12 +5,12 @@
 <div class="container">
 
     <h3>IoT Opstellingen</h3>
-    <div  id="map" style="height: 600px">
+    <div id="map" style="height: 600px">
 
     </div>
 </div>
 <script>
-    // Initialize and add the map
+// Initialize and add the map
     function initMap() {
         var position = { lat: @Model.First().Position.Lat, lng: @Model.First().Position.Lng };
         var map = new google.maps.Map(document.getElementById('map'), { zoom: 12, center: position });

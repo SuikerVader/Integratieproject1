@@ -23,6 +23,8 @@ namespace Integratieproject1.DAL.Repositories
         #region Survey
 
         // Survey methods
+
+        // Returns enumerable of surveys of phase based on ID of phase
         public IEnumerable<Survey> GetSurveys(int phaseId)
         {
             return _ctx.Surveys
@@ -32,6 +34,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all surveys of a project based on ID of project
         public IEnumerable<Survey> GetProjectSurveys(int projectId)
         {
             return _ctx.Surveys
@@ -41,6 +44,7 @@ namespace Integratieproject1.DAL.Repositories
 
         }
 
+        // Returns enumerable of all surveys
         public IEnumerable<Survey> GetAllSurveys()
         {
             return _ctx.Surveys
@@ -48,10 +52,13 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns only survey based on ID
         public Survey GetOnlySurvey(int surveyId)
         {
             return _ctx.Surveys.Find(surveyId);
         }
+
+        // Returns survey based on ID
         public Survey GetSurvey(int surveyId)
         {
             return _ctx.Surveys
@@ -60,29 +67,29 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(p => p.Phase).ThenInclude(pr => pr.Project).ThenInclude(pl => pl.Platform)
                 .Single(s => s.SurveyId == surveyId);
         }
+
+        // Creates survey based on given survey
         public Survey CreateSurvey(Survey survey)
         {
             _ctx.Surveys.Add(survey);
             _ctx.SaveChanges();
             return survey;
         }
+
+        // Updates survey based on given survey
+        // Returns updated survey
         public Survey EditSurvey(Survey survey)
         {
             _ctx.Surveys.Update(survey);
             _ctx.SaveChanges();
             return survey;
         }
+
+        // Deletes given survey from database
         public void RemoveSurvey(Survey survey)
         {
             _ctx.Surveys.Remove(survey);
             _ctx.SaveChanges();
-        }
-
-        public bool IsEmail(int id, int key)
-        {
-            Survey survey = _ctx.Surveys.Include(s => s.Questions).Single(s => s.SurveyId == id);
-            Question question = survey.Questions.Where(q => q.QuestionNr == key).Single();
-            return question.QuestionType == QuestionType.EMAIL;
         }
 
         #endregion
@@ -90,6 +97,8 @@ namespace Integratieproject1.DAL.Repositories
         #region Question
 
         // Question methods
+
+        // Returns enumerable of questions of survey based on ID of survey
         public IEnumerable<Question> GetQuestions(int surveyId)
         {
             return _ctx.Questions.Where(q => q.Survey.SurveyId == surveyId).OrderBy(q => q.QuestionNr)
@@ -97,6 +106,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns question based on ID
         public Question GetQuestion(int questionId)
         {
             return _ctx.Questions
@@ -105,6 +115,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(q => q.QuestionId == questionId);
         }
         
+        // Updates question based on given question
         public Question EditQuestion(Question question)
         {
             _ctx.Questions.Update(question);
@@ -112,12 +123,15 @@ namespace Integratieproject1.DAL.Repositories
             return question;
         }
 
+        // Creates question based on given question
         public Question CreateQuestion(Question question)
         {
             _ctx.Questions.Add(question);
             _ctx.SaveChanges();
             return question;
         }
+
+        // Deletes question based on given question
         public void RemoveQuestion(Question question)
         {
             _ctx.Questions.Remove(question);
@@ -128,22 +142,28 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Answer
         // Answer methods
+
+        // Returns a enumerable of all answers
         public IEnumerable<Answer> GetAnswers()
         {
             return _ctx.Answers.AsEnumerable();
         }
 
+        // Returns answer based on ID
         public Answer GetAnswer(int answerId)
         {
             return _ctx.Answers.Find(answerId);
         }
 
+        // Creates new answer based on given answer
         public Answer CreateAnswer(Answer answer)
         {
             _ctx.Answers.Add(answer);
             _ctx.SaveChanges();
             return answer;
         }
+
+        // Updates answer based on given answer
         public Answer EditAnswer(Answer answer)
         {
             _ctx.Answers.Update(answer);
@@ -151,6 +171,7 @@ namespace Integratieproject1.DAL.Repositories
             return answer;
         }
 
+        // Updates answer based on given answer
         public Answer UpdateAnswer(Answer answer)
         {
             Console.WriteLine("repo update called!");
@@ -161,6 +182,7 @@ namespace Integratieproject1.DAL.Repositories
             return answer;
         }
 
+        // Deletes given answer from database
         public void RemoveAnswer(Answer answer)
         {
             _ctx.Answers.Remove(answer);
@@ -172,6 +194,16 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Answers.Where(q => q.Question == question).AsEnumerable();
         }
         
+
+        // Checks if answer is email or not
+        // Returns true if email
+        // Returns false if not email
+        public bool IsEmail(int id, int key)
+        {
+            Survey survey = _ctx.Surveys.Include(s => s.Questions).Single(s => s.SurveyId == id);
+            Question question = survey.Questions.Where(q => q.QuestionNr == key).Single();
+            return question.QuestionType == QuestionType.EMAIL;
+        }
 
         #endregion
     }

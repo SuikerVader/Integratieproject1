@@ -35,6 +35,7 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
         
+        // Returns a newly generated string which returns to sign-up page
         public string GenerateIoTUrl(string id)
         {
             //TODO: creeer link die doorverwijst naar sign-up page.
@@ -62,34 +63,41 @@ namespace Integratieproject1.BL.Managers
         }
 
         #region Gets
+        // Returns iot based on ID
         public IoTSetup GetIoT(string iotId)
         {
             return _ioTRepository.GetIoTSetup(iotId);
         }
+
+        // Returns a list of all iotsetups for a platform based on ID of platform
         public List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForPlatform(platformId).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for a project based on ID of project
         public List<IoTSetup> GetAllIoTSetupsForProject(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForProject(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for an ideation based on ID of ideation
         public List<IoTSetup> GetAllIoTSetupsForIdeation(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdeation(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for an idea based on ID of idea
         public List<IoTSetup> GetAllIoTSetupsForIdea(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdea(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for a question based on ID of question
         public List<IoTSetup> GetAllIoTSetupsForQuestion(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
@@ -104,6 +112,7 @@ namespace Integratieproject1.BL.Managers
         #endregion
         
         #region CUD
+        // Deletes iotsetup from database based on ID
         public void DeleteIoTSetup(string ioTId)
         {
             IoTSetup ioTSetup = _ioTRepository.GetIoTSetup(ioTId);
@@ -111,6 +120,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
         
+        // Creates new iotsetup based on given position, idea and question
         public void CreateIoT(Position position, Idea idea, Question question)
         {
             IoTSetup setup = new IoTSetup
@@ -121,62 +131,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-        public void RegisterVotes(string payload)
-        {
-            var contents = payload.Split('-');
-            if (contents.Length < 3)
-            {
-                Console.WriteLine("Error in mqttpacket");
-            }
-            else
-            {
-
-                if (contents.Length == 3)
-                {
-                    RegisterIdeaVotes(contents[1], contents[2]);
-                }
-                else
-                {
-                    RegisterQuestionVotes(contents);
-                }
-            }
-        }
-
-        public void RegisterQuestionVotes(string[] contents)
-        {
-            try
-            {
-                var setup = GetIoT(contents[1]);
-                for (int q = 0; q < contents.Length-2; q++)
-                {
-                    if (Int32.TryParse(contents[q+2], out int x))
-                    {
-                        for (int i=0; i < x; i++)
-                        {
-                            _surveysManager.UpdateSingleAnswer(setup.Question.QuestionId, q);
-                        }
-                    }
-                }
-            }
-            catch (NullReferenceException)
-            {
-                Console.WriteLine("Error in mqttpacket");
-            }
-        }
-
-        public void RegisterIdeaVotes(string id, string votes)
-        {
-            var setup = GetIoT(id);
-            if (Int32.TryParse(votes, out int i))
-            {
-                for (int j = 0; j < i; j++)
-                {
-                    _ideationsManager.CreateVote(setup.Idea.IdeaId, VoteType.IOT, null);
-                    Console.WriteLine("simple vote " + i);
-                }
-            }
-        }
-
+        // Creates new iotsetup based on newly given iotsetup and ID and with given type
         public void CreateIoTSetup(IoTSetup ioTSetup, int id, string type)
         {
             
@@ -195,6 +150,7 @@ namespace Integratieproject1.BL.Managers
         }
 
 
+        // Updates iotsetup based on newly given iotsetup and ID
         public void EditIoTSetup(IoTSetup ioTSetup, string iotId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
