@@ -19912,6 +19912,39 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./wwwroot/js/projectFunctions.js":
+/*!****************************************!*\
+  !*** ./wwwroot/js/projectFunctions.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function displayPhase(id) {
+    var btn = document.getElementById(id);
+    var phase = document.getElementById("phase+" + id.substring(9));
+    var phaseTitle = document.getElementById("phaseTitle+" + id.substring(9));
+    var btnSS = document.getElementById("btnPhaseSS+" + id.substring(9));
+    var buttons = document.getElementsByClassName("btnPhase");
+    var buttonsSS = document.getElementsByClassName("btnPhaseSS");
+    var phases = document.getElementsByClassName("phase");
+    var phasesTitles = document.getElementsByClassName("phaseTitle");
+    var i;
+    for (i = 0; i < buttons.length; i++) {
+        buttonsSS[i].classList.remove("btn-primary");
+        buttonsSS[i].classList.add("btn-secondary");
+        buttons[i].style.backgroundColor = "lightslategrey";
+        phases[i].style.display = "none";
+        phasesTitles[i].style.display = "none";
+    }
+    btnSS.classList.remove("btn-secondary");
+    btnSS.classList.add("btn-primary");
+    btn.style.backgroundColor = "#007bff";
+    phase.style.display = "block";
+    phaseTitle.style.display = "block";
+}
+
+/***/ }),
+
 /***/ "./wwwroot/js/site.js":
 /*!****************************!*\
   !*** ./wwwroot/js/site.js ***!
@@ -19935,6 +19968,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! font-awesome/css/font-awesome.css */ "./node_modules/font-awesome/css/font-awesome.css");
 /* harmony import */ var font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _projectFunctions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./projectFunctions */ "./wwwroot/js/projectFunctions.js");
+/* harmony import */ var _projectFunctions__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_projectFunctions__WEBPACK_IMPORTED_MODULE_7__);
 ﻿// JS Dependencies: Bootstrap & JQuery
 
 
@@ -19951,7 +19986,9 @@ __webpack_require__.r(__webpack_exports__);
 
 // Custom JS imports
 
+
 console.log('The \'site\' bundle has been loaded!');
+
 
 /***/ })
 

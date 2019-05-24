@@ -10,15 +10,11 @@ namespace Integratieproject1.Domain.Projects
     public class Phase : IValidatableObject
     {
         [Key] public int PhaseId { get; set; }
-
-        //[Required]
         public int PhaseNr { get; set; }
         public string PhaseName { get; set; }
         public string Description { get; set; }
         [Required] public DateTime StartDate { get; set; }
         [Required] public DateTime EndDate { get; set; }
-
-        //[Required]
         public Project Project { get; set; }
 
         public ICollection<Ideation> Ideations { get; set; }

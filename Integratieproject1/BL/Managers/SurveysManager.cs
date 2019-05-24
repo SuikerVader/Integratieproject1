@@ -98,17 +98,12 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (var question in survey.Questions.ToList())
                 {
-                    this.DeleteQuestion(question.QuestionId);
+                    DeleteQuestion(question.QuestionId);
                 }
             }
 
             _surveysRepository.RemoveSurvey(survey);
             _unitOfWorkManager.Save();
-        }
-
-        public bool IsEmail(int id, int key)
-        {
-            return _surveysRepository.IsEmail(id, key);
         }
 
         #endregion
@@ -275,7 +270,10 @@ namespace Integratieproject1.BL.Managers
                 }
             }
         }
-
+        public bool IsEmail(int id, int key)
+        {
+            return _surveysRepository.IsEmail(id, key);
+        }
         #endregion
     }
 }

@@ -18,13 +18,6 @@ namespace Integratieproject1.Domain.Ideations
         public Idea Idea { get; set; }
         public ICollection<Like> Likes { get; set; }
 
-
-        /*[ForeignKey("LoggedInUser")]
-        public int LoggedInUserFK { get; set; }
-        [ForeignKey("Ideation")]
-        public int IdeationFK { get; set; }
-        [ForeignKey("Idea")]
-        public int IdeaFK { get; set; }*/
         public Reaction()
         {
         }
