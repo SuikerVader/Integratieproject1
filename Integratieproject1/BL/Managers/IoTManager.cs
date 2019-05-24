@@ -16,6 +16,8 @@ namespace Integratieproject1.BL.Managers
     {
         private readonly IoTRepository _ioTRepository;
         private readonly UnitOfWorkManager _unitOfWorkManager;
+        private readonly IdeationsManager _ideationsManager;
+        private readonly SurveysManager _surveysManager;
     
 
         public IoTManager()
@@ -34,18 +36,30 @@ namespace Integratieproject1.BL.Managers
         }
         
         // Returns a newly generated string which returns to sign-up page
-        public string GenerateIoTUrl()
+        public string GenerateIoTUrl(string id)
         {
             //TODO: creeer link die doorverwijst naar sign-up page.
-            return "randomSignUpUrl" + DateTime.Now;
+            return "http://34.76.196.101/Antwerpen/Home/QrCode/" + id;
         }
 
         //in case of an IoTSetup that offers multiple options (buttons)
-        public void RegisterComplexVote(int id, int supportLv)
+        public void RegisterComplexVote(int questionId, int answer, int amount)
         {
-            SurveysManager surveysManager = new SurveysManager(_unitOfWorkManager);
-            IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
-            surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
+            List<Answer> list = _surveysManager.GetAnswersFromQuestion(_surveysManager.GetQuestion(questionId));
+            
+            for (int i = 0; i < amount; i++)
+            {
+                _surveysManager.UpdateSingleAnswer(questionId, list[answer-1].AnswerId);
+            }
+        }
+
+        public void RegisterSimpleVote(int ideaId, int amount)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                Console.WriteLine("registering votes on idea: "+ ideaId + "times " +amount);
+                _ideationsManager.CreateVote(ideaId, VoteType.IOT, null);
+            }
         }
 
         #region Gets
@@ -89,6 +103,11 @@ namespace Integratieproject1.BL.Managers
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
             return ioTSetups;
         }
+        
+        public List<IoTSetup> GetAllIoTSetups()
+        {
+            return _ioTRepository.GetIoTSetups().ToList();
+        }
 
         #endregion
         
@@ -106,7 +125,7 @@ namespace Integratieproject1.BL.Managers
         {
             IoTSetup setup = new IoTSetup
             {
-                Idea = idea, Position = position, Question = question, Code = GenerateIoTUrl()
+                Idea = idea, Position = position, Question = question
             };
             _ioTRepository.CreateIoTSetup(setup);
             _unitOfWorkManager.Save();
@@ -141,7 +160,6 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository.UpdateIoTSetup(original);
             _unitOfWorkManager.Save();
         }
-
 
         #endregion
         

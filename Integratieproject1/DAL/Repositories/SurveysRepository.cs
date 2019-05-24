@@ -189,6 +189,12 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
+        public IEnumerable<Answer> GetAnswersFromQuestion(Question question)
+        {
+            return _ctx.Answers.Where(q => q.Question == question).AsEnumerable();
+        }
+        
+
         // Checks if answer is email or not
         // Returns true if email
         // Returns false if not email
