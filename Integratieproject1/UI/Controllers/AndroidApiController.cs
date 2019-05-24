@@ -1,27 +1,19 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Security.Cryptography;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Integratieproject1.Areas.Identity.Services;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Projects;
 using Microsoft.AspNetCore.Mvc;
 using Integratieproject1.Domain.Ideations;
 using Integratieproject1.Domain.Surveys;
 using Integratieproject1.Domain.Users;
-using Microsoft.AspNetCore.Http.Headers;
-using JWT;
-using JWT.Serializers;
-using JWT.Algorithms;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+using Integratieproject1.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.Net.Http.Headers;
 using Platform = Integratieproject1.Domain.Projects.Platform;
 using Project = Integratieproject1.Domain.Projects.Project;
 
@@ -35,7 +27,7 @@ namespace Integratieproject1.UI.Controllers
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
         private readonly SignInManager<CustomUser> _signInManager;
-
+        
         public AndroidApiController(SignInManager<CustomUser> signInManager)
         {
             _ideationsManager = new IdeationsManager();
@@ -142,18 +134,35 @@ namespace Integratieproject1.UI.Controllers
             return _surveysManager.GetProjectsSurveys(id);
         }
 
-        [HttpGet]
-        [Route("Api/Answer/{id}")]
-        public IEnumerable<Answer> GetAnswers()
-        {
-            return null;
-        }
+//        [HttpGet]
+//        [Route("Api/answers/{id}")]
+//        public IEnumerable<Answer> GetAnswers()
+//        {
+//            return null;
+//        }
 
         [HttpGet]
         [Route("Api/questions/{id}")]
         public IEnumerable<Question> GetQuestions(int id)
         {
             return _surveysManager.GetQuestions(id).ToList();
+        }
+        
+        [HttpPost]
+        [Route("Api/questions/answers/save")]
+        public void PostAnswers([FromHeader(Name = "SurveyId")] int surveyId, [FromBody] AnswerPostValuesModel[] answerPostValuesArray)
+        {
+            var answers = new ArrayList();
+            
+            foreach (var answerPostValues in answerPostValuesArray)
+            {
+                byte[] decodedAnswerText = Convert.FromBase64String(answerPostValues.AnswerText.Replace("%3D", "="));
+                answerPostValues.AnswerText = System.Text.Encoding.UTF8.GetString(decodedAnswerText);
+                
+                answers.Add(answerPostValues.AnswerText);
+            }
+            
+            _surveysManager.UpdateAnswers(answers, surveyId);
         }
 
         #endregion
@@ -225,6 +234,43 @@ namespace Integratieproject1.UI.Controllers
             
                 _usersManager.UpdateUser(user);
             }
+        }
+
+        [HttpGet]
+        [Route("Api/users/register")]
+        public async Task<CustomUser> Register([FromHeader(Name = "Username")] string username,
+            [FromHeader(Name = "Email")] string email,
+            [FromHeader(Name = "Password")] string password)
+        {
+            byte[] decodedUsername = Convert.FromBase64String(username);
+            username = System.Text.Encoding.UTF8.GetString(decodedUsername);
+            
+            byte[] decodedEmail = Convert.FromBase64String(email);
+            email = System.Text.Encoding.UTF8.GetString(decodedEmail);
+
+            byte[] decodedPassword = Convert.FromBase64String(password);
+            password = System.Text.Encoding.UTF8.GetString(decodedPassword);
+
+            if (_usersManager.GetUserByEmail(username) == null && _usersManager.GetUserByUsername(username) == null)
+            {
+                var user = new CustomUser
+                {
+                    UserName = username,
+                    Email = email
+                };
+                
+                var result = await _signInManager.UserManager.CreateAsync(user, password);
+                _usersManager.GiveRole(user.Id, "USER");
+
+                if (result.Succeeded)
+                {                
+                    //TODO: send verification email to new user
+                    
+                    return user;
+                }
+            }
+
+            return null;
         }
 
         #endregion

@@ -98,7 +98,7 @@ namespace Integratieproject1.BL.Managers
             {
                 foreach (var question in survey.Questions.ToList())
                 {
-                    this.DeleteQuestion(question.QuestionId);
+                    DeleteQuestion(question.QuestionId);
                 }
             }
 
