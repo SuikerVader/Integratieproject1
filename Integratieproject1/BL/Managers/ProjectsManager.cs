@@ -36,27 +36,32 @@ namespace Integratieproject1.BL.Managers
 
         #region Platform
 
+        // Returns platform based onn ID
         public Platform GetPlatform(int platformId)
         {
             return _projectsRepository.GetPlatform(platformId);
         }
 
+        // Returns platform based on NAME
         public Platform GetPlatformByName(string platformName)
         {
             return _projectsRepository.GetPlatformByName(platformName);
         }
 
+        // Creates a new platform based on given platform
         public void CreatePlatform(Platform platform)
         {
             _projectsRepository.CreatePlatform(platform);
             _unitOfWorkManager.Save();
         }
 
+        // Returns a list of all platforms
         public IList<Platform> GetAllPlatforms()
         {
             return _projectsRepository.GetPlatforms().ToList();
         }
 
+        // Returns a list of all platforms sorted by: platformid or platformname
         public IList<Platform> GetAllPlatformsBySort(string sortOrder)
         {
             IEnumerable<Platform> platforms =  GetAllPlatforms().ToList();
@@ -78,6 +83,7 @@ namespace Integratieproject1.BL.Managers
             return platforms.ToList();
         }
 
+        // Deletes platform from database based on ID
         public void DeletePlatform(int platformId)
         {
             Platform platform = _projectsRepository.GetPlatform(platformId);
@@ -101,6 +107,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
         
+        // Updates the platform based on given platform and ID
         public void EditPlatform(Platform platform, int platformId)
         {
             Platform originalPlatform = GetPlatform(platformId);
@@ -116,6 +123,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates the layout of the given platform and ID
         public void EditPlatformLayout(Platform platform, int platformId)
         {
             Platform originalPlatform = GetPlatform(platformId);
@@ -125,6 +133,8 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.EditPlatform(originalPlatform);
             _unitOfWorkManager.Save();
         }
+
+        // Deletes the backgroundimage from platform of given ID
         public void DeleteBackgroundImagePlatform(int platformId)
         {
             Platform platform = GetPlatform(platformId);
@@ -132,6 +142,8 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.EditPlatform(platform);
             _unitOfWorkManager.Save();
         }
+
+        // Deletes the logo from platform of given ID
         public void DeleteLogoPlatform(int platformId)
         {
             Platform platform = GetPlatform(platformId);
@@ -144,21 +156,25 @@ namespace Integratieproject1.BL.Managers
 
         #region Project
 
+        // Returns project based on ID
         public Project GetProject(int projectId)
         {
             return _projectsRepository.GetProject(projectId);
         }
 
+        // Returns a list of all projects of platform based on ID of platform
         public IList<Project> GetProjects(int platformId)
         {
             return _projectsRepository.GetProjects(platformId).ToList();
         }
         
+        // Returns a list of all projects
         public IList<Project> GetAllProjects()
         {
             return _projectsRepository.GetAllProjects().ToList();
         }
 
+        // Returns a list of all projects and sorted by: projectname, startdate, status, enddate, platformname
         public IList<Project> GetAllProjectsBySort(string sortOrder)
         {
             IEnumerable<Project> projects = _projectsRepository.GetAllProjects().ToList();
@@ -198,6 +214,7 @@ namespace Integratieproject1.BL.Managers
             return projects.ToList();
         }
 
+        // Returns a list of all projects of a user based on ID of user
         public IList<Project> GetAdminProjects(string userId)
         {
             List<Project> projects = new List<Project>();
@@ -217,6 +234,7 @@ namespace Integratieproject1.BL.Managers
             return projects;
         }
 
+        // Returns a list of all projects of a user based on ID of user and sorted by: projectname, startdate, status, enddate, platformname
         public IList<Project> GetAdminProjectsBySort(string userId, string sortOrder)
         {
             IEnumerable<Project> projects = GetAdminProjects(userId);
@@ -256,11 +274,13 @@ namespace Integratieproject1.BL.Managers
             return projects.ToList();
             }
 
+        // Returns a list of all adminprojects of a user based on ID of user
         public IList<AdminProject> GetAllAdminProjects(string userId)
         {
             return _projectsRepository.GetAdminProjectsByUser(userId).ToList();
         }
 
+        // Returns a list of all adminprojects of a user by given ID of user and sorted by: projectname, startdate, status, enddate, platformname
         public IList<AdminProject> GetAllAdminProjectsBySort(string userId, string sortOrder)
         {
             IEnumerable<AdminProject> projects = GetAllAdminProjects(userId);
@@ -300,6 +320,7 @@ namespace Integratieproject1.BL.Managers
             return projects.ToList();
         }
 
+        // Creates new project based on newly given project, user based on ID and platform based on ID
         public void CreateProject(Project project, string userId, int platformId)
         {
             CustomUser identityUser = _usersManager.GetUser(userId);
@@ -316,6 +337,8 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates project based on newly given project and ID
+        // Returns updated project
         public Project EditProject(Project project, int projectId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
@@ -337,6 +360,8 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
             return _projectsRepository.EditProject(originalProject);
         }
+
+        // Deletes backgroundimage from project of given ID
         public void DeleteBackgroundImageProject(int projectId)
         {
             Project project = GetProject(projectId);
@@ -345,6 +370,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes project from database based on ID
         public void DeleteProject(int projectId)
         {
             Project project = _projectsRepository.GetProject(projectId);
@@ -368,6 +394,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes adminproject from database based on ID
         public void DeleteAdminProject(int adminProjectId)
         {
             AdminProject adminProject = _projectsRepository.GetAdminProject(adminProjectId);
@@ -375,10 +402,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
         
+        // Returns adminproject based on ID
         public AdminProject GetAdminProject(int adminProjectId)
         {
             return _projectsRepository.GetAdminProject(adminProjectId);
         }
+
+        // Creates a new adminproject so the admin based on ID is assigned to the project based on ID
         public void CreateAdminProject(int projectId, string adminId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
@@ -392,6 +422,8 @@ namespace Integratieproject1.BL.Managers
             _projectsRepository.CreateAdminProject(adminProject);
             _unitOfWorkManager.Save();
         }
+
+        // Returns a list of all adminprojects based on ID of project
         public IList<CustomUser> GetNotProjectAdmins(int projectId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
@@ -412,6 +444,7 @@ namespace Integratieproject1.BL.Managers
             return allAdmins;
         }
 
+        // Returns a list of all adminprojects based on ID of project and sorted by: username, surname, name, email, age
         public IList<CustomUser> GetNotProjectAdminsBySort(int projectId, string sortOrder)
         {
             IEnumerable<CustomUser> admins = GetNotProjectAdmins(projectId);
@@ -455,21 +488,26 @@ namespace Integratieproject1.BL.Managers
 
         #region Phase
 
+        // Returns phase based on ID
         public Phase GetPhase(int phaseId)
         {
             return _projectsRepository.GetPhase(phaseId);
         }
 
+        // Returns a list of all phases of a project based on ID of project
         public IList<Phase> GetPhases(int projectId)
         {
             return _projectsRepository.GetPhases(projectId).ToList();
         }
 
+        // Returns a list of all phases of a platform based on ID of platform
         public IList<Phase> GetAllPhases(int platformId)
         {
             return _projectsRepository.GetAllPhases(platformId).ToList();
         }
 
+        // Creates a new phase based on given phase and phasenumber and adds it to the project of given ID
+        // Returns newly created phase
         public Phase CreatePhase(Phase phase, int phaseNr, int projectId)
         {
             phase.PhaseNr = phaseNr;
@@ -493,7 +531,7 @@ namespace Integratieproject1.BL.Managers
             return createdPhase;
         }
 
-
+        // Returns the phase of a project based on ID of project
         public Phase GetNewPhase(int projectId)
         {
             Phase phase = new Phase();
@@ -514,6 +552,7 @@ namespace Integratieproject1.BL.Managers
             return phase;
         }
 
+        // Deletes phase from database based on ID
         public void DeletePhase(int phaseId)
         {
             IdeationsManager ideationsManager = new IdeationsManager(_unitOfWorkManager);
@@ -539,6 +578,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates phase based on newly given phase and ID
         public Phase EditPhase(Phase phase, int phaseId)
         {
             Phase originalPhase = GetPhase(phaseId);

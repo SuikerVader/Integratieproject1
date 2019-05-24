@@ -41,31 +41,37 @@ namespace Integratieproject1.BL.Managers
 
         #region Ideation
 
+        // Returns the ideation based on given ID
         public Ideation GetIdeation(int ideationId)
         {
             return _ideationsRepository.GetIdeation(ideationId);
         }
 
+        // Returns a list of ideations of a projects based on given ID of project
         public IList<Ideation> GetProjectIdeations(int projectId)
         {
             return _ideationsRepository.GetProjectsIdeations(projectId).ToList();
         }
 
+        // Returns a list of ideations of a phase based on given ID of phase
         public IList<Ideation> GetIdeations(int phaseId)
         {
             return _ideationsRepository.GetIdeations(phaseId).ToList();
         }
 
+        // Returns a list of ideations of a platform based on given ID of platform
         public IList<Ideation> GetIdeationsByPlatform(int platformId)
         {
             return _ideationsRepository.GetIdeationsByPlatform(platformId).ToList();
         }
 
+        // Returns a list of all ideations in the database
         public IList<Ideation> GetAllIdeations()
         {
             return _ideationsRepository.GetAllIdeations().ToList();
         }
 
+        // Returns a list of all ideations sorted by: CentralQuestion
         public IList<Ideation> GetAllIdeationsBySort(string sortOrder)
         {
             IEnumerable<Ideation> ideations = GetAllIdeations();
@@ -81,6 +87,8 @@ namespace Integratieproject1.BL.Managers
             return ideations.ToList();
         }
 
+        // Creates an ideation in the database based on given ideation and ID
+        // Returns newly created ideation
         public void CreateIdeation(Ideation ideation, int phaseId)
         {
             ProjectsManager projectsManager = new ProjectsManager(_unitOfWorkManager);
@@ -90,6 +98,8 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates the values of ideation based on new ideation and ID
+        // Returns the updated ideation
         public Ideation EditIdeation(Ideation ideation, int ideationId)
         {
             Ideation originalIdeation = GetIdeation(ideationId);
@@ -169,6 +179,7 @@ namespace Integratieproject1.BL.Managers
             return returnIdeation;
         }
 
+        // Deletes ideation from database based on ID
         public void DeleteIdeation(int ideationId)
         {
             Ideation ideation = GetIdeation(ideationId);
@@ -196,16 +207,53 @@ namespace Integratieproject1.BL.Managers
 
         #region Idea
 
+        // Returns a list of all ideas of a platform based on given ID of platform
         public IList<Idea> GetAllIdeas(int platformId)
         {
             return _ideationsRepository.GetAllIdeas(platformId).ToList();
         }
+
+        // Returns a list of all ideas of a user based on given ID of user
         public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
         {
             return _ideationsRepository.GetIdeasByUser(currentUserId);
         }
 
+        // Returns a list of all ideas which are not yet published sorted by: Title, Username, CentralQuestion
+        public IEnumerable<Idea> GetIdeasByUserSorted(string currentUserId, string sortOrder)
+        {
+            IEnumerable<Idea> ideas = GetIdeasByUser(currentUserId);
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    ideas = ideas.OrderByDescending(i => i.Title);
+                    break;
+                case "Ideation":
+                    ideas = ideas.OrderBy(i => i.Ideation.CentralQuestion);
+                    break;
+                case "ideation_desc":
+                    ideas = ideas.OrderByDescending(i => i.Ideation.CentralQuestion);
+                    break;
+                case "Phase":
+                    ideas = ideas.OrderBy(i => i.Ideation.Phase.PhaseName);
+                    break;
+                case "phase_desc":
+                    ideas = ideas.OrderByDescending(i => i.Ideation.Phase.PhaseName);
+                    break;
+                case "Project":
+                    ideas = ideas.OrderBy(i => i.Ideation.Phase.Project.ProjectName);
+                    break;
+                case "project_desc":
+                    ideas = ideas.OrderByDescending(i => i.Ideation.Phase.Project.ProjectName);
+                    break;
+                default:
+                    ideas = ideas.OrderBy(i => i.Title);
+                    break;
+            }
+            return ideas;
+        }
 
+        // Returns a list of all ideas which are not yet published sorted by: Title, Username, CentralQuestion
         public IEnumerable<Idea> GetAllNonPublishedIdeas(string sortOrder)
         {
             IEnumerable<Idea> ideas = _ideationsRepository.GetAllNonPublishedIdeas().ToList();
@@ -233,11 +281,13 @@ namespace Integratieproject1.BL.Managers
             return ideas;
         }
 
+        // Returns a list of all ideas of an ideation based on given ID of ideation
         public IList<Idea> GetIdeas(int ideationId)
         {
             return _ideationsRepository.GetIdeas(ideationId).ToList();
         }
 
+        // Returns a list of all ideas of an ideation based on given ID of ideation
         public IList<Idea> GetOtherIdeas(int ideationId)
         {
             Ideation ideation = GetIdeation(ideationId);
@@ -246,11 +296,14 @@ namespace Integratieproject1.BL.Managers
             return ideas;
         }
 
+        // Returns a list of all ideas of a project based on given ID of project which are reported
         public IList<Idea> GetReportedIdeas(int projectId)
         {
             return _ideationsRepository.GetReportedIdeas(projectId).ToList();
         }
 
+        // Creates a new idea template with ideation from given ID and user from given ID
+        // Returns newly created idea
         public Idea CreateNewIdea(int ideationId, string userId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
@@ -309,6 +362,7 @@ namespace Integratieproject1.BL.Managers
             return returnIdea;
         }
 
+        // Gets the idea from given ID and publishes it
         public void PublishIdea(int ideaId)
         {
             Idea idea = GetIdea(ideaId);
@@ -316,18 +370,20 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates the idea from given ID
         public void ChangeIdea(Idea idea)
         {
             _ideationsRepository.UpdateIdea(idea);
             _unitOfWorkManager.Save();
         }
 
+        // Returns the idea from given ID
         public Idea GetIdea(int ideaId)
         {
             return _ideationsRepository.GetIdea(ideaId);
         }
 
-
+        // Updates title of the idea from given ID
         public void EditIdea(Idea idea, int ideaId)
         {
             Idea returnIdea = GetIdea(ideaId);
@@ -336,7 +392,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-
+        // Deletes the idea from given ID
         public void DeleteIdea(int ideaId)
         {
             IoTManager ioTManager = new IoTManager(_unitOfWorkManager);
@@ -368,9 +424,11 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.RemoveIdea(idea);
             _unitOfWorkManager.Save();
         }
-
+        
+        // Gets the idea from given ID and add given position to that idea
         public void AddPosition(Position position, int ideaId)
         {
+            
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
             dataTypeManager.CreatePosition(position);
             
@@ -393,6 +451,8 @@ namespace Integratieproject1.BL.Managers
             _ideationsRepository.UpdateIdea(editIdea);
             _unitOfWorkManager.Save();
         }
+
+        // Deletes the location from given ID from idea based on given ID
         public void DeleteLocationFromIdea(int ideaId, int positionId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
@@ -402,21 +462,25 @@ namespace Integratieproject1.BL.Managers
             dataTypeManager.DeletePosition(positionId);
             _unitOfWorkManager.Save();
         }
+        
 
         #endregion
 
         #region IdeaObject
 
+        // Returns ideaobject based on ID
         public IdeaObject GetIdeaObject(int ideaObjectId)
         {
             return _ideationsRepository.GetIdeaObject(ideaObjectId);
         }
 
+        // Returns a list of all ideaobjects of an idea based on ID of idea
         public List<IdeaObject> GetIdeaObjects(int ideaId)
         {
             return _ideationsRepository.GetIdeaObjects(ideaId).ToList();
         }
 
+        // Changes order of ideaobject based on ID's of ideaobject and idea and order changed by string
         public void OrderNrChange(int ideaObjectId, string changer, int ideaId)
         {
             IdeaObject ideaObject = GetIdeaObject(ideaObjectId);
@@ -453,6 +517,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates ideaobject based on given ideaobject
         public void EditIdeaObject(IdeaObject ideaObject)
         {
             if (ideaObject.GetType() == typeof(TextField))
@@ -477,8 +542,9 @@ namespace Integratieproject1.BL.Managers
         }
 
         #region TextField
-
-        public void AddTextField(TextField textField, int ideaId)
+            
+        // Creates new textfield based on given textfield and ID of idea
+            public void AddTextField(TextField textField, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
             textField.Idea = idea;
@@ -487,6 +553,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Updates textfield based on new given textfield and ID
         public void EditTextField(TextField textField, int textFieldId)
         {
             TextField editTextField = GetTextField(textFieldId);
@@ -495,6 +562,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes textfield from database from given ID
         public void DeleteTextField(int textFieldId)
         {
             TextField textField = GetTextField(textFieldId);
@@ -512,6 +580,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns the textfield based on ID
         public TextField GetTextField(int textFieldId)
         {
             return _ideationsRepository.GetTextField(textFieldId);
@@ -520,6 +589,7 @@ namespace Integratieproject1.BL.Managers
         
         #region VideoAllowed
 
+        // Creates a new video from given video and adds it to idea of given ID
         public void AddVideo(Video video, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
@@ -530,6 +600,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes video from database based on ID
         public void DeleteVideo(int videoId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);
@@ -548,6 +619,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns video based on ID
         public Video GetVideo(int videoId)
         {
             return _ideationsRepository.GetVideo(videoId);
@@ -557,6 +629,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Images
 
+        // Creates an image based on given name and path and add it to idea of given ID
         public void CreateImage(string name, string path, int ideaId)
         {
             Idea ideaToAddImageTo = GetIdea(ideaId);
@@ -580,16 +653,19 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns a list of images from idea based on ID of idea
         public IEnumerable<Image> GetImages(int ideaId)
         {
             return _ideationsRepository.ReadImagesOfIdea(ideaId);
         }
 
+        // Returns the image based on ID
         public Image GetImage(int imageId)
         {
             return _ideationsRepository.GetImage(imageId);
         }
 
+        // Deletes the image from database based on ID
         public void DeleteImage(int imageId)
         {
             Image image = GetImage(imageId);
@@ -613,6 +689,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Like
 
+        // Deletes the like from database based on ID
         public void DeleteLike(int likeId)
         {
             Like like = GetLike(likeId);
@@ -620,6 +697,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns the like based on ID
         public Like GetLike(int likeId)
         {
             return _ideationsRepository.GetLike(likeId);
@@ -652,20 +730,26 @@ namespace Integratieproject1.BL.Managers
 
         #region Reaction
 
+        // Returns a list of all reactions of a platform based on ID of platform
         public IList<Reaction> GetAllReactions(int platformId)
         {
             return _ideationsRepository.GetAllReactions(platformId).ToList();
         }
+
+        // Returns a list of all reactions of an idea based on ID of Idea
         public IList<Reaction> GetIdeaReactions(int id)
         {
             return _ideationsRepository.GetIdeaReactions(id).ToList();
         }
 
+        // Returns a list of all reported reactions
         public IList<Reaction> GetReportedReactions(int projectId)
         {
             return _ideationsRepository.GetReportedReactions(projectId).ToList();
         }
 
+        // Creates a new reaction based on arraylist and decides if reaction is for idea or ideation based on string
+        // Sets reaction user and idea/ideation based on given ID's
         public void PostReaction(ArrayList parameters, int id, string userId, string element)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
@@ -687,6 +771,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Creates a new like for a reaction of given ID from user of given ID
         public void LikeReaction(int reactionId, string userId)
         {
             UsersManager usersManager = new UsersManager(_unitOfWorkManager);
@@ -709,6 +794,7 @@ namespace Integratieproject1.BL.Managers
             }
         }
 
+        // Deletes the reaction of given ID from database
         public void DeleteReaction(int reactionId)
         {
             Reaction reaction = GetReaction(reactionId);
@@ -724,6 +810,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns the reaction based on ID
         public Reaction GetReaction(int reactionId)
         {
             return _ideationsRepository.GetReaction(reactionId);
@@ -733,6 +820,7 @@ namespace Integratieproject1.BL.Managers
 
         #region Vote
 
+        // Create a new vote based on idea and user of given ID's and give new vote the given votetype
         public void CreateVote(int ideaId, VoteType voteType, string userId)
         {
             Vote vote = new Vote();
@@ -765,6 +853,9 @@ namespace Integratieproject1.BL.Managers
             }
         }
         
+        // Checks if user already voted on Idea
+        // Return true if user did not vote already
+        // Return false if user already voted
         public bool CheckVote(string userId, VoteType voteType, int ideaId)
         {
             Idea idea = GetIdea(ideaId);
@@ -779,6 +870,7 @@ namespace Integratieproject1.BL.Managers
             return true;
         }
 
+        // Deletes vote from database based on ID
         public void DeleteVote(int voteId)
         {
             Vote vote = GetVote(voteId);
@@ -786,11 +878,12 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Returns vote based on ID
         public Vote GetVote(int voteId)
         {
             return _ideationsRepository.GetVote(voteId);
         }
-
+        // Returns votes based on ideaId
         public IEnumerable<Vote> GetIdeaVote(int ideaId)
         {
             return _ideationsRepository.GetIdeaVotes(ideaId);
@@ -800,11 +893,13 @@ namespace Integratieproject1.BL.Managers
 
         #region Tag
 
+        // Returns a tag based on ID
         public Tag GetTag(int tagId)
         {
             return _ideationsRepository.GetTag(tagId);
         }
 
+        // Returns a list of all tags of an idea based on given ID of idea
         public List<Tag> GetTags(int ideaId)
         {
             List<Tag> tags = GetAllTags();
@@ -824,11 +919,13 @@ namespace Integratieproject1.BL.Managers
             return tags;
         }
 
+        // Returns a list of all tags
         public List<Tag> GetAllTags()
         {
             return _ideationsRepository.GetAllTags().ToList();
         }
 
+        // Returns a list of all tags and sorted by: tagname
         public List<Tag> GetAllTagsBySort(string sortOrder)
         {
             IEnumerable<Tag> tags = GetAllTags();
@@ -841,17 +938,18 @@ namespace Integratieproject1.BL.Managers
                     tags = tags.OrderBy(t => t.TagName);
                     break;
             }
-
             return tags.ToList();
         }
 
+        // Deletes ideatag from database based on ID
         public void DeleteIdeaTag(int ideaTagId)
         {
             IdeaTag ideaTag = GetIdeaTag(ideaTagId);
             _ideationsRepository.DeleteIdeaTag(ideaTag);
             _unitOfWorkManager.Save();
         }
-
+        
+        // Creates new ideatag based on ID's of idea and tag
         public void CreateIdeaTag(int ideaId, int tagId)
         {
             IdeaTag ideaTag = new IdeaTag()
@@ -863,12 +961,13 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
-
+        // Returns ideatag based on ID
         public IdeaTag GetIdeaTag(int ideaTagId)
         {
             return _ideationsRepository.GetIdeaTag(ideaTagId);
         }
-
+        
+        // Updates values of tag based on tag and ID
         public void EditTag(Tag tag, int tagId)
         {
             tag.TagId = tagId;
@@ -876,6 +975,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes tag from database based on ID
         public void DeleteTag(int tagId)
         {
             Tag tag = GetTag(tagId);
@@ -883,16 +983,17 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Adds a tag to the database based on given tag
         public void AddTag(Tag tag)
         {
             _ideationsRepository.AddTag(tag);
             _unitOfWorkManager.Save();
         }
-
         #endregion
 
         #region Posts
 
+        // Reports the reaction or idea based on given type
         public void ReportPost(int id, string type)
         {
             if (type.Equals("reaction"))
@@ -910,7 +1011,8 @@ namespace Integratieproject1.BL.Managers
 
             _unitOfWorkManager.Save();
         }
-
+        
+        // Updates reaction or idea based on given type
         public void PostCorrect(int id, string type)
         {
             if (type.Equals("reaction"))
@@ -929,6 +1031,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
 
+        // Deletes the post from given ID based on type
         public void DeletePost(int id, string type)
         {
             if (type.Equals("reaction"))
