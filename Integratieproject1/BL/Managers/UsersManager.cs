@@ -33,15 +33,20 @@ namespace Integratieproject1.BL.Managers
         #region User
 
         #region Gets
+
+        // Returns user based on ID
         public CustomUser GetUser(string userId)
         {
             return _usersRepository.GetUser(userId);
         }
+
+        // Returns a list of all users in given role
         public IList<CustomUser> GetUsers(string role)
         {
             return _usersRepository.GetUsers(role).ToList();
         }
 
+        // Return list of users in given role sorted by: username, surname, name, email, age
         public IList<CustomUser> GetUsersBySort(string role, string sortOrder)
         {
             IEnumerable<CustomUser> users = GetUsers(role).ToList();
@@ -80,36 +85,44 @@ namespace Integratieproject1.BL.Managers
             }
             return users.ToList();
         }
+
+        // Get user based on email
         public CustomUser GetUserByEmail(string email)
         {
             return _usersRepository.GetUserByEmail(email);
         }
 
+        // Get user based on username
         public CustomUser GetUserByUsername(string username)
         {
             return _usersRepository.GetUserByUsername(username);
         }
 
+        // Get surname of user based on ID
         public string GetSurname(CustomUser customUser)
         {
             return _usersRepository.GetSurname(customUser);
         }
 
+        // Get name of user based on ID
         public string GetName(CustomUser customUser)
         {
             return _usersRepository.GetName(customUser);
         }
 
+        // Get sex of user based on ID
         public string GetSex(CustomUser customUser)
         {
             return _usersRepository.GetSex(customUser);
         }
 
+        // Get age of user based on ID
         public int GetAge(CustomUser customUser)
         {
             return _usersRepository.GetAge(customUser);
         }
 
+        // Get zipcode of user based on ID
         public string GetZipcode(CustomUser customUser)
         {
             return _usersRepository.GetZipcode(customUser);
@@ -117,21 +130,26 @@ namespace Integratieproject1.BL.Managers
 
         #endregion
         
+        // Blocks user based on ID by given days
         public void BlockUser(string userId, int days)
         {
             CustomUser identityUser = GetUser(userId);
             _usersRepository.BlockUser(identityUser, days);
         }
+
+        // Creates new user based on given user
         public void CreateUser(CustomUser identityUser)
         {
             _usersRepository.CreateUser(identityUser);
         }
 
+        // Updates user based on given user
         public void UpdateUser(CustomUser identityUser)
         {
             _usersRepository.UpdateUser(identityUser);
         }
 
+        // Deletes user based on ID
         public void DeleteUser(string userId)
         {
             CustomUser identityUser = GetUser(userId);
@@ -140,18 +158,28 @@ namespace Integratieproject1.BL.Managers
         #endregion
 
         #region Roles
+
+        // Get user based on ID and assign the given role to user
         public void GiveRole(string userId, string role)
         {
             CustomUser identityUser = GetUser(userId);
-            _usersRepository.DeleteRole(identityUser, "USER");
+            if (IsInRole(userId, "USER"))
+            {
+                _usersRepository.DeleteRole(identityUser, "USER");
+            }
             _usersRepository.GiveRole(identityUser, role);
         }
         
+        // Check if user based on ID is in given role
+        // Returns true if user is in given role
+        // Returns false if user is not in given role
         public bool IsInRole(string userId, string role)
         {
             CustomUser identityUser = GetUser(userId);
             return _usersRepository.IsInRole(identityUser, role);
         }
+
+        // Delete a role based on role from a user based on ID
         public void DeleteRole(string userId, string role)
         {
             CustomUser identityUser = GetUser(userId);
@@ -162,18 +190,21 @@ namespace Integratieproject1.BL.Managers
 
         #region VerificationRequest
 
+        // Let user be ready to be verified
         public void AskVerify(string userId)
         {
             CustomUser user = GetUser(userId);
             _usersRepository.AskVerifyAsync(user);
         }
 
+        // Verifies a user based on ID
         public void Verify(string userId)
         {
             CustomUser user = GetUser(userId);
             _usersRepository.Verify(user);
         }
 
+        // Returns a list of all users who need to be verified
         public IList<CustomUser> GetRequests()
         {
             return _usersRepository.GetRequests();

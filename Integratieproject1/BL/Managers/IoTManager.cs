@@ -33,6 +33,7 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository = new IoTRepository(_unitOfWorkManager.UnitOfWork);
         }
         
+        // Returns a newly generated string which returns to sign-up page
         public string GenerateIoTUrl()
         {
             //TODO: creeer link die doorverwijst naar sign-up page.
@@ -46,36 +47,43 @@ namespace Integratieproject1.BL.Managers
             IoTSetup setup = _ioTRepository.GetIoTSetupByIdea(id);
             surveysManager.UpdateSingleAnswer(setup.Question, supportLv);
         }
-        
+
         #region Gets
+        // Returns iot based on ID
         public IoTSetup GetIoT(string iotId)
         {
             return _ioTRepository.GetIoTSetup(iotId);
         }
+
+        // Returns a list of all iotsetups for a platform based on ID of platform
         public List<IoTSetup> GetAllIoTSetupsForPlatform(int platformId)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForPlatform(platformId).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for a project based on ID of project
         public List<IoTSetup> GetAllIoTSetupsForProject(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForProject(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for an ideation based on ID of ideation
         public List<IoTSetup> GetAllIoTSetupsForIdeation(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdeation(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for an idea based on ID of idea
         public List<IoTSetup> GetAllIoTSetupsForIdea(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForIdea(id).ToList();
             return ioTSetups;
         }
 
+        // Returns a list of all iotsetups for a question based on ID of question
         public List<IoTSetup> GetAllIoTSetupsForQuestion(int id)
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
@@ -85,6 +93,7 @@ namespace Integratieproject1.BL.Managers
         #endregion
         
         #region CUD
+        // Deletes iotsetup from database based on ID
         public void DeleteIoTSetup(string ioTId)
         {
             IoTSetup ioTSetup = _ioTRepository.GetIoTSetup(ioTId);
@@ -92,6 +101,7 @@ namespace Integratieproject1.BL.Managers
             _unitOfWorkManager.Save();
         }
         
+        // Creates new iotsetup based on given position, idea and question
         public void CreateIoT(Position position, Idea idea, Question question)
         {
             IoTSetup setup = new IoTSetup
@@ -101,6 +111,8 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository.CreateIoTSetup(setup);
             _unitOfWorkManager.Save();
         }
+
+        // Creates new iotsetup based on newly given iotsetup and ID and with given type
         public void CreateIoTSetup(IoTSetup ioTSetup, int id, string type)
         {
             
@@ -119,6 +131,7 @@ namespace Integratieproject1.BL.Managers
         }
 
 
+        // Updates iotsetup based on newly given iotsetup and ID
         public void EditIoTSetup(IoTSetup ioTSetup, string iotId)
         {
             DataTypeManager dataTypeManager = new DataTypeManager(_unitOfWorkManager);

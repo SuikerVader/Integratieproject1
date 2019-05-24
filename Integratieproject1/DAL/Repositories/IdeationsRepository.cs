@@ -26,6 +26,7 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Ideation methods
 
+        // Returns enumerable of all ideations of phase based on ID of phase
         public IEnumerable<Ideation> GetIdeations(int phaseId)
         {
             return _ctx.Ideations
@@ -33,6 +34,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all ideations of project based on ID of project
         public IEnumerable<Ideation> GetProjectsIdeations(int projectId)
         {
             return _ctx.Ideations
@@ -44,6 +46,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all ideations
         public IEnumerable<Ideation> GetAllIdeations()
         {
             return _ctx.Ideations
@@ -51,6 +54,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all ideations of platform based on ID of platform
         public IEnumerable<Ideation> GetIdeationsByPlatform(int platformId)
         {
             return _ctx.Ideations
@@ -59,6 +63,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns ideation based on ID
         public Ideation GetIdeation(int ideationId)
         {
             return _ctx.Ideations
@@ -72,6 +77,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(id => id.IdeationId == ideationId);
         }
 
+        // Creates ideation based on given ideation
+        // Returns new ideation
         public Ideation CreateIdeation(Ideation ideation)
         {
             _ctx.Ideations.Add(ideation);
@@ -79,6 +86,8 @@ namespace Integratieproject1.DAL.Repositories
             return ideation;
         }
 
+        // Updates ideation based on given ideation
+        // Returns updated ideation
         public Ideation EditIdeation(Ideation ideation)
         {
             _ctx.Ideations.Update(ideation);
@@ -86,6 +95,8 @@ namespace Integratieproject1.DAL.Repositories
             return ideation;
         }
 
+
+        // Deletes given ideation from database
         public void RemoveIdeation(Ideation ideation)
         {
             _ctx.Ideations.Remove(ideation);
@@ -97,11 +108,14 @@ namespace Integratieproject1.DAL.Repositories
         #region Idea methods
 
         //Idea methods
+
+        // Returns enumerable of all ideas of ideation based on ID of ideation
         public IEnumerable<Idea> GetIdeas(int ideationId)
         {
             return _ctx.Ideas.Where(idea => idea.Ideation.IdeationId == ideationId).AsEnumerable();
         }
 
+        // Returns enumerable of all ideas of platform based on ID of platform
         public IEnumerable<Idea> GetAllIdeas(int platformId)
         {
             return _ctx.Ideas
@@ -110,7 +124,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.IdeaTags).ThenInclude(i => i.Tag)
                 .AsEnumerable();
         }
-        
+
+        // Returns enumerable of all ideas of user based on ID of user
         public IEnumerable<Idea> GetIdeasByUser(string currentUserId)
         {
             return _ctx.Ideas
@@ -119,6 +134,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all ideas that are not yet published
         public IEnumerable<Idea> GetAllNonPublishedIdeas()
         {
             return _ctx.Ideas
@@ -130,6 +146,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns idea based on ID
         public Idea GetIdea(int ideaId)
         {
             return _ctx.Ideas
@@ -145,6 +162,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(i => i.IdeaId == ideaId);
         }
 
+        // Returns enumerable of all reported ideas of project based on ID of project
         public IEnumerable<Idea> GetReportedIdeas(int projectId)
         {
             return _ctx.Ideas
@@ -155,6 +173,8 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Creates new idea based on given idea
+        // Return new idea
         public Idea CreateIdea(Idea idea)
         {
             _ctx.Ideas.Add(idea);
@@ -162,12 +182,14 @@ namespace Integratieproject1.DAL.Repositories
             return idea;
         }
 
+        // Updates idea based on given idea
         public void UpdateIdea(Idea idea)
         {
             _ctx.Ideas.Update(idea);
             _ctx.SaveChanges();
         }
 
+        // Publishes given idea
         public void PublishIdea(Idea idea)
         {
             idea.Published = true;
@@ -175,6 +197,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
+        // Deletes given idea from database
         public void RemoveIdea(Idea idea)
         {
             _ctx.Ideas.Remove(idea);
@@ -186,11 +209,13 @@ namespace Integratieproject1.DAL.Repositories
 
         #region IdeaObject methods
 
+        // Returns enumerable of all ideaobjects of idea based on ID of idea
         public IEnumerable<IdeaObject> GetIdeaObjects(int ideaId)
         {
             return _ctx.IdeaObjects.Where(i => i.Idea.IdeaId == ideaId).AsEnumerable();
         }
 
+        // Returns ideaobject based on ID
         public IdeaObject GetIdeaObject(int ideaObjectId)
         {
             return _ctx.IdeaObjects.Include(i => i.Idea).Single(i => i.IdeaObjectId == ideaObjectId);
@@ -288,6 +313,7 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Reaction methods
 
+        // Returns enumerable of all reactions of platform based on ID of platform
         public IEnumerable<Reaction> GetAllReactions(int platformId)
         {
             return _ctx.Reactions
@@ -296,6 +322,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all reported reactions of project based on ID of project
         public IEnumerable<Reaction> GetReportedReactions(int projectId)
         {
             return _ctx.Reactions
@@ -308,21 +335,25 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all reactions of ideation based on given ideation
         public IEnumerable<Reaction> GetReactionsOnIdeation(Ideation ideation)
         {
             return _ctx.Reactions.Where(reaction => reaction.Ideation == ideation).AsEnumerable();
         }
 
+        // Returns enumerable of all reactions of idea based on given idea
         public IEnumerable<Reaction> GetReactionsOnIdea(Idea idea)
         {
             return _ctx.Reactions.Where(reaction => reaction.Idea == idea).AsEnumerable();
         }
         
+        // Returns enumerable of all reactions of idea based on ID of idea
         public IEnumerable<Reaction> GetIdeaReactions(int id)
         {
             return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id).AsEnumerable();
         }
 
+        // Returns reaction based on ID
         public Reaction GetReaction(int reactionId)
         {
             return _ctx.Reactions
@@ -331,6 +362,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(r => r.ReactionId == reactionId);
         }
 
+        // Create reaction based on given reaction
+        // Returns new reaction
         public Reaction CreateReaction(Reaction reaction)
         {
             _ctx.Reactions.Add(reaction);
@@ -338,12 +371,14 @@ namespace Integratieproject1.DAL.Repositories
             return reaction;
         }
 
+        // Updates reaction based on given reaction
         public void UpdateReaction(Reaction reaction)
         {
             _ctx.Reactions.Update(reaction);
             _ctx.SaveChanges();
         }
 
+        // Deletes given reaction from database
         public void RemoveReaction(Reaction reaction)
         {
             _ctx.Reactions.Remove(reaction);
@@ -355,26 +390,30 @@ namespace Integratieproject1.DAL.Repositories
         #region Vote methods
 
         //Vote methods
+
+        // Return enumerable of all votes
         public IEnumerable<Vote> GetVotes()
         {
             return _ctx.Votes.AsEnumerable();
         }
 
+        // Return vote based on ID
         public Vote GetVote(int voteId)
         {
             return _ctx.Votes.Find(voteId);
         }
 
+        // Create a new vote based on given vote
         public Vote CreateVote(Vote vote)
         {
-            /*Idea idea = GetIdea(vote.Idea.IdeaId);
-            idea.Votes.Add(vote);
-            ctx.Ideas.Update(idea);*/
             _ctx.Votes.Add(vote);
             _ctx.SaveChanges();
             return vote;
         }
 
+        // Checks if user already voted on Idea
+        // Return true if user did not vote already
+        // Return false if user already voted
         public bool CheckUserVote(IdentityUser user, VoteType voteType, Idea idea)
         {
             if (_ctx.Votes.Where(v => v.Idea == idea).Where(v => v.IdentityUser == user)
@@ -389,6 +428,7 @@ namespace Integratieproject1.DAL.Repositories
             }
         }
 
+        // Deletes given vote from database
         public void RemoveVote(Vote vote)
         {
             _ctx.Votes.Remove(vote);
@@ -399,6 +439,9 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Like methods
 
+        // Checks if given user has already liked the given reaction
+        // Returns false if user has liked reaction
+        // Return true if user has not liked reaction
         public bool CheckLike(Reaction reaction, IdentityUser loggedInUser)
         {
             if (_ctx.Likes.Where(l => l.Reaction == reaction).Where(l => l.IdentityUser == loggedInUser).AsEnumerable()
@@ -412,6 +455,8 @@ namespace Integratieproject1.DAL.Repositories
             }
         }
 
+        // Creates new like based on given like
+        // Returns the new like
         public Like CreateLike(Like like)
         {
             _ctx.Likes.Add(like);
@@ -419,11 +464,13 @@ namespace Integratieproject1.DAL.Repositories
             return like;
         }
 
+        // Returns like based on ID
         public Like GetLike(int likeId)
         {
             return _ctx.Likes.Find(likeId);
         }
 
+        // Deletes given like from database
         public void RemoveLike(Like like)
         {
             _ctx.Likes.Remove(like);
@@ -435,15 +482,19 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Tag methods
         
+        // Return tag based on ID
         public Tag GetTag(int tagId)
         {
             return _ctx.Tags.Find(tagId);
         }
+
+        // Returns enumerable of all tags
         public IEnumerable<Tag> GetAllTags()
         {
             return _ctx.Tags.AsEnumerable();
         }
         
+        // Returns ideatag based on ID
         public IdeaTag GetIdeaTag(int ideaTagId)
         {
             return _ctx.IdeaTags
@@ -452,30 +503,35 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(i => i.IdeaTagId == ideaTagId);
         }
         
+        // Creates new ideatag from given ideatag
         public void CreateIdeaTag(IdeaTag ideaTag)
         {
             _ctx.IdeaTags.Add(ideaTag);
             _ctx.SaveChanges();
         }
 
+        // Deletes the given ideatag from database
         public void DeleteIdeaTag(IdeaTag ideaTag)
         {
             _ctx.IdeaTags.Remove(ideaTag);
             _ctx.SaveChanges();
         }
         
+        // Updates tag based on given tag
         public void EditTag(Tag tag)
         {
             _ctx.Tags.Update(tag);
             _ctx.SaveChanges();
         }
 
+        // Creates a new tag based on given tag
         public void AddTag(Tag tag)
         {
             _ctx.Tags.Add(tag);
             _ctx.SaveChanges();
         }
 
+        // Deletes the given tag from the database
         public void DeleteTag(Tag tag)
         {
             _ctx.Tags.Remove(tag);
