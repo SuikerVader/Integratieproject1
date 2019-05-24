@@ -16,7 +16,5 @@ namespace Integratieproject1.Domain.Surveys
     public ICollection<Answer> Answers { get; set; }
     public ICollection<IoTSetup> IoTSetups { get; set; }
     
-    /*[ForeignKey("Survey")]
-    public int SurveyFK { get; set; }*/
   }
 }

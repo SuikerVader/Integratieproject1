@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Users;
@@ -11,33 +12,41 @@ namespace Integratieproject1.Services
 {
     public static class MailService
     {
+        private const string Host = "smtp.gmail.com";
+        private const int PortNr = 587;
+        private const string EmailCoI = "info.cityofideas@gmail.com";
+        private const string DisplayNameCoI = "City Of Ideas";
+        private const string PwdCoI = "CoIMySweet16";
         private static readonly UsersManager UsersManager = new UsersManager();
 
-        public static void SendErrorMail(string email, string password, string routeWhereExceptionOccurred,
-            Exception exceptionThatOccurred, IIdentity userIdentity)
-        {            
+        private static void SendMail(string subject, string body, MailPriority priority)
+        {
             using (SmtpClient client = new SmtpClient
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
+                Host = Host,
+                Port = PortNr,
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(email, password),
+                Credentials = new NetworkCredential(EmailCoI, PwdCoI),
                 DeliveryMethod = SmtpDeliveryMethod.Network
             })
             {
-                using (MailMessage mail = new MailMessage {From = new MailAddress(email, "CityOfIdeas")})
-                {                    
-                    mail.To.Add("info.cityofideas@gmail.com");
-                    foreach (var user in UsersManager.GetUsers("SUPERADMIN"))
-                    {
-                        mail.To.Add(new MailAddress(user.Email));
-                    }
-
-                    mail.Subject = "Error";
+                using (MailMessage mail = new MailMessage {From = new MailAddress(EmailCoI, DisplayNameCoI)})
+                {
+                    mail.To.Add(EmailCoI);
+                    mail.Subject = subject;
                     mail.IsBodyHtml = true;
-                    mail.Priority = MailPriority.High;
-                    mail.Body = $@"
+                    mail.Priority = priority;
+                    mail.Body = body;
+
+                    client.Send(mail);
+                }
+            }
+        }
+
+        public static void SendErrorMail(string routeWhereExceptionOccurred, Exception exceptionThatOccurred, IIdentity userIdentity)
+        {
+            SendMail("Error", $@"
         <html>
         <body>
             <h1>An Error Has Occurred!</h1>
@@ -64,12 +73,8 @@ namespace Integratieproject1.Services
                 </tr>
             </table>
         </body>
-        </html>";
-
-                    client.Send(mail);
-                    Console.WriteLine("mail sent");
-                }
-            }
+        </html>", 
+                MailPriority.High);
         }
     }
 }

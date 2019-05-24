@@ -75,20 +75,20 @@ namespace Integratieproject1.Migrations
 
                     b.Property<int>("IdeationId");
 
-                    b.Property<string>("Image");
+                    b.Property<string>("ImageAllowed");
 
                     b.Property<int>("LoggedInUserUserId");
 
                     b.Property<int?>("PositionPostionId");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("TextAllowed");
 
                     b.Property<string>("Theme");
 
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<string>("Video");
+                    b.Property<string>("VideoAllowed");
 
                     b.HasKey("IdeaId");
 

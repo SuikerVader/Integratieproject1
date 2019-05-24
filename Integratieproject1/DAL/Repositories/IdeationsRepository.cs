@@ -230,7 +230,7 @@ namespace Integratieproject1.DAL.Repositories
 
         #endregion
 
-        #region Video
+        #region VideoAllowed
 
         public Video GetVideo(int videoId)
         {
