@@ -74,10 +74,9 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new CustomUser { UserName = Input.Username, Email = Input.Email};
+                var user = new CustomUser { UserName = Input.Username, Email = Input.Email, EmailConfirmed=true};
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                UsersManager usersManager = new UsersManager();
-                usersManager.GiveRole(user.Id,"USER");
+                await _userManager.AddToRoleAsync(user, "USER");
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Gebruiker heeft nieuw account met wachtwoord gemaakt.");
@@ -89,10 +88,10 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Email bevestigen",
-                        $"Bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier te klikken</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Email bevestigen",
+                      //  $"Bevestig je account door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier te klikken</a>.");
 
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
