@@ -272,6 +272,11 @@ namespace Integratieproject1.BL.Managers
                 }
             }
         }
+
+        public List<Answer> GetAnswersFromQuestion(Question question)
+        {
+            return _surveysRepository.GetAnswersFromQuestion(question).ToList();
+        }
         public bool IsEmail(int id, int key)
         {
             return _surveysRepository.IsEmail(id, key);

@@ -44,9 +44,11 @@ namespace Integratieproject1.BL.Managers
         //in case of an IoTSetup that offers multiple options (buttons)
         public void RegisterComplexVote(int questionId, int answer, int amount)
         {
+            List<Answer> list = _surveysManager.GetAnswersFromQuestion(_surveysManager.GetQuestion(questionId));
+            
             for (int i = 0; i < amount; i++)
             {
-                _surveysManager.UpdateSingleAnswer(questionId, answer);
+                _surveysManager.UpdateSingleAnswer(questionId, list[answer-1].AnswerId);
             }
         }
 
@@ -92,6 +94,11 @@ namespace Integratieproject1.BL.Managers
         {
             List<IoTSetup> ioTSetups = _ioTRepository.GetAllIoTSetupsForQuestion(id).ToList();
             return ioTSetups;
+        }
+        
+        public List<IoTSetup> GetAllIoTSetups()
+        {
+            return _ioTRepository.GetIoTSetups().ToList();
         }
 
         #endregion
@@ -197,12 +204,6 @@ namespace Integratieproject1.BL.Managers
             _ioTRepository.UpdateIoTSetup(original);
             _unitOfWorkManager.Save();
         }
-        
-        public List<IoTSetup> GetAllIoTSetups()
-        {
-            List<IoTSetup> list = _ioTRepository.GetIoTSetups().ToList();return list;
-        }
-
 
         #endregion
         

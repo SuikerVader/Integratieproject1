@@ -166,6 +166,11 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.Answers.Remove(answer);
             _ctx.SaveChanges();
         }
+
+        public IEnumerable<Answer> GetAnswersFromQuestion(Question question)
+        {
+            return _ctx.Answers.Where(q => q.Question == question).AsEnumerable();
+        }
         
 
         #endregion
