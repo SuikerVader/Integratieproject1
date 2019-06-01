@@ -748,22 +748,26 @@ namespace Integratieproject1.DAL
             IoTSetup ioT1 = new IoTSetup()
             {
                Idea = ideaSport1,
-               Position = groenplaats
+               Position = groenplaats,
+                Code = "1"
             };
             IoTSetup ioT2 = new IoTSetup()
             {
                 Idea = ideaSport2,
-                Position = centraalStation
+                Position = centraalStation,
+                Code = "2"
             };
             IoTSetup ioT3 = new IoTSetup()
             {
                 Idea = ideaSport3,
-                Position = pothoekstraat
+                Position = pothoekstraat,
+                Code = "3"
             };
             IoTSetup ioT4 = new IoTSetup()
             {
                 Question = radioQuestion,
-                Position = stadswaag
+                Position = stadswaag,
+                Code = "4"
             };
 
             

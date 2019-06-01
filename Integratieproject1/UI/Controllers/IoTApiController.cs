@@ -32,9 +32,9 @@ namespace Integratieproject1.UI.Controllers
         
         //wordt gebruikt voor IoT-opstellingen die meerdere knoppen bevatten (1-4) in mate van hoe eens ze het zijn
         [HttpPost("Vote/{id}/{supportLv}")]
-        public async Task IoTVote(int id, int supportLv)
+        public async Task IoTVote(int id, int supportLv, int amount)
         {
-            _ioTManager.RegisterComplexVote(id, supportLv);
+            _ioTManager.RegisterComplexVote(id, supportLv, amount);
         }
     }
 }
