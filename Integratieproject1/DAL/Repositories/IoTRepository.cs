@@ -64,8 +64,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Where(i => i.Idea.Ideation.Phase.Project.ProjectId == id ||
                             i.Question.Survey.Phase.Project.ProjectId == id)
                 .Include(i => i.Position)
-                .Include(i => i.Question).ThenInclude(q => q.Survey)
-                .Include(i => i.Idea)
+                .Include(i => i.Question).ThenInclude(q => q.Survey).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
+                .Include(i => i.Idea).ThenInclude(i => i.Ideation).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
                 .AsEnumerable();
         }
 
@@ -75,8 +75,8 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.IoTSetups
                 .Where(i => i.Idea.Ideation.IdeationId == id)
                 .Include(i => i.Position)
-                .Include(i => i.Question).ThenInclude(q => q.Survey)
-                .Include(i => i.Idea)
+                .Include(i => i.Question).ThenInclude(q => q.Survey).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
+                .Include(i => i.Idea).ThenInclude(i => i.Ideation).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
                 .AsEnumerable();
         }
 
@@ -86,8 +86,8 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.IoTSetups
                             .Where(i => i.Idea.IdeaId == id)
                             .Include(i => i.Position)
-                            .Include(i => i.Question).ThenInclude(q => q.Survey)
-                            .Include(i => i.Idea)
+                            .Include(i => i.Question).ThenInclude(q => q.Survey).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
+                            .Include(i => i.Idea).ThenInclude(i => i.Ideation).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
                             .AsEnumerable();
         }
 
@@ -97,8 +97,8 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.IoTSetups
                 .Where(i => i.Question.QuestionId == id)
                 .Include(i => i.Position)
-                .Include(i => i.Question).ThenInclude(q => q.Survey)
-                .Include(i => i.Idea)
+                .Include(i => i.Question).ThenInclude(q => q.Survey).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
+                .Include(i => i.Idea).ThenInclude(i => i.Ideation).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
                 .AsEnumerable();
         }
         
