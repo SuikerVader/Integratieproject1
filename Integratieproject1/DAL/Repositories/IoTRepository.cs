@@ -99,7 +99,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Include(i => i.Position)
                 .Include(i => i.Question).ThenInclude(q => q.Survey).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
                 .Include(i => i.Idea).ThenInclude(i => i.Ideation).ThenInclude(s => s.Phase).ThenInclude(p=>p.Project).ThenInclude(p=>p.Platform)
-                .AsEnumerable();
+                .AsEnumerable(); 
         }
         
 
