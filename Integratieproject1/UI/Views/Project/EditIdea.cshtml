@@ -159,7 +159,11 @@
 
                             </div>
                             <div class="ideaObjectBtn">
-                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
+                                @if (Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() == 1 && Model.Ideation.ImageRequired == true && User.IsInRole("User"))
+                                {
+                                    
+                                }
+                                else
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                                        asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
@@ -178,7 +182,11 @@
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                             </iframe>
                             <div class="ideaObjectBtn">
-                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
+                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() == 1 && Model.Ideation.VideoRequired == true) && User.IsInRole("User"))
+                                {
+                                   
+                                }
+                                else
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                                        asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
