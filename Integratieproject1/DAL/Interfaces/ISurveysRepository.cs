@@ -37,6 +37,7 @@ namespace Integratieproject1.DAL.Interfaces
         Answer EditAnswer(Answer answer);
         Answer UpdateAnswer(Answer answer);
         void RemoveAnswer(Answer answer);
+        IEnumerable<Answer> GetAnswersFromQuestion(Question question);
 
         #endregion
     }

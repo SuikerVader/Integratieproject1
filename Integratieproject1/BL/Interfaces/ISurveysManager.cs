@@ -35,7 +35,7 @@ namespace Integratieproject1.BL.Interfaces
         Answer GetAnswer(int answerId);
         void CreateAnswer(Answer answer);
         void EditAnswer(Answer answer, int answerId, int questionId);
-        void UpdateSingleAnswer(Question question, int response);
+        void UpdateSingleAnswer(int questionId, int response);
         void UpdateAnswers(ArrayList answers, int surveyId);
         void DeleteAnswer(int answerId);
         bool IsEmail(int id, int key);

@@ -170,16 +170,6 @@ namespace Integratieproject1.UI.Controllers
             );
         }
 
-        [HttpGet]
-        public IActionResult LogoPartial(string platformName)
-        {
-           
-                Platform platform = _projectsManager.GetPlatformByName(platformName);
-                ViewBag.Logo = platform.Logo;
-                return PartialView("/UI/Views/Shared/_LogoPartial.cshtml");
-            
-        }
-
 
         public IActionResult IoTMap(int id, string type)
         {
@@ -212,7 +202,7 @@ namespace Integratieproject1.UI.Controllers
         {
             ClaimsPrincipal  currentUser = User;
             string currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUser(currentUserId);
+            IEnumerable<Idea> ideas = _ideationsManager.GetIdeasByUserSorted(currentUserId, sortOrder);
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["IdeationSortParm"] = sortOrder == "Ideation" ? "ideation_desc" : "Ideation";
             ViewData["PhaseSortParm"] = sortOrder == "Phase" ? "phase_desc" : "Phase";

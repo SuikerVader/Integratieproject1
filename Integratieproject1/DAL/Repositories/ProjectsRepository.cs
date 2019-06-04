@@ -27,11 +27,13 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Platform
 
+        // Returns enumerable of all platforms
         public IEnumerable<Platform> GetPlatforms()
         {
             return _ctx.Platforms.AsEnumerable();
         }
 
+        // Returns platform based on ID
         public Platform GetPlatform(int platformId)
         {
             return _ctx.Platforms
@@ -42,6 +44,7 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(pl => pl.PlatformId == platformId);
         }
 
+        // Returns platform based on name
         public Platform GetPlatformByName(string platformName)
         {
             return _ctx.Platforms
@@ -53,6 +56,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(pl => pl.PlatformName == platformName);
         }
 
+        // Creates new platform based on given platform
+        // Returns new platform
         public Platform CreatePlatform(Platform platform)
         {
             _ctx.Platforms.Add(platform);
@@ -60,12 +65,14 @@ namespace Integratieproject1.DAL.Repositories
             return platform;
         }
 
+        // Deletes given platform from database
         public void RemovePlatform(Platform platform)
         {
             _ctx.Platforms.Remove(platform);
             _ctx.SaveChanges();
         }
 
+        // Updates platform based on given platform
         public void EditPlatform(Platform platform)
         {
             _ctx.Platforms.Update(platform);
@@ -76,6 +83,7 @@ namespace Integratieproject1.DAL.Repositories
 
         #region Project
 
+        // Returns enumerable of all projects of a platform based on ID of platform
         public IEnumerable<Project> GetProjects(int platformId)
         {
             return _ctx.Projects
@@ -123,6 +131,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all projects
         public IEnumerable<Project> GetAllProjects()
         {
             return _ctx.Projects
@@ -131,6 +140,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all adminprojects of a user based on ID of user
         public IEnumerable<AdminProject> GetAdminProjectsByUser(string userId)
         {
             UserStore<CustomUser> userStore = new UserStore<CustomUser>(_ctx);
@@ -142,6 +152,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Returns enumerable of all adminprojects of a project based on ID of project
         public IEnumerable<AdminProject> GetAdminProjectsByProject(int projectId)
         {
             return _ctx.AdminProjects.Where(a => a.Project.ProjectId == projectId)
@@ -150,7 +161,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
-
+        // Returns project based on ID
         public Project GetProject(int projectId)
         {
             return _ctx.Projects
@@ -166,6 +177,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(p => p.ProjectId == projectId);
         }
 
+        // Creates new project based on given project
+        // Returns new project
         public Project CreateProject(Project project)
         {
             _ctx.Projects.Add(project);
@@ -178,6 +191,8 @@ namespace Integratieproject1.DAL.Repositories
             return project;
         }
 
+        // Updates project based on given project
+        // Returns updated project
         public Project EditProject(Project project)
         {
             _ctx.Projects.Update(project);
@@ -185,6 +200,8 @@ namespace Integratieproject1.DAL.Repositories
             return _ctx.Projects.Find(project.ProjectId);
         }
 
+        // Creates new adminproject based on given admnproject
+        // Returns created adminproject
         public AdminProject CreateAdminProject(AdminProject adminProject)
         {
             _ctx.AdminProjects.Add(adminProject);
@@ -194,18 +211,20 @@ namespace Integratieproject1.DAL.Repositories
             return adminProject;
         }
 
-
+        // Deletes given project from database
         public void RemoveProject(Project project)
         {
             _ctx.Projects.Remove(project);
             _ctx.SaveChanges();
         }
 
+        // Returns adminproject based on ID
         public AdminProject GetAdminProject(int adminProjectId)
         {
             return _ctx.AdminProjects.Find(adminProjectId);
         }
 
+        // Deletes given adminproject from database
         public void RemoveAdminProject(AdminProject adminProject)
         {
             _ctx.AdminProjects.Remove(adminProject);
@@ -217,6 +236,8 @@ namespace Integratieproject1.DAL.Repositories
         #region Phase
 
         //PhaseMethods
+
+        // Return enumerable of all phases of project based on ID of project
         public IEnumerable<Phase> GetPhases(int projectId)
         {
             return _ctx.Phases
@@ -226,6 +247,7 @@ namespace Integratieproject1.DAL.Repositories
                 .AsEnumerable();
         }
 
+        // Return enumerable of all phases of platform based on ID of platform
         public IEnumerable<Phase> GetAllPhases(int platformId)
         {
             return _ctx.Phases
@@ -234,6 +256,7 @@ namespace Integratieproject1.DAL.Repositories
 
         }
 
+        // Returns phase based on ID
         public Phase GetPhase(int phaseId)
         {
             return _ctx.Phases
@@ -243,6 +266,8 @@ namespace Integratieproject1.DAL.Repositories
                 .Single(p => p.PhaseId == phaseId);
         }
 
+        // Creates new phase based on given phase
+        // Returns created phase
         public Phase CreatePhase(Phase phase)
         {
             _ctx.Phases.Add(phase);
@@ -252,12 +277,14 @@ namespace Integratieproject1.DAL.Repositories
             return phase;
         }
 
+        // Deletes given phase from database
         public void RemovePhase(Phase phase)
         {
             _ctx.Phases.Remove(phase);
             _ctx.SaveChanges();
         }
 
+        // Updates phase based on given phase
         public Phase EditPhase(Phase phase)
         {
             _ctx.Phases.Update(phase);

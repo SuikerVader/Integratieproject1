@@ -35,7 +35,7 @@ namespace Integratieproject1
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "_t0_97S06yAC", "dotNetApp");
         }    
 
         public IConfiguration Configuration { get; }
