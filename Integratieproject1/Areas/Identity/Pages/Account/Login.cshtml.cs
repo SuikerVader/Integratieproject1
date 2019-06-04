@@ -50,9 +50,9 @@ namespace Integratieproject1.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty("Dit veld is verplicht!"))
+            if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                ModelState.AddModelError(string.Empty, "Dit veld is verplicht");
+                ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
