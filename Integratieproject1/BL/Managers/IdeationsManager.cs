@@ -446,7 +446,6 @@ namespace Integratieproject1.BL.Managers
                 IoTSetups = idea.IoTSetups,
                 Votes = idea.Votes,
                 Reactions = idea.Reactions,
-                
                 Position = position,
             };
             _ideationsRepository.RemoveIdea(idea);
@@ -705,6 +704,29 @@ namespace Integratieproject1.BL.Managers
             return _ideationsRepository.GetLike(likeId);
         }
 
+        public void postLike(int reactionId, string userId)
+        {
+            Like like = new Like();
+            Reaction reaction = GetReaction(reactionId);
+            if (userId != null)
+            {
+                UsersManager usersManager = new UsersManager(_unitOfWorkManager);
+                CustomUser user = usersManager.GetUser(userId);
+
+                if (_ideationsRepository.CheckLike(reaction, user) == true)
+                {
+                    like.IdentityUser = user;
+                    like.Reaction = reaction;
+                    _ideationsRepository.CreateLike(like);
+                    _unitOfWorkManager.Save();
+                }
+                else
+                {
+                    throw new Exception("user already voted in that type");
+                }
+            }
+        }
+
         #endregion
 
         #region Reaction
@@ -862,6 +884,11 @@ namespace Integratieproject1.BL.Managers
         {
             return _ideationsRepository.GetVote(voteId);
         }
+        // Returns votes based on ideaId
+        public IEnumerable<Vote> GetIdeaVote(int ideaId)
+        {
+            return _ideationsRepository.GetIdeaVotes(ideaId);
+        }
 
         #endregion
 
@@ -870,7 +897,7 @@ namespace Integratieproject1.BL.Managers
         // Returns a tag based on ID
         public Tag GetTag(int tagId)
         {
-           return  _ideationsRepository.GetTag(tagId);
+            return _ideationsRepository.GetTag(tagId);
         }
 
         // Returns a list of all tags of an idea based on given ID of idea
@@ -902,7 +929,7 @@ namespace Integratieproject1.BL.Managers
         // Returns a list of all tags and sorted by: tagname
         public List<Tag> GetAllTagsBySort(string sortOrder)
         {
-            IEnumerable<Tag> tags =  GetAllTags();
+            IEnumerable<Tag> tags = GetAllTags();
             switch (sortOrder)
             {
                 case "name_desc":
@@ -960,8 +987,8 @@ namespace Integratieproject1.BL.Managers
         // Adds a tag to the database based on given tag
         public void AddTag(Tag tag)
         {
-           _ideationsRepository.AddTag(tag);
-           _unitOfWorkManager.Save();
+            _ideationsRepository.AddTag(tag);
+            _unitOfWorkManager.Save();
         }
         #endregion
 
@@ -1021,8 +1048,5 @@ namespace Integratieproject1.BL.Managers
         }
 
         #endregion
-
-
-        
     }
 }

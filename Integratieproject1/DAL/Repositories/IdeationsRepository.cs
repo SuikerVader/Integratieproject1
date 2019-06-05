@@ -204,7 +204,6 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
 
-
         #endregion
 
         #region IdeaObject methods
@@ -350,7 +349,9 @@ namespace Integratieproject1.DAL.Repositories
         // Returns enumerable of all reactions of idea based on ID of idea
         public IEnumerable<Reaction> GetIdeaReactions(int id)
         {
-            return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id).AsEnumerable();
+            return _ctx.Reactions.Where(reaction => reaction.Idea.IdeaId == id)
+                .Include(r=>r.Likes)
+                .AsEnumerable();
         }
 
         // Returns reaction based on ID
@@ -401,6 +402,15 @@ namespace Integratieproject1.DAL.Repositories
         public Vote GetVote(int voteId)
         {
             return _ctx.Votes.Find(voteId);
+        }
+
+        public IEnumerable<Vote> GetIdeaVotes(int ideaId)
+        {
+            return _ctx.Votes.
+                Where(i => i.Idea.IdeaId == ideaId)
+                .Include(v=>v.Idea)
+                .Include(v=>v.IdentityUser)
+                .AsEnumerable();
         }
 
         // Create a new vote based on given vote
@@ -538,8 +548,5 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
         #endregion
-
-
-        
     }
 }
