@@ -163,9 +163,9 @@
             <div class="d-flex flex-row justify-content-around flex-wrap">
             @if (Model.Ideas != null && Model.Ideas.Count > 0)
             {
-                foreach (var idea in Model.Ideas)
+                foreach (Idea idea in Model.Ideas)
                 {
-                    if (idea.Published == true)
+                    if (idea.Published)
                     {
                         <div id="@idea.IdeaId" class="card text-center idea">
 
@@ -255,7 +255,7 @@
 
     @foreach (Idea idea in Model.Ideas)
     {
-        if(idea.Published == true)
+        if(idea.Published)
         {
             @:names.push("@idea.Title");
             @:values.push("@idea.Votes.Count");
