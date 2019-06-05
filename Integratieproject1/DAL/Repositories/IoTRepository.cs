@@ -26,7 +26,11 @@ namespace Integratieproject1.DAL.Repositories
         // Returns enumerable of all iotsetups
         public IEnumerable<IoTSetup> GetIoTSetups()
         {
-            return _ctx.IoTSetups.AsEnumerable();
+            return _ctx.IoTSetups
+                .Include(i => i.Question)
+                .Include(i => i.Idea)
+                .Include(i => i.Position)
+                .AsEnumerable();
         }
 
         // Returns iotsetup based on ID

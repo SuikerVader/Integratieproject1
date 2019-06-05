@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Integratieproject1.BL.Managers;
 using Integratieproject1.Domain.Datatypes;
@@ -24,8 +26,8 @@ namespace Integratieproject1.UI.Controllers
         private readonly SurveysManager _surveysManager;
         private readonly ProjectsManager _projectsManager;
         private readonly UsersManager _usersManager;
+        private readonly IoTManager _iotManager;
         private readonly SignInManager<CustomUser> _signInManager;
-        public readonly IoTManager _IoTManager;
 
         public AndroidApiController(SignInManager<CustomUser> signInManager)
         {
@@ -33,7 +35,7 @@ namespace Integratieproject1.UI.Controllers
             _surveysManager = new SurveysManager();
             _projectsManager = new ProjectsManager();
             _usersManager = new UsersManager();
-            _IoTManager = new IoTManager();
+            _iotManager = new IoTManager();
             _signInManager = signInManager;
         }
 
@@ -80,7 +82,7 @@ namespace Integratieproject1.UI.Controllers
                     case "video":
                     {
                         Video video = new Video();
-                        video.Url = ideaObjectPostValue.value;
+                        video.Url = "https://www.youtube.com/watch?v=" + ideaObjectPostValue.value;
                         _ideationsManager.AddVideo(video,newidea.IdeaId);
                         _ideationsManager.ChangeIdea(newidea);
                         break;
@@ -127,6 +129,7 @@ namespace Integratieproject1.UI.Controllers
         {
             return _ideationsManager.GetIdeaReactions(id);
         }
+
         [HttpGet]
         [Route("Api/sharedVotes/{id}")]
         public IEnumerable<Vote> GetVotes(int id)
@@ -136,7 +139,7 @@ namespace Integratieproject1.UI.Controllers
 
         [HttpPost]
         [Route("Api/like")]
-        public void postLike([FromHeader] int reactionId,[FromHeader] string userid)
+        public void PostLike([FromHeader] int reactionId,[FromHeader] string userid)
         {
             Console.WriteLine(reactionId + userid);
             _ideationsManager.postLike(reactionId, userid);
@@ -189,7 +192,7 @@ namespace Integratieproject1.UI.Controllers
 
         [HttpPost]
         [Route("/Api/vote")]
-        public void androidVote([FromHeader] int id, [FromHeader] String vote, [FromHeader] string userId)
+        public void AndroidVote([FromHeader] int id, [FromHeader] String vote, [FromHeader] string userId)
         {
             VoteType voteType = (VoteType) Enum.Parse(typeof(VoteType), vote, true);
             _ideationsManager.CreateVote(id, voteType, userId);
@@ -226,6 +229,8 @@ namespace Integratieproject1.UI.Controllers
             [FromBody] AnswerPostValuesModel[] answerPostValuesArray)
         {
             var answers = new ArrayList();
+            
+            answerPostValuesArray = answerPostValuesArray.OrderBy(a => a.QuestionNr).ToArray();
 
             foreach (var answerPostValues in answerPostValuesArray)
             {
@@ -267,9 +272,12 @@ namespace Integratieproject1.UI.Controllers
         {
             byte[] decodedUsername = Convert.FromBase64String(username);
             username = System.Text.Encoding.UTF8.GetString(decodedUsername);
+
             byte[] decodedPassword = Convert.FromBase64String(password);
             password = System.Text.Encoding.UTF8.GetString(decodedPassword);
+
             CustomUser user = null;
+            
             if (username.Contains("@"))
             {
                 user = _usersManager.GetUserByEmail(username);
@@ -293,7 +301,14 @@ namespace Integratieproject1.UI.Controllers
         public void UpdateUser([FromHeader(Name = "Username")] string username,
             [FromBody] UserUpdateValuesModel userUpdateValues)
         {
+            byte[] decodedSurname = Convert.FromBase64String(userUpdateValues.Surname.Replace("%3D", "="));
+            userUpdateValues.Surname = System.Text.Encoding.UTF8.GetString(decodedSurname);
+
+            byte[] decodedLastName = Convert.FromBase64String(userUpdateValues.LastName.Replace("%3D", "="));
+            userUpdateValues.LastName = System.Text.Encoding.UTF8.GetString(decodedLastName);
+            
             var user = _usersManager.GetUserByUsername(username);
+            
             if (user != null)
             {
                 user.Surname = userUpdateValues.Surname;
@@ -301,6 +316,7 @@ namespace Integratieproject1.UI.Controllers
                 user.Sex = userUpdateValues.Sex;
                 user.Age = Int32.Parse(userUpdateValues.Age);
                 user.Zipcode = userUpdateValues.ZipCode;
+            
                 _usersManager.UpdateUser(user);
             }
         }
@@ -344,15 +360,15 @@ namespace Integratieproject1.UI.Controllers
 
         #endregion
         
-        //region Iot
+        #region IoT
 
         [HttpGet]
         [Route("Api/iot")]
         public IEnumerable<IoTSetup> GetAllIoTSetups()
         {
-            return _IoTManager.GetAllIoTSetupsForPlatform(1);
+            return _iotManager.GetAllIoTSetupsForPlatform(1);
         }
         
-        //endregion
+        #endregion
     }
 }
