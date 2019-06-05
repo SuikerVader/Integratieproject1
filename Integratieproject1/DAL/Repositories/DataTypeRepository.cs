@@ -36,13 +36,13 @@ namespace Integratieproject1.DAL.Repositories
         // Returns the address based on the ID
         public Address GetAddress(int addressId)
         {
-           return _ctx.Addresses.Find(addressId);
+           return _ctx.Addresses1.Find(addressId);
         }
 
         // Returns enumerable of all addresses
         public IEnumerable<Address> GetAddresses()
         {
-            return _ctx.Addresses.AsEnumerable();
+            return _ctx.Addresses1.AsEnumerable();
         }
 
         #endregion

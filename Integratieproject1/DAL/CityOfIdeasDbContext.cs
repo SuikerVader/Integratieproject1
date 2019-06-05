@@ -48,7 +48,7 @@ namespace Integratieproject1.DAL
 
         public DbSet<AdminProject> AdminProjects { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Address> Addresses1 { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<IdeaObject> IdeaObjects { get; set; }
         public DbSet<TextField> TextFields { get; set; }
