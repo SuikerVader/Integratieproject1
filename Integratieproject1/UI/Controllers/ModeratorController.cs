@@ -70,6 +70,8 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult PostCorrect(int projectId, int id, string type)
         {
             _ideationsManager.PostCorrect(id, type);
+            ViewBag.ReportedIdeas = _ideationsManager.GetReportedIdeas(projectId);
+            ViewBag.ReportedReactions = _ideationsManager.GetReportedReactions(projectId);
             Project project = _projectsManager.GetProject(projectId);
             return View("/UI/Views/Moderator/Posts.cshtml", project);
         }
@@ -77,6 +79,8 @@ namespace Integratieproject1.UI.Controllers
         public IActionResult DeletePost(int projectId, int id, string type)
         {
             _ideationsManager.DeletePost(id, type);
+            ViewBag.ReportedIdeas = _ideationsManager.GetReportedIdeas(projectId);
+            ViewBag.ReportedReactions = _ideationsManager.GetReportedReactions(projectId);
             Project project = _projectsManager.GetProject(projectId);
             return View("/UI/Views/Moderator/Posts.cshtml", project);
         }

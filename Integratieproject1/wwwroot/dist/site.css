@@ -1696,6 +1696,9 @@ a.text-danger:hover, a.text-danger:focus {
 .fa-times:before {
   content: "\f00d";
 }
+.fa-home:before {
+  content: "\f015";
+}
 .fa-flag:before {
   content: "\f024";
 }

@@ -1,0 +1,422 @@
+#!/bin/bash
+# Author: joren.frans@student.kdg.be
+# Copyright: 2019 joren.frans@student.kdg.be
+# Version: 01/04/2019
+# Function: Automatic creation of the needed infrastructure components (instances, firewall rules, …) in Google Cloud to deploy the .Net application.
+# Arguments: Arg1 is [ -i | --import | -d | --delete | -da | --deleteall ]
+# Requires: Gcloud account
+
+
+#################### Parameters
+region="europe-west1" 
+zone="europe-west1-b"
+password=""
+linuxServerInstance="linuxserver"
+sqlInstance="sql4"
+databaseInstance="coiDb"
+bucket="bucketjorenfrans"
+firewallRule80="http80"
+firewallRule443="http443"
+firewallRule5000="http5000"
+serviceAccountEmailAddress=""
+RESERVED_IP_ADDRESS=""
+VM_IP_ADDRESS=""
+SQL_IP_ADDRESS=""
+
+# Check for unexistant/too much parameters or help
+if [ $# -lt 1 -o "$1" = "--help" -o $# -gt 1 ]
+then
+	echo "Usage: ./`basename $0` [ -i | --import | -d | --delete | -da | --deleteall ]" >&2
+	echo "Example: ./`basename $0` -i">&2
+	exit 1
+fi
+
+# Check for wrong parameter
+if [ "$1" != "-i" ] && [ "$1" != "--import" ] && [ "$1" != "-d" ] && [ "$1" != "--delete" ] && [ "$1" != "-da" ] && [ "$1" != "--deleteall" ]
+then
+	echo "Usage: ./`basename $0` [ -i | --import | -d | --delete | -da | --deleteall ]">&2
+	echo "Example: ./`basename $0` -i">&2
+	exit 1
+fi
+
+while [[ -z $password ]]; do
+	read -p "Enter password for database (cannot be empty):" -s password
+	echo ""
+done
+
+# Check if $RESERVED_IP_ADDRESS is empty
+if [ "$RESERVED_IP_ADDRESS" = "" ] 
+then
+	######### Name the reserved IP address
+	RESERVED_IP_ADDRESS="iplinux"
+	echo "######### Name the reserved IP address done"
+else
+	echo "######### Reserved IP already named"
+fi
+
+if [ $# -eq 0 ] || [ "$1" = "-i" ] || [ "$1" = "--import" ]
+then
+	
+	######### Creation SQL instance
+	sqlInstances=`gcloud sql instances list --filter="$sqlInstance"`
+	if [ "$sqlInstances" != "" ]
+	then
+		echo "######### Sql instance already exists" >&2
+	else
+		gcloud sql instances create $sqlInstance --zone=$zone
+		echo "######### Creation SQL instance done"
+	fi
+
+	######### Creation database instance
+	databases=`gcloud sql databases list --instance=$sqlInstance --filter="$databaseInstance"`
+	if [ "$reservedAddresses" != "" ]
+	then
+		echo "######### Database instance already exists" >&2
+	else
+		gcloud sql databases create $databaseInstance --instance=$sqlInstance
+		echo "######### Creation database instance done"
+	fi
+
+	
+	######### Saving SQL IP-address
+	SQL_IP_ADDRESS=`gcloud sql instances describe $sqlInstance --format='get(ipAddresses[0].ipAddress)'`
+	echo "######### Saving SQL IP-address done"
+
+	######### Changing root password for SQL
+	gcloud sql users set-password root --host=% --instance=$sqlInstance --password=$password
+	echo "######### Changing root password for SQL done"
+
+	######### setup automatic daily backup for SQL
+	gcloud sql instances patch $sqlInstance --backup-start-time 00:00
+	echo "######### setup automatic daily backup for SQL done"
+
+	# Check if RESERVED_IP_ADDRESS exists
+	reservedAddresses=`gcloud compute addresses list --filter="$RESERVED_IP_ADDRESS"`
+	if [ "$reservedAddresses" != "" ]
+	then
+		echo "######### Reserved IP already created"
+	else
+		######### Create reserved IP address
+		gcloud compute addresses create $RESERVED_IP_ADDRESS --region=$region
+		echo "######### Create reserved IP address done"
+	fi
+
+	######### Saving VM IP-address
+	VM_IP_ADDRESS=`gcloud compute addresses describe $RESERVED_IP_ADDRESS --region=$region --format='get(address)'`
+	echo "######### Saving VM IP-address done"
+
+	######### Authorize linux server instance
+	yes | gcloud sql instances patch $sqlInstance --authorized-networks=$VM_IP_ADDRESS/32
+	echo "######### Authorize linux server instance done"
+
+	######### Create firewall-rule80
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule80"`
+	if [ "$firewallRules" != "" ]
+	then
+		echo "######### Firewall-rule80 already exists" >&2
+	else
+		gcloud compute firewall-rules create $firewallRule80 --allow=tcp:80 --target-tags=webserver
+		echo "######### Create firewall-rule80 done"
+	fi
+
+	######### Create firewall-rule443
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule443"`
+	if [ "$firewallRules" != "" ]
+	then
+		echo "######### Firewall-rule8080 already exists" >&2
+	else
+		gcloud compute firewall-rules create $firewallRule443 --allow=tcp:443 --target-tags=webserver
+		echo "######### Create firewall-rule443 done"
+	fi
+
+	######### Create firewall-rule5000
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule5000"`
+	if [ "$firewallRules" != "" ]
+	then
+		echo "######### Firewall-rule5000 already exists" >&2
+	else
+		gcloud compute firewall-rules create $firewallRule5000 --allow=tcp:5000 --target-tags=webserver
+		echo "######### Create firewall-rule5000 done"
+	fi
+
+	# "import" parameter
+	if [ $# -eq 1 ]
+	then
+		# Check if buckets exist
+		if [ "`gsutil ls`" = "" ]
+		then	
+			echo "######### There is no bucket yet to import the database from!" >&2
+		else
+			######### Import database from bucket
+			serviceAccountEmailAddress=`gcloud sql instances describe $sqlInstance --format='get(serviceAccountEmailAddress)'`
+			gsutil acl ch -u $serviceAccountEmailAddress:W gs://$bucket
+			gsutil acl ch -u $serviceAccountEmailAddress:R gs://$bucket/sqldumpfile.gz
+			yes | gcloud sql import sql $sqlInstance gs://$bucket/sqldumpfile.gz --database=$databaseInstance
+			gsutil acl ch -d $serviceAccountEmailAddress gs://$bucket/sqldumpfile.gz
+			gsutil acl ch -d $serviceAccountEmailAddress gs://$bucket
+			echo "######### Import database from bucket done"
+		fi
+
+		
+	fi
+
+	linuxInstances=`gcloud compute instances list --filter="$linuxServerInstance"`
+	if [ "$linuxInstances" != "" ]
+	then
+		echo "######### Database instance already exists" >&2
+	else
+		######### Creation instance including startup script
+
+		gcloud compute instances create $linuxServerInstance --machine-type=n1-standard-1 --zone=$zone --address=$VM_IP_ADDRESS --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud --tags=webserver --metadata=startup-script="
+		#!/bin/bash
+		######### Make errorfile
+		touch /startup.log
+
+		######### Update & upgrade server
+		apt-get update
+		apt-get -y upgrade
+
+		######### installs
+		apt-get -y install mysql-client &>> /startup.log
+		apt-get -y install git &>> /startup.log
+		curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+		mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+		echo 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main' > /etc/apt/sources.list.d/dotnetdev.list
+		apt-get install apt-transport-https &>> /startup.log
+		apt-get update
+		apt-get -y install dotnet-sdk-2.2 &>> /startup.log
+		apt-get -y install apache2 &>> /startup.log
+
+		######### Clone project 
+		git clone https://github.com/SuikerVader/Integratieproject1.git &>> /startup.log
+
+		######### Change from Sqlite to SQL database
+		######### Tijdelijk in commentaar door probleem database
+		#sed -i 's/UseSqlite/UseMySql/g' Integratieproject1/Integratieproject1/DAL/CityOfIdeasDbContext.cs &>> /startup.log
+		#sed -i 's/Data Source=CityOfIdeas.db/Server=$SQL_IP_ADDRESS;Database=$databaseInstance;Uid=root;Pwd=$password/g' Integratieproject1/Integratieproject1/DAL/CityOfIdeasDbContext.cs &>> /startup.log
+		#sed -i 's/true/false/g' Integratieproject1/Integratieproject1/DAL/CityOfIdeasDbContext.cs &>> /startup.log
+
+		######### .NET Facebook API
+		cd Integratieproject1/Integratieproject1/
+		dotnet user-secrets set Authentication:Facebook:AppId 285231842388196
+		dotnet user-secrets set Authentication:Facebook:AppSecret 22dfda0ef87036b3585ee6b901b6c156
+		
+		######### .NET Google API
+		dotnet user-secrets set Authentication:Google:ClientId 1015726814369-908l3gj2iog40c68p531518dbt6nl18h.apps.googleusercontent.com
+		dotnet user-secrets set Authentication:Google:ClientSecret ZDlT_mqDPrmD9pyUdJAYCSri
+
+		######### Enable modproxy modules
+		cd ~
+		a2enmod proxy proxy_http proxy_html &>> /startup.log
+
+		######### enable SSL module
+		a2enmod ssl &>> /startup.log
+
+		######### Make temporary directory for certificate files
+		mkdir ~/certificates
+		cd ~/certificates
+
+		######### Create certificate files
+		openssl req -nodes -newkey rsa:2048 -keyout apache.key -out apache.crt -subj '/C=BE/ST=Antwerp/L=Antwerp/O=Global Security/OU=IT Department/CN=cityofideas.gq' &>> /startup.log
+		
+		######### Move certificate files
+		mkdir /etc/apache2/ssl
+		mv ~/certificates/* /etc/apache2/ssl/. &>> /startup.log
+
+		######### Create and write configuration file
+		cat > \'/etc/apache2/conf-enabled/Integratieproject1.conf\' <<-FOE
+			<VirtualHost *:80>
+				ServerAdmin joren.frans@student.kdg.be
+  				ServerAlias www.cityofideas.gq
+
+				ProxyPreserveHost On
+				ProxyPass / http://127.0.0.1:5000/
+				ProxyPassReverse / http://127.0.0.1:5000/
+				ErrorLog /var/log/apache2/Integratieproject1-error.log
+				CustomLog /var/log/apache2/Integratieproject1-access.log common
+			</VirtualHost>
+
+ 			<VirtualHost *:443>
+  				ServerAdmin joren.frans@student.kdg.be
+  				ServerName cityofideas.gq
+  				ServerAlias www.cityofideas.gq
+
+  				ProxyPreserveHost On
+				ProxyPass / http://127.0.0.1:5000/
+				ProxyPassReverse / http://127.0.0.1:5000/
+				ErrorLog /var/log/apache2/Integratieproject1-error.log
+				CustomLog /var/log/apache2/Integratieproject1-access.log common
+
+  				SSLEngine on
+  				SSLCertificateFile    /etc/apache2/ssl/apache.crt
+  				SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+
+  				<FilesMatch '\.(cgi|shtml|phtml|php)$'>
+   					SSLOptions +StdEnvVars
+  				</FilesMatch>
+  				<Directory /usr/lib/cgi-bin>
+   					SSLOptions +StdEnvVars
+  				</Directory>
+ 			</VirtualHost>
+		FOE
+
+		######### Restart apache
+		service apache2 restart &>> /startup.log
+		
+		######### Publish
+		cd ~/Integratieproject1/
+		dotnet publish &>> /startup.log
+		cd ~
+		cp -a ~/Integratieproject1/Integratieproject1/bin/Debug/netcoreapp2.2/publish/ /var/Integratieproject1/ &>> /startup.log
+
+		######### Create and write service file
+		cat > \'/etc/systemd/system/kestrel-Integratieproject1.service\' <<-FOE
+			[Unit]
+			Description=Example ASP .NET Web Application running on Ubuntu 16.04
+			[Service]
+			WorkingDirectory=/var/Integratieproject1
+			ExecStart=/usr/bin/dotnet /var/Integratieproject1/Integratieproject1.dll
+			Restart=always
+			RestartSec=10
+			SyslogIdentifier=dotnet-demo
+			User=www-data
+			Environment=ASPNETCORE_ENVIRONMENT=Production
+			[Install]
+			WantedBy=multi-user.target
+		FOE
+
+		######### Enable and start .service file
+		systemctl enable kestrel-Integratieproject1.service &>> /startup.log
+		systemctl start kestrel-Integratieproject1.service &>> /startup.log
+
+		######### Run
+		dotnet run --urls http://*:5000 --project ~/Integratieproject1/Integratieproject1 &>> /startup.log
+		"
+	fi
+fi
+
+
+######### "delete" parameter
+if [ "$1" = "-d" ] || [ "$1" = "--delete" ] || [ "$1" = "-da" ] || [ "$1" = "--deleteall" ]
+then
+	if [ "$1" = "-d" ] || [ "$1" = "--delete" ]
+	then
+		# Ask permission to export database to bucket
+		read -p "Do you want to export the database to a bucket? " -n 1 -r
+		echo
+		if [[ $REPLY =~ ^[Yy]$ ]]
+		then
+			# Check if buckets exist
+			if [ "`gsutil ls`" != "" ]
+			then	
+				echo "######### Bucket already exists"	
+			else
+				######### Creation bucket
+				gsutil mb gs://$bucket
+				echo "######### Creation bucket done"
+			fi
+
+			######### Export database
+			serviceAccountEmailAddress=`gcloud sql instances describe $sqlInstance --format='get(serviceAccountEmailAddress)'`
+			gsutil acl ch -u $serviceAccountEmailAddress:W gs://$bucket
+			yes | gcloud sql export sql $sqlInstance gs://$bucket/sqldumpfile.gz --database=$databaseInstance
+			gsutil acl ch -d $serviceAccountEmailAddress gs://$bucket
+			echo "######### Export database done"
+		else
+			echo "######### syntax not right: command for complete removal: ./deploy [ -da | --deleteall ]" &>2
+			exit
+		fi
+	fi
+
+	# Check if database exists
+	databases=`gcloud sql databases list --instance=$sqlInstance --filter="$databaseInstance"`
+	if [ "$reservedAddresses" != "" ]
+	then
+		######### Database verwijderen
+		gcloud sql databases delete $databaseInstance --instance=$sqlInstance
+		echo "######### Database verwijderen done"
+	else
+		echo "######### No database to delete" &>2
+	fi
+
+	# Check if firewall-rule80 exist
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule80"`
+	if [ "$firewallRules" != "" ]
+	then
+		######### Delete firewall-rule80
+		yes | gcloud compute firewall-rules delete $firewallRule80
+		echo "######### Delete firewall-rule80 done"
+	else
+		echo "######### No firewall-rule80 to delete" >&2
+	fi
+
+	# Check if firewall-rule443 exist
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule443"`
+	if [ "$firewallRules" != "" ]
+	then
+		######### Delete firewall-rule443
+		yes | gcloud compute firewall-rules delete $firewallRule443
+		echo "######### Delete firewall-rule443 done"
+	else
+		echo "######### No firewall-rule443 to delete" >&2
+	fi
+
+	# Check if firewall-rule5000 exist
+	firewallRules=`gcloud compute firewall-rules list --filter="$firewallRule5000"`
+	if [ "$firewallRules" != "" ]
+	then
+		######### Delete firewall-rule5000
+		yes | gcloud compute firewall-rules delete $firewallRule5000
+		echo "######### Delete firewall-rule5000 done"
+	else
+		echo "######### No firewall-rule5000 to delete" >&2
+	fi
+
+	# Check if linux instance exists
+	linuxInstances=`gcloud compute instances list --filter="$linuxServerInstance"`
+	if [ "$linuxInstances" != "" ]
+	then
+		######### Delete linux instance
+		yes | gcloud compute instances delete $linuxServerInstance
+		echo "######### Delete linux instance done"
+	else
+		echo "######### No linux instance to delete" >&2
+	fi
+
+	# Check if sql instance exists
+	sqlInstances=`gcloud sql instances list --filter="$sqlInstance"`
+	if [ "$sqlInstances" != "" ]
+	then
+		######### Delete sql instance
+		yes | gcloud sql instances delete $sqlInstance
+		echo "######### Delete sql instance done"
+	else
+		echo " No SQL instances to delete" >&2
+	fi
+
+	######### "deleteall" parameter
+	if [ "$1" = "-da" ] || [ "$1" = "--deleteall" ]
+	then	
+		# Check if RESERVED_IP_ADDRESS exists
+		reservedAddresses=`gcloud compute addresses list --filter="$RESERVED_IP_ADDRESS"`
+		if [ "$reservedAddresses" != "" ]
+		then
+			######### Delete reserved ip
+			y | gcloud compute addresses delete $RESERVED_IP_ADDRESS
+			echo "######### Delete reserved IP done"
+		else
+			echo "######### No reserved IP to delete" >&2
+		fi
+
+		
+		# Check if buckets exist
+		if [ "`gsutil ls`" != "" ]
+		then	
+			######### Delete bucket
+			gsutil rm -r gs://$bucket
+			echo "######### Delete bucket done"
+		else
+			echo "######### No bucket to delete"
+		fi
+	fi
+fi

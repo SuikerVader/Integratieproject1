@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using QRCoder;
 
 namespace Integratieproject1.UI.Controllers
 {
@@ -202,8 +204,22 @@ namespace Integratieproject1.UI.Controllers
                 ViewBag.tags = _ideationsManager.GetTags(idea.IdeaId);
                 return View("/UI/Views/Project/EditIdea.cshtml", idea);
             }
-            
-            
+        }
+
+        public IActionResult IoTSetups()
+        {
+            List<IoTSetup> list = _ioTManager.GetAllIoTSetups();
+            return View("/UI/Views/Admin/IoTSetups.cshtml", list);
+        }
+
+        public Bitmap generateQr(IoTSetup setup)
+        {
+            QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
+            string url = _ioTManager.GenerateIoTUrl(setup.Code);
+            QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            return qrCodeImage;
         }
 
 

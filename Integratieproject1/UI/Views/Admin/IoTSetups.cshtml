@@ -1,0 +1,45 @@
+@model IList<Integratieproject1.Domain.IoT.IoTSetup>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "/UI/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+<div class="adminGrid">
+    <div class="adminTitle text-center">
+        <h2>IoT-opstellingen</h2>
+    </div>
+    <div class="adminMain">
+        <div>
+            <table class="table">
+                <tr>
+                    <th>IoT-opstelling</th>
+                    <th>positie</th>
+                    <th>onderwerp</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                @foreach (var setup in Model)
+                {
+                    <tr>
+                        <td>@setup.Code</td>
+                        <td>@setup.Position</td>
+                        <td>@setup.Idea.Title @setup.Question.QuestionText</td>
+                        <td>
+                            <a asp-area="" asp-controller="Admin"
+                               asp-action="EditIoT" asp-route-ideationId="@setup">
+                                Wijzig
+                            </a>
+                        </td>
+                        <a asp-area="" asp-controller="Admin"
+                           asp-action="generateQr" asp-route-ideationId="@setup">
+                            genereer Qr-code
+                        </a>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+</div>

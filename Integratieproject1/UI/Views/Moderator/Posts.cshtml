@@ -42,18 +42,6 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </td>
-                        <td>
-                            <a asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-projectId="@idea.IdeaId">
-                                <i class="fa fa-paper-plane"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-projectId="@idea.IdeaId">
-                                <i class="fa fa-user-times"></i>
-                            </a>
-                        </td>
                     </tr>
                 }
             </table>
@@ -87,18 +75,6 @@
                             <a asp-area="" asp-controller="Moderator"
                                asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
                                 <i class="fa fa-times"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
-                                <i class="fa fa-paper-plane"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-area="" asp-controller="Project"
-                               asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
-                                <i class="fa fa-user-times"></i>
                             </a>
                         </td>
                     </tr>
@@ -169,18 +145,6 @@
                                     <i class="fa fa-times"></i>
                                 </a>
                             </td>
-                            <td>
-                                <a asp-area="" asp-controller="Project"
-                                   asp-action="Idea" asp-route-projectId="@idea.IdeaId">
-                                    <i class="fa fa-paper-plane"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a asp-area="" asp-controller="Project"
-                                   asp-action="Idea" asp-route-projectId="@idea.IdeaId">
-                                    <i class="fa fa-user-times"></i>
-                                </a>
-                            </td>
                         </tr>
                     }
                 </table>
@@ -205,7 +169,6 @@
                                 {
                                     <td>idee: @reaction.Idea.Title</td>
                                 }
-                                <td>@reaction.IdentityUser.Email</td>
                                 <td>
                                     <a asp-area="" asp-controller="Moderator"
                                        asp-action="PostCorrect" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
@@ -216,18 +179,6 @@
                                     <a asp-area="" asp-controller="Moderator"
                                        asp-action="DeletePost" asp-route-projectId="@Model.ProjectId" asp-route-id="@reaction.ReactionId" asp-route-type="reaction">
                                         <i class="fa fa-times"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-area="" asp-controller="Project"
-                                       asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
-                                        <i class="fa fa-paper-plane"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-area="" asp-controller="Project"
-                                       asp-action="Idea" asp-route-projectId="@reaction.ReactionId">
-                                        <i class="fa fa-user-times"></i>
                                     </a>
                                 </td>
                             </tr>
