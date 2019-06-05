@@ -388,6 +388,7 @@ namespace Integratieproject1.BL.Managers
         {
             Idea returnIdea = GetIdea(ideaId);
             returnIdea.Title = idea.Title;
+            returnIdea.Published = false;
             _ideationsRepository.UpdateIdea(returnIdea);
             _unitOfWorkManager.Save();
         }

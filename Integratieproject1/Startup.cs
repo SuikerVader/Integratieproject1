@@ -35,7 +35,7 @@ namespace Integratieproject1
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "9S03vDhi54u1", "dotNetApp");
+            MqttClientTask("m24.cloudmqtt.com", 15459, "jdvewwvn", "_t0_97S06yAC", "dotNetApp");
         }    
 
         public IConfiguration Configuration { get; }
@@ -50,15 +50,15 @@ namespace Integratieproject1
                 options.MinimumSameSitePolicy = SameSiteMode.None; 
             }).Configure<AuthMessageSenderOptions>(Configuration);
 
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            }).AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            });
+//            services.AddAuthentication().AddFacebook(facebookOptions =>
+//            {
+//                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+//                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+//            }).AddGoogle(googleOptions =>
+//            {
+//                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+//                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+//            });
             
             services.AddMvc(options =>
             {

@@ -282,8 +282,10 @@ namespace Integratieproject1.BL.Managers
 
         //using IoTAPI you can answer a single question (doesn't have to be a question from a survey)
         // Updates single answer based on question and ID
-        public void UpdateSingleAnswer(Question question, int response)
+        public void UpdateSingleAnswer(int questionId, int response)
         {
+            Console.WriteLine("updating answer response");
+            Question question = _surveysRepository.GetQuestion(questionId);
             foreach (Answer answer in question.Answers)
             {
                 if (answer.AnswerId == response)
@@ -291,6 +293,11 @@ namespace Integratieproject1.BL.Managers
                     _surveysRepository.UpdateAnswer(answer);
                 }
             }
+        }
+
+        public List<Answer> GetAnswersFromQuestion(Question question)
+        {
+            return _surveysRepository.GetAnswersFromQuestion(question).ToList();
         }
 
         // Checks if answer is email or not

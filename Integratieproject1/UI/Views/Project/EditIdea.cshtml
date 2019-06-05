@@ -42,7 +42,7 @@
         </form>
         @if (Model.Position != null)
         {
-            <div class="text-center" id="editLocation" @*style="display: none; padding: 5px"*@>
+            <div class="text-center" id="editLocation">
                 @await Html.PartialAsync("_EditLocationPartial.cshtml", Model.Position)
             </div>
         } 
@@ -135,7 +135,7 @@
                     @if (ideaObject.GetType() == typeof(TextField))
                     {
                         var textField = (TextField) ideaObject;
-                        <div class="ideaObjectGrid" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                        <div class="ideaObjectGrid">
                             <div class="ideaObjectArea">
                                 <div>@textField.Text</div>
                             </div>
@@ -153,13 +153,17 @@
                     @if (ideaObject.GetType() == typeof(Image))
                     {
                         var image = (Image) ideaObject;
-                        <div class="ideaObjectGrid" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                        <div class="ideaObjectGrid" >
                             <div class="ideaObjectArea">
                                 <img src="@image.ImagePath" style="max-height: 200px; max-width: 200px" class=" img-thumbnail" alt="@image.ImageName"/>
 
                             </div>
                             <div class="ideaObjectBtn">
-                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() != 1 && Model.Ideation.ImageRequired == true) || User.IsInRole("Admin"))
+                                @if (Model.IdeaObjects.Where(i => i.GetType() == typeof(Image)).Count() == 1 && Model.Ideation.ImageRequired == true && User.IsInRole("User"))
+                                {
+                                    
+                                }
+                                else
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                                        asp-action="DeleteImage" asp-route-imageId="@image.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
@@ -172,13 +176,17 @@
                     @if (ideaObject.GetType() == typeof(Video))
                     {
                         var video = (Video) ideaObject;
-                        <div class="ideaObjectGrid text-center" @*class="d-flex flex-row justify-content-between align-items-center"*@>
+                        <div class="ideaObjectGrid text-center" >
 
                             <iframe class="ideaObjectArea" src="@video.Url" width="100%"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                             </iframe>
                             <div class="ideaObjectBtn">
-                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() != 1 && Model.Ideation.VideoRequired == true) || User.IsInRole("Admin"))
+                                @if ((Model.IdeaObjects.Where(i => i.GetType() == typeof(Video)).Count() == 1 && Model.Ideation.VideoRequired == true) && User.IsInRole("User"))
+                                {
+                                   
+                                }
+                                else
                                 {
                                     <a class="btn btn-danger btn-sm" asp-area="" asp-controller="Project"
                                        asp-action="DeleteVideo" asp-route-videoId="@video.IdeaObjectId" asp-route-ideaId="@Model.IdeaId">
@@ -203,8 +211,6 @@
     <div id="newVideo" style="display: none; padding: 5px">
         @await Html.PartialAsync("_AddVideoPartial.cshtml", new Video())
     </div>
-    @*@if (!Model.Title.Equals("_NewIdea_"))
-    {*@
         <div class="d-flex flex-row justify-content-center">
             <div class="dropdown">
                 <button class="btn btn-primary btn-lg" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -226,7 +232,6 @@
                 </div>
             </div>
         </div>
-    @*}*@
 </div>
 </div>
 </div>

@@ -23,7 +23,7 @@ namespace Integratieproject1.DAL
         private static bool _hasRunDuringAppExecution = false;
 
         public static void Initialize(CityOfIdeasDbContext context
-            , bool dropCreateDatabase = false)
+            , bool dropCreateDatabase = true)
         {
             if (!_hasRunDuringAppExecution)
             {
@@ -748,22 +748,26 @@ namespace Integratieproject1.DAL
             IoTSetup ioT1 = new IoTSetup()
             {
                Idea = ideaSport1,
-               Position = groenplaats
+               Position = groenplaats,
+                Code = "1"
             };
             IoTSetup ioT2 = new IoTSetup()
             {
                 Idea = ideaSport2,
-                Position = centraalStation
+                Position = centraalStation,
+                Code = "2"
             };
             IoTSetup ioT3 = new IoTSetup()
             {
                 Idea = ideaSport3,
-                Position = pothoekstraat
+                Position = pothoekstraat,
+                Code = "3"
             };
             IoTSetup ioT4 = new IoTSetup()
             {
                 Question = radioQuestion,
-                Position = stadswaag
+                Position = stadswaag,
+                Code = "4"
             };
 
             
@@ -861,7 +865,7 @@ namespace Integratieproject1.DAL
             var modTest = new CustomUser {UserName = "Mod", Email = "mod@gmail.com", EmailConfirmed = true };
             var organisationTest = new CustomUser
                 {UserName = "Organisation", Email = "organisation@gmail.com", EmailConfirmed = true };
-            var userTest = new CustomUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true };
+            var userTest = new CustomUser {UserName = "User", Email = "user@gmail.com", EmailConfirmed = true, Age = 21};
 
             //Users opslaan
             await userManager.CreateAsync(superAdminTest, "SuperAdmin123!");
