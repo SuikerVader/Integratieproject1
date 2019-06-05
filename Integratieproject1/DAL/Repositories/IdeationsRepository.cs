@@ -527,6 +527,7 @@ namespace Integratieproject1.DAL.Repositories
             _ctx.SaveChanges();
         }
         
+        // Updates tag based on given tag
         public void EditTag(Tag tag)
         {
             _ctx.Tags.Update(tag);
